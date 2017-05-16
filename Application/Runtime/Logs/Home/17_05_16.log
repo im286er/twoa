@@ -18,3 +18,2450 @@ INFO: [ app_end ] --START--
 INFO: Run Behavior\ShowPageTraceBehavior [ RunTime:0.002000s ]
 INFO: [ app_end ] --END-- [ RunTime:0.002000s ]
 
+[ 2017-05-16T14:05:25+08:00 ] ::1 /twoa/
+INFO: [ app_init ] --START--
+INFO: Run Behavior\BuildLiteBehavior [ RunTime:0.000000s ]
+INFO: [ app_init ] --END-- [ RunTime:0.000000s ]
+INFO: [ app_begin ] --START--
+INFO: Run Behavior\ReadHtmlCacheBehavior [ RunTime:0.001000s ]
+INFO: [ app_begin ] --END-- [ RunTime:0.001000s ]
+INFO: [ view_parse ] --START--
+INFO: Run Behavior\ParseTemplateBehavior [ RunTime:0.002000s ]
+INFO: [ view_parse ] --END-- [ RunTime:0.002000s ]
+INFO: [ view_filter ] --START--
+INFO: Run Behavior\WriteHtmlCacheBehavior [ RunTime:0.001000s ]
+INFO: [ view_filter ] --END-- [ RunTime:0.001000s ]
+INFO: [ app_end ] --START--
+INFO: Run Behavior\ShowPageTraceBehavior [ RunTime:0.001000s ]
+INFO: [ app_end ] --END-- [ RunTime:0.001000s ]
+
+[ 2017-05-16T14:07:02+08:00 ] ::1 /twoa/
+INFO: [ app_init ] --START--
+INFO: Run Behavior\BuildLiteBehavior [ RunTime:0.000000s ]
+INFO: [ app_init ] --END-- [ RunTime:0.001000s ]
+INFO: [ app_begin ] --START--
+INFO: Run Behavior\ReadHtmlCacheBehavior [ RunTime:0.001000s ]
+INFO: [ app_begin ] --END-- [ RunTime:0.001000s ]
+INFO: [ view_parse ] --START--
+INFO: [ template_filter ] --START--
+INFO: Run Behavior\ContentReplaceBehavior [ RunTime:0.000000s ]
+INFO: [ template_filter ] --END-- [ RunTime:0.000000s ]
+INFO: Run Behavior\ParseTemplateBehavior [ RunTime:0.011001s ]
+INFO: [ view_parse ] --END-- [ RunTime:0.013001s ]
+INFO: [ view_filter ] --START--
+INFO: Run Behavior\WriteHtmlCacheBehavior [ RunTime:0.001000s ]
+INFO: [ view_filter ] --END-- [ RunTime:0.002000s ]
+INFO: [ app_end ] --START--
+INFO: Run Behavior\ShowPageTraceBehavior [ RunTime:0.001000s ]
+INFO: [ app_end ] --END-- [ RunTime:0.001000s ]
+
+[ 2017-05-16T14:08:56+08:00 ] ::1 /twoa/
+INFO: [ app_init ] --START--
+INFO: Run Behavior\BuildLiteBehavior [ RunTime:0.000000s ]
+INFO: [ app_init ] --END-- [ RunTime:0.001001s ]
+INFO: [ app_begin ] --START--
+INFO: Run Behavior\ReadHtmlCacheBehavior [ RunTime:0.001000s ]
+INFO: [ app_begin ] --END-- [ RunTime:0.002000s ]
+INFO: [ view_parse ] --START--
+INFO: [ template_filter ] --START--
+INFO: Run Behavior\ContentReplaceBehavior [ RunTime:0.000000s ]
+INFO: [ template_filter ] --END-- [ RunTime:0.000000s ]
+INFO: Run Behavior\ParseTemplateBehavior [ RunTime:0.011001s ]
+INFO: [ view_parse ] --END-- [ RunTime:0.012001s ]
+INFO: [ view_filter ] --START--
+INFO: Run Behavior\WriteHtmlCacheBehavior [ RunTime:0.001000s ]
+INFO: [ view_filter ] --END-- [ RunTime:0.001000s ]
+INFO: [ app_end ] --START--
+INFO: Run Behavior\ShowPageTraceBehavior [ RunTime:0.001000s ]
+INFO: [ app_end ] --END-- [ RunTime:0.002000s ]
+
+[ 2017-05-16T14:08:58+08:00 ] ::1 /twoa/
+INFO: [ app_init ] --START--
+INFO: Run Behavior\BuildLiteBehavior [ RunTime:0.000000s ]
+INFO: [ app_init ] --END-- [ RunTime:0.001000s ]
+INFO: [ app_begin ] --START--
+INFO: Run Behavior\ReadHtmlCacheBehavior [ RunTime:0.001000s ]
+INFO: [ app_begin ] --END-- [ RunTime:0.001000s ]
+INFO: [ view_parse ] --START--
+INFO: Run Behavior\ParseTemplateBehavior [ RunTime:0.001000s ]
+INFO: [ view_parse ] --END-- [ RunTime:0.001000s ]
+INFO: [ view_filter ] --START--
+INFO: Run Behavior\WriteHtmlCacheBehavior [ RunTime:0.001000s ]
+INFO: [ view_filter ] --END-- [ RunTime:0.001000s ]
+INFO: [ app_end ] --START--
+INFO: Run Behavior\ShowPageTraceBehavior [ RunTime:0.001000s ]
+INFO: [ app_end ] --END-- [ RunTime:0.001000s ]
+
+[ 2017-05-16T14:09:06+08:00 ] ::1 /twoa/
+INFO: [ app_init ] --START--
+INFO: Run Behavior\BuildLiteBehavior [ RunTime:0.000000s ]
+INFO: [ app_init ] --END-- [ RunTime:0.001000s ]
+INFO: [ app_begin ] --START--
+INFO: Run Behavior\ReadHtmlCacheBehavior [ RunTime:0.002000s ]
+INFO: [ app_begin ] --END-- [ RunTime:0.002000s ]
+ERR: 模板不存在:./Application/Home/View/Index/login.html
+
+[ 2017-05-16T14:09:25+08:00 ] ::1 /twoa/
+INFO: [ app_init ] --START--
+INFO: Run Behavior\BuildLiteBehavior [ RunTime:0.000000s ]
+INFO: [ app_init ] --END-- [ RunTime:0.001000s ]
+INFO: [ app_begin ] --START--
+INFO: Run Behavior\ReadHtmlCacheBehavior [ RunTime:0.001000s ]
+INFO: [ app_begin ] --END-- [ RunTime:0.001000s ]
+INFO: [ view_parse ] --START--
+INFO: [ template_filter ] --START--
+INFO: Run Behavior\ContentReplaceBehavior [ RunTime:0.000000s ]
+INFO: [ template_filter ] --END-- [ RunTime:0.001000s ]
+INFO: Run Behavior\ParseTemplateBehavior [ RunTime:0.013001s ]
+INFO: [ view_parse ] --END-- [ RunTime:0.014001s ]
+INFO: [ view_filter ] --START--
+INFO: Run Behavior\WriteHtmlCacheBehavior [ RunTime:0.001000s ]
+INFO: [ view_filter ] --END-- [ RunTime:0.001000s ]
+INFO: [ app_end ] --START--
+INFO: Run Behavior\ShowPageTraceBehavior [ RunTime:0.001000s ]
+INFO: [ app_end ] --END-- [ RunTime:0.001000s ]
+
+[ 2017-05-16T14:11:23+08:00 ] ::1 /twoa/
+INFO: [ app_init ] --START--
+INFO: Run Behavior\BuildLiteBehavior [ RunTime:0.000000s ]
+INFO: [ app_init ] --END-- [ RunTime:0.001000s ]
+INFO: [ app_begin ] --START--
+INFO: Run Behavior\ReadHtmlCacheBehavior [ RunTime:0.002000s ]
+INFO: [ app_begin ] --END-- [ RunTime:0.006001s ]
+INFO: [ view_parse ] --START--
+INFO: [ template_filter ] --START--
+INFO: Run Behavior\ContentReplaceBehavior [ RunTime:0.000000s ]
+INFO: [ template_filter ] --END-- [ RunTime:0.001000s ]
+INFO: Run Behavior\ParseTemplateBehavior [ RunTime:0.015001s ]
+INFO: [ view_parse ] --END-- [ RunTime:0.015001s ]
+INFO: [ view_filter ] --START--
+INFO: Run Behavior\WriteHtmlCacheBehavior [ RunTime:0.001000s ]
+INFO: [ view_filter ] --END-- [ RunTime:0.001000s ]
+INFO: [ app_end ] --START--
+INFO: Run Behavior\ShowPageTraceBehavior [ RunTime:0.002000s ]
+INFO: [ app_end ] --END-- [ RunTime:0.002000s ]
+
+[ 2017-05-16T14:15:24+08:00 ] ::1 /twoa/
+INFO: [ app_init ] --START--
+INFO: Run Behavior\BuildLiteBehavior [ RunTime:0.000000s ]
+INFO: [ app_init ] --END-- [ RunTime:0.002000s ]
+INFO: [ app_begin ] --START--
+INFO: Run Behavior\ReadHtmlCacheBehavior [ RunTime:0.002001s ]
+INFO: [ app_begin ] --END-- [ RunTime:0.002001s ]
+INFO: [ view_parse ] --START--
+INFO: [ template_filter ] --START--
+INFO: Run Behavior\ContentReplaceBehavior [ RunTime:0.000000s ]
+INFO: [ template_filter ] --END-- [ RunTime:0.001001s ]
+INFO: Run Behavior\ParseTemplateBehavior [ RunTime:0.015001s ]
+INFO: [ view_parse ] --END-- [ RunTime:0.015001s ]
+INFO: [ view_filter ] --START--
+INFO: Run Behavior\WriteHtmlCacheBehavior [ RunTime:0.001000s ]
+INFO: [ view_filter ] --END-- [ RunTime:0.001000s ]
+INFO: [ app_end ] --START--
+INFO: Run Behavior\ShowPageTraceBehavior [ RunTime:0.002000s ]
+INFO: [ app_end ] --END-- [ RunTime:0.003000s ]
+
+[ 2017-05-16T14:15:39+08:00 ] ::1 /twoa/
+INFO: [ app_init ] --START--
+INFO: Run Behavior\BuildLiteBehavior [ RunTime:0.000000s ]
+INFO: [ app_init ] --END-- [ RunTime:0.002000s ]
+INFO: [ app_begin ] --START--
+INFO: Run Behavior\ReadHtmlCacheBehavior [ RunTime:0.001000s ]
+INFO: [ app_begin ] --END-- [ RunTime:0.001000s ]
+INFO: [ view_parse ] --START--
+INFO: [ template_filter ] --START--
+INFO: Run Behavior\ContentReplaceBehavior [ RunTime:0.000000s ]
+INFO: [ template_filter ] --END-- [ RunTime:0.001000s ]
+INFO: Run Behavior\ParseTemplateBehavior [ RunTime:0.034002s ]
+INFO: [ view_parse ] --END-- [ RunTime:0.034002s ]
+INFO: [ view_filter ] --START--
+INFO: Run Behavior\WriteHtmlCacheBehavior [ RunTime:0.001000s ]
+INFO: [ view_filter ] --END-- [ RunTime:0.001000s ]
+INFO: [ app_end ] --START--
+INFO: Run Behavior\ShowPageTraceBehavior [ RunTime:0.001000s ]
+INFO: [ app_end ] --END-- [ RunTime:0.002000s ]
+
+[ 2017-05-16T14:15:41+08:00 ] ::1 /twoa/
+INFO: [ app_init ] --START--
+INFO: Run Behavior\BuildLiteBehavior [ RunTime:0.000000s ]
+INFO: [ app_init ] --END-- [ RunTime:0.001000s ]
+INFO: [ app_begin ] --START--
+INFO: Run Behavior\ReadHtmlCacheBehavior [ RunTime:0.001000s ]
+INFO: [ app_begin ] --END-- [ RunTime:0.001000s ]
+INFO: [ view_parse ] --START--
+INFO: [ template_filter ] --START--
+INFO: Run Behavior\ContentReplaceBehavior [ RunTime:0.000000s ]
+INFO: [ template_filter ] --END-- [ RunTime:0.000000s ]
+INFO: Run Behavior\ParseTemplateBehavior [ RunTime:0.014000s ]
+INFO: [ view_parse ] --END-- [ RunTime:0.014000s ]
+INFO: [ view_filter ] --START--
+INFO: Run Behavior\WriteHtmlCacheBehavior [ RunTime:0.003000s ]
+INFO: [ view_filter ] --END-- [ RunTime:0.007001s ]
+INFO: [ app_end ] --START--
+INFO: Run Behavior\ShowPageTraceBehavior [ RunTime:0.001000s ]
+INFO: [ app_end ] --END-- [ RunTime:0.001000s ]
+
+[ 2017-05-16T14:19:49+08:00 ] ::1 /twoa/
+INFO: [ app_init ] --START--
+INFO: Run Behavior\BuildLiteBehavior [ RunTime:0.000000s ]
+INFO: [ app_init ] --END-- [ RunTime:0.001000s ]
+INFO: [ app_begin ] --START--
+INFO: Run Behavior\ReadHtmlCacheBehavior [ RunTime:0.002000s ]
+INFO: [ app_begin ] --END-- [ RunTime:0.003000s ]
+INFO: [ view_parse ] --START--
+INFO: [ template_filter ] --START--
+INFO: Run Behavior\ContentReplaceBehavior [ RunTime:0.000000s ]
+INFO: [ template_filter ] --END-- [ RunTime:0.000000s ]
+INFO: Run Behavior\ParseTemplateBehavior [ RunTime:0.018001s ]
+INFO: [ view_parse ] --END-- [ RunTime:0.019001s ]
+INFO: [ view_filter ] --START--
+INFO: Run Behavior\WriteHtmlCacheBehavior [ RunTime:0.001000s ]
+INFO: [ view_filter ] --END-- [ RunTime:0.001000s ]
+INFO: [ app_end ] --START--
+INFO: Run Behavior\ShowPageTraceBehavior [ RunTime:0.001000s ]
+INFO: [ app_end ] --END-- [ RunTime:0.001000s ]
+
+[ 2017-05-16T14:20:34+08:00 ] ::1 /twoa/
+INFO: [ app_init ] --START--
+INFO: Run Behavior\BuildLiteBehavior [ RunTime:0.000000s ]
+INFO: [ app_init ] --END-- [ RunTime:0.001000s ]
+INFO: [ app_begin ] --START--
+INFO: Run Behavior\ReadHtmlCacheBehavior [ RunTime:0.001000s ]
+INFO: [ app_begin ] --END-- [ RunTime:0.001000s ]
+INFO: [ view_parse ] --START--
+INFO: [ template_filter ] --START--
+INFO: Run Behavior\ContentReplaceBehavior [ RunTime:0.000000s ]
+INFO: [ template_filter ] --END-- [ RunTime:0.001000s ]
+INFO: Run Behavior\ParseTemplateBehavior [ RunTime:0.015001s ]
+INFO: [ view_parse ] --END-- [ RunTime:0.015001s ]
+INFO: [ view_filter ] --START--
+INFO: Run Behavior\WriteHtmlCacheBehavior [ RunTime:0.001000s ]
+INFO: [ view_filter ] --END-- [ RunTime:0.001000s ]
+INFO: [ app_end ] --START--
+INFO: Run Behavior\ShowPageTraceBehavior [ RunTime:0.001000s ]
+INFO: [ app_end ] --END-- [ RunTime:0.001000s ]
+
+[ 2017-05-16T14:20:46+08:00 ] ::1 /twoa/
+INFO: [ app_init ] --START--
+INFO: Run Behavior\BuildLiteBehavior [ RunTime:0.000000s ]
+INFO: [ app_init ] --END-- [ RunTime:0.002000s ]
+INFO: [ app_begin ] --START--
+INFO: Run Behavior\ReadHtmlCacheBehavior [ RunTime:0.001000s ]
+INFO: [ app_begin ] --END-- [ RunTime:0.001000s ]
+INFO: [ view_parse ] --START--
+INFO: [ template_filter ] --START--
+INFO: Run Behavior\ContentReplaceBehavior [ RunTime:0.000000s ]
+INFO: [ template_filter ] --END-- [ RunTime:0.000000s ]
+INFO: Run Behavior\ParseTemplateBehavior [ RunTime:0.015001s ]
+INFO: [ view_parse ] --END-- [ RunTime:0.015001s ]
+INFO: [ view_filter ] --START--
+INFO: Run Behavior\WriteHtmlCacheBehavior [ RunTime:0.001000s ]
+INFO: [ view_filter ] --END-- [ RunTime:0.001000s ]
+INFO: [ app_end ] --START--
+INFO: Run Behavior\ShowPageTraceBehavior [ RunTime:0.003000s ]
+INFO: [ app_end ] --END-- [ RunTime:0.004000s ]
+
+[ 2017-05-16T14:21:20+08:00 ] ::1 /twoa/
+INFO: [ app_init ] --START--
+INFO: Run Behavior\BuildLiteBehavior [ RunTime:0.000000s ]
+INFO: [ app_init ] --END-- [ RunTime:0.001001s ]
+INFO: [ app_begin ] --START--
+INFO: Run Behavior\ReadHtmlCacheBehavior [ RunTime:0.000000s ]
+INFO: [ app_begin ] --END-- [ RunTime:0.002000s ]
+INFO: [ view_parse ] --START--
+INFO: [ template_filter ] --START--
+INFO: Run Behavior\ContentReplaceBehavior [ RunTime:0.000000s ]
+INFO: [ template_filter ] --END-- [ RunTime:0.001000s ]
+INFO: Run Behavior\ParseTemplateBehavior [ RunTime:0.014001s ]
+INFO: [ view_parse ] --END-- [ RunTime:0.014001s ]
+INFO: [ view_filter ] --START--
+INFO: Run Behavior\WriteHtmlCacheBehavior [ RunTime:0.001000s ]
+INFO: [ view_filter ] --END-- [ RunTime:0.001000s ]
+INFO: [ app_end ] --START--
+INFO: Run Behavior\ShowPageTraceBehavior [ RunTime:0.001000s ]
+INFO: [ app_end ] --END-- [ RunTime:0.001000s ]
+
+[ 2017-05-16T14:23:52+08:00 ] ::1 /twoa/
+INFO: [ app_init ] --START--
+INFO: Run Behavior\BuildLiteBehavior [ RunTime:0.000000s ]
+INFO: [ app_init ] --END-- [ RunTime:0.002000s ]
+INFO: [ app_begin ] --START--
+INFO: Run Behavior\ReadHtmlCacheBehavior [ RunTime:0.002000s ]
+INFO: [ app_begin ] --END-- [ RunTime:0.002000s ]
+INFO: [ view_parse ] --START--
+INFO: [ template_filter ] --START--
+INFO: Run Behavior\ContentReplaceBehavior [ RunTime:0.000000s ]
+INFO: [ template_filter ] --END-- [ RunTime:0.000000s ]
+INFO: Run Behavior\ParseTemplateBehavior [ RunTime:0.017001s ]
+INFO: [ view_parse ] --END-- [ RunTime:0.018001s ]
+INFO: [ view_filter ] --START--
+INFO: Run Behavior\WriteHtmlCacheBehavior [ RunTime:0.001000s ]
+INFO: [ view_filter ] --END-- [ RunTime:0.001000s ]
+INFO: [ app_end ] --START--
+INFO: Run Behavior\ShowPageTraceBehavior [ RunTime:0.001001s ]
+INFO: [ app_end ] --END-- [ RunTime:0.001001s ]
+
+[ 2017-05-16T14:24:19+08:00 ] ::1 /twoa/
+INFO: [ app_init ] --START--
+INFO: Run Behavior\BuildLiteBehavior [ RunTime:0.000000s ]
+INFO: [ app_init ] --END-- [ RunTime:0.001000s ]
+INFO: [ app_begin ] --START--
+INFO: Run Behavior\ReadHtmlCacheBehavior [ RunTime:0.001000s ]
+INFO: [ app_begin ] --END-- [ RunTime:0.001000s ]
+INFO: [ view_parse ] --START--
+INFO: [ template_filter ] --START--
+INFO: Run Behavior\ContentReplaceBehavior [ RunTime:0.000000s ]
+INFO: [ template_filter ] --END-- [ RunTime:0.000000s ]
+INFO: Run Behavior\ParseTemplateBehavior [ RunTime:0.017001s ]
+INFO: [ view_parse ] --END-- [ RunTime:0.017001s ]
+INFO: [ view_filter ] --START--
+INFO: Run Behavior\WriteHtmlCacheBehavior [ RunTime:0.001000s ]
+INFO: [ view_filter ] --END-- [ RunTime:0.002000s ]
+INFO: [ app_end ] --START--
+INFO: Run Behavior\ShowPageTraceBehavior [ RunTime:0.001000s ]
+INFO: [ app_end ] --END-- [ RunTime:0.002001s ]
+
+[ 2017-05-16T14:25:18+08:00 ] ::1 /twoa/
+INFO: [ app_init ] --START--
+INFO: Run Behavior\BuildLiteBehavior [ RunTime:0.000000s ]
+INFO: [ app_init ] --END-- [ RunTime:0.001000s ]
+INFO: [ app_begin ] --START--
+INFO: Run Behavior\ReadHtmlCacheBehavior [ RunTime:0.002000s ]
+INFO: [ app_begin ] --END-- [ RunTime:0.002000s ]
+INFO: [ view_parse ] --START--
+INFO: [ template_filter ] --START--
+INFO: Run Behavior\ContentReplaceBehavior [ RunTime:0.000000s ]
+INFO: [ template_filter ] --END-- [ RunTime:0.000000s ]
+INFO: Run Behavior\ParseTemplateBehavior [ RunTime:0.027002s ]
+INFO: [ view_parse ] --END-- [ RunTime:0.027002s ]
+INFO: [ view_filter ] --START--
+INFO: Run Behavior\WriteHtmlCacheBehavior [ RunTime:0.001000s ]
+INFO: [ view_filter ] --END-- [ RunTime:0.001000s ]
+INFO: [ app_end ] --START--
+INFO: Run Behavior\ShowPageTraceBehavior [ RunTime:0.001000s ]
+INFO: [ app_end ] --END-- [ RunTime:0.002000s ]
+
+[ 2017-05-16T14:26:06+08:00 ] ::1 /twoa/
+INFO: [ app_init ] --START--
+INFO: Run Behavior\BuildLiteBehavior [ RunTime:0.000000s ]
+INFO: [ app_init ] --END-- [ RunTime:0.001000s ]
+INFO: [ app_begin ] --START--
+INFO: Run Behavior\ReadHtmlCacheBehavior [ RunTime:0.001000s ]
+INFO: [ app_begin ] --END-- [ RunTime:0.002000s ]
+INFO: [ view_parse ] --START--
+INFO: [ template_filter ] --START--
+INFO: Run Behavior\ContentReplaceBehavior [ RunTime:0.001000s ]
+INFO: [ template_filter ] --END-- [ RunTime:0.001000s ]
+INFO: Run Behavior\ParseTemplateBehavior [ RunTime:0.020001s ]
+INFO: [ view_parse ] --END-- [ RunTime:0.021001s ]
+INFO: [ view_filter ] --START--
+INFO: Run Behavior\WriteHtmlCacheBehavior [ RunTime:0.001001s ]
+INFO: [ view_filter ] --END-- [ RunTime:0.001001s ]
+INFO: [ app_end ] --START--
+INFO: Run Behavior\ShowPageTraceBehavior [ RunTime:0.001000s ]
+INFO: [ app_end ] --END-- [ RunTime:0.002000s ]
+
+[ 2017-05-16T14:26:51+08:00 ] ::1 /twoa/
+INFO: [ app_init ] --START--
+INFO: Run Behavior\BuildLiteBehavior [ RunTime:0.000000s ]
+INFO: [ app_init ] --END-- [ RunTime:0.000000s ]
+INFO: [ app_begin ] --START--
+INFO: Run Behavior\ReadHtmlCacheBehavior [ RunTime:0.001001s ]
+INFO: [ app_begin ] --END-- [ RunTime:0.002001s ]
+INFO: [ view_parse ] --START--
+INFO: [ template_filter ] --START--
+INFO: Run Behavior\ContentReplaceBehavior [ RunTime:0.000000s ]
+INFO: [ template_filter ] --END-- [ RunTime:0.002001s ]
+INFO: Run Behavior\ParseTemplateBehavior [ RunTime:0.016001s ]
+INFO: [ view_parse ] --END-- [ RunTime:0.016001s ]
+INFO: [ view_filter ] --START--
+INFO: Run Behavior\WriteHtmlCacheBehavior [ RunTime:0.001000s ]
+INFO: [ view_filter ] --END-- [ RunTime:0.001000s ]
+INFO: [ app_end ] --START--
+INFO: Run Behavior\ShowPageTraceBehavior [ RunTime:0.001000s ]
+INFO: [ app_end ] --END-- [ RunTime:0.001000s ]
+
+[ 2017-05-16T14:29:18+08:00 ] ::1 /twoa/
+INFO: [ app_init ] --START--
+INFO: Run Behavior\BuildLiteBehavior [ RunTime:0.000000s ]
+INFO: [ app_init ] --END-- [ RunTime:0.001000s ]
+INFO: [ app_begin ] --START--
+INFO: Run Behavior\ReadHtmlCacheBehavior [ RunTime:0.001000s ]
+INFO: [ app_begin ] --END-- [ RunTime:0.001000s ]
+INFO: [ view_parse ] --START--
+INFO: [ template_filter ] --START--
+INFO: Run Behavior\ContentReplaceBehavior [ RunTime:0.000000s ]
+INFO: [ template_filter ] --END-- [ RunTime:0.001000s ]
+INFO: Run Behavior\ParseTemplateBehavior [ RunTime:0.014001s ]
+INFO: [ view_parse ] --END-- [ RunTime:0.015001s ]
+INFO: [ view_filter ] --START--
+INFO: Run Behavior\WriteHtmlCacheBehavior [ RunTime:0.001000s ]
+INFO: [ view_filter ] --END-- [ RunTime:0.001000s ]
+INFO: [ app_end ] --START--
+INFO: Run Behavior\ShowPageTraceBehavior [ RunTime:0.003000s ]
+INFO: [ app_end ] --END-- [ RunTime:0.004000s ]
+
+[ 2017-05-16T14:30:37+08:00 ] ::1 /twoa/
+INFO: [ app_init ] --START--
+INFO: Run Behavior\BuildLiteBehavior [ RunTime:0.000000s ]
+INFO: [ app_init ] --END-- [ RunTime:0.001001s ]
+INFO: [ app_begin ] --START--
+INFO: Run Behavior\ReadHtmlCacheBehavior [ RunTime:0.001000s ]
+INFO: [ app_begin ] --END-- [ RunTime:0.001000s ]
+INFO: [ view_parse ] --START--
+INFO: [ template_filter ] --START--
+INFO: Run Behavior\ContentReplaceBehavior [ RunTime:0.000000s ]
+INFO: [ template_filter ] --END-- [ RunTime:0.000000s ]
+INFO: Run Behavior\ParseTemplateBehavior [ RunTime:0.017001s ]
+INFO: [ view_parse ] --END-- [ RunTime:0.017001s ]
+INFO: [ view_filter ] --START--
+INFO: Run Behavior\WriteHtmlCacheBehavior [ RunTime:0.001000s ]
+INFO: [ view_filter ] --END-- [ RunTime:0.001000s ]
+INFO: [ app_end ] --START--
+INFO: Run Behavior\ShowPageTraceBehavior [ RunTime:0.001000s ]
+INFO: [ app_end ] --END-- [ RunTime:0.005000s ]
+
+[ 2017-05-16T14:30:43+08:00 ] ::1 /twoa/
+INFO: [ app_init ] --START--
+INFO: Run Behavior\BuildLiteBehavior [ RunTime:0.000000s ]
+INFO: [ app_init ] --END-- [ RunTime:0.000000s ]
+INFO: [ app_begin ] --START--
+INFO: Run Behavior\ReadHtmlCacheBehavior [ RunTime:0.001000s ]
+INFO: [ app_begin ] --END-- [ RunTime:0.002000s ]
+INFO: [ view_parse ] --START--
+INFO: [ template_filter ] --START--
+INFO: Run Behavior\ContentReplaceBehavior [ RunTime:0.000000s ]
+INFO: [ template_filter ] --END-- [ RunTime:0.000000s ]
+INFO: Run Behavior\ParseTemplateBehavior [ RunTime:0.015001s ]
+INFO: [ view_parse ] --END-- [ RunTime:0.016001s ]
+INFO: [ view_filter ] --START--
+INFO: Run Behavior\WriteHtmlCacheBehavior [ RunTime:0.001000s ]
+INFO: [ view_filter ] --END-- [ RunTime:0.001000s ]
+INFO: [ app_end ] --START--
+INFO: Run Behavior\ShowPageTraceBehavior [ RunTime:0.001000s ]
+INFO: [ app_end ] --END-- [ RunTime:0.001000s ]
+
+[ 2017-05-16T14:32:23+08:00 ] ::1 /twoa/
+INFO: [ app_init ] --START--
+INFO: Run Behavior\BuildLiteBehavior [ RunTime:0.000000s ]
+INFO: [ app_init ] --END-- [ RunTime:0.000000s ]
+INFO: [ app_begin ] --START--
+INFO: Run Behavior\ReadHtmlCacheBehavior [ RunTime:0.001000s ]
+INFO: [ app_begin ] --END-- [ RunTime:0.001000s ]
+INFO: [ view_parse ] --START--
+INFO: [ template_filter ] --START--
+INFO: Run Behavior\ContentReplaceBehavior [ RunTime:0.000000s ]
+INFO: [ template_filter ] --END-- [ RunTime:0.000000s ]
+INFO: Run Behavior\ParseTemplateBehavior [ RunTime:0.015000s ]
+INFO: [ view_parse ] --END-- [ RunTime:0.016000s ]
+INFO: [ view_filter ] --START--
+INFO: Run Behavior\WriteHtmlCacheBehavior [ RunTime:0.001001s ]
+INFO: [ view_filter ] --END-- [ RunTime:0.001001s ]
+INFO: [ app_end ] --START--
+INFO: Run Behavior\ShowPageTraceBehavior [ RunTime:0.002000s ]
+INFO: [ app_end ] --END-- [ RunTime:0.002000s ]
+
+[ 2017-05-16T14:32:35+08:00 ] ::1 /twoa/
+INFO: [ app_init ] --START--
+INFO: Run Behavior\BuildLiteBehavior [ RunTime:0.000000s ]
+INFO: [ app_init ] --END-- [ RunTime:0.001000s ]
+INFO: [ app_begin ] --START--
+INFO: Run Behavior\ReadHtmlCacheBehavior [ RunTime:0.002000s ]
+INFO: [ app_begin ] --END-- [ RunTime:0.002000s ]
+INFO: [ view_parse ] --START--
+INFO: [ template_filter ] --START--
+INFO: Run Behavior\ContentReplaceBehavior [ RunTime:0.000000s ]
+INFO: [ template_filter ] --END-- [ RunTime:0.000000s ]
+INFO: Run Behavior\ParseTemplateBehavior [ RunTime:0.022001s ]
+INFO: [ view_parse ] --END-- [ RunTime:0.024001s ]
+INFO: [ view_filter ] --START--
+INFO: Run Behavior\WriteHtmlCacheBehavior [ RunTime:0.001000s ]
+INFO: [ view_filter ] --END-- [ RunTime:0.001000s ]
+INFO: [ app_end ] --START--
+INFO: Run Behavior\ShowPageTraceBehavior [ RunTime:0.003000s ]
+INFO: [ app_end ] --END-- [ RunTime:0.003000s ]
+
+[ 2017-05-16T14:33:10+08:00 ] ::1 /twoa/
+INFO: [ app_init ] --START--
+INFO: Run Behavior\BuildLiteBehavior [ RunTime:0.000000s ]
+INFO: [ app_init ] --END-- [ RunTime:0.001000s ]
+INFO: [ app_begin ] --START--
+INFO: Run Behavior\ReadHtmlCacheBehavior [ RunTime:0.001000s ]
+INFO: [ app_begin ] --END-- [ RunTime:0.002000s ]
+INFO: [ view_parse ] --START--
+INFO: [ template_filter ] --START--
+INFO: Run Behavior\ContentReplaceBehavior [ RunTime:0.000000s ]
+INFO: [ template_filter ] --END-- [ RunTime:0.000000s ]
+INFO: Run Behavior\ParseTemplateBehavior [ RunTime:0.014001s ]
+INFO: [ view_parse ] --END-- [ RunTime:0.014001s ]
+INFO: [ view_filter ] --START--
+INFO: Run Behavior\WriteHtmlCacheBehavior [ RunTime:0.001000s ]
+INFO: [ view_filter ] --END-- [ RunTime:0.001000s ]
+INFO: [ app_end ] --START--
+INFO: Run Behavior\ShowPageTraceBehavior [ RunTime:0.001000s ]
+INFO: [ app_end ] --END-- [ RunTime:0.001000s ]
+
+[ 2017-05-16T14:33:25+08:00 ] ::1 /twoa/
+INFO: [ app_init ] --START--
+INFO: Run Behavior\BuildLiteBehavior [ RunTime:0.000000s ]
+INFO: [ app_init ] --END-- [ RunTime:0.001000s ]
+INFO: [ app_begin ] --START--
+INFO: Run Behavior\ReadHtmlCacheBehavior [ RunTime:0.001001s ]
+INFO: [ app_begin ] --END-- [ RunTime:0.001001s ]
+INFO: [ view_parse ] --START--
+INFO: [ template_filter ] --START--
+INFO: Run Behavior\ContentReplaceBehavior [ RunTime:0.001000s ]
+INFO: [ template_filter ] --END-- [ RunTime:0.001000s ]
+INFO: Run Behavior\ParseTemplateBehavior [ RunTime:0.013000s ]
+INFO: [ view_parse ] --END-- [ RunTime:0.013000s ]
+INFO: [ view_filter ] --START--
+INFO: Run Behavior\WriteHtmlCacheBehavior [ RunTime:0.000000s ]
+INFO: [ view_filter ] --END-- [ RunTime:0.000000s ]
+INFO: [ app_end ] --START--
+INFO: Run Behavior\ShowPageTraceBehavior [ RunTime:0.001001s ]
+INFO: [ app_end ] --END-- [ RunTime:0.001001s ]
+
+[ 2017-05-16T14:33:47+08:00 ] ::1 /twoa/
+INFO: [ app_init ] --START--
+INFO: Run Behavior\BuildLiteBehavior [ RunTime:0.000000s ]
+INFO: [ app_init ] --END-- [ RunTime:0.001000s ]
+INFO: [ app_begin ] --START--
+INFO: Run Behavior\ReadHtmlCacheBehavior [ RunTime:0.001000s ]
+INFO: [ app_begin ] --END-- [ RunTime:0.001000s ]
+INFO: [ view_parse ] --START--
+INFO: [ template_filter ] --START--
+INFO: Run Behavior\ContentReplaceBehavior [ RunTime:0.000000s ]
+INFO: [ template_filter ] --END-- [ RunTime:0.000000s ]
+INFO: Run Behavior\ParseTemplateBehavior [ RunTime:0.010001s ]
+INFO: [ view_parse ] --END-- [ RunTime:0.011001s ]
+INFO: [ view_filter ] --START--
+INFO: Run Behavior\WriteHtmlCacheBehavior [ RunTime:0.001000s ]
+INFO: [ view_filter ] --END-- [ RunTime:0.002000s ]
+INFO: [ app_end ] --START--
+INFO: Run Behavior\ShowPageTraceBehavior [ RunTime:0.001000s ]
+INFO: [ app_end ] --END-- [ RunTime:0.001000s ]
+
+[ 2017-05-16T14:37:05+08:00 ] ::1 /twoa/
+INFO: [ app_init ] --START--
+INFO: Run Behavior\BuildLiteBehavior [ RunTime:0.000000s ]
+INFO: [ app_init ] --END-- [ RunTime:0.001000s ]
+INFO: [ app_begin ] --START--
+INFO: Run Behavior\ReadHtmlCacheBehavior [ RunTime:0.001000s ]
+INFO: [ app_begin ] --END-- [ RunTime:0.002000s ]
+INFO: [ view_parse ] --START--
+INFO: [ template_filter ] --START--
+INFO: Run Behavior\ContentReplaceBehavior [ RunTime:0.001000s ]
+INFO: [ template_filter ] --END-- [ RunTime:0.001000s ]
+INFO: Run Behavior\ParseTemplateBehavior [ RunTime:0.024001s ]
+INFO: [ view_parse ] --END-- [ RunTime:0.024001s ]
+INFO: [ view_filter ] --START--
+INFO: Run Behavior\WriteHtmlCacheBehavior [ RunTime:0.001000s ]
+INFO: [ view_filter ] --END-- [ RunTime:0.001000s ]
+INFO: [ app_end ] --START--
+INFO: Run Behavior\ShowPageTraceBehavior [ RunTime:0.001000s ]
+INFO: [ app_end ] --END-- [ RunTime:0.001000s ]
+
+[ 2017-05-16T14:38:22+08:00 ] ::1 /twoa/
+INFO: [ app_init ] --START--
+INFO: Run Behavior\BuildLiteBehavior [ RunTime:0.000000s ]
+INFO: [ app_init ] --END-- [ RunTime:0.001001s ]
+INFO: [ app_begin ] --START--
+INFO: Run Behavior\ReadHtmlCacheBehavior [ RunTime:0.001000s ]
+INFO: [ app_begin ] --END-- [ RunTime:0.002000s ]
+INFO: [ view_parse ] --START--
+INFO: [ template_filter ] --START--
+INFO: Run Behavior\ContentReplaceBehavior [ RunTime:0.000000s ]
+INFO: [ template_filter ] --END-- [ RunTime:0.001000s ]
+INFO: Run Behavior\ParseTemplateBehavior [ RunTime:0.021001s ]
+INFO: [ view_parse ] --END-- [ RunTime:0.021001s ]
+INFO: [ view_filter ] --START--
+INFO: Run Behavior\WriteHtmlCacheBehavior [ RunTime:0.003000s ]
+INFO: [ view_filter ] --END-- [ RunTime:0.003000s ]
+INFO: [ app_end ] --START--
+INFO: Run Behavior\ShowPageTraceBehavior [ RunTime:0.000000s ]
+INFO: [ app_end ] --END-- [ RunTime:0.002001s ]
+
+[ 2017-05-16T14:39:32+08:00 ] ::1 /twoa/
+INFO: [ app_init ] --START--
+INFO: Run Behavior\BuildLiteBehavior [ RunTime:0.000000s ]
+INFO: [ app_init ] --END-- [ RunTime:0.001000s ]
+INFO: [ app_begin ] --START--
+INFO: Run Behavior\ReadHtmlCacheBehavior [ RunTime:0.001000s ]
+INFO: [ app_begin ] --END-- [ RunTime:0.001000s ]
+INFO: [ view_parse ] --START--
+INFO: [ template_filter ] --START--
+INFO: Run Behavior\ContentReplaceBehavior [ RunTime:0.000000s ]
+INFO: [ template_filter ] --END-- [ RunTime:0.001000s ]
+INFO: Run Behavior\ParseTemplateBehavior [ RunTime:0.016001s ]
+INFO: [ view_parse ] --END-- [ RunTime:0.016001s ]
+INFO: [ view_filter ] --START--
+INFO: Run Behavior\WriteHtmlCacheBehavior [ RunTime:0.001000s ]
+INFO: [ view_filter ] --END-- [ RunTime:0.001000s ]
+INFO: [ app_end ] --START--
+INFO: Run Behavior\ShowPageTraceBehavior [ RunTime:0.001000s ]
+INFO: [ app_end ] --END-- [ RunTime:0.001000s ]
+
+[ 2017-05-16T14:39:56+08:00 ] ::1 /twoa/
+INFO: [ app_init ] --START--
+INFO: Run Behavior\BuildLiteBehavior [ RunTime:0.000000s ]
+INFO: [ app_init ] --END-- [ RunTime:0.000000s ]
+INFO: [ app_begin ] --START--
+INFO: Run Behavior\ReadHtmlCacheBehavior [ RunTime:0.001000s ]
+INFO: [ app_begin ] --END-- [ RunTime:0.001000s ]
+INFO: [ view_parse ] --START--
+INFO: [ template_filter ] --START--
+INFO: Run Behavior\ContentReplaceBehavior [ RunTime:0.000000s ]
+INFO: [ template_filter ] --END-- [ RunTime:0.000000s ]
+INFO: Run Behavior\ParseTemplateBehavior [ RunTime:0.043002s ]
+INFO: [ view_parse ] --END-- [ RunTime:0.043002s ]
+INFO: [ view_filter ] --START--
+INFO: Run Behavior\WriteHtmlCacheBehavior [ RunTime:0.000000s ]
+INFO: [ view_filter ] --END-- [ RunTime:0.001000s ]
+INFO: [ app_end ] --START--
+INFO: Run Behavior\ShowPageTraceBehavior [ RunTime:0.001000s ]
+INFO: [ app_end ] --END-- [ RunTime:0.001000s ]
+
+[ 2017-05-16T14:40:11+08:00 ] ::1 /twoa/
+INFO: [ app_init ] --START--
+INFO: Run Behavior\BuildLiteBehavior [ RunTime:0.000000s ]
+INFO: [ app_init ] --END-- [ RunTime:0.001000s ]
+INFO: [ app_begin ] --START--
+INFO: Run Behavior\ReadHtmlCacheBehavior [ RunTime:0.003000s ]
+INFO: [ app_begin ] --END-- [ RunTime:0.003000s ]
+INFO: [ view_parse ] --START--
+INFO: [ template_filter ] --START--
+INFO: Run Behavior\ContentReplaceBehavior [ RunTime:0.001000s ]
+INFO: [ template_filter ] --END-- [ RunTime:0.001000s ]
+INFO: Run Behavior\ParseTemplateBehavior [ RunTime:0.011000s ]
+INFO: [ view_parse ] --END-- [ RunTime:0.011000s ]
+INFO: [ view_filter ] --START--
+INFO: Run Behavior\WriteHtmlCacheBehavior [ RunTime:0.001000s ]
+INFO: [ view_filter ] --END-- [ RunTime:0.002000s ]
+INFO: [ app_end ] --START--
+INFO: Run Behavior\ShowPageTraceBehavior [ RunTime:0.001000s ]
+INFO: [ app_end ] --END-- [ RunTime:0.001000s ]
+
+[ 2017-05-16T14:41:01+08:00 ] ::1 /twoa/
+INFO: [ app_init ] --START--
+INFO: Run Behavior\BuildLiteBehavior [ RunTime:0.000000s ]
+INFO: [ app_init ] --END-- [ RunTime:0.001000s ]
+INFO: [ app_begin ] --START--
+INFO: Run Behavior\ReadHtmlCacheBehavior [ RunTime:0.003000s ]
+INFO: [ app_begin ] --END-- [ RunTime:0.003000s ]
+INFO: [ view_parse ] --START--
+INFO: [ template_filter ] --START--
+INFO: Run Behavior\ContentReplaceBehavior [ RunTime:0.000000s ]
+INFO: [ template_filter ] --END-- [ RunTime:0.001000s ]
+INFO: Run Behavior\ParseTemplateBehavior [ RunTime:0.013001s ]
+INFO: [ view_parse ] --END-- [ RunTime:0.014001s ]
+INFO: [ view_filter ] --START--
+INFO: Run Behavior\WriteHtmlCacheBehavior [ RunTime:0.001000s ]
+INFO: [ view_filter ] --END-- [ RunTime:0.001000s ]
+INFO: [ app_end ] --START--
+INFO: Run Behavior\ShowPageTraceBehavior [ RunTime:0.001000s ]
+INFO: [ app_end ] --END-- [ RunTime:0.001000s ]
+
+[ 2017-05-16T14:42:42+08:00 ] ::1 /twoa/
+INFO: [ app_init ] --START--
+INFO: Run Behavior\BuildLiteBehavior [ RunTime:0.000000s ]
+INFO: [ app_init ] --END-- [ RunTime:0.001000s ]
+INFO: [ app_begin ] --START--
+INFO: Run Behavior\ReadHtmlCacheBehavior [ RunTime:0.001000s ]
+INFO: [ app_begin ] --END-- [ RunTime:0.002000s ]
+INFO: [ view_parse ] --START--
+INFO: [ template_filter ] --START--
+INFO: Run Behavior\ContentReplaceBehavior [ RunTime:0.000000s ]
+INFO: [ template_filter ] --END-- [ RunTime:0.000000s ]
+INFO: Run Behavior\ParseTemplateBehavior [ RunTime:0.018001s ]
+INFO: [ view_parse ] --END-- [ RunTime:0.019002s ]
+INFO: [ view_filter ] --START--
+INFO: Run Behavior\WriteHtmlCacheBehavior [ RunTime:0.002000s ]
+INFO: [ view_filter ] --END-- [ RunTime:0.002000s ]
+INFO: [ app_end ] --START--
+INFO: Run Behavior\ShowPageTraceBehavior [ RunTime:0.002000s ]
+INFO: [ app_end ] --END-- [ RunTime:0.002000s ]
+
+[ 2017-05-16T14:42:57+08:00 ] ::1 /twoa/
+INFO: [ app_init ] --START--
+INFO: Run Behavior\BuildLiteBehavior [ RunTime:0.000000s ]
+INFO: [ app_init ] --END-- [ RunTime:0.001000s ]
+INFO: [ app_begin ] --START--
+INFO: Run Behavior\ReadHtmlCacheBehavior [ RunTime:0.001000s ]
+INFO: [ app_begin ] --END-- [ RunTime:0.001000s ]
+INFO: [ view_parse ] --START--
+INFO: [ template_filter ] --START--
+INFO: Run Behavior\ContentReplaceBehavior [ RunTime:0.000000s ]
+INFO: [ template_filter ] --END-- [ RunTime:0.001000s ]
+INFO: Run Behavior\ParseTemplateBehavior [ RunTime:0.013001s ]
+INFO: [ view_parse ] --END-- [ RunTime:0.013001s ]
+INFO: [ view_filter ] --START--
+INFO: Run Behavior\WriteHtmlCacheBehavior [ RunTime:0.001000s ]
+INFO: [ view_filter ] --END-- [ RunTime:0.001000s ]
+INFO: [ app_end ] --START--
+INFO: Run Behavior\ShowPageTraceBehavior [ RunTime:0.002000s ]
+INFO: [ app_end ] --END-- [ RunTime:0.002000s ]
+
+[ 2017-05-16T14:44:15+08:00 ] ::1 /twoa/
+INFO: [ app_init ] --START--
+INFO: Run Behavior\BuildLiteBehavior [ RunTime:0.000000s ]
+INFO: [ app_init ] --END-- [ RunTime:0.001000s ]
+INFO: [ app_begin ] --START--
+INFO: Run Behavior\ReadHtmlCacheBehavior [ RunTime:0.001000s ]
+INFO: [ app_begin ] --END-- [ RunTime:0.001000s ]
+INFO: [ view_parse ] --START--
+INFO: [ template_filter ] --START--
+INFO: Run Behavior\ContentReplaceBehavior [ RunTime:0.000000s ]
+INFO: [ template_filter ] --END-- [ RunTime:0.000000s ]
+INFO: Run Behavior\ParseTemplateBehavior [ RunTime:0.014001s ]
+INFO: [ view_parse ] --END-- [ RunTime:0.014001s ]
+INFO: [ view_filter ] --START--
+INFO: Run Behavior\WriteHtmlCacheBehavior [ RunTime:0.001000s ]
+INFO: [ view_filter ] --END-- [ RunTime:0.001000s ]
+INFO: [ app_end ] --START--
+INFO: Run Behavior\ShowPageTraceBehavior [ RunTime:0.001000s ]
+INFO: [ app_end ] --END-- [ RunTime:0.001000s ]
+
+[ 2017-05-16T14:44:44+08:00 ] ::1 /twoa/
+INFO: [ app_init ] --START--
+INFO: Run Behavior\BuildLiteBehavior [ RunTime:0.000000s ]
+INFO: [ app_init ] --END-- [ RunTime:0.001000s ]
+INFO: [ app_begin ] --START--
+INFO: Run Behavior\ReadHtmlCacheBehavior [ RunTime:0.001000s ]
+INFO: [ app_begin ] --END-- [ RunTime:0.001000s ]
+INFO: [ view_parse ] --START--
+INFO: [ template_filter ] --START--
+INFO: Run Behavior\ContentReplaceBehavior [ RunTime:0.000000s ]
+INFO: [ template_filter ] --END-- [ RunTime:0.001000s ]
+INFO: Run Behavior\ParseTemplateBehavior [ RunTime:0.017001s ]
+INFO: [ view_parse ] --END-- [ RunTime:0.018001s ]
+INFO: [ view_filter ] --START--
+INFO: Run Behavior\WriteHtmlCacheBehavior [ RunTime:0.001000s ]
+INFO: [ view_filter ] --END-- [ RunTime:0.001000s ]
+INFO: [ app_end ] --START--
+INFO: Run Behavior\ShowPageTraceBehavior [ RunTime:0.001000s ]
+INFO: [ app_end ] --END-- [ RunTime:0.002000s ]
+
+[ 2017-05-16T14:46:32+08:00 ] ::1 /twoa/
+INFO: [ app_init ] --START--
+INFO: Run Behavior\BuildLiteBehavior [ RunTime:0.000000s ]
+INFO: [ app_init ] --END-- [ RunTime:0.001000s ]
+INFO: [ app_begin ] --START--
+INFO: Run Behavior\ReadHtmlCacheBehavior [ RunTime:0.001000s ]
+INFO: [ app_begin ] --END-- [ RunTime:0.001000s ]
+INFO: [ view_parse ] --START--
+INFO: [ template_filter ] --START--
+INFO: Run Behavior\ContentReplaceBehavior [ RunTime:0.000000s ]
+INFO: [ template_filter ] --END-- [ RunTime:0.000000s ]
+INFO: Run Behavior\ParseTemplateBehavior [ RunTime:0.014001s ]
+INFO: [ view_parse ] --END-- [ RunTime:0.014001s ]
+INFO: [ view_filter ] --START--
+INFO: Run Behavior\WriteHtmlCacheBehavior [ RunTime:0.020001s ]
+INFO: [ view_filter ] --END-- [ RunTime:0.021001s ]
+INFO: [ app_end ] --START--
+INFO: Run Behavior\ShowPageTraceBehavior [ RunTime:0.002000s ]
+INFO: [ app_end ] --END-- [ RunTime:0.004000s ]
+
+[ 2017-05-16T14:46:56+08:00 ] ::1 /twoa/
+INFO: [ app_init ] --START--
+INFO: Run Behavior\BuildLiteBehavior [ RunTime:0.000000s ]
+INFO: [ app_init ] --END-- [ RunTime:0.001000s ]
+INFO: [ app_begin ] --START--
+INFO: Run Behavior\ReadHtmlCacheBehavior [ RunTime:0.001000s ]
+INFO: [ app_begin ] --END-- [ RunTime:0.002000s ]
+INFO: [ view_parse ] --START--
+INFO: [ template_filter ] --START--
+INFO: Run Behavior\ContentReplaceBehavior [ RunTime:0.000000s ]
+INFO: [ template_filter ] --END-- [ RunTime:0.000000s ]
+INFO: Run Behavior\ParseTemplateBehavior [ RunTime:0.013001s ]
+INFO: [ view_parse ] --END-- [ RunTime:0.014001s ]
+INFO: [ view_filter ] --START--
+INFO: Run Behavior\WriteHtmlCacheBehavior [ RunTime:0.001000s ]
+INFO: [ view_filter ] --END-- [ RunTime:0.001000s ]
+INFO: [ app_end ] --START--
+INFO: Run Behavior\ShowPageTraceBehavior [ RunTime:0.001000s ]
+INFO: [ app_end ] --END-- [ RunTime:0.002000s ]
+
+[ 2017-05-16T15:52:14+08:00 ] ::1 /twoa/
+INFO: [ app_init ] --START--
+INFO: Run Behavior\BuildLiteBehavior [ RunTime:0.000000s ]
+INFO: [ app_init ] --END-- [ RunTime:0.002000s ]
+INFO: [ app_begin ] --START--
+INFO: Run Behavior\ReadHtmlCacheBehavior [ RunTime:0.003000s ]
+INFO: [ app_begin ] --END-- [ RunTime:0.004000s ]
+
+[ 2017-05-16T15:52:35+08:00 ] ::1 /twoa/
+INFO: [ app_init ] --START--
+INFO: Run Behavior\BuildLiteBehavior [ RunTime:0.000000s ]
+INFO: [ app_init ] --END-- [ RunTime:0.005001s ]
+INFO: [ app_begin ] --START--
+INFO: Run Behavior\ReadHtmlCacheBehavior [ RunTime:0.014001s ]
+INFO: [ app_begin ] --END-- [ RunTime:0.014001s ]
+
+[ 2017-05-16T15:53:33+08:00 ] ::1 /twoa/
+INFO: [ app_init ] --START--
+INFO: Run Behavior\BuildLiteBehavior [ RunTime:0.000000s ]
+INFO: [ app_init ] --END-- [ RunTime:0.001000s ]
+INFO: [ app_begin ] --START--
+INFO: Run Behavior\ReadHtmlCacheBehavior [ RunTime:0.002000s ]
+INFO: [ app_begin ] --END-- [ RunTime:0.002000s ]
+
+[ 2017-05-16T15:55:00+08:00 ] ::1 /twoa/
+INFO: [ app_init ] --START--
+INFO: Run Behavior\BuildLiteBehavior [ RunTime:0.000000s ]
+INFO: [ app_init ] --END-- [ RunTime:0.001000s ]
+INFO: [ app_begin ] --START--
+INFO: Run Behavior\ReadHtmlCacheBehavior [ RunTime:0.002000s ]
+INFO: [ app_begin ] --END-- [ RunTime:0.002000s ]
+
+[ 2017-05-16T15:59:34+08:00 ] ::1 /twoa/
+INFO: [ app_init ] --START--
+INFO: Run Behavior\BuildLiteBehavior [ RunTime:0.000000s ]
+INFO: [ app_init ] --END-- [ RunTime:0.001000s ]
+INFO: [ app_begin ] --START--
+INFO: Run Behavior\ReadHtmlCacheBehavior [ RunTime:0.001000s ]
+INFO: [ app_begin ] --END-- [ RunTime:0.001000s ]
+
+[ 2017-05-16T16:01:24+08:00 ] ::1 /twoa/
+INFO: [ app_init ] --START--
+INFO: Run Behavior\BuildLiteBehavior [ RunTime:0.000000s ]
+INFO: [ app_init ] --END-- [ RunTime:0.001000s ]
+INFO: [ app_begin ] --START--
+INFO: Run Behavior\ReadHtmlCacheBehavior [ RunTime:0.001000s ]
+INFO: [ app_begin ] --END-- [ RunTime:0.002000s ]
+
+[ 2017-05-16T16:01:30+08:00 ] ::1 /twoa/
+INFO: [ app_init ] --START--
+INFO: Run Behavior\BuildLiteBehavior [ RunTime:0.000000s ]
+INFO: [ app_init ] --END-- [ RunTime:0.000000s ]
+INFO: [ app_begin ] --START--
+INFO: Run Behavior\ReadHtmlCacheBehavior [ RunTime:0.002000s ]
+INFO: [ app_begin ] --END-- [ RunTime:0.002000s ]
+INFO: [ view_parse ] --START--
+INFO: [ template_filter ] --START--
+INFO: Run Behavior\ContentReplaceBehavior [ RunTime:0.000000s ]
+INFO: [ template_filter ] --END-- [ RunTime:0.000000s ]
+INFO: Run Behavior\ParseTemplateBehavior [ RunTime:0.060004s ]
+INFO: [ view_parse ] --END-- [ RunTime:0.060004s ]
+INFO: [ view_filter ] --START--
+INFO: Run Behavior\WriteHtmlCacheBehavior [ RunTime:0.012000s ]
+INFO: [ view_filter ] --END-- [ RunTime:0.012000s ]
+INFO: [ app_end ] --START--
+INFO: Run Behavior\ShowPageTraceBehavior [ RunTime:0.014001s ]
+INFO: [ app_end ] --END-- [ RunTime:0.014001s ]
+
+[ 2017-05-16T16:03:12+08:00 ] ::1 /twoa/
+INFO: [ app_init ] --START--
+INFO: Run Behavior\BuildLiteBehavior [ RunTime:0.000000s ]
+INFO: [ app_init ] --END-- [ RunTime:0.001000s ]
+INFO: [ app_begin ] --START--
+INFO: Run Behavior\ReadHtmlCacheBehavior [ RunTime:0.001000s ]
+INFO: [ app_begin ] --END-- [ RunTime:0.001000s ]
+
+[ 2017-05-16T16:03:53+08:00 ] ::1 /twoa/
+INFO: [ app_init ] --START--
+INFO: Run Behavior\BuildLiteBehavior [ RunTime:0.000000s ]
+INFO: [ app_init ] --END-- [ RunTime:0.001000s ]
+INFO: [ app_begin ] --START--
+INFO: Run Behavior\ReadHtmlCacheBehavior [ RunTime:0.004000s ]
+INFO: [ app_begin ] --END-- [ RunTime:0.005000s ]
+
+[ 2017-05-16T16:03:56+08:00 ] ::1 /twoa/
+INFO: [ app_init ] --START--
+INFO: Run Behavior\BuildLiteBehavior [ RunTime:0.000000s ]
+INFO: [ app_init ] --END-- [ RunTime:0.001000s ]
+INFO: [ app_begin ] --START--
+INFO: Run Behavior\ReadHtmlCacheBehavior [ RunTime:0.001000s ]
+INFO: [ app_begin ] --END-- [ RunTime:0.001000s ]
+
+[ 2017-05-16T16:05:28+08:00 ] ::1 /twoa/
+INFO: [ app_init ] --START--
+INFO: Run Behavior\BuildLiteBehavior [ RunTime:0.000000s ]
+INFO: [ app_init ] --END-- [ RunTime:0.001000s ]
+INFO: [ app_begin ] --START--
+INFO: Run Behavior\ReadHtmlCacheBehavior [ RunTime:0.001000s ]
+INFO: [ app_begin ] --END-- [ RunTime:0.001000s ]
+ERR: Think\Controller:__constrcut方法不存在！
+
+[ 2017-05-16T16:05:54+08:00 ] ::1 /twoa/
+INFO: [ app_init ] --START--
+INFO: Run Behavior\BuildLiteBehavior [ RunTime:0.000000s ]
+INFO: [ app_init ] --END-- [ RunTime:0.000000s ]
+INFO: [ app_begin ] --START--
+INFO: Run Behavior\ReadHtmlCacheBehavior [ RunTime:0.001000s ]
+INFO: [ app_begin ] --END-- [ RunTime:0.001000s ]
+INFO: [ view_parse ] --START--
+INFO: [ template_filter ] --START--
+INFO: Run Behavior\ContentReplaceBehavior [ RunTime:0.000000s ]
+INFO: [ template_filter ] --END-- [ RunTime:0.000000s ]
+INFO: Run Behavior\ParseTemplateBehavior [ RunTime:0.014001s ]
+INFO: [ view_parse ] --END-- [ RunTime:0.014001s ]
+INFO: [ view_filter ] --START--
+INFO: Run Behavior\WriteHtmlCacheBehavior [ RunTime:0.001000s ]
+INFO: [ view_filter ] --END-- [ RunTime:0.001000s ]
+INFO: [ app_end ] --START--
+INFO: Run Behavior\ShowPageTraceBehavior [ RunTime:0.001000s ]
+INFO: [ app_end ] --END-- [ RunTime:0.001000s ]
+
+[ 2017-05-16T16:06:35+08:00 ] ::1 /twoa/
+INFO: [ app_init ] --START--
+INFO: Run Behavior\BuildLiteBehavior [ RunTime:0.000000s ]
+INFO: [ app_init ] --END-- [ RunTime:0.001000s ]
+INFO: [ app_begin ] --START--
+INFO: Run Behavior\ReadHtmlCacheBehavior [ RunTime:0.005000s ]
+INFO: [ app_begin ] --END-- [ RunTime:0.005000s ]
+INFO: [ view_parse ] --START--
+INFO: [ template_filter ] --START--
+INFO: Run Behavior\ContentReplaceBehavior [ RunTime:0.000000s ]
+INFO: [ template_filter ] --END-- [ RunTime:0.000000s ]
+INFO: Run Behavior\ParseTemplateBehavior [ RunTime:0.028001s ]
+INFO: [ view_parse ] --END-- [ RunTime:0.028001s ]
+INFO: [ view_filter ] --START--
+INFO: Run Behavior\WriteHtmlCacheBehavior [ RunTime:0.001000s ]
+INFO: [ view_filter ] --END-- [ RunTime:0.001000s ]
+INFO: [ app_end ] --START--
+INFO: Run Behavior\ShowPageTraceBehavior [ RunTime:0.001001s ]
+INFO: [ app_end ] --END-- [ RunTime:0.001001s ]
+
+[ 2017-05-16T16:10:17+08:00 ] ::1 /twoa/
+INFO: [ app_init ] --START--
+INFO: Run Behavior\BuildLiteBehavior [ RunTime:0.000000s ]
+INFO: [ app_init ] --END-- [ RunTime:0.021001s ]
+INFO: [ app_begin ] --START--
+INFO: Run Behavior\ReadHtmlCacheBehavior [ RunTime:0.006001s ]
+INFO: [ app_begin ] --END-- [ RunTime:0.006001s ]
+INFO: [ view_parse ] --START--
+INFO: [ template_filter ] --START--
+INFO: Run Behavior\ContentReplaceBehavior [ RunTime:0.000000s ]
+INFO: [ template_filter ] --END-- [ RunTime:0.001000s ]
+INFO: Run Behavior\ParseTemplateBehavior [ RunTime:0.015001s ]
+INFO: [ view_parse ] --END-- [ RunTime:0.015001s ]
+INFO: [ view_filter ] --START--
+INFO: Run Behavior\WriteHtmlCacheBehavior [ RunTime:0.001000s ]
+INFO: [ view_filter ] --END-- [ RunTime:0.001000s ]
+INFO: [ app_end ] --START--
+INFO: Run Behavior\ShowPageTraceBehavior [ RunTime:0.001000s ]
+INFO: [ app_end ] --END-- [ RunTime:0.001000s ]
+
+[ 2017-05-16T16:10:22+08:00 ] ::1 /twoa/
+INFO: [ app_init ] --START--
+INFO: Run Behavior\BuildLiteBehavior [ RunTime:0.000000s ]
+INFO: [ app_init ] --END-- [ RunTime:0.001000s ]
+INFO: [ app_begin ] --START--
+INFO: Run Behavior\ReadHtmlCacheBehavior [ RunTime:0.001000s ]
+INFO: [ app_begin ] --END-- [ RunTime:0.001000s ]
+INFO: [ view_parse ] --START--
+INFO: [ template_filter ] --START--
+INFO: Run Behavior\ContentReplaceBehavior [ RunTime:0.000000s ]
+INFO: [ template_filter ] --END-- [ RunTime:0.001000s ]
+INFO: Run Behavior\ParseTemplateBehavior [ RunTime:0.018001s ]
+INFO: [ view_parse ] --END-- [ RunTime:0.018001s ]
+INFO: [ view_filter ] --START--
+INFO: Run Behavior\WriteHtmlCacheBehavior [ RunTime:0.001000s ]
+INFO: [ view_filter ] --END-- [ RunTime:0.001000s ]
+INFO: [ app_end ] --START--
+INFO: Run Behavior\ShowPageTraceBehavior [ RunTime:0.002000s ]
+INFO: [ app_end ] --END-- [ RunTime:0.003000s ]
+
+[ 2017-05-16T16:13:50+08:00 ] ::1 /twoa/
+INFO: [ app_init ] --START--
+INFO: Run Behavior\BuildLiteBehavior [ RunTime:0.000000s ]
+INFO: [ app_init ] --END-- [ RunTime:0.002000s ]
+INFO: [ app_begin ] --START--
+INFO: Run Behavior\ReadHtmlCacheBehavior [ RunTime:0.002000s ]
+INFO: [ app_begin ] --END-- [ RunTime:0.002000s ]
+
+[ 2017-05-16T16:14:03+08:00 ] ::1 /twoa/
+INFO: [ app_init ] --START--
+INFO: Run Behavior\BuildLiteBehavior [ RunTime:0.000000s ]
+INFO: [ app_init ] --END-- [ RunTime:0.002001s ]
+INFO: [ app_begin ] --START--
+INFO: Run Behavior\ReadHtmlCacheBehavior [ RunTime:0.001000s ]
+INFO: [ app_begin ] --END-- [ RunTime:0.001000s ]
+
+[ 2017-05-16T16:14:03+08:00 ] ::1 /twoa/index.php/Home/index/login.html
+INFO: [ app_init ] --START--
+INFO: Run Behavior\BuildLiteBehavior [ RunTime:0.000000s ]
+INFO: [ app_init ] --END-- [ RunTime:0.002000s ]
+INFO: [ app_begin ] --START--
+INFO: Run Behavior\ReadHtmlCacheBehavior [ RunTime:0.001000s ]
+INFO: [ app_begin ] --END-- [ RunTime:0.001000s ]
+
+[ 2017-05-16T16:14:04+08:00 ] ::1 /twoa/index.php/Home/index/login.html
+INFO: [ app_init ] --START--
+INFO: Run Behavior\BuildLiteBehavior [ RunTime:0.000000s ]
+INFO: [ app_init ] --END-- [ RunTime:0.001000s ]
+INFO: [ app_begin ] --START--
+INFO: Run Behavior\ReadHtmlCacheBehavior [ RunTime:0.001001s ]
+INFO: [ app_begin ] --END-- [ RunTime:0.002001s ]
+
+[ 2017-05-16T16:14:04+08:00 ] ::1 /twoa/index.php/Home/index/login.html
+INFO: [ app_init ] --START--
+INFO: Run Behavior\BuildLiteBehavior [ RunTime:0.000000s ]
+INFO: [ app_init ] --END-- [ RunTime:0.001000s ]
+INFO: [ app_begin ] --START--
+INFO: Run Behavior\ReadHtmlCacheBehavior [ RunTime:0.001000s ]
+INFO: [ app_begin ] --END-- [ RunTime:0.002001s ]
+
+[ 2017-05-16T16:14:04+08:00 ] ::1 /twoa/index.php/Home/index/login.html
+INFO: [ app_init ] --START--
+INFO: Run Behavior\BuildLiteBehavior [ RunTime:0.000000s ]
+INFO: [ app_init ] --END-- [ RunTime:0.001000s ]
+INFO: [ app_begin ] --START--
+INFO: Run Behavior\ReadHtmlCacheBehavior [ RunTime:0.001000s ]
+INFO: [ app_begin ] --END-- [ RunTime:0.001000s ]
+
+[ 2017-05-16T16:14:04+08:00 ] ::1 /twoa/index.php/Home/index/login.html
+INFO: [ app_init ] --START--
+INFO: Run Behavior\BuildLiteBehavior [ RunTime:0.000000s ]
+INFO: [ app_init ] --END-- [ RunTime:0.001000s ]
+INFO: [ app_begin ] --START--
+INFO: Run Behavior\ReadHtmlCacheBehavior [ RunTime:0.001000s ]
+INFO: [ app_begin ] --END-- [ RunTime:0.002000s ]
+
+[ 2017-05-16T16:14:05+08:00 ] ::1 /twoa/index.php/Home/index/login.html
+INFO: [ app_init ] --START--
+INFO: Run Behavior\BuildLiteBehavior [ RunTime:0.000000s ]
+INFO: [ app_init ] --END-- [ RunTime:0.001000s ]
+INFO: [ app_begin ] --START--
+INFO: Run Behavior\ReadHtmlCacheBehavior [ RunTime:0.001000s ]
+INFO: [ app_begin ] --END-- [ RunTime:0.001000s ]
+
+[ 2017-05-16T16:14:05+08:00 ] ::1 /twoa/index.php/Home/index/login.html
+INFO: [ app_init ] --START--
+INFO: Run Behavior\BuildLiteBehavior [ RunTime:0.000000s ]
+INFO: [ app_init ] --END-- [ RunTime:0.001001s ]
+INFO: [ app_begin ] --START--
+INFO: Run Behavior\ReadHtmlCacheBehavior [ RunTime:0.001000s ]
+INFO: [ app_begin ] --END-- [ RunTime:0.001000s ]
+
+[ 2017-05-16T16:14:05+08:00 ] ::1 /twoa/index.php/Home/index/login.html
+INFO: [ app_init ] --START--
+INFO: Run Behavior\BuildLiteBehavior [ RunTime:0.000000s ]
+INFO: [ app_init ] --END-- [ RunTime:0.002001s ]
+INFO: [ app_begin ] --START--
+INFO: Run Behavior\ReadHtmlCacheBehavior [ RunTime:0.001000s ]
+INFO: [ app_begin ] --END-- [ RunTime:0.001000s ]
+
+[ 2017-05-16T16:14:06+08:00 ] ::1 /twoa/index.php/Home/index/login.html
+INFO: [ app_init ] --START--
+INFO: Run Behavior\BuildLiteBehavior [ RunTime:0.000000s ]
+INFO: [ app_init ] --END-- [ RunTime:0.002000s ]
+INFO: [ app_begin ] --START--
+INFO: Run Behavior\ReadHtmlCacheBehavior [ RunTime:0.001000s ]
+INFO: [ app_begin ] --END-- [ RunTime:0.002000s ]
+
+[ 2017-05-16T16:14:06+08:00 ] ::1 /twoa/index.php/Home/index/login.html
+INFO: [ app_init ] --START--
+INFO: Run Behavior\BuildLiteBehavior [ RunTime:0.000000s ]
+INFO: [ app_init ] --END-- [ RunTime:0.002000s ]
+INFO: [ app_begin ] --START--
+INFO: Run Behavior\ReadHtmlCacheBehavior [ RunTime:0.001000s ]
+INFO: [ app_begin ] --END-- [ RunTime:0.001000s ]
+
+[ 2017-05-16T16:14:06+08:00 ] ::1 /twoa/index.php/Home/index/login.html
+INFO: [ app_init ] --START--
+INFO: Run Behavior\BuildLiteBehavior [ RunTime:0.000000s ]
+INFO: [ app_init ] --END-- [ RunTime:0.001000s ]
+INFO: [ app_begin ] --START--
+INFO: Run Behavior\ReadHtmlCacheBehavior [ RunTime:0.001000s ]
+INFO: [ app_begin ] --END-- [ RunTime:0.001000s ]
+
+[ 2017-05-16T16:14:07+08:00 ] ::1 /twoa/index.php/Home/index/login.html
+INFO: [ app_init ] --START--
+INFO: Run Behavior\BuildLiteBehavior [ RunTime:0.000000s ]
+INFO: [ app_init ] --END-- [ RunTime:0.001000s ]
+INFO: [ app_begin ] --START--
+INFO: Run Behavior\ReadHtmlCacheBehavior [ RunTime:0.001001s ]
+INFO: [ app_begin ] --END-- [ RunTime:0.001001s ]
+
+[ 2017-05-16T16:14:07+08:00 ] ::1 /twoa/index.php/Home/index/login.html
+INFO: [ app_init ] --START--
+INFO: Run Behavior\BuildLiteBehavior [ RunTime:0.000000s ]
+INFO: [ app_init ] --END-- [ RunTime:0.002001s ]
+INFO: [ app_begin ] --START--
+INFO: Run Behavior\ReadHtmlCacheBehavior [ RunTime:0.001000s ]
+INFO: [ app_begin ] --END-- [ RunTime:0.002000s ]
+
+[ 2017-05-16T16:14:07+08:00 ] ::1 /twoa/index.php/Home/index/login.html
+INFO: [ app_init ] --START--
+INFO: Run Behavior\BuildLiteBehavior [ RunTime:0.000000s ]
+INFO: [ app_init ] --END-- [ RunTime:0.002000s ]
+INFO: [ app_begin ] --START--
+INFO: Run Behavior\ReadHtmlCacheBehavior [ RunTime:0.001000s ]
+INFO: [ app_begin ] --END-- [ RunTime:0.001000s ]
+
+[ 2017-05-16T16:14:08+08:00 ] ::1 /twoa/index.php/Home/index/login.html
+INFO: [ app_init ] --START--
+INFO: Run Behavior\BuildLiteBehavior [ RunTime:0.000000s ]
+INFO: [ app_init ] --END-- [ RunTime:0.002000s ]
+INFO: [ app_begin ] --START--
+INFO: Run Behavior\ReadHtmlCacheBehavior [ RunTime:0.002000s ]
+INFO: [ app_begin ] --END-- [ RunTime:0.002000s ]
+
+[ 2017-05-16T16:14:08+08:00 ] ::1 /twoa/index.php/Home/index/login.html
+INFO: [ app_init ] --START--
+INFO: Run Behavior\BuildLiteBehavior [ RunTime:0.000000s ]
+INFO: [ app_init ] --END-- [ RunTime:0.001000s ]
+INFO: [ app_begin ] --START--
+INFO: Run Behavior\ReadHtmlCacheBehavior [ RunTime:0.001000s ]
+INFO: [ app_begin ] --END-- [ RunTime:0.001000s ]
+
+[ 2017-05-16T16:14:09+08:00 ] ::1 /twoa/index.php/Home/index/login.html
+INFO: [ app_init ] --START--
+INFO: Run Behavior\BuildLiteBehavior [ RunTime:0.000000s ]
+INFO: [ app_init ] --END-- [ RunTime:0.001001s ]
+INFO: [ app_begin ] --START--
+INFO: Run Behavior\ReadHtmlCacheBehavior [ RunTime:0.001000s ]
+INFO: [ app_begin ] --END-- [ RunTime:0.001000s ]
+
+[ 2017-05-16T16:14:09+08:00 ] ::1 /twoa/index.php/Home/index/login.html
+INFO: [ app_init ] --START--
+INFO: Run Behavior\BuildLiteBehavior [ RunTime:0.000000s ]
+INFO: [ app_init ] --END-- [ RunTime:0.001000s ]
+INFO: [ app_begin ] --START--
+INFO: Run Behavior\ReadHtmlCacheBehavior [ RunTime:0.001000s ]
+INFO: [ app_begin ] --END-- [ RunTime:0.001000s ]
+
+[ 2017-05-16T16:14:09+08:00 ] ::1 /twoa/index.php/Home/index/login.html
+INFO: [ app_init ] --START--
+INFO: Run Behavior\BuildLiteBehavior [ RunTime:0.000000s ]
+INFO: [ app_init ] --END-- [ RunTime:0.001000s ]
+INFO: [ app_begin ] --START--
+INFO: Run Behavior\ReadHtmlCacheBehavior [ RunTime:0.001000s ]
+INFO: [ app_begin ] --END-- [ RunTime:0.002000s ]
+
+[ 2017-05-16T16:14:10+08:00 ] ::1 /twoa/index.php/Home/index/login.html
+INFO: [ app_init ] --START--
+INFO: Run Behavior\BuildLiteBehavior [ RunTime:0.000000s ]
+INFO: [ app_init ] --END-- [ RunTime:0.001000s ]
+INFO: [ app_begin ] --START--
+INFO: Run Behavior\ReadHtmlCacheBehavior [ RunTime:0.001000s ]
+INFO: [ app_begin ] --END-- [ RunTime:0.001000s ]
+
+[ 2017-05-16T16:14:10+08:00 ] ::1 /twoa/index.php/Home/index/login.html
+INFO: [ app_init ] --START--
+INFO: Run Behavior\BuildLiteBehavior [ RunTime:0.000000s ]
+INFO: [ app_init ] --END-- [ RunTime:0.001001s ]
+INFO: [ app_begin ] --START--
+INFO: Run Behavior\ReadHtmlCacheBehavior [ RunTime:0.001000s ]
+INFO: [ app_begin ] --END-- [ RunTime:0.001000s ]
+
+[ 2017-05-16T16:14:10+08:00 ] ::1 /twoa/index.php/Home/index/login.html
+INFO: [ app_init ] --START--
+INFO: Run Behavior\BuildLiteBehavior [ RunTime:0.000000s ]
+INFO: [ app_init ] --END-- [ RunTime:0.001000s ]
+INFO: [ app_begin ] --START--
+INFO: Run Behavior\ReadHtmlCacheBehavior [ RunTime:0.001000s ]
+INFO: [ app_begin ] --END-- [ RunTime:0.001000s ]
+
+[ 2017-05-16T16:14:11+08:00 ] ::1 /twoa/index.php/Home/index/login.html
+INFO: [ app_init ] --START--
+INFO: Run Behavior\BuildLiteBehavior [ RunTime:0.000000s ]
+INFO: [ app_init ] --END-- [ RunTime:0.001000s ]
+INFO: [ app_begin ] --START--
+INFO: Run Behavior\ReadHtmlCacheBehavior [ RunTime:0.001000s ]
+INFO: [ app_begin ] --END-- [ RunTime:0.001000s ]
+
+[ 2017-05-16T16:14:11+08:00 ] ::1 /twoa/index.php/Home/index/login.html
+INFO: [ app_init ] --START--
+INFO: Run Behavior\BuildLiteBehavior [ RunTime:0.000000s ]
+INFO: [ app_init ] --END-- [ RunTime:0.001000s ]
+INFO: [ app_begin ] --START--
+INFO: Run Behavior\ReadHtmlCacheBehavior [ RunTime:0.002000s ]
+INFO: [ app_begin ] --END-- [ RunTime:0.002000s ]
+
+[ 2017-05-16T16:14:12+08:00 ] ::1 /twoa/index.php/Home/index/login.html
+INFO: [ app_init ] --START--
+INFO: Run Behavior\BuildLiteBehavior [ RunTime:0.000000s ]
+INFO: [ app_init ] --END-- [ RunTime:0.002000s ]
+INFO: [ app_begin ] --START--
+INFO: Run Behavior\ReadHtmlCacheBehavior [ RunTime:0.001000s ]
+INFO: [ app_begin ] --END-- [ RunTime:0.002000s ]
+
+[ 2017-05-16T16:14:20+08:00 ] ::1 /twoa/index.php/Home/index/login.html
+INFO: [ app_init ] --START--
+INFO: Run Behavior\BuildLiteBehavior [ RunTime:0.000000s ]
+INFO: [ app_init ] --END-- [ RunTime:0.002000s ]
+INFO: [ app_begin ] --START--
+INFO: Run Behavior\ReadHtmlCacheBehavior [ RunTime:0.001001s ]
+INFO: [ app_begin ] --END-- [ RunTime:0.001001s ]
+
+[ 2017-05-16T16:14:21+08:00 ] ::1 /twoa/index.php/Home/index/login.html
+INFO: [ app_init ] --START--
+INFO: Run Behavior\BuildLiteBehavior [ RunTime:0.000000s ]
+INFO: [ app_init ] --END-- [ RunTime:0.001000s ]
+INFO: [ app_begin ] --START--
+INFO: Run Behavior\ReadHtmlCacheBehavior [ RunTime:0.002000s ]
+INFO: [ app_begin ] --END-- [ RunTime:0.002000s ]
+
+[ 2017-05-16T16:14:21+08:00 ] ::1 /twoa/index.php/Home/index/login.html
+INFO: [ app_init ] --START--
+INFO: Run Behavior\BuildLiteBehavior [ RunTime:0.000000s ]
+INFO: [ app_init ] --END-- [ RunTime:0.001000s ]
+INFO: [ app_begin ] --START--
+INFO: Run Behavior\ReadHtmlCacheBehavior [ RunTime:0.001000s ]
+INFO: [ app_begin ] --END-- [ RunTime:0.002000s ]
+
+[ 2017-05-16T16:14:22+08:00 ] ::1 /twoa/index.php/Home/index/login.html
+INFO: [ app_init ] --START--
+INFO: Run Behavior\BuildLiteBehavior [ RunTime:0.000000s ]
+INFO: [ app_init ] --END-- [ RunTime:0.001000s ]
+INFO: [ app_begin ] --START--
+INFO: Run Behavior\ReadHtmlCacheBehavior [ RunTime:0.001000s ]
+INFO: [ app_begin ] --END-- [ RunTime:0.001000s ]
+
+[ 2017-05-16T16:14:22+08:00 ] ::1 /twoa/index.php/Home/index/login.html
+INFO: [ app_init ] --START--
+INFO: Run Behavior\BuildLiteBehavior [ RunTime:0.000000s ]
+INFO: [ app_init ] --END-- [ RunTime:0.001000s ]
+INFO: [ app_begin ] --START--
+INFO: Run Behavior\ReadHtmlCacheBehavior [ RunTime:0.001000s ]
+INFO: [ app_begin ] --END-- [ RunTime:0.001000s ]
+
+[ 2017-05-16T16:14:22+08:00 ] ::1 /twoa/index.php/Home/index/login.html
+INFO: [ app_init ] --START--
+INFO: Run Behavior\BuildLiteBehavior [ RunTime:0.001000s ]
+INFO: [ app_init ] --END-- [ RunTime:0.001000s ]
+INFO: [ app_begin ] --START--
+INFO: Run Behavior\ReadHtmlCacheBehavior [ RunTime:0.001000s ]
+INFO: [ app_begin ] --END-- [ RunTime:0.001000s ]
+
+[ 2017-05-16T16:14:23+08:00 ] ::1 /twoa/index.php/Home/index/login.html
+INFO: [ app_init ] --START--
+INFO: Run Behavior\BuildLiteBehavior [ RunTime:0.000000s ]
+INFO: [ app_init ] --END-- [ RunTime:0.001000s ]
+INFO: [ app_begin ] --START--
+INFO: Run Behavior\ReadHtmlCacheBehavior [ RunTime:0.001000s ]
+INFO: [ app_begin ] --END-- [ RunTime:0.001000s ]
+
+[ 2017-05-16T16:14:23+08:00 ] ::1 /twoa/index.php/Home/index/login.html
+INFO: [ app_init ] --START--
+INFO: Run Behavior\BuildLiteBehavior [ RunTime:0.000000s ]
+INFO: [ app_init ] --END-- [ RunTime:0.001000s ]
+INFO: [ app_begin ] --START--
+INFO: Run Behavior\ReadHtmlCacheBehavior [ RunTime:0.001000s ]
+INFO: [ app_begin ] --END-- [ RunTime:0.001000s ]
+
+[ 2017-05-16T16:14:23+08:00 ] ::1 /twoa/index.php/Home/index/login.html
+INFO: [ app_init ] --START--
+INFO: Run Behavior\BuildLiteBehavior [ RunTime:0.000000s ]
+INFO: [ app_init ] --END-- [ RunTime:0.001000s ]
+INFO: [ app_begin ] --START--
+INFO: Run Behavior\ReadHtmlCacheBehavior [ RunTime:0.002000s ]
+INFO: [ app_begin ] --END-- [ RunTime:0.002000s ]
+
+[ 2017-05-16T16:14:24+08:00 ] ::1 /twoa/index.php/Home/index/login.html
+INFO: [ app_init ] --START--
+INFO: Run Behavior\BuildLiteBehavior [ RunTime:0.000000s ]
+INFO: [ app_init ] --END-- [ RunTime:0.002000s ]
+INFO: [ app_begin ] --START--
+INFO: Run Behavior\ReadHtmlCacheBehavior [ RunTime:0.001000s ]
+INFO: [ app_begin ] --END-- [ RunTime:0.001000s ]
+
+[ 2017-05-16T16:14:24+08:00 ] ::1 /twoa/index.php/Home/index/login.html
+INFO: [ app_init ] --START--
+INFO: Run Behavior\BuildLiteBehavior [ RunTime:0.000000s ]
+INFO: [ app_init ] --END-- [ RunTime:0.001000s ]
+INFO: [ app_begin ] --START--
+INFO: Run Behavior\ReadHtmlCacheBehavior [ RunTime:0.001000s ]
+INFO: [ app_begin ] --END-- [ RunTime:0.002000s ]
+
+[ 2017-05-16T16:14:24+08:00 ] ::1 /twoa/index.php/Home/index/login.html
+INFO: [ app_init ] --START--
+INFO: Run Behavior\BuildLiteBehavior [ RunTime:0.000000s ]
+INFO: [ app_init ] --END-- [ RunTime:0.001000s ]
+INFO: [ app_begin ] --START--
+INFO: Run Behavior\ReadHtmlCacheBehavior [ RunTime:0.001001s ]
+INFO: [ app_begin ] --END-- [ RunTime:0.001001s ]
+
+[ 2017-05-16T16:14:25+08:00 ] ::1 /twoa/index.php/Home/index/login.html
+INFO: [ app_init ] --START--
+INFO: Run Behavior\BuildLiteBehavior [ RunTime:0.000000s ]
+INFO: [ app_init ] --END-- [ RunTime:0.001000s ]
+INFO: [ app_begin ] --START--
+INFO: Run Behavior\ReadHtmlCacheBehavior [ RunTime:0.001000s ]
+INFO: [ app_begin ] --END-- [ RunTime:0.001000s ]
+
+[ 2017-05-16T16:14:25+08:00 ] ::1 /twoa/index.php/Home/index/login.html
+INFO: [ app_init ] --START--
+INFO: Run Behavior\BuildLiteBehavior [ RunTime:0.000000s ]
+INFO: [ app_init ] --END-- [ RunTime:0.001000s ]
+INFO: [ app_begin ] --START--
+INFO: Run Behavior\ReadHtmlCacheBehavior [ RunTime:0.001000s ]
+INFO: [ app_begin ] --END-- [ RunTime:0.002000s ]
+
+[ 2017-05-16T16:14:25+08:00 ] ::1 /twoa/index.php/Home/index/login.html
+INFO: [ app_init ] --START--
+INFO: Run Behavior\BuildLiteBehavior [ RunTime:0.000000s ]
+INFO: [ app_init ] --END-- [ RunTime:0.001001s ]
+INFO: [ app_begin ] --START--
+INFO: Run Behavior\ReadHtmlCacheBehavior [ RunTime:0.001000s ]
+INFO: [ app_begin ] --END-- [ RunTime:0.001000s ]
+
+[ 2017-05-16T16:16:29+08:00 ] ::1 /twoa/index.php/Home/index/login.html
+INFO: [ app_init ] --START--
+INFO: Run Behavior\BuildLiteBehavior [ RunTime:0.000000s ]
+INFO: [ app_init ] --END-- [ RunTime:0.000000s ]
+INFO: [ app_begin ] --START--
+INFO: Run Behavior\ReadHtmlCacheBehavior [ RunTime:0.002000s ]
+INFO: [ app_begin ] --END-- [ RunTime:0.002000s ]
+INFO: [ view_parse ] --START--
+INFO: [ template_filter ] --START--
+INFO: Run Behavior\ContentReplaceBehavior [ RunTime:0.020001s ]
+INFO: [ template_filter ] --END-- [ RunTime:0.021001s ]
+INFO: Run Behavior\ParseTemplateBehavior [ RunTime:0.044003s ]
+INFO: [ view_parse ] --END-- [ RunTime:0.046003s ]
+INFO: [ view_filter ] --START--
+INFO: Run Behavior\WriteHtmlCacheBehavior [ RunTime:0.003000s ]
+INFO: [ view_filter ] --END-- [ RunTime:0.003000s ]
+INFO: [ app_end ] --START--
+INFO: Run Behavior\ShowPageTraceBehavior [ RunTime:0.003000s ]
+INFO: [ app_end ] --END-- [ RunTime:0.004001s ]
+
+[ 2017-05-16T16:29:55+08:00 ] ::1 /twoa/index.php/Home/index/login.html
+INFO: [ app_init ] --START--
+INFO: Run Behavior\BuildLiteBehavior [ RunTime:0.000000s ]
+INFO: [ app_init ] --END-- [ RunTime:0.001000s ]
+INFO: [ app_begin ] --START--
+INFO: Run Behavior\ReadHtmlCacheBehavior [ RunTime:0.000000s ]
+INFO: [ app_begin ] --END-- [ RunTime:0.002001s ]
+
+[ 2017-05-16T16:31:29+08:00 ] ::1 /twoa/index.php/Home/index/login.html
+INFO: [ app_init ] --START--
+INFO: Run Behavior\BuildLiteBehavior [ RunTime:0.000000s ]
+INFO: [ app_init ] --END-- [ RunTime:0.001000s ]
+INFO: [ app_begin ] --START--
+INFO: Run Behavior\ReadHtmlCacheBehavior [ RunTime:0.001000s ]
+INFO: [ app_begin ] --END-- [ RunTime:0.001000s ]
+
+[ 2017-05-16T16:32:51+08:00 ] ::1 /twoa/index.php/Home/index/login.html
+INFO: [ app_init ] --START--
+INFO: Run Behavior\BuildLiteBehavior [ RunTime:0.000000s ]
+INFO: [ app_init ] --END-- [ RunTime:0.001000s ]
+INFO: [ app_begin ] --START--
+INFO: Run Behavior\ReadHtmlCacheBehavior [ RunTime:0.001000s ]
+INFO: [ app_begin ] --END-- [ RunTime:0.001000s ]
+
+[ 2017-05-16T16:33:48+08:00 ] ::1 /twoa/index.php/Home/index/login.html
+INFO: [ app_init ] --START--
+INFO: Run Behavior\BuildLiteBehavior [ RunTime:0.000000s ]
+INFO: [ app_init ] --END-- [ RunTime:0.001000s ]
+INFO: [ app_begin ] --START--
+INFO: Run Behavior\ReadHtmlCacheBehavior [ RunTime:0.000000s ]
+INFO: [ app_begin ] --END-- [ RunTime:0.001000s ]
+INFO: [ app_end ] --START--
+INFO: Run Behavior\ShowPageTraceBehavior [ RunTime:0.001001s ]
+INFO: [ app_end ] --END-- [ RunTime:0.002001s ]
+
+[ 2017-05-16T16:33:55+08:00 ] ::1 /twoa/index.php/Home/index/index.html
+INFO: [ app_init ] --START--
+INFO: Run Behavior\BuildLiteBehavior [ RunTime:0.000000s ]
+INFO: [ app_init ] --END-- [ RunTime:0.001000s ]
+INFO: [ app_begin ] --START--
+INFO: Run Behavior\ReadHtmlCacheBehavior [ RunTime:0.001000s ]
+INFO: [ app_begin ] --END-- [ RunTime:0.001000s ]
+INFO: [ view_parse ] --START--
+INFO: [ template_filter ] --START--
+INFO: Run Behavior\ContentReplaceBehavior [ RunTime:0.000000s ]
+INFO: [ template_filter ] --END-- [ RunTime:0.000000s ]
+INFO: Run Behavior\ParseTemplateBehavior [ RunTime:0.023002s ]
+INFO: [ view_parse ] --END-- [ RunTime:0.024002s ]
+INFO: [ view_filter ] --START--
+INFO: Run Behavior\WriteHtmlCacheBehavior [ RunTime:0.001000s ]
+INFO: [ view_filter ] --END-- [ RunTime:0.001000s ]
+INFO: [ app_end ] --START--
+INFO: Run Behavior\ShowPageTraceBehavior [ RunTime:0.000000s ]
+INFO: [ app_end ] --END-- [ RunTime:0.002000s ]
+
+[ 2017-05-16T16:36:09+08:00 ] ::1 /twoa/index.php/Home/index/index.html
+INFO: [ app_init ] --START--
+INFO: Run Behavior\BuildLiteBehavior [ RunTime:0.000000s ]
+INFO: [ app_init ] --END-- [ RunTime:0.001000s ]
+INFO: [ app_begin ] --START--
+INFO: Run Behavior\ReadHtmlCacheBehavior [ RunTime:0.001000s ]
+INFO: [ app_begin ] --END-- [ RunTime:0.001000s ]
+INFO: [ view_parse ] --START--
+INFO: [ template_filter ] --START--
+INFO: Run Behavior\ContentReplaceBehavior [ RunTime:0.000000s ]
+INFO: [ template_filter ] --END-- [ RunTime:0.000000s ]
+INFO: Run Behavior\ParseTemplateBehavior [ RunTime:0.024001s ]
+INFO: [ view_parse ] --END-- [ RunTime:0.024001s ]
+INFO: [ view_filter ] --START--
+INFO: Run Behavior\WriteHtmlCacheBehavior [ RunTime:0.000000s ]
+INFO: [ view_filter ] --END-- [ RunTime:0.001000s ]
+INFO: [ app_end ] --START--
+INFO: Run Behavior\ShowPageTraceBehavior [ RunTime:0.001000s ]
+INFO: [ app_end ] --END-- [ RunTime:0.001000s ]
+
+[ 2017-05-16T16:36:30+08:00 ] ::1 /twoa/index.php/Home/index/index.html
+INFO: [ app_init ] --START--
+INFO: Run Behavior\BuildLiteBehavior [ RunTime:0.000000s ]
+INFO: [ app_init ] --END-- [ RunTime:0.001000s ]
+INFO: [ app_begin ] --START--
+INFO: Run Behavior\ReadHtmlCacheBehavior [ RunTime:0.001000s ]
+INFO: [ app_begin ] --END-- [ RunTime:0.002000s ]
+INFO: [ view_parse ] --START--
+INFO: [ template_filter ] --START--
+INFO: Run Behavior\ContentReplaceBehavior [ RunTime:0.000000s ]
+INFO: [ template_filter ] --END-- [ RunTime:0.001000s ]
+INFO: Run Behavior\ParseTemplateBehavior [ RunTime:0.278016s ]
+INFO: [ view_parse ] --END-- [ RunTime:0.278016s ]
+INFO: [ view_filter ] --START--
+INFO: Run Behavior\WriteHtmlCacheBehavior [ RunTime:0.029002s ]
+INFO: [ view_filter ] --END-- [ RunTime:0.030002s ]
+INFO: [ app_end ] --START--
+INFO: Run Behavior\ShowPageTraceBehavior [ RunTime:0.001000s ]
+INFO: [ app_end ] --END-- [ RunTime:0.002000s ]
+
+[ 2017-05-16T16:36:55+08:00 ] ::1 /twoa/index.php/Home/index/index.html
+INFO: [ app_init ] --START--
+INFO: Run Behavior\BuildLiteBehavior [ RunTime:0.000000s ]
+INFO: [ app_init ] --END-- [ RunTime:0.001000s ]
+INFO: [ app_begin ] --START--
+INFO: Run Behavior\ReadHtmlCacheBehavior [ RunTime:0.002000s ]
+INFO: [ app_begin ] --END-- [ RunTime:0.002000s ]
+INFO: [ view_parse ] --START--
+INFO: [ template_filter ] --START--
+INFO: Run Behavior\ContentReplaceBehavior [ RunTime:0.000000s ]
+INFO: [ template_filter ] --END-- [ RunTime:0.000000s ]
+INFO: Run Behavior\ParseTemplateBehavior [ RunTime:0.015001s ]
+INFO: [ view_parse ] --END-- [ RunTime:0.015001s ]
+INFO: [ view_filter ] --START--
+INFO: Run Behavior\WriteHtmlCacheBehavior [ RunTime:0.002000s ]
+INFO: [ view_filter ] --END-- [ RunTime:0.002000s ]
+INFO: [ app_end ] --START--
+INFO: Run Behavior\ShowPageTraceBehavior [ RunTime:0.001000s ]
+INFO: [ app_end ] --END-- [ RunTime:0.002000s ]
+
+[ 2017-05-16T16:37:55+08:00 ] ::1 /twoa/index.php/Home/index/index.html
+INFO: [ app_init ] --START--
+INFO: Run Behavior\BuildLiteBehavior [ RunTime:0.000000s ]
+INFO: [ app_init ] --END-- [ RunTime:0.001001s ]
+INFO: [ app_begin ] --START--
+INFO: Run Behavior\ReadHtmlCacheBehavior [ RunTime:0.001000s ]
+INFO: [ app_begin ] --END-- [ RunTime:0.002000s ]
+INFO: [ view_parse ] --START--
+INFO: [ template_filter ] --START--
+INFO: Run Behavior\ContentReplaceBehavior [ RunTime:0.001000s ]
+INFO: [ template_filter ] --END-- [ RunTime:0.001000s ]
+INFO: Run Behavior\ParseTemplateBehavior [ RunTime:0.028002s ]
+INFO: [ view_parse ] --END-- [ RunTime:0.028002s ]
+INFO: [ view_filter ] --START--
+INFO: Run Behavior\WriteHtmlCacheBehavior [ RunTime:0.001000s ]
+INFO: [ view_filter ] --END-- [ RunTime:0.002000s ]
+INFO: [ app_end ] --START--
+INFO: Run Behavior\ShowPageTraceBehavior [ RunTime:0.003000s ]
+INFO: [ app_end ] --END-- [ RunTime:0.003000s ]
+
+[ 2017-05-16T16:39:15+08:00 ] ::1 /twoa/index.php/Home/index/index.html
+INFO: [ app_init ] --START--
+INFO: Run Behavior\BuildLiteBehavior [ RunTime:0.000000s ]
+INFO: [ app_init ] --END-- [ RunTime:0.001000s ]
+INFO: [ app_begin ] --START--
+INFO: Run Behavior\ReadHtmlCacheBehavior [ RunTime:0.001001s ]
+INFO: [ app_begin ] --END-- [ RunTime:0.002001s ]
+INFO: [ view_parse ] --START--
+INFO: [ template_filter ] --START--
+INFO: Run Behavior\ContentReplaceBehavior [ RunTime:0.000000s ]
+INFO: [ template_filter ] --END-- [ RunTime:0.001000s ]
+INFO: Run Behavior\ParseTemplateBehavior [ RunTime:0.037002s ]
+INFO: [ view_parse ] --END-- [ RunTime:0.038002s ]
+INFO: [ view_filter ] --START--
+INFO: Run Behavior\WriteHtmlCacheBehavior [ RunTime:0.002000s ]
+INFO: [ view_filter ] --END-- [ RunTime:0.002000s ]
+INFO: [ app_end ] --START--
+INFO: Run Behavior\ShowPageTraceBehavior [ RunTime:0.001000s ]
+INFO: [ app_end ] --END-- [ RunTime:0.001000s ]
+
+[ 2017-05-16T16:39:18+08:00 ] ::1 /twoa/index.php/Home/index/index.html
+INFO: [ app_init ] --START--
+INFO: Run Behavior\BuildLiteBehavior [ RunTime:0.000000s ]
+INFO: [ app_init ] --END-- [ RunTime:0.001000s ]
+INFO: [ app_begin ] --START--
+INFO: Run Behavior\ReadHtmlCacheBehavior [ RunTime:0.001000s ]
+INFO: [ app_begin ] --END-- [ RunTime:0.001000s ]
+INFO: [ view_parse ] --START--
+INFO: [ template_filter ] --START--
+INFO: Run Behavior\ContentReplaceBehavior [ RunTime:0.000000s ]
+INFO: [ template_filter ] --END-- [ RunTime:0.000000s ]
+INFO: Run Behavior\ParseTemplateBehavior [ RunTime:0.017001s ]
+INFO: [ view_parse ] --END-- [ RunTime:0.017001s ]
+INFO: [ view_filter ] --START--
+INFO: Run Behavior\WriteHtmlCacheBehavior [ RunTime:0.001000s ]
+INFO: [ view_filter ] --END-- [ RunTime:0.001000s ]
+INFO: [ app_end ] --START--
+INFO: Run Behavior\ShowPageTraceBehavior [ RunTime:0.001000s ]
+INFO: [ app_end ] --END-- [ RunTime:0.002000s ]
+
+[ 2017-05-16T16:41:04+08:00 ] ::1 /twoa/index.php/Home/index/index.html
+INFO: [ app_init ] --START--
+INFO: Run Behavior\BuildLiteBehavior [ RunTime:0.000000s ]
+INFO: [ app_init ] --END-- [ RunTime:0.001000s ]
+INFO: [ app_begin ] --START--
+INFO: Run Behavior\ReadHtmlCacheBehavior [ RunTime:0.001000s ]
+INFO: [ app_begin ] --END-- [ RunTime:0.002000s ]
+INFO: [ view_parse ] --START--
+INFO: [ template_filter ] --START--
+INFO: Run Behavior\ContentReplaceBehavior [ RunTime:0.000000s ]
+INFO: [ template_filter ] --END-- [ RunTime:0.000000s ]
+INFO: Run Behavior\ParseTemplateBehavior [ RunTime:0.023001s ]
+INFO: [ view_parse ] --END-- [ RunTime:0.023001s ]
+INFO: [ view_filter ] --START--
+INFO: Run Behavior\WriteHtmlCacheBehavior [ RunTime:0.000000s ]
+INFO: [ view_filter ] --END-- [ RunTime:0.002000s ]
+INFO: [ app_end ] --START--
+INFO: Run Behavior\ShowPageTraceBehavior [ RunTime:0.001000s ]
+INFO: [ app_end ] --END-- [ RunTime:0.001000s ]
+
+[ 2017-05-16T16:41:16+08:00 ] ::1 /twoa/index.php/Home/Index/login.html?user_name=&user_passwd=
+INFO: [ app_init ] --START--
+INFO: Run Behavior\BuildLiteBehavior [ RunTime:0.000000s ]
+INFO: [ app_init ] --END-- [ RunTime:0.000000s ]
+INFO: [ app_begin ] --START--
+INFO: Run Behavior\ReadHtmlCacheBehavior [ RunTime:0.001000s ]
+INFO: [ app_begin ] --END-- [ RunTime:0.002001s ]
+INFO: [ app_end ] --START--
+INFO: Run Behavior\ShowPageTraceBehavior [ RunTime:0.001000s ]
+INFO: [ app_end ] --END-- [ RunTime:0.001000s ]
+
+[ 2017-05-16T16:41:39+08:00 ] ::1 /twoa/index.php/Home/Index/login.html?user_name=&user_passwd=
+INFO: [ app_init ] --START--
+INFO: Run Behavior\BuildLiteBehavior [ RunTime:0.000000s ]
+INFO: [ app_init ] --END-- [ RunTime:0.000000s ]
+INFO: [ app_begin ] --START--
+INFO: Run Behavior\ReadHtmlCacheBehavior [ RunTime:0.003001s ]
+INFO: [ app_begin ] --END-- [ RunTime:0.004001s ]
+INFO: [ app_end ] --START--
+INFO: Run Behavior\ShowPageTraceBehavior [ RunTime:0.001000s ]
+INFO: [ app_end ] --END-- [ RunTime:0.001000s ]
+
+[ 2017-05-16T16:44:01+08:00 ] ::1 /twoa/index.php/Home/index/index.html
+INFO: [ app_init ] --START--
+INFO: Run Behavior\BuildLiteBehavior [ RunTime:0.000000s ]
+INFO: [ app_init ] --END-- [ RunTime:0.001000s ]
+INFO: [ app_begin ] --START--
+INFO: Run Behavior\ReadHtmlCacheBehavior [ RunTime:0.001001s ]
+INFO: [ app_begin ] --END-- [ RunTime:0.001001s ]
+INFO: [ view_parse ] --START--
+INFO: [ template_filter ] --START--
+INFO: Run Behavior\ContentReplaceBehavior [ RunTime:0.000000s ]
+INFO: [ template_filter ] --END-- [ RunTime:0.001000s ]
+INFO: Run Behavior\ParseTemplateBehavior [ RunTime:0.013000s ]
+INFO: [ view_parse ] --END-- [ RunTime:0.014001s ]
+INFO: [ view_filter ] --START--
+INFO: Run Behavior\WriteHtmlCacheBehavior [ RunTime:0.000000s ]
+INFO: [ view_filter ] --END-- [ RunTime:0.001000s ]
+INFO: [ app_end ] --START--
+INFO: Run Behavior\ShowPageTraceBehavior [ RunTime:0.001000s ]
+INFO: [ app_end ] --END-- [ RunTime:0.002000s ]
+
+[ 2017-05-16T16:44:06+08:00 ] ::1 /twoa/index.php/Home/Index/login.html
+INFO: [ app_init ] --START--
+INFO: Run Behavior\BuildLiteBehavior [ RunTime:0.000000s ]
+INFO: [ app_init ] --END-- [ RunTime:0.001000s ]
+INFO: [ app_begin ] --START--
+INFO: Run Behavior\ReadHtmlCacheBehavior [ RunTime:0.001000s ]
+INFO: [ app_begin ] --END-- [ RunTime:0.001000s ]
+NOTIC: [2] Missing argument 1 for I(), called in C:\wamp\www\twoa\Application\Home\Controller\IndexController.class.php on line 11 and defined C:\wamp\www\twoa\ThinkPHP\Common\functions.php 第 271 行.
+NOTIC: [8] Undefined variable: name C:\wamp\www\twoa\ThinkPHP\Common\functions.php 第 273 行.
+NOTIC: [8] Undefined variable: name C:\wamp\www\twoa\ThinkPHP\Common\functions.php 第 278 行.
+NOTIC: [8] Undefined variable: name C:\wamp\www\twoa\ThinkPHP\Common\functions.php 第 339 行.
+INFO: [ app_end ] --START--
+INFO: Run Behavior\ShowPageTraceBehavior [ RunTime:0.001000s ]
+INFO: [ app_end ] --END-- [ RunTime:0.001000s ]
+
+[ 2017-05-16T16:44:30+08:00 ] ::1 /twoa/index.php/Home/Index/login.html
+INFO: [ app_init ] --START--
+INFO: Run Behavior\BuildLiteBehavior [ RunTime:0.000000s ]
+INFO: [ app_init ] --END-- [ RunTime:0.001000s ]
+INFO: [ app_begin ] --START--
+INFO: Run Behavior\ReadHtmlCacheBehavior [ RunTime:0.001000s ]
+INFO: [ app_begin ] --END-- [ RunTime:0.001000s ]
+INFO: [ app_end ] --START--
+INFO: Run Behavior\ShowPageTraceBehavior [ RunTime:0.001001s ]
+INFO: [ app_end ] --END-- [ RunTime:0.001001s ]
+
+[ 2017-05-16T16:48:24+08:00 ] ::1 /twoa/index.php/Home/Index/login.html
+INFO: [ app_init ] --START--
+INFO: Run Behavior\BuildLiteBehavior [ RunTime:0.000000s ]
+INFO: [ app_init ] --END-- [ RunTime:0.001000s ]
+INFO: [ app_begin ] --START--
+INFO: Run Behavior\ReadHtmlCacheBehavior [ RunTime:0.001001s ]
+INFO: [ app_begin ] --END-- [ RunTime:0.002001s ]
+INFO: [ app_end ] --START--
+INFO: Run Behavior\ShowPageTraceBehavior [ RunTime:0.001000s ]
+INFO: [ app_end ] --END-- [ RunTime:0.001000s ]
+
+[ 2017-05-16T16:48:33+08:00 ] ::1 /twoa/index.php/Home/index/index.html
+INFO: [ app_init ] --START--
+INFO: Run Behavior\BuildLiteBehavior [ RunTime:0.000000s ]
+INFO: [ app_init ] --END-- [ RunTime:0.001000s ]
+INFO: [ app_begin ] --START--
+INFO: Run Behavior\ReadHtmlCacheBehavior [ RunTime:0.001000s ]
+INFO: [ app_begin ] --END-- [ RunTime:0.001000s ]
+INFO: [ view_parse ] --START--
+INFO: [ template_filter ] --START--
+INFO: Run Behavior\ContentReplaceBehavior [ RunTime:0.000000s ]
+INFO: [ template_filter ] --END-- [ RunTime:0.000000s ]
+INFO: Run Behavior\ParseTemplateBehavior [ RunTime:0.013001s ]
+INFO: [ view_parse ] --END-- [ RunTime:0.014001s ]
+INFO: [ view_filter ] --START--
+INFO: Run Behavior\WriteHtmlCacheBehavior [ RunTime:0.001000s ]
+INFO: [ view_filter ] --END-- [ RunTime:0.001000s ]
+INFO: [ app_end ] --START--
+INFO: Run Behavior\ShowPageTraceBehavior [ RunTime:0.001000s ]
+INFO: [ app_end ] --END-- [ RunTime:0.001000s ]
+
+[ 2017-05-16T16:48:41+08:00 ] ::1 /twoa/index.php/Home/Index/login.html
+INFO: [ app_init ] --START--
+INFO: Run Behavior\BuildLiteBehavior [ RunTime:0.000000s ]
+INFO: [ app_init ] --END-- [ RunTime:0.001000s ]
+INFO: [ app_begin ] --START--
+INFO: Run Behavior\ReadHtmlCacheBehavior [ RunTime:0.000000s ]
+INFO: [ app_begin ] --END-- [ RunTime:0.001000s ]
+ERR: 无法加载数据库驱动: Think\Db\Driver\
+
+[ 2017-05-16T16:58:47+08:00 ] ::1 /twoa/index.php/Home/Index/login.html
+ERR: 1241:Operand should contain 1 column(s)
+ [ SQL语句 ] : SELECT * FROM `oa_user` WHERE ( user_name='vition',user_passwd='895b317c76b8e504c2fb32dbb4420178f60ce321' ) LIMIT 1  
+
+[ 2017-05-16T17:07:00+08:00 ] ::1 /twoa/index.php/Home/Index/Menu/index
+ERR: 非法操作:Menu
+
+[ 2017-05-16T17:09:19+08:00 ] ::1 /twoa/index.php/Home/Index/Menu/index
+ERR: 非法操作:Menu
+
+[ 2017-05-16T17:09:26+08:00 ] ::1 /twoa/index.php/Home/Index/Menu/index
+ERR: 非法操作:Menu
+
+[ 2017-05-16T17:09:45+08:00 ] ::1 /twoa/index.php/Home/Index/Menu/index
+ERR: 非法操作:Menu
+
+[ 2017-05-16T17:18:59+08:00 ] ::1 /twoa/index.php/Home/assets/css/bootstrap.css
+ERR: 无法加载控制器:Assets
+
+[ 2017-05-16T17:18:59+08:00 ] ::1 /twoa/index.php/Home/assets/css/ace-fonts.css
+ERR: 无法加载控制器:Assets
+
+[ 2017-05-16T17:18:59+08:00 ] ::1 /twoa/index.php/Home/components/font-awesome/css/font-awesome.css
+ERR: 无法加载控制器:Components
+
+[ 2017-05-16T17:18:59+08:00 ] ::1 /twoa/index.php/Home/assets/css/ace-skins.css
+ERR: 无法加载控制器:Assets
+
+[ 2017-05-16T17:18:59+08:00 ] ::1 /twoa/index.php/Home/assets/js/src/elements.scroller.js
+ERR: 无法加载控制器:Assets
+
+[ 2017-05-16T17:19:00+08:00 ] ::1 /twoa/index.php/Home/assets/js/src/elements.colorpicker.js
+ERR: 无法加载控制器:Assets
+
+[ 2017-05-16T17:19:00+08:00 ] ::1 /twoa/index.php/Home/components/jquery/dist/jquery.js
+ERR: 无法加载控制器:Components
+
+[ 2017-05-16T17:19:00+08:00 ] ::1 /twoa/index.php/Home/assets/css/ace.css
+ERR: 无法加载控制器:Assets
+
+[ 2017-05-16T17:19:00+08:00 ] ::1 /twoa/index.php/Home/assets/js/src/elements.fileinput.js
+ERR: 无法加载控制器:Assets
+
+[ 2017-05-16T17:19:00+08:00 ] ::1 /twoa/index.php/Home/components/bootstrap/dist/js/bootstrap.js
+ERR: 无法加载控制器:Components
+
+[ 2017-05-16T17:19:00+08:00 ] ::1 /twoa/index.php/Home/assets/js/ace-extra.js
+ERR: 无法加载控制器:Assets
+
+[ 2017-05-16T17:19:00+08:00 ] ::1 /twoa/index.php/Home/assets/css/ace-rtl.css
+ERR: 无法加载控制器:Assets
+
+[ 2017-05-16T17:19:00+08:00 ] ::1 /twoa/index.php/Home/assets/js/src/elements.wizard.js
+ERR: 无法加载控制器:Assets
+
+[ 2017-05-16T17:19:00+08:00 ] ::1 /twoa/index.php/Home/assets/js/src/ace.js
+ERR: 无法加载控制器:Assets
+
+[ 2017-05-16T17:19:00+08:00 ] ::1 /twoa/index.php/Home/assets/js/src/elements.spinner.js
+ERR: 无法加载控制器:Assets
+
+[ 2017-05-16T17:19:00+08:00 ] ::1 /twoa/index.php/Home/assets/js/src/ace.basics.js
+ERR: 无法加载控制器:Assets
+
+[ 2017-05-16T17:19:00+08:00 ] ::1 /twoa/index.php/Home/assets/js/src/elements.wysiwyg.js
+ERR: 无法加载控制器:Assets
+
+[ 2017-05-16T17:19:00+08:00 ] ::1 /twoa/index.php/Home/assets/js/src/ace.ajax-content.js
+ERR: 无法加载控制器:Assets
+
+[ 2017-05-16T17:19:00+08:00 ] ::1 /twoa/index.php/Home/assets/js/src/ace.touch-drag.js
+ERR: 无法加载控制器:Assets
+
+[ 2017-05-16T17:19:00+08:00 ] ::1 /twoa/index.php/Home/assets/js/src/ace.sidebar.js
+ERR: 无法加载控制器:Assets
+
+[ 2017-05-16T17:19:00+08:00 ] ::1 /twoa/index.php/Home/assets/js/src/elements.treeview.js
+ERR: 无法加载控制器:Assets
+
+[ 2017-05-16T17:19:00+08:00 ] ::1 /twoa/index.php/Home/assets/js/src/ace.submenu-hover.js
+ERR: 无法加载控制器:Assets
+
+[ 2017-05-16T17:19:00+08:00 ] ::1 /twoa/index.php/Home/assets/js/src/ace.sidebar-scroll-1.js
+ERR: 无法加载控制器:Assets
+
+[ 2017-05-16T17:19:00+08:00 ] ::1 /twoa/index.php/Home/assets/js/src/ace.scrolltop.js
+ERR: 无法加载控制器:Assets
+
+[ 2017-05-16T17:19:00+08:00 ] ::1 /twoa/index.php/Home/assets/js/src/ace.settings-rtl.js
+ERR: 无法加载控制器:Assets
+
+[ 2017-05-16T17:19:00+08:00 ] ::1 /twoa/index.php/Home/assets/js/src/ace.widget-box.js
+ERR: 无法加载控制器:Assets
+
+[ 2017-05-16T17:19:00+08:00 ] ::1 /twoa/index.php/Home/assets/js/src/elements.aside.js
+ERR: 无法加载控制器:Assets
+
+[ 2017-05-16T17:19:00+08:00 ] ::1 /twoa/index.php/Home/assets/js/src/ace.settings.js
+ERR: 无法加载控制器:Assets
+
+[ 2017-05-16T17:19:00+08:00 ] ::1 /twoa/index.php/Home/assets/js/src/ace.widget-on-reload.js
+ERR: 无法加载控制器:Assets
+
+[ 2017-05-16T17:19:00+08:00 ] ::1 /twoa/index.php/Home/assets/js/src/ace.settings-skin.js
+ERR: 无法加载控制器:Assets
+
+[ 2017-05-16T17:19:00+08:00 ] ::1 /twoa/index.php/Home/docs/assets/js/themes/sunburst.css
+ERR: 无法加载控制器:Docs
+
+[ 2017-05-16T17:19:00+08:00 ] ::1 /twoa/index.php/Home/assets/js/src/ace.searchbox-autocomplete.js
+ERR: 无法加载控制器:Assets
+
+[ 2017-05-16T17:19:00+08:00 ] ::1 /twoa/index.php/Home/assets/js/src/elements.onpage-help.js
+ERR: 无法加载控制器:Assets
+
+[ 2017-05-16T17:19:00+08:00 ] ::1 /twoa/index.php/Home/docs/assets/js/rainbow.js
+ERR: 无法加载控制器:Docs
+
+[ 2017-05-16T17:19:00+08:00 ] ::1 /twoa/index.php/Home/assets/js/src/ace.onpage-help.js
+ERR: 无法加载控制器:Assets
+
+[ 2017-05-16T17:19:00+08:00 ] ::1 /twoa/index.php/Home/docs/assets/js/language/generic.js
+ERR: 无法加载控制器:Docs
+
+[ 2017-05-16T17:19:00+08:00 ] ::1 /twoa/index.php/Home/docs/assets/js/language/html.js
+ERR: 无法加载控制器:Docs
+
+[ 2017-05-16T17:19:00+08:00 ] ::1 /twoa/index.php/Home/docs/assets/js/language/css.js
+ERR: 无法加载控制器:Docs
+
+[ 2017-05-16T17:19:00+08:00 ] ::1 /twoa/index.php/Home/assets/css/ace.onpage-help.css
+ERR: 无法加载控制器:Assets
+
+[ 2017-05-16T17:19:01+08:00 ] ::1 /twoa/index.php/Home/assets/js/src/elements.typeahead.js
+ERR: 无法加载控制器:Assets
+
+[ 2017-05-16T17:19:01+08:00 ] ::1 /twoa/index.php/Home/docs/assets/js/language/javascript.js
+ERR: 无法加载控制器:Docs
+
+[ 2017-05-16T17:19:01+08:00 ] ::1 /twoa/index.php/Home/components/jquery/dist/jquery.js
+ERR: 无法加载控制器:Components
+
+[ 2017-05-16T17:19:02+08:00 ] ::1 /twoa/index.php/Home/components/bootstrap/dist/js/bootstrap.js
+ERR: 无法加载控制器:Components
+
+[ 2017-05-16T17:19:02+08:00 ] ::1 /twoa/index.php/Home/assets/js/src/elements.scroller.js
+ERR: 无法加载控制器:Assets
+
+[ 2017-05-16T17:19:02+08:00 ] ::1 /twoa/index.php/Home/assets/js/src/elements.colorpicker.js
+ERR: 无法加载控制器:Assets
+
+[ 2017-05-16T17:19:02+08:00 ] ::1 /twoa/index.php/Home/assets/js/src/elements.fileinput.js
+ERR: 无法加载控制器:Assets
+
+[ 2017-05-16T17:19:02+08:00 ] ::1 /twoa/index.php/Home/assets/js/src/elements.typeahead.js
+ERR: 无法加载控制器:Assets
+
+[ 2017-05-16T17:19:02+08:00 ] ::1 /twoa/index.php/Home/assets/js/src/elements.wysiwyg.js
+ERR: 无法加载控制器:Assets
+
+[ 2017-05-16T17:19:02+08:00 ] ::1 /twoa/index.php/Home/assets/js/src/elements.spinner.js
+ERR: 无法加载控制器:Assets
+
+[ 2017-05-16T17:19:03+08:00 ] ::1 /twoa/index.php/Home/assets/js/src/elements.treeview.js
+ERR: 无法加载控制器:Assets
+
+[ 2017-05-16T17:19:03+08:00 ] ::1 /twoa/index.php/Home/assets/js/src/elements.wizard.js
+ERR: 无法加载控制器:Assets
+
+[ 2017-05-16T17:19:03+08:00 ] ::1 /twoa/index.php/Home/assets/js/src/elements.aside.js
+ERR: 无法加载控制器:Assets
+
+[ 2017-05-16T17:19:03+08:00 ] ::1 /twoa/index.php/Home/assets/js/src/ace.js
+ERR: 无法加载控制器:Assets
+
+[ 2017-05-16T17:19:03+08:00 ] ::1 /twoa/index.php/Home/assets/js/src/ace.basics.js
+ERR: 无法加载控制器:Assets
+
+[ 2017-05-16T17:19:03+08:00 ] ::1 /twoa/index.php/Home/assets/js/src/ace.scrolltop.js
+ERR: 无法加载控制器:Assets
+
+[ 2017-05-16T17:19:03+08:00 ] ::1 /twoa/index.php/Home/assets/js/src/ace.ajax-content.js
+ERR: 无法加载控制器:Assets
+
+[ 2017-05-16T17:19:03+08:00 ] ::1 /twoa/index.php/Home/assets/js/src/ace.touch-drag.js
+ERR: 无法加载控制器:Assets
+
+[ 2017-05-16T17:19:03+08:00 ] ::1 /twoa/index.php/Home/assets/js/src/ace.sidebar.js
+ERR: 无法加载控制器:Assets
+
+[ 2017-05-16T17:19:04+08:00 ] ::1 /twoa/index.php/Home/assets/js/src/ace.sidebar-scroll-1.js
+ERR: 无法加载控制器:Assets
+
+[ 2017-05-16T17:19:04+08:00 ] ::1 /twoa/index.php/Home/assets/js/src/ace.submenu-hover.js
+ERR: 无法加载控制器:Assets
+
+[ 2017-05-16T17:19:04+08:00 ] ::1 /twoa/index.php/Home/assets/js/src/ace.widget-box.js
+ERR: 无法加载控制器:Assets
+
+[ 2017-05-16T17:19:04+08:00 ] ::1 /twoa/index.php/Home/assets/js/src/ace.settings.js
+ERR: 无法加载控制器:Assets
+
+[ 2017-05-16T17:19:04+08:00 ] ::1 /twoa/index.php/Home/assets/js/src/ace.settings-rtl.js
+ERR: 无法加载控制器:Assets
+
+[ 2017-05-16T17:19:04+08:00 ] ::1 /twoa/index.php/Home/assets/js/src/ace.settings-skin.js
+ERR: 无法加载控制器:Assets
+
+[ 2017-05-16T17:19:04+08:00 ] ::1 /twoa/index.php/Home/assets/js/src/ace.widget-on-reload.js
+ERR: 无法加载控制器:Assets
+
+[ 2017-05-16T17:19:05+08:00 ] ::1 /twoa/index.php/Home/assets/js/src/ace.searchbox-autocomplete.js
+ERR: 无法加载控制器:Assets
+
+[ 2017-05-16T17:19:05+08:00 ] ::1 /twoa/index.php/Home/assets/css/ace.onpage-help.css
+ERR: 无法加载控制器:Assets
+
+[ 2017-05-16T17:19:05+08:00 ] ::1 /twoa/index.php/Home/docs/assets/js/themes/sunburst.css
+ERR: 无法加载控制器:Docs
+
+[ 2017-05-16T17:19:05+08:00 ] ::1 /twoa/index.php/Home/assets/js/src/elements.onpage-help.js
+ERR: 无法加载控制器:Assets
+
+[ 2017-05-16T17:19:05+08:00 ] ::1 /twoa/index.php/Home/assets/js/src/ace.onpage-help.js
+ERR: 无法加载控制器:Assets
+
+[ 2017-05-16T17:19:05+08:00 ] ::1 /twoa/index.php/Home/docs/assets/js/rainbow.js
+ERR: 无法加载控制器:Docs
+
+[ 2017-05-16T17:19:05+08:00 ] ::1 /twoa/index.php/Home/docs/assets/js/language/generic.js
+ERR: 无法加载控制器:Docs
+
+[ 2017-05-16T17:19:06+08:00 ] ::1 /twoa/index.php/Home/docs/assets/js/language/html.js
+ERR: 无法加载控制器:Docs
+
+[ 2017-05-16T17:19:06+08:00 ] ::1 /twoa/index.php/Home/docs/assets/js/language/css.js
+ERR: 无法加载控制器:Docs
+
+[ 2017-05-16T17:19:06+08:00 ] ::1 /twoa/index.php/Home/docs/assets/js/language/javascript.js
+ERR: 无法加载控制器:Docs
+
+[ 2017-05-16T17:20:08+08:00 ] ::1 /twoa/index.php/Home/components/jquery/dist/jquery.js
+ERR: 无法加载控制器:Components
+
+[ 2017-05-16T17:20:08+08:00 ] ::1 /twoa/index.php/Home/assets/js/src/elements.scroller.js
+ERR: 无法加载控制器:Assets
+
+[ 2017-05-16T17:20:08+08:00 ] ::1 /twoa/index.php/Home/assets/js/src/elements.colorpicker.js
+ERR: 无法加载控制器:Assets
+
+[ 2017-05-16T17:20:08+08:00 ] ::1 /twoa/index.php/Home/assets/js/src/elements.typeahead.js
+ERR: 无法加载控制器:Assets
+
+[ 2017-05-16T17:20:08+08:00 ] ::1 /twoa/index.php/Home/assets/js/src/elements.spinner.js
+ERR: 无法加载控制器:Assets
+
+[ 2017-05-16T17:20:08+08:00 ] ::1 /twoa/index.php/Home/assets/js/src/elements.treeview.js
+ERR: 无法加载控制器:Assets
+
+[ 2017-05-16T17:20:08+08:00 ] ::1 /twoa/index.php/Home/assets/js/src/elements.wizard.js
+ERR: 无法加载控制器:Assets
+
+[ 2017-05-16T17:20:08+08:00 ] ::1 /twoa/index.php/Home/assets/js/src/elements.aside.js
+ERR: 无法加载控制器:Assets
+
+[ 2017-05-16T17:20:08+08:00 ] ::1 /twoa/index.php/Home/assets/js/src/elements.wysiwyg.js
+ERR: 无法加载控制器:Assets
+
+[ 2017-05-16T17:20:08+08:00 ] ::1 /twoa/index.php/Home/assets/js/src/elements.fileinput.js
+ERR: 无法加载控制器:Assets
+
+[ 2017-05-16T17:20:08+08:00 ] ::1 /twoa/index.php/Home/assets/js/src/ace.basics.js
+ERR: 无法加载控制器:Assets
+
+[ 2017-05-16T17:20:08+08:00 ] ::1 /twoa/index.php/Home/assets/js/src/ace.touch-drag.js
+ERR: 无法加载控制器:Assets
+
+[ 2017-05-16T17:20:08+08:00 ] ::1 /twoa/index.php/Home/assets/js/src/ace.sidebar.js
+ERR: 无法加载控制器:Assets
+
+[ 2017-05-16T17:20:08+08:00 ] ::1 /twoa/index.php/Home/assets/js/src/ace.sidebar-scroll-1.js
+ERR: 无法加载控制器:Assets
+
+[ 2017-05-16T17:20:08+08:00 ] ::1 /twoa/index.php/Home/assets/js/src/ace.scrolltop.js
+ERR: 无法加载控制器:Assets
+
+[ 2017-05-16T17:20:08+08:00 ] ::1 /twoa/index.php/Home/assets/js/src/ace.widget-box.js
+ERR: 无法加载控制器:Assets
+
+[ 2017-05-16T17:20:08+08:00 ] ::1 /twoa/index.php/Home/assets/js/src/ace.submenu-hover.js
+ERR: 无法加载控制器:Assets
+
+[ 2017-05-16T17:20:08+08:00 ] ::1 /twoa/index.php/Home/assets/js/src/ace.settings.js
+ERR: 无法加载控制器:Assets
+
+[ 2017-05-16T17:20:08+08:00 ] ::1 /twoa/index.php/Home/assets/js/src/ace.settings-rtl.js
+ERR: 无法加载控制器:Assets
+
+[ 2017-05-16T17:20:08+08:00 ] ::1 /twoa/index.php/Home/assets/js/src/ace.settings-skin.js
+ERR: 无法加载控制器:Assets
+
+[ 2017-05-16T17:20:08+08:00 ] ::1 /twoa/index.php/Home/assets/js/src/ace.widget-on-reload.js
+ERR: 无法加载控制器:Assets
+
+[ 2017-05-16T17:20:08+08:00 ] ::1 /twoa/index.php/Home/assets/js/src/ace.searchbox-autocomplete.js
+ERR: 无法加载控制器:Assets
+
+[ 2017-05-16T17:20:08+08:00 ] ::1 /twoa/index.php/Home/assets/js/src/ace.ajax-content.js
+ERR: 无法加载控制器:Assets
+
+[ 2017-05-16T17:20:08+08:00 ] ::1 /twoa/index.php/Home/docs/assets/js/themes/sunburst.css
+ERR: 无法加载控制器:Docs
+
+[ 2017-05-16T17:20:08+08:00 ] ::1 /twoa/index.php/Home/assets/js/src/elements.onpage-help.js
+ERR: 无法加载控制器:Assets
+
+[ 2017-05-16T17:20:08+08:00 ] ::1 /twoa/index.php/Home/assets/js/src/ace.onpage-help.js
+ERR: 无法加载控制器:Assets
+
+[ 2017-05-16T17:20:08+08:00 ] ::1 /twoa/index.php/Home/assets/js/src/ace.js
+ERR: 无法加载控制器:Assets
+
+[ 2017-05-16T17:20:08+08:00 ] ::1 /twoa/index.php/Home/docs/assets/js/language/generic.js
+ERR: 无法加载控制器:Docs
+
+[ 2017-05-16T17:20:08+08:00 ] ::1 /twoa/index.php/Home/docs/assets/js/rainbow.js
+ERR: 无法加载控制器:Docs
+
+[ 2017-05-16T17:20:08+08:00 ] ::1 /twoa/index.php/Home/docs/assets/js/language/css.js
+ERR: 无法加载控制器:Docs
+
+[ 2017-05-16T17:20:09+08:00 ] ::1 /twoa/index.php/Home/components/bootstrap/dist/js/bootstrap.js
+ERR: 无法加载控制器:Components
+
+[ 2017-05-16T17:20:09+08:00 ] ::1 /twoa/index.php/Home/docs/assets/js/language/javascript.js
+ERR: 无法加载控制器:Docs
+
+[ 2017-05-16T17:20:09+08:00 ] ::1 /twoa/index.php/Home/docs/assets/js/language/html.js
+ERR: 无法加载控制器:Docs
+
+[ 2017-05-16T17:20:09+08:00 ] ::1 /twoa/index.php/Home/assets/css/ace.onpage-help.css
+ERR: 无法加载控制器:Assets
+
+[ 2017-05-16T17:20:09+08:00 ] ::1 /twoa/index.php/Home/assets/js/ace-extra.js
+ERR: 无法加载控制器:Assets
+
+[ 2017-05-16T17:20:10+08:00 ] ::1 /twoa/index.php/Home/components/jquery/dist/jquery.js
+ERR: 无法加载控制器:Components
+
+[ 2017-05-16T17:20:12+08:00 ] ::1 /twoa/index.php/Home/components/bootstrap/dist/js/bootstrap.js
+ERR: 无法加载控制器:Components
+
+[ 2017-05-16T17:20:13+08:00 ] ::1 /twoa/index.php/Home/assets/js/src/elements.scroller.js
+ERR: 无法加载控制器:Assets
+
+[ 2017-05-16T17:20:13+08:00 ] ::1 /twoa/index.php/Home/assets/js/src/elements.colorpicker.js
+ERR: 无法加载控制器:Assets
+
+[ 2017-05-16T17:20:13+08:00 ] ::1 /twoa/index.php/Home/assets/js/src/elements.fileinput.js
+ERR: 无法加载控制器:Assets
+
+[ 2017-05-16T17:20:13+08:00 ] ::1 /twoa/index.php/Home/assets/js/src/elements.typeahead.js
+ERR: 无法加载控制器:Assets
+
+[ 2017-05-16T17:20:13+08:00 ] ::1 /twoa/index.php/Home/assets/js/src/elements.wysiwyg.js
+ERR: 无法加载控制器:Assets
+
+[ 2017-05-16T17:20:13+08:00 ] ::1 /twoa/index.php/Home/assets/js/src/elements.spinner.js
+ERR: 无法加载控制器:Assets
+
+[ 2017-05-16T17:20:13+08:00 ] ::1 /twoa/index.php/Home/assets/js/src/elements.treeview.js
+ERR: 无法加载控制器:Assets
+
+[ 2017-05-16T17:20:13+08:00 ] ::1 /twoa/index.php/Home/assets/js/src/elements.wizard.js
+ERR: 无法加载控制器:Assets
+
+[ 2017-05-16T17:20:14+08:00 ] ::1 /twoa/index.php/Home/assets/js/src/elements.aside.js
+ERR: 无法加载控制器:Assets
+
+[ 2017-05-16T17:20:14+08:00 ] ::1 /twoa/index.php/Home/assets/js/src/ace.js
+ERR: 无法加载控制器:Assets
+
+[ 2017-05-16T17:20:14+08:00 ] ::1 /twoa/index.php/Home/assets/js/src/ace.basics.js
+ERR: 无法加载控制器:Assets
+
+[ 2017-05-16T17:20:14+08:00 ] ::1 /twoa/index.php/Home/assets/js/src/ace.scrolltop.js
+ERR: 无法加载控制器:Assets
+
+[ 2017-05-16T17:20:14+08:00 ] ::1 /twoa/index.php/Home/assets/js/src/ace.ajax-content.js
+ERR: 无法加载控制器:Assets
+
+[ 2017-05-16T17:20:14+08:00 ] ::1 /twoa/index.php/Home/assets/js/src/ace.touch-drag.js
+ERR: 无法加载控制器:Assets
+
+[ 2017-05-16T17:20:14+08:00 ] ::1 /twoa/index.php/Home/assets/js/src/ace.sidebar.js
+ERR: 无法加载控制器:Assets
+
+[ 2017-05-16T17:20:14+08:00 ] ::1 /twoa/index.php/Home/assets/js/src/ace.sidebar-scroll-1.js
+ERR: 无法加载控制器:Assets
+
+[ 2017-05-16T17:20:15+08:00 ] ::1 /twoa/index.php/Home/assets/js/src/ace.submenu-hover.js
+ERR: 无法加载控制器:Assets
+
+[ 2017-05-16T17:20:15+08:00 ] ::1 /twoa/index.php/Home/assets/js/src/ace.widget-box.js
+ERR: 无法加载控制器:Assets
+
+[ 2017-05-16T17:20:15+08:00 ] ::1 /twoa/index.php/Home/assets/js/src/ace.settings.js
+ERR: 无法加载控制器:Assets
+
+[ 2017-05-16T17:20:15+08:00 ] ::1 /twoa/index.php/Home/assets/js/src/ace.settings-rtl.js
+ERR: 无法加载控制器:Assets
+
+[ 2017-05-16T17:20:15+08:00 ] ::1 /twoa/index.php/Home/assets/js/src/ace.settings-skin.js
+ERR: 无法加载控制器:Assets
+
+[ 2017-05-16T17:20:15+08:00 ] ::1 /twoa/index.php/Home/assets/js/src/ace.widget-on-reload.js
+ERR: 无法加载控制器:Assets
+
+[ 2017-05-16T17:20:15+08:00 ] ::1 /twoa/index.php/Home/assets/js/src/ace.searchbox-autocomplete.js
+ERR: 无法加载控制器:Assets
+
+[ 2017-05-16T17:20:15+08:00 ] ::1 /twoa/index.php/Home/assets/css/ace.onpage-help.css
+ERR: 无法加载控制器:Assets
+
+[ 2017-05-16T17:20:15+08:00 ] ::1 /twoa/index.php/Home/docs/assets/js/themes/sunburst.css
+ERR: 无法加载控制器:Docs
+
+[ 2017-05-16T17:20:15+08:00 ] ::1 /twoa/index.php/Home/assets/js/src/elements.onpage-help.js
+ERR: 无法加载控制器:Assets
+
+[ 2017-05-16T17:20:16+08:00 ] ::1 /twoa/index.php/Home/assets/js/src/ace.onpage-help.js
+ERR: 无法加载控制器:Assets
+
+[ 2017-05-16T17:20:16+08:00 ] ::1 /twoa/index.php/Home/docs/assets/js/rainbow.js
+ERR: 无法加载控制器:Docs
+
+[ 2017-05-16T17:20:16+08:00 ] ::1 /twoa/index.php/Home/docs/assets/js/language/generic.js
+ERR: 无法加载控制器:Docs
+
+[ 2017-05-16T17:20:16+08:00 ] ::1 /twoa/index.php/Home/docs/assets/js/language/html.js
+ERR: 无法加载控制器:Docs
+
+[ 2017-05-16T17:20:16+08:00 ] ::1 /twoa/index.php/Home/docs/assets/js/language/css.js
+ERR: 无法加载控制器:Docs
+
+[ 2017-05-16T17:20:16+08:00 ] ::1 /twoa/index.php/Home/docs/assets/js/language/javascript.js
+ERR: 无法加载控制器:Docs
+
+[ 2017-05-16T17:21:37+08:00 ] ::1 /twoa/index.php/Home/Menu/__Public__/assets/js/ace-extra.js
+ERR: 非法操作:__Public__
+
+[ 2017-05-16T17:21:37+08:00 ] ::1 /twoa/index.php/Home/Menu/__Public__/components/bootstrap/dist/js/bootstrap.js
+ERR: 非法操作:__Public__
+
+[ 2017-05-16T17:21:37+08:00 ] ::1 /twoa/index.php/Home/Menu/__Public__/assets/js/src/elements.typeahead.js
+ERR: 非法操作:__Public__
+
+[ 2017-05-16T17:21:37+08:00 ] ::1 /twoa/index.php/Home/Menu/__Public__/assets/js/src/elements.fileinput.js
+ERR: 非法操作:__Public__
+
+[ 2017-05-16T17:21:37+08:00 ] ::1 /twoa/index.php/Home/Menu/__Public__/assets/js/src/elements.scroller.js
+ERR: 非法操作:__Public__
+
+[ 2017-05-16T17:21:37+08:00 ] ::1 /twoa/index.php/Home/Menu/__Public__/assets/js/src/elements.wizard.js
+ERR: 非法操作:__Public__
+
+[ 2017-05-16T17:21:37+08:00 ] ::1 /twoa/index.php/Home/Menu/__Public__/assets/js/src/elements.aside.js
+ERR: 非法操作:__Public__
+
+[ 2017-05-16T17:21:37+08:00 ] ::1 /twoa/index.php/Home/Menu/__Public__/assets/js/src/elements.wysiwyg.js
+ERR: 非法操作:__Public__
+
+[ 2017-05-16T17:21:37+08:00 ] ::1 /twoa/index.php/Home/Menu/__Public__/assets/js/src/ace.js
+ERR: 非法操作:__Public__
+
+[ 2017-05-16T17:21:37+08:00 ] ::1 /twoa/index.php/Home/Menu/__Public__/assets/js/src/elements.spinner.js
+ERR: 非法操作:__Public__
+
+[ 2017-05-16T17:21:37+08:00 ] ::1 /twoa/index.php/Home/Menu/__Public__/assets/js/src/ace.basics.js
+ERR: 非法操作:__Public__
+
+[ 2017-05-16T17:21:38+08:00 ] ::1 /twoa/index.php/Home/Menu/__Public__/components/jquery/dist/jquery.js
+ERR: 非法操作:__Public__
+
+[ 2017-05-16T17:21:38+08:00 ] ::1 /twoa/index.php/Home/Menu/__Public__/assets/js/src/ace.ajax-content.js
+ERR: 非法操作:__Public__
+
+[ 2017-05-16T17:21:38+08:00 ] ::1 /twoa/index.php/Home/Menu/__Public__/assets/js/src/ace.sidebar-scroll-1.js
+ERR: 非法操作:__Public__
+
+[ 2017-05-16T17:21:38+08:00 ] ::1 /twoa/index.php/Home/Menu/__Public__/assets/js/src/elements.treeview.js
+ERR: 非法操作:__Public__
+
+[ 2017-05-16T17:21:38+08:00 ] ::1 /twoa/index.php/Home/Menu/__Public__/assets/js/src/ace.touch-drag.js
+ERR: 非法操作:__Public__
+
+[ 2017-05-16T17:21:38+08:00 ] ::1 /twoa/index.php/Home/Menu/__Public__/assets/js/src/ace.submenu-hover.js
+ERR: 非法操作:__Public__
+
+[ 2017-05-16T17:21:38+08:00 ] ::1 /twoa/index.php/Home/Menu/__Public__/assets/js/src/ace.sidebar.js
+ERR: 非法操作:__Public__
+
+[ 2017-05-16T17:21:38+08:00 ] ::1 /twoa/index.php/Home/Menu/__Public__/assets/js/src/ace.scrolltop.js
+ERR: 非法操作:__Public__
+
+[ 2017-05-16T17:21:38+08:00 ] ::1 /twoa/index.php/Home/Menu/__Public__/assets/js/src/ace.settings-skin.js
+ERR: 非法操作:__Public__
+
+[ 2017-05-16T17:21:38+08:00 ] ::1 /twoa/index.php/Home/Menu/__Public__/assets/js/src/ace.searchbox-autocomplete.js
+ERR: 非法操作:__Public__
+
+[ 2017-05-16T17:21:38+08:00 ] ::1 /twoa/index.php/Home/Menu/__Public__/assets/js/src/ace.settings.js
+ERR: 非法操作:__Public__
+
+[ 2017-05-16T17:21:38+08:00 ] ::1 /twoa/index.php/Home/Menu/__Public__/assets/css/ace.onpage-help.css
+ERR: 非法操作:__Public__
+
+[ 2017-05-16T17:21:38+08:00 ] ::1 /twoa/index.php/Home/docs/assets/js/themes/sunburst.css
+ERR: 无法加载控制器:Docs
+
+[ 2017-05-16T17:21:38+08:00 ] ::1 /twoa/index.php/Home/Menu/__Public__/assets/js/src/elements.onpage-help.js
+ERR: 非法操作:__Public__
+
+[ 2017-05-16T17:21:38+08:00 ] ::1 /twoa/index.php/Home/docs/assets/js/rainbow.js
+ERR: 无法加载控制器:Docs
+
+[ 2017-05-16T17:21:38+08:00 ] ::1 /twoa/index.php/Home/docs/assets/js/language/generic.js
+ERR: 无法加载控制器:Docs
+
+[ 2017-05-16T17:21:38+08:00 ] ::1 /twoa/index.php/Home/docs/assets/js/language/html.js
+ERR: 无法加载控制器:Docs
+
+[ 2017-05-16T17:21:38+08:00 ] ::1 /twoa/index.php/Home/Menu/__Public__/assets/js/src/ace.widget-on-reload.js
+ERR: 非法操作:__Public__
+
+[ 2017-05-16T17:21:38+08:00 ] ::1 /twoa/index.php/Home/docs/assets/js/language/css.js
+ERR: 无法加载控制器:Docs
+
+[ 2017-05-16T17:21:38+08:00 ] ::1 /twoa/index.php/Home/Menu/__Public__/assets/js/src/ace.widget-box.js
+ERR: 非法操作:__Public__
+
+[ 2017-05-16T17:21:38+08:00 ] ::1 /twoa/index.php/Home/Menu/__Public__/assets/js/src/ace.settings-rtl.js
+ERR: 非法操作:__Public__
+
+[ 2017-05-16T17:21:38+08:00 ] ::1 /twoa/index.php/Home/Menu/__Public__/assets/js/src/elements.colorpicker.js
+ERR: 非法操作:__Public__
+
+[ 2017-05-16T17:21:38+08:00 ] ::1 /twoa/index.php/Home/Menu/__Public__/assets/js/src/ace.onpage-help.js
+ERR: 非法操作:__Public__
+
+[ 2017-05-16T17:21:38+08:00 ] ::1 /twoa/index.php/Home/docs/assets/js/language/javascript.js
+ERR: 无法加载控制器:Docs
+
+[ 2017-05-16T17:21:39+08:00 ] ::1 /twoa/index.php/Home/Menu/__Public__/components/jquery/dist/jquery.js
+ERR: 非法操作:__Public__
+
+[ 2017-05-16T17:21:41+08:00 ] ::1 /twoa/index.php/Home/Menu/__Public__/components/bootstrap/dist/js/bootstrap.js
+ERR: 非法操作:__Public__
+
+[ 2017-05-16T17:21:42+08:00 ] ::1 /twoa/index.php/Home/Menu/__Public__/assets/js/src/elements.scroller.js
+ERR: 非法操作:__Public__
+
+[ 2017-05-16T17:21:42+08:00 ] ::1 /twoa/index.php/Home/Menu/__Public__/assets/js/src/elements.colorpicker.js
+ERR: 非法操作:__Public__
+
+[ 2017-05-16T17:21:42+08:00 ] ::1 /twoa/index.php/Home/Menu/__Public__/assets/js/src/elements.fileinput.js
+ERR: 非法操作:__Public__
+
+[ 2017-05-16T17:21:42+08:00 ] ::1 /twoa/index.php/Home/Menu/__Public__/assets/js/src/elements.typeahead.js
+ERR: 非法操作:__Public__
+
+[ 2017-05-16T17:21:43+08:00 ] ::1 /twoa/index.php/Home/Menu/__Public__/assets/js/src/elements.wysiwyg.js
+ERR: 非法操作:__Public__
+
+[ 2017-05-16T17:21:43+08:00 ] ::1 /twoa/index.php/Home/Menu/__Public__/assets/js/src/elements.spinner.js
+ERR: 非法操作:__Public__
+
+[ 2017-05-16T17:21:43+08:00 ] ::1 /twoa/index.php/Home/Menu/__Public__/assets/js/src/elements.treeview.js
+ERR: 非法操作:__Public__
+
+[ 2017-05-16T17:21:43+08:00 ] ::1 /twoa/index.php/Home/Menu/__Public__/assets/js/src/elements.wizard.js
+ERR: 非法操作:__Public__
+
+[ 2017-05-16T17:21:43+08:00 ] ::1 /twoa/index.php/Home/Menu/__Public__/assets/js/src/elements.aside.js
+ERR: 非法操作:__Public__
+
+[ 2017-05-16T17:21:44+08:00 ] ::1 /twoa/index.php/Home/Menu/__Public__/assets/js/src/ace.js
+ERR: 非法操作:__Public__
+
+[ 2017-05-16T17:21:44+08:00 ] ::1 /twoa/index.php/Home/Menu/__Public__/assets/js/src/ace.basics.js
+ERR: 非法操作:__Public__
+
+[ 2017-05-16T17:21:44+08:00 ] ::1 /twoa/index.php/Home/Menu/__Public__/assets/js/src/ace.scrolltop.js
+ERR: 非法操作:__Public__
+
+[ 2017-05-16T17:21:44+08:00 ] ::1 /twoa/index.php/Home/Menu/__Public__/assets/js/src/ace.ajax-content.js
+ERR: 非法操作:__Public__
+
+[ 2017-05-16T17:21:45+08:00 ] ::1 /twoa/index.php/Home/Menu/__Public__/assets/js/src/ace.touch-drag.js
+ERR: 非法操作:__Public__
+
+[ 2017-05-16T17:21:45+08:00 ] ::1 /twoa/index.php/Home/Menu/__Public__/assets/js/src/ace.sidebar.js
+ERR: 非法操作:__Public__
+
+[ 2017-05-16T17:21:45+08:00 ] ::1 /twoa/index.php/Home/Menu/__Public__/assets/js/src/ace.sidebar-scroll-1.js
+ERR: 非法操作:__Public__
+
+[ 2017-05-16T17:21:45+08:00 ] ::1 /twoa/index.php/Home/Menu/__Public__/assets/js/src/ace.submenu-hover.js
+ERR: 非法操作:__Public__
+
+[ 2017-05-16T17:21:46+08:00 ] ::1 /twoa/index.php/Home/Menu/__Public__/assets/js/src/ace.widget-box.js
+ERR: 非法操作:__Public__
+
+[ 2017-05-16T17:21:46+08:00 ] ::1 /twoa/index.php/Home/Menu/__Public__/assets/js/src/ace.settings.js
+ERR: 非法操作:__Public__
+
+[ 2017-05-16T17:21:46+08:00 ] ::1 /twoa/index.php/Home/Menu/__Public__/assets/js/src/ace.settings-rtl.js
+ERR: 非法操作:__Public__
+
+[ 2017-05-16T17:21:46+08:00 ] ::1 /twoa/index.php/Home/Menu/__Public__/assets/js/src/ace.settings-skin.js
+ERR: 非法操作:__Public__
+
+[ 2017-05-16T17:21:47+08:00 ] ::1 /twoa/index.php/Home/Menu/__Public__/assets/js/src/ace.widget-on-reload.js
+ERR: 非法操作:__Public__
+
+[ 2017-05-16T17:21:47+08:00 ] ::1 /twoa/index.php/Home/Menu/__Public__/assets/js/src/ace.searchbox-autocomplete.js
+ERR: 非法操作:__Public__
+
+[ 2017-05-16T17:21:47+08:00 ] ::1 /twoa/index.php/Home/Menu/__Public__/assets/css/ace.onpage-help.css
+ERR: 非法操作:__Public__
+
+[ 2017-05-16T17:21:47+08:00 ] ::1 /twoa/index.php/Home/docs/assets/js/themes/sunburst.css
+ERR: 无法加载控制器:Docs
+
+[ 2017-05-16T17:21:47+08:00 ] ::1 /twoa/index.php/Home/Menu/__Public__/assets/js/src/elements.onpage-help.js
+ERR: 非法操作:__Public__
+
+[ 2017-05-16T17:21:47+08:00 ] ::1 /twoa/index.php/Home/Menu/__Public__/assets/js/src/ace.onpage-help.js
+ERR: 非法操作:__Public__
+
+[ 2017-05-16T17:21:47+08:00 ] ::1 /twoa/index.php/Home/docs/assets/js/rainbow.js
+ERR: 无法加载控制器:Docs
+
+[ 2017-05-16T17:21:48+08:00 ] ::1 /twoa/index.php/Home/docs/assets/js/language/generic.js
+ERR: 无法加载控制器:Docs
+
+[ 2017-05-16T17:21:48+08:00 ] ::1 /twoa/index.php/Home/docs/assets/js/language/html.js
+ERR: 无法加载控制器:Docs
+
+[ 2017-05-16T17:21:48+08:00 ] ::1 /twoa/index.php/Home/docs/assets/js/language/css.js
+ERR: 无法加载控制器:Docs
+
+[ 2017-05-16T17:21:48+08:00 ] ::1 /twoa/index.php/Home/docs/assets/js/language/javascript.js
+ERR: 无法加载控制器:Docs
+
+[ 2017-05-16T17:22:54+08:00 ] ::1 /twoa/index.php/Home/Menu/__Public__/components/jquery/dist/jquery.js
+ERR: 非法操作:__Public__
+
+[ 2017-05-16T17:22:54+08:00 ] ::1 /twoa/index.php/Home/Menu/__Public__/assets/js/src/elements.colorpicker.js
+ERR: 非法操作:__Public__
+
+[ 2017-05-16T17:22:54+08:00 ] ::1 /twoa/index.php/Home/Menu/__Public__/components/bootstrap/dist/js/bootstrap.js
+ERR: 非法操作:__Public__
+
+[ 2017-05-16T17:22:54+08:00 ] ::1 /twoa/index.php/Home/Menu/__Public__/assets/js/src/elements.typeahead.js
+ERR: 非法操作:__Public__
+
+[ 2017-05-16T17:22:54+08:00 ] ::1 /twoa/index.php/Home/Menu/__Public__/assets/js/src/elements.fileinput.js
+ERR: 非法操作:__Public__
+
+[ 2017-05-16T17:22:54+08:00 ] ::1 /twoa/index.php/Home/Menu/__Public__/assets/js/src/elements.spinner.js
+ERR: 非法操作:__Public__
+
+[ 2017-05-16T17:22:54+08:00 ] ::1 /twoa/index.php/Home/Menu/__Public__/assets/js/src/elements.treeview.js
+ERR: 非法操作:__Public__
+
+[ 2017-05-16T17:22:54+08:00 ] ::1 /twoa/index.php/Home/Menu/__Public__/assets/js/src/ace.js
+ERR: 非法操作:__Public__
+
+[ 2017-05-16T17:22:54+08:00 ] ::1 /twoa/index.php/Home/Menu/__Public__/assets/js/src/elements.scroller.js
+ERR: 非法操作:__Public__
+
+[ 2017-05-16T17:22:54+08:00 ] ::1 /twoa/index.php/Home/Menu/__Public__/assets/js/src/elements.wizard.js
+ERR: 非法操作:__Public__
+
+[ 2017-05-16T17:22:54+08:00 ] ::1 /twoa/index.php/Home/Menu/__Public__/assets/js/src/elements.wysiwyg.js
+ERR: 非法操作:__Public__
+
+[ 2017-05-16T17:22:54+08:00 ] ::1 /twoa/index.php/Home/Menu/__Public__/assets/js/ace-extra.js
+ERR: 非法操作:__Public__
+
+[ 2017-05-16T17:22:54+08:00 ] ::1 /twoa/index.php/Home/Menu/__Public__/assets/js/src/elements.aside.js
+ERR: 非法操作:__Public__
+
+[ 2017-05-16T17:22:54+08:00 ] ::1 /twoa/index.php/Home/Menu/__Public__/assets/js/src/ace.basics.js
+ERR: 非法操作:__Public__
+
+[ 2017-05-16T17:22:54+08:00 ] ::1 /twoa/index.php/Home/Menu/__Public__/assets/js/src/ace.touch-drag.js
+ERR: 非法操作:__Public__
+
+[ 2017-05-16T17:22:54+08:00 ] ::1 /twoa/index.php/Home/Menu/__Public__/assets/js/src/ace.sidebar.js
+ERR: 非法操作:__Public__
+
+[ 2017-05-16T17:22:54+08:00 ] ::1 /twoa/index.php/Home/Menu/__Public__/assets/js/src/ace.ajax-content.js
+ERR: 非法操作:__Public__
+
+[ 2017-05-16T17:22:54+08:00 ] ::1 /twoa/index.php/Home/Menu/__Public__/assets/js/src/ace.scrolltop.js
+ERR: 非法操作:__Public__
+
+[ 2017-05-16T17:22:54+08:00 ] ::1 /twoa/index.php/Home/Menu/__Public__/assets/js/src/ace.sidebar-scroll-1.js
+ERR: 非法操作:__Public__
+
+[ 2017-05-16T17:22:54+08:00 ] ::1 /twoa/index.php/Home/Menu/__Public__/assets/js/src/ace.widget-box.js
+ERR: 非法操作:__Public__
+
+[ 2017-05-16T17:22:54+08:00 ] ::1 /twoa/index.php/Home/Menu/__Public__/assets/js/src/ace.settings.js
+ERR: 非法操作:__Public__
+
+[ 2017-05-16T17:22:54+08:00 ] ::1 /twoa/index.php/Home/Menu/__Public__/assets/js/src/ace.widget-on-reload.js
+ERR: 非法操作:__Public__
+
+[ 2017-05-16T17:22:54+08:00 ] ::1 /twoa/index.php/Home/Menu/__Public__/assets/js/src/ace.submenu-hover.js
+ERR: 非法操作:__Public__
+
+[ 2017-05-16T17:22:54+08:00 ] ::1 /twoa/index.php/Home/Menu/__Public__/assets/css/ace.onpage-help.css
+ERR: 非法操作:__Public__
+
+[ 2017-05-16T17:22:54+08:00 ] ::1 /twoa/index.php/Home/Menu/__Public__/assets/js/src/ace.settings-rtl.js
+ERR: 非法操作:__Public__
+
+[ 2017-05-16T17:22:54+08:00 ] ::1 /twoa/index.php/Home/Menu/__Public__/assets/js/src/ace.settings-skin.js
+ERR: 非法操作:__Public__
+
+[ 2017-05-16T17:22:54+08:00 ] ::1 /twoa/index.php/Home/Menu/__Public__/assets/js/src/ace.searchbox-autocomplete.js
+ERR: 非法操作:__Public__
+
+[ 2017-05-16T17:22:54+08:00 ] ::1 /twoa/index.php/Home/docs/assets/js/themes/sunburst.css
+ERR: 无法加载控制器:Docs
+
+[ 2017-05-16T17:22:54+08:00 ] ::1 /twoa/index.php/Home/Menu/__Public__/assets/js/src/elements.onpage-help.js
+ERR: 非法操作:__Public__
+
+[ 2017-05-16T17:22:54+08:00 ] ::1 /twoa/index.php/Home/Menu/__Public__/assets/js/src/ace.onpage-help.js
+ERR: 非法操作:__Public__
+
+[ 2017-05-16T17:22:56+08:00 ] ::1 /twoa/index.php/Home/Menu/__Public__/components/jquery/dist/jquery.js
+ERR: 非法操作:__Public__
+
+[ 2017-05-16T17:22:57+08:00 ] ::1 /twoa/index.php/Home/Menu/__Public__/components/bootstrap/dist/js/bootstrap.js
+ERR: 非法操作:__Public__
+
+[ 2017-05-16T17:22:58+08:00 ] ::1 /twoa/index.php/Home/Menu/__Public__/assets/js/src/elements.scroller.js
+ERR: 非法操作:__Public__
+
+[ 2017-05-16T17:22:58+08:00 ] ::1 /twoa/index.php/Home/Menu/__Public__/assets/js/src/elements.colorpicker.js
+ERR: 非法操作:__Public__
+
+[ 2017-05-16T17:22:58+08:00 ] ::1 /twoa/index.php/Home/Menu/__Public__/assets/js/src/elements.fileinput.js
+ERR: 非法操作:__Public__
+
+[ 2017-05-16T17:22:58+08:00 ] ::1 /twoa/index.php/Home/Menu/__Public__/assets/js/src/elements.typeahead.js
+ERR: 非法操作:__Public__
+
+[ 2017-05-16T17:22:58+08:00 ] ::1 /twoa/index.php/Home/Menu/__Public__/assets/js/src/elements.wysiwyg.js
+ERR: 非法操作:__Public__
+
+[ 2017-05-16T17:22:58+08:00 ] ::1 /twoa/index.php/Home/Menu/__Public__/assets/js/src/elements.spinner.js
+ERR: 非法操作:__Public__
+
+[ 2017-05-16T17:22:58+08:00 ] ::1 /twoa/index.php/Home/Menu/__Public__/assets/js/src/elements.treeview.js
+ERR: 非法操作:__Public__
+
+[ 2017-05-16T17:22:58+08:00 ] ::1 /twoa/index.php/Home/Menu/__Public__/assets/js/src/elements.wizard.js
+ERR: 非法操作:__Public__
+
+[ 2017-05-16T17:22:58+08:00 ] ::1 /twoa/index.php/Home/Menu/__Public__/assets/js/src/elements.aside.js
+ERR: 非法操作:__Public__
+
+[ 2017-05-16T17:22:58+08:00 ] ::1 /twoa/index.php/Home/Menu/__Public__/assets/js/src/ace.js
+ERR: 非法操作:__Public__
+
+[ 2017-05-16T17:22:59+08:00 ] ::1 /twoa/index.php/Home/Menu/__Public__/assets/js/src/ace.basics.js
+ERR: 非法操作:__Public__
+
+[ 2017-05-16T17:22:59+08:00 ] ::1 /twoa/index.php/Home/Menu/__Public__/assets/js/src/ace.scrolltop.js
+ERR: 非法操作:__Public__
+
+[ 2017-05-16T17:22:59+08:00 ] ::1 /twoa/index.php/Home/Menu/__Public__/assets/js/src/ace.ajax-content.js
+ERR: 非法操作:__Public__
+
+[ 2017-05-16T17:22:59+08:00 ] ::1 /twoa/index.php/Home/Menu/__Public__/assets/js/src/ace.touch-drag.js
+ERR: 非法操作:__Public__
+
+[ 2017-05-16T17:22:59+08:00 ] ::1 /twoa/index.php/Home/Menu/__Public__/assets/js/src/ace.sidebar.js
+ERR: 非法操作:__Public__
+
+[ 2017-05-16T17:22:59+08:00 ] ::1 /twoa/index.php/Home/Menu/__Public__/assets/js/src/ace.sidebar-scroll-1.js
+ERR: 非法操作:__Public__
+
+[ 2017-05-16T17:22:59+08:00 ] ::1 /twoa/index.php/Home/Menu/__Public__/assets/js/src/ace.submenu-hover.js
+ERR: 非法操作:__Public__
+
+[ 2017-05-16T17:22:59+08:00 ] ::1 /twoa/index.php/Home/Menu/__Public__/assets/js/src/ace.widget-box.js
+ERR: 非法操作:__Public__
+
+[ 2017-05-16T17:22:59+08:00 ] ::1 /twoa/index.php/Home/Menu/__Public__/assets/js/src/ace.settings.js
+ERR: 非法操作:__Public__
+
+[ 2017-05-16T17:22:59+08:00 ] ::1 /twoa/index.php/Home/Menu/__Public__/assets/js/src/ace.settings-rtl.js
+ERR: 非法操作:__Public__
+
+[ 2017-05-16T17:22:59+08:00 ] ::1 /twoa/index.php/Home/Menu/__Public__/assets/js/src/ace.settings-skin.js
+ERR: 非法操作:__Public__
+
+[ 2017-05-16T17:22:59+08:00 ] ::1 /twoa/index.php/Home/Menu/__Public__/assets/js/src/ace.widget-on-reload.js
+ERR: 非法操作:__Public__
+
+[ 2017-05-16T17:23:00+08:00 ] ::1 /twoa/index.php/Home/Menu/__Public__/assets/js/src/ace.searchbox-autocomplete.js
+ERR: 非法操作:__Public__
+
+[ 2017-05-16T17:23:00+08:00 ] ::1 /twoa/index.php/Home/Menu/__Public__/assets/css/ace.onpage-help.css
+ERR: 非法操作:__Public__
+
+[ 2017-05-16T17:23:00+08:00 ] ::1 /twoa/index.php/Home/docs/assets/js/themes/sunburst.css
+ERR: 无法加载控制器:Docs
+
+[ 2017-05-16T17:23:00+08:00 ] ::1 /twoa/index.php/Home/Menu/__Public__/assets/js/src/elements.onpage-help.js
+ERR: 非法操作:__Public__
+
+[ 2017-05-16T17:23:00+08:00 ] ::1 /twoa/index.php/Home/Menu/__Public__/assets/js/src/ace.onpage-help.js
+ERR: 非法操作:__Public__
+
+[ 2017-05-16T17:28:40+08:00 ] ::1 /twoa/index.php/Home/Menu/profile.html
+ERR: 非法操作:profile
+
+[ 2017-05-16T17:48:28+08:00 ] ::1 /twoa/index.php/Home/Menu/calendar.html
+ERR: 非法操作:calendar
+
+[ 2017-05-16T18:08:11+08:00 ] ::1 /twoa/index.php/Home/Menu/blank.html
+ERR: 非法操作:blank
+
+[ 2017-05-16T18:08:17+08:00 ] ::1 /twoa/index.php/Home/Menu/widgets.html
+ERR: 非法操作:widgets
+
