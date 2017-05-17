@@ -11,7 +11,7 @@
 		<!-- bootstrap & fontawesome -->
 		<link rel="stylesheet" href="__PUBLIC__/assets/css/bootstrap.css" />
 		<link rel="stylesheet" href="__PUBLIC__/components/font-awesome/css/font-awesome.css" />
-
+	
 		<!-- page specific plugin styles -->
 
 		<!-- text fonts -->
@@ -334,7 +334,7 @@
 								<img class="nav-user-photo" src="__PUBLIC__/assets/avatars/user.jpg" alt="Jason's Photo" />
 								<span class="user-info">
 									<small>Welcome,</small>
-									Jason
+									{$user['user_name']}
 								</span>
 
 								<i class="ace-icon fa fa-caret-down"></i>
@@ -344,12 +344,12 @@
 								<li>
 									<a href="#">
 										<i class="ace-icon fa fa-cog"></i>
-										Settings
+										设置
 									</a>
 								</li>
 
 								<li>
-									<a href="profile.html">
+									<a class="ajax-html" href="javascript:void(0);"  data-html="{:U('Menu/profile')}">
 										<i class="ace-icon fa fa-user"></i>
 										个人信息
 									</a>
@@ -358,9 +358,9 @@
 								<li class="divider"></li>
 
 								<li>
-									<a href="#">
+									<a class="ajax-html" href="javascript:void(0);" data-html="{:U('Menu/logout')}">
 										<i class="ace-icon fa fa-power-off"></i>
-										Logout
+										退出
 									</a>
 								</li>
 							</ul>
@@ -421,9 +421,9 @@
 
 				<ul class="nav nav-list">
 					<li class="">
-						<a href="index.html">
+						<a id="menu-company" href="javascript:void(0);" class="ajax-html" data-html="{:U('Menu/company')}">
 							<i class="menu-icon fa fa-tachometer"></i>
-							<span class="menu-text"> Dashboard </span>
+							<span class="menu-text"> 企业首页 </span>
 						</a>
 
 						<b class="arrow"></b>
@@ -771,9 +771,10 @@
 
 						<!-- /section:settings.box -->
 						<div class="row">
-							<div class="col-xs-12">
+							<div id="content-box" class="col-xs-12">
+								<!-- <iframe id="content-box" src=""></iframe> -->
 								<!-- PAGE CONTENT BEGINS -->
-								<iframe src=""></iframe>
+
 								<!-- PAGE CONTENT ENDS -->
 							</div><!-- /.col -->
 						</div><!-- /.row -->
@@ -786,7 +787,7 @@
 					<!-- #section:basics/footer -->
 					<div class="footer-content">
 						<span class="bigger-120">
-							<span class="blue bolder">TWOWAy</span>
+							<span class="blue bolder">TWOWAY</span>
 							Application &copy; 2017
 						</span>
 
@@ -825,29 +826,77 @@
 		<!--[if IE]>
 <script src="__PUBLIC__/components/jquery.1x/dist/jquery.js"></script>
 <![endif]-->
+		<literal>
 		<script type="text/javascript">
 			if('ontouchstart' in document.documentElement) document.write("<script src='__PUBLIC__/components/_mod/jquery.mobile.custom/jquery.mobile.custom.js'>"+"<"+"/script>");
+			$(function(){
+				//ajax-html执行获取页面
+				get_html($("#menu-company").data("html"));
+				$(".ajax-html").on("click",function(){
+					var urls=$(this).data("html");
+					get_html(urls);
+				})
+				function get_html(urls){
+					$.ajax({
+			            url:urls,
+			            data:{},
+			            dataType:"html",
+			            type:"post", 
+			            success:function(data){
+			            	if(data=="logout"){
+			            		location.reload();
+			            	}else{
+			            		$("#content-box").html(data);
+			            	}
+			            }
+			        })
+				}
+			})
 		</script>
+		</literal>
 		<script src="__PUBLIC__/components/bootstrap/dist/js/bootstrap.js"></script>
+		<script src="__PUBLIC__/components/_mod/jquery-ui.custom/jquery-ui.custom.js"></script>
+		<script src="__PUBLIC__/components/jqueryui-touch-punch/jquery.ui.touch-punch.js"></script>
+		<script src="__PUBLIC__/components/jquery.gritter/js/jquery.gritter.js"></script>
+		<script src="__PUBLIC__/components/bootbox.js/bootbox.js"></script>
+		<script src="__PUBLIC__/components/_mod/easypiechart/jquery.easypiechart.js"></script>
+		<script src="__PUBLIC__/components/bootstrap-datepicker/dist/js/bootstrap-datepicker.js"></script>
+		<script src="__PUBLIC__/components/jquery.hotkeys/index.js"></script>
+		<script src="__PUBLIC__/components/_mod/bootstrap-wysiwyg/bootstrap-wysiwyg.js"></script>
+		<script src="__PUBLIC__/components/select2/dist/js/select2.js"></script>
+		<script src="__PUBLIC__/components/fuelux/js/spinbox.js"></script>
+		<script src="__PUBLIC__/components/_mod/x-editable/bootstrap-editable.js"></script>
+		<script src="__PUBLIC__/components/_mod/x-editable/ace-editable.js"></script>
+		<script src="__PUBLIC__/components/jquery.maskedinput/dist/jquery.maskedinput.js"></script>
+
 
 		<!-- page specific plugin scripts -->
 
 		<!-- ace scripts -->
 		<script src="__PUBLIC__/assets/js/src/elements.scroller.js"></script>
+		<script src="__PUBLIC__/assets/js/src/elements.colorpicker.js"></script>
+		<script src="__PUBLIC__/assets/js/src/elements.fileinput.js"></script>
+		<script src="__PUBLIC__/assets/js/src/elements.typeahead.js"></script>
+		<script src="__PUBLIC__/assets/js/src/elements.wysiwyg.js"></script>
+		<script src="__PUBLIC__/assets/js/src/elements.spinner.js"></script>
+		<script src="__PUBLIC__/assets/js/src/elements.treeview.js"></script>
+		<script src="__PUBLIC__/assets/js/src/elements.wizard.js"></script>
 		<script src="__PUBLIC__/assets/js/src/elements.aside.js"></script>
 		<script src="__PUBLIC__/assets/js/src/ace.js"></script>
 		<script src="__PUBLIC__/assets/js/src/ace.basics.js"></script>
 		<script src="__PUBLIC__/assets/js/src/ace.scrolltop.js"></script>
-
+		<script src="__PUBLIC__/assets/js/src/ace.ajax-content.js"></script>
 		<script src="__PUBLIC__/assets/js/src/ace.touch-drag.js"></script>
 		<script src="__PUBLIC__/assets/js/src/ace.sidebar.js"></script>
 		<script src="__PUBLIC__/assets/js/src/ace.sidebar-scroll-1.js"></script>
 		<script src="__PUBLIC__/assets/js/src/ace.submenu-hover.js"></script>
+		<script src="__PUBLIC__/assets/js/src/ace.widget-box.js"></script>
 		<script src="__PUBLIC__/assets/js/src/ace.settings.js"></script>
 		<script src="__PUBLIC__/assets/js/src/ace.settings-rtl.js"></script>
 		<script src="__PUBLIC__/assets/js/src/ace.settings-skin.js"></script>
 		<script src="__PUBLIC__/assets/js/src/ace.widget-on-reload.js"></script>
 		<script src="__PUBLIC__/assets/js/src/ace.searchbox-autocomplete.js"></script>
+
 
 		<!-- inline scripts related to this page -->
 	</body>
