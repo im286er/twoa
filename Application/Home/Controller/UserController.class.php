@@ -6,4 +6,8 @@ class UserController extends AmangController {
 	public function create(){
 		$this->display("create");
 	}
+	//用户列表
+	public function lists(){
+		$this->display("list");
+	}
 }
