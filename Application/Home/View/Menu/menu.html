@@ -349,7 +349,7 @@
 								</li>
 
 								<li>
-									<a class="ajax-html" href="javascript:void(0);"  data-html="{:U('Menu/profile')}">
+									<a class="ajax-html" href="javascript:void(0);"  data-con="{:U('Menu/gethtml')}" data-html="profile">
 										<i class="ace-icon fa fa-user"></i>
 										个人信息
 									</a>
@@ -358,7 +358,7 @@
 								<li class="divider"></li>
 
 								<li>
-									<a class="ajax-html" href="javascript:void(0);" data-html="{:U('Menu/logout')}">
+									<a class="ajax-html" href="javascript:void(0);" data-con="{:U('Menu/logout')}" data-html="logout">
 										<i class="ace-icon fa fa-power-off"></i>
 										退出
 									</a>
@@ -421,7 +421,7 @@
 
 				<ul class="nav nav-list">
 					<li class="">
-						<a id="menu-company" href="javascript:void(0);" class="ajax-html" data-html="{:U('Menu/company')}">
+						<a id="menu-company" href="javascript:void(0);" class="ajax-html" data-con="{:U('Menu/gethtml')}" data-html="company" >
 							<i class="menu-icon fa fa-tachometer"></i>
 							<span class="menu-text"> 企业首页 </span>
 						</a>
@@ -641,14 +641,14 @@
 
 						<ul class="submenu">
 							<li class="">
-								<a href="javascript:void(0);" class="ajax-html" data-html="{:U('User/create')}">
+								<a href="javascript:void(0);" class="ajax-html" data-con="{:U('User/gethtml')}" data-html="create" >
 									<i class="menu-icon glyphicon glyphicon-user"></i>
 									添加人员
 								</a>
 								<b class="arrow"></b>
 							</li>
 							<li class="">
-								<a href="javascript:void(0);" class="ajax-html" data-html="{:U('User/lists')}">
+								<a href="javascript:void(0);" class="ajax-html" data-con="{:U('User/gethtml')}" data-html="list">
 									<i class="menu-icon fa fa-users"></i>
 									人员列表
 								</a>
@@ -855,20 +855,21 @@
 		<!--[if IE]>
 <script src="__PUBLIC__/components/jquery.1x/dist/jquery.js"></script>
 <![endif]-->
-		<literal>
+
 		<script type="text/javascript">
 			if('ontouchstart' in document.documentElement) document.write("<script src='__PUBLIC__/components/_mod/jquery.mobile.custom/jquery.mobile.custom.js'>"+"<"+"/script>");
 			$(function(){
 				//ajax-html执行获取页面
-				get_html($("#menu-company").data("html"));
+				get_html($("#menu-company").data("con"),$("#menu-company").data("html"));
+				//get_html({"html":$("#menu-company").data("html")});
 				$(".ajax-html").on("click",function(){
-					var urls=$(this).data("html");
-					get_html(urls);
+					//var data={"html":$(this).data("html")};
+					get_html($(this).data("con"),$(this).data("html"));
 				})
-				function get_html(urls){
+				function get_html(url,hdata){
 					$.ajax({
-			            url:urls,
-			            data:{},
+			            url:url,
+			            data:{html:hdata},
 			            dataType:"html",
 			            type:"post", 
 			            success:function(data){
@@ -882,7 +883,7 @@
 				}
 			})
 		</script>
-		</literal>
+
 		<script src="__PUBLIC__/components/bootstrap/dist/js/bootstrap.js"></script>
 		
 		<script src="__PUBLIC__/components/_mod/jquery-ui.custom/jquery-ui.custom.js"></script>

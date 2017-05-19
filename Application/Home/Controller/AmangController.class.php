@@ -16,4 +16,10 @@ class AmangController extends Controller {
 		}
 	}
 
+	public function gethtml(){
+		if(IS_POST){
+			$this->display(I("html"));
+		}
+	}
+
 }
