@@ -6,14 +6,6 @@ class MenuController extends AmangController {
 	public function menu(){
 		$this->display("menu");
 	}
-	//company
-	// public function company(){
-	// 	$this->display("company");
-	// }
-	// //个人信息
-	// public function profile(){
-	// 	$this->display("profile");
-	// }
 	//退出
 	public function logout(){
 		if(IS_POST){

@@ -631,7 +631,7 @@
 						<a href="#" class="dropdown-toggle">
 							<i class="menu-icon fa fa-users"></i>
 							<span class="menu-text">
-								人员信息
+								用户信息
 							</span>
 
 							<b class="arrow fa fa-angle-down"></b>
@@ -643,7 +643,7 @@
 							<li class="">
 								<a href="javascript:void(0);" class="ajax-html" data-con="{:U('User/gethtml')}" data-html="create" >
 									<i class="menu-icon glyphicon glyphicon-user"></i>
-									添加人员
+									添加/修改
 								</a>
 								<b class="arrow"></b>
 							</li>
@@ -866,6 +866,7 @@
 					//var data={"html":$(this).data("html")};
 					get_html($(this).data("con"),$(this).data("html"));
 				})
+				//gethtml页面
 				function get_html(url,hdata){
 					$.ajax({
 			            url:url,
@@ -881,7 +882,35 @@
 			            }
 			        })
 				}
+				
 			})
+			//转参数json
+			function toJson(string){
+				var string_arr = string.split('&');
+				var res = {};
+				for(var i = 0;i<string_arr.length;i++){
+				    var str = string_arr[i].split('=');
+				    res[str[0]]=str[1];
+				}
+				return res;
+			}
+			//获取form 数据
+			function get_form_data(classN){
+				var cElement=$(classN)
+				var jsonData={}
+				for (var i=0; i<cElement.length; i++) {
+					var label=cElement.eq(i).data("label");
+					var name=cElement.eq(i).attr("name");
+					var value=cElement.eq(i).val();
+					if(value!=""){
+						jsonData[name]=value;
+					}else{
+						alert(label+"不能为空");
+						return false;
+					}
+				}
+				return jsonData;
+			}
 		</script>
 
 		<script src="__PUBLIC__/components/bootstrap/dist/js/bootstrap.js"></script>

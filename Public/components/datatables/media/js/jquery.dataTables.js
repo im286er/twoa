@@ -1149,7 +1149,7 @@
 	 *  @param {object} settings dataTables settings object
 	 *  @param {int} rowIdx aoData row id
 	 *  @param {int} colIdx Column index
-	 *  @param {string} type data get type ('display', 'type' 'filter' 'sort')
+	 *  @param {string} type data get type ('显示', 'type' 'filter' 'sort')
 	 *  @returns {*} Cell data
 	 *  @memberof DataTable#oApi
 	 */
@@ -1186,7 +1186,7 @@
 			return cellData.call( rowData );
 		}
 	
-		if ( cellData === null && type == 'display' ) {
+		if ( cellData === null && type == '显示' ) {
 			return '';
 		}
 		return cellData;
@@ -1560,7 +1560,7 @@
 				cell.removeChild( cell.firstChild );
 			}
 	
-			cell.innerHTML = _fnGetCellData( settings, rowIdx, col, 'display' );
+			cell.innerHTML = _fnGetCellData( settings, rowIdx, col, '显示' );
 		};
 	
 		// Are we reading last data from DOM or the data object?
@@ -1776,7 +1776,7 @@
 				if ( (!nTrIn || oCol.mRender || oCol.mData !== i) &&
 					 (!$.isPlainObject(oCol.mData) || oCol.mData._ !== i+'.display')
 				) {
-					nTd.innerHTML = _fnGetCellData( oSettings, iRow, i, 'display' );
+					nTd.innerHTML = _fnGetCellData( oSettings, iRow, i, '显示' );
 				}
 	
 				/* Add user defined class */
@@ -3608,11 +3608,11 @@
 				start = 0;
 			}
 		}
-		else if ( action == "first" )
+		else if ( action == "首页" )
 		{
 			start = 0;
 		}
-		else if ( action == "previous" )
+		else if ( action == "上一页" )
 		{
 			start = len >= 0 ?
 				start - len :
@@ -3623,14 +3623,14 @@
 			  start = 0;
 			}
 		}
-		else if ( action == "next" )
+		else if ( action == "下一页" )
 		{
 			if ( start + len < records )
 			{
 				start += len;
 			}
 		}
-		else if ( action == "last" )
+		else if ( action == "尾页" )
 		{
 			start = Math.floor( (records-1) / len) * len;
 		}
@@ -3643,7 +3643,7 @@
 		settings._iDisplayStart = start;
 	
 		if ( changed ) {
-			_fnCallbackFire( settings, null, 'page', [settings] );
+			_fnCallbackFire( settings, null, '页', [settings] );
 	
 			if ( redraw ) {
 				_fnDraw( settings );
@@ -3681,7 +3681,7 @@
 	function _fnProcessingDisplay ( settings, show )
 	{
 		if ( settings.oFeatures.bProcessing ) {
-			$(settings.aanFeatures.r).css( 'display', show ? 'block' : 'none' );
+			$(settings.aanFeatures.r).css( '显示', show ? 'block' : 'none' );
 		}
 	
 		_fnCallbackFire( settings, null, 'processing', [settings, show] );
@@ -4465,7 +4465,7 @@
 	
 		var data = settings.aoData[ idx ];
 		return ! data.nTr ? // Might not have been created when deferred rendering
-			$('<td/>').html( _fnGetCellData( settings, idx, colIdx, 'display' ) )[0] :
+			$('<td/>').html( _fnGetCellData( settings, idx, colIdx, '显示' ) )[0] :
 			data.anCells[ colIdx ];
 	}
 	
@@ -4482,7 +4482,7 @@
 		var s, max=-1, maxIdx = -1;
 	
 		for ( var i=0, ien=settings.aoData.length ; i<ien ; i++ ) {
-			s = _fnGetCellData( settings, i, colIdx, 'display' )+'';
+			s = _fnGetCellData( settings, i, colIdx, '显示' )+'';
 			s = s.replace( __re_html_remove, '' );
 			s = s.replace( /&nbsp;/g, ' ' );
 	
@@ -9625,7 +9625,7 @@
 		 *  @param {array|object} oData The data array/object for the array
 		 *    (i.e. aoData[]._aData)
 		 *  @param {string} sSpecific The specific data type you want to get -
-		 *    'display', 'type' 'filter' 'sort'
+		 *    '显示', 'type' 'filter' 'sort'
 		 *  @returns {*} The data for the cell from the given row's data
 		 *  @default null
 		 */
@@ -11262,7 +11262,7 @@
 				 *      } );
 				 *    } );
 				 */
-				"sFirst": "First",
+				"sFirst": "首页",
 	
 	
 				/**
@@ -11285,7 +11285,7 @@
 				 *      } );
 				 *    } );
 				 */
-				"sLast": "Last",
+				"sLast": "尾页",
 	
 	
 				/**
@@ -11308,7 +11308,7 @@
 				 *      } );
 				 *    } );
 				 */
-				"sNext": "Next",
+				"sNext": "下一页",
 	
 	
 				/**
@@ -11331,7 +11331,7 @@
 				 *      } );
 				 *    } );
 				 */
-				"sPrevious": "Previous"
+				"sPrevious": "上一页"
 			},
 	
 			/**
@@ -11354,7 +11354,7 @@
 			 *      } );
 			 *    } );
 			 */
-			"sEmptyTable": "No data available in table",
+			"sEmptyTable": "表中没有数据",
 	
 	
 			/**
@@ -11386,7 +11386,7 @@
 			 *      } );
 			 *    } );
 			 */
-			"sInfo": "Showing _START_ to _END_ of _TOTAL_ entries",
+			"sInfo": "查看 _START_ to _END_ of _TOTAL_ 条",
 	
 	
 			/**
@@ -11407,7 +11407,7 @@
 			 *      } );
 			 *    } );
 			 */
-			"sInfoEmpty": "Showing 0 to 0 of 0 entries",
+			"sInfoEmpty": "查看 0 to 0 of 0 条",
 	
 	
 			/**
@@ -11547,7 +11547,7 @@
 			 *      } );
 			 *    } );
 			 */
-			"sLengthMenu": "Show _MENU_ entries",
+			"sLengthMenu": "查看 _MENU_ 条",
 	
 	
 			/**
@@ -11571,7 +11571,7 @@
 			 *      } );
 			 *    } );
 			 */
-			"sLoadingRecords": "Loading...",
+			"sLoadingRecords": "加载中...",
 	
 	
 			/**
@@ -11592,7 +11592,7 @@
 			 *      } );
 			 *    } );
 			 */
-			"sProcessing": "Processing...",
+			"sProcessing": "处理中...",
 	
 	
 			/**
@@ -11627,7 +11627,7 @@
 			 *      } );
 			 *    } );
 			 */
-			"sSearch": "Search:",
+			"sSearch": "搜索:",
 	
 	
 			/**
@@ -11685,7 +11685,7 @@
 			 *      } );
 			 *    } );
 			 */
-			"sZeroRecords": "No matching records found"
+			"sZeroRecords": "没找到匹配的记录"
 		},
 	
 	
@@ -11731,7 +11731,7 @@
 		 *
 		 *  @deprecated 1.10. Please use `ajax` for this functionality now.
 		 */
-		"sAjaxDataProp": "data",
+		"sAjaxDataProp": "数据",
 	
 	
 		/**
@@ -12252,7 +12252,7 @@
 		 *    * Parameters:
 		 *      * `{array|object}` The data source for the row
 		 *      * `{string}` The type call data requested - this will be 'set' when
-		 *        setting data or 'filter', 'display', 'type', 'sort' or undefined
+		 *        setting data or 'filter', '显示', 'type', 'sort' or undefined
 		 *        when gathering data. Note that when `undefined` is given for the
 		 *        type DataTables expects to get the raw data for the object back<
 		 *      * `{*}` Data to set when the second parameter is 'set'.
@@ -12341,7 +12341,7 @@
 		 *              source.price_filter  = val=="" ? "" : "$"+numberFormat(val)+" "+val;
 		 *              return;
 		 *            }
-		 *            else if (type === 'display') {
+		 *            else if (type === '显示') {
 		 *              return source.price_display;
 		 *            }
 		 *            else if (type === 'filter') {
@@ -12412,7 +12412,7 @@
 		 *      function in a nested property or even `browser().version` to get an
 		 *      object property if the function called returns an object.
 		 * * `object` - use different data for the different data types requested by
-		 *   DataTables ('filter', 'display', 'type' or 'sort'). The property names
+		 *   DataTables ('filter', '显示', 'type' or 'sort'). The property names
 		 *   of the object is the data type the property refers to and the value can
 		 *   defined using an integer, string or function using the same rules as
 		 *   `render` normally does. Note that an `_` option _must_ be specified.
@@ -12424,7 +12424,7 @@
 		 *    * Parameters:
 		 *      * {array|object} The data source for the row (based on `data`)
 		 *      * {string} The type call data requested - this will be 'filter',
-		 *        'display', 'type' or 'sort'.
+		 *        '显示', 'type' or 'sort'.
 		 *      * {array|object} The full data source for the row (not based on
 		 *        `data`)
 		 *    * Return:
