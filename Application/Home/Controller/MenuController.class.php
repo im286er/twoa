@@ -1,5 +1,5 @@
 <?php
-/*主菜单{company,profile}{企业信息,个人信息}*/
+/*主菜单{company|企业信息,profile|个人信息}*/
 namespace Home\Controller;
 use Common\Controller\AmangController;
 class MenuController extends AmangController {

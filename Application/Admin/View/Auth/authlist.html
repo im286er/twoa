@@ -53,14 +53,12 @@
 							<div class="widget-main">
 								<p class="alert alert-success">
 									<volist name="controllers['controller']" id="thicon">
-										<volist name="controllers['controllercn']" id="concn">
 										<span class="label>
 											<label class="inline">
-												<input name="form-field-checkbox" type="checkbox" class="ace">
-												<span class="lbl">{$thicon}</span>
+												<input name="{$thicon[0]}" type="checkbox" class="ace">
+												<span class="lbl">{$thicon[1]}</span>
 											</label>
 										</span>
-									</volist>
 									</volist>
 								</p>
 							</div>
