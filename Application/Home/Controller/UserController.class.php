@@ -1,5 +1,5 @@
 <?php
-/*用户功能{list,create,edit}*/
+/*用户功能{list,create,edit}{用户列表,新建用户,编辑用户}*/
 namespace Home\Controller;
 use Common\Controller\AmangController;
 class UserController extends AmangController {

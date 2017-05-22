@@ -20,10 +20,10 @@ class AuthController extends AmangController {
 			preg_match('/([\S]*)Controller.class.php/', $files[$i],$conMatch);
 			if(count($conMatch)>1){
 				$conFile=file_get_contents($url."/".$conMatch[0]);
-				preg_match('/\/\*([\S]*){([\S]*)}\*\//', $conFile,$cMatch);
+				preg_match('/\/\*([\S]*){([\S]*)}{([\S]*)}\*\//', $conFile,$cMatch);
 				if(count($cMatch)>1){
 					// array_push($authArray, array("name"=>$cMatch[1],"controller"=>$cMatch[2]));
-					array_push($authArray, array("name"=>$cMatch[1],"controller"=>explode(",", $cMatch[2])));
+					array_push($authArray, array("name"=>$cMatch[1],"controller"=>explode(",", $cMatch[2]),"controllercn"=>explode(",", $cMatch[3])));
 				}
 				/*用户功能{list,create,edit}*/
 				// print_r($authArray);
