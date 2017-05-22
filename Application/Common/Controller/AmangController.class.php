@@ -49,9 +49,14 @@ class AmangController extends Controller {
     		$user=M("oa_user");
     		$userData=$user->where("user_name='".I("user_name")."' AND user_passwd='".sha1(I("user_passwd"))."'")->find();
     		if($userData["user_id"]>0){
-    			session("oa_islogin","1");
-    			session("oa_user_name",I("user_name"));
-    			$this->success("登录成功",U("Menu/menu"));
+    			if(strtoupper(MODULE_NAME)=="ADMIN" AND $userData["user_role"]!=1){
+    				$this->error("抱歉！非超级管理员无法登陆后台",U("index/index"),3);
+    			}else{
+    				session("oa_islogin","1");
+	    			session("oa_user_name",I("user_name"));
+	    			$this->success("登录成功",U("Menu/menu"));
+    			}
+    			
     		}else{
     			$this->error("登录失败",U("index/index"),1);
     		}
