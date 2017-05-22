@@ -16,7 +16,7 @@ class AuthController extends AmangController {
 		$url=APP_PATH."/Home/Controller";
 		$files=scandir($url);
 		$authArray=array();
-		for($i=1;$i<count($files);$i++){
+		for($i=1;$i<count($files);$i++){//循环目录下所有文件
 			preg_match('/([\S]*)Controller.class.php/', $files[$i],$conMatch);
 			if(count($conMatch)>1){
 				$conFile=file_get_contents($url."/".$conMatch[0]);
@@ -27,13 +27,13 @@ class AuthController extends AmangController {
 					for($c=0;$c<=count($controll);$c++){
 						array_push($conNameArray, explode("|", $controll[$c]));
 					}
-					array_push($authArray, array("name"=>$cMatch[1],"controller"=>$conNameArray));
+					array_push($authArray, array("name"=>array("cn"=>$cMatch[1],"en"=>$conMatch[1]),"controller"=>$conNameArray));
 				}
 				
 
 			}
 		}
-		return $authArray;
-		
+		return $authArray;//返回三维数组信息
+		 
 	}  
 }

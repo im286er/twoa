@@ -24,7 +24,7 @@
 					<!-- #section:custom/widget-box -->
 					<div class="widget-box" id="widget-box-1">
 						<div class="widget-header">
-							<h5 class="widget-title">{$controllers.name}</h5>
+							<h5 class="widget-title">{$controllers.name.cn}</h5>
 
 							<!-- #section:custom/widget-box.toolbar -->
 							<div class="widget-toolbar">
@@ -55,7 +55,7 @@
 									<volist name="controllers['controller']" id="thicon">
 										<span class="label>
 											<label class="inline">
-												<input name="{$thicon[0]}" type="checkbox" class="ace">
+												<input name="{$thicon[0]}" data-control="{$controllers.name.en}-{$thicon[0]}" type="checkbox" class="ace">
 												<span class="lbl">{$thicon[1]}</span>
 											</label>
 										</span>
