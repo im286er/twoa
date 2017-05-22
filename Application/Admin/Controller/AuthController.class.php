@@ -19,7 +19,6 @@ class AuthController extends AmangController {
 		for($i=1;$i<count($files);$i++){
 			preg_match('/([\S]*)Controller.class.php/', $files[$i],$conMatch);
 			if(count($conMatch)>1){
-				echo $files[$i]."</br>";
 				$conFile=file_get_contents($url."/".$conMatch[0]);
 				preg_match('/\/\*([\S]*){([\S]*)}\*\//', $conFile,$cMatch);
 				$conNameArray=array();
