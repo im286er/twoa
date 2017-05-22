@@ -1,14 +1,17 @@
 <?php
 /*作为中间层的类*/
-namespace Home\Controller;
+namespace Common\Controller;
 use Think\Controller;
 class AmangController extends Controller {
 	//初始化，类似构造方法，判断是否登录
 	public function _initialize(){
 		$oa_login=session("oa_islogin");
 		if(empty($oa_login)){
-			$url=U("index/index");
-			echo "<script>top.location.href='$url'</script>";exit;
+			//防止死循环跳转
+			if (CONTROLLER_NAME!="Index") {
+				$url=U("index/index");
+				echo "<script>top.location.href='$url'</script>";exit;
+			}
 		}else{
 			//获取到用户的信息
 			$user=M("oa_user u");
@@ -18,11 +21,35 @@ class AmangController extends Controller {
 			$this->assign("user",$userData);
 		}
 	}
-
+	//获取html页面
 	public function gethtml(){
 		if(IS_POST){
 			$this->display(I("html"));
 		}
 	}
+	//默认所有控制器index就是登录的页面，存在就跳转，不存在就登录
+	public function index(){
+    	$oa_login=session("oa_islogin");
+		if(empty($oa_login)){
+			$this->display("login");
+		}else{
+			$this->success("已登录",U("Menu/menu"));
+		}
+    	
+    }
+    //登录功能
+    public function login(){
+    	if(IS_POST){
+    		$user=M("oa_user");
+    		$userData=$user->where("user_name='".I("user_name")."' AND user_passwd='".sha1(I("user_passwd"))."'")->find();
+    		if($userData["user_id"]>0){
+    			session("oa_islogin","1");
+    			session("oa_user_name",I("user_name"));
+    			$this->success("登录成功",U("Menu/menu"));
+    		}else{
+    			$this->error("登录失败",U("index/index"),1);
+    		}
+    	}
+    }
 
 }

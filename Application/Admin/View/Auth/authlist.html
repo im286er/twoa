@@ -1,0 +1,71 @@
+
+<div class="page-header">
+	<h1>
+		全局所有权限
+		<small>
+			<i class="ace-icon fa fa-angle-double-right"></i>
+			罗列出全站拥有的各个权限
+		</small>
+	</h1>
+</div><!-- /.page-header -->
+
+<div class="row">
+	<div class="col-xs-12">
+		<button class="btn btn-success"><i class="ace-icon fa fa-refresh"></i>刷新所有</button>
+	</div>
+</div>
+<div class="space-8"></div>
+<volist name="condata" id="controllers">
+	<div class="col-xs-12 col-sm-6">
+		<!-- PAGE CONTENT BEGINS -->
+		<div class="main-widget-container">
+			<div class="row">
+				<div class="col-sm-12 col-xs-12 widget-container-col">
+					<!-- #section:custom/widget-box -->
+					<div class="widget-box" id="widget-box-1">
+						<div class="widget-header">
+							<h5 class="widget-title">{$controllers.name}</h5>
+
+							<!-- #section:custom/widget-box.toolbar -->
+							<div class="widget-toolbar">
+
+								<a href="#" data-action="fullscreen" class="orange2">
+									<i class="ace-icon fa fa-expand"></i>
+								</a>
+
+								<a href="#" data-action="reload">
+									<i class="ace-icon fa fa-refresh"></i>
+								</a>
+
+								<a href="#" data-action="collapse">
+									<i class="ace-icon fa fa-chevron-up"></i>
+								</a>
+
+								<a href="#" data-action="close">
+									<i class="ace-icon fa fa-times"></i>
+								</a>
+							</div>
+
+							<!-- /section:custom/widget-box.toolbar -->
+						</div>
+
+						<div class="widget-body">
+							<div class="widget-main">
+								<p class="alert alert-success">
+									<volist name="controllers['controller']" id="thicon">
+										<span class="label>
+											<label class="inline">
+												<input name="form-field-checkbox" type="checkbox" class="ace">
+												<span class="lbl">{$thicon}</span>
+											</label>
+										</span>
+									</volist>
+								</p>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div><!-- /.row -->
+		</div><!-- PAGE CONTENT ENDS -->
+	</div><!-- /.col -->
+</volist>

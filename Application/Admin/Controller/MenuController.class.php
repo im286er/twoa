@@ -1,6 +1,5 @@
 <?php
-/*主菜单{company,profile}*/
-namespace Home\Controller;
+namespace Admin\Controller;
 use Common\Controller\AmangController;
 class MenuController extends AmangController {
 	//menu

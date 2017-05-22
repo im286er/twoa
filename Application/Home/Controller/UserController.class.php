@@ -1,6 +1,7 @@
 <?php
+/*用户功能{list,create,edit}*/
 namespace Home\Controller;
-use Think\Controller;
+use Common\Controller\AmangController;
 class UserController extends AmangController {
 	//新建用户
 	// public function create(){
