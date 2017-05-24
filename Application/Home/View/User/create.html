@@ -75,7 +75,7 @@
 							<div class="col-sm-8">
 								<select class="chosen-select form-control user-finfo" data-label="角色" name="user_role" data-placeholder="选择对应角色">
 									<volist name="user_roles" id="roles">
-										<option value="{$roles.config_key}">{$roles.config_value}</option>
+										<option value="{$roles.role_id}">{$roles.role_name}</option>
 									</volist>
 								</select>
 							</div>

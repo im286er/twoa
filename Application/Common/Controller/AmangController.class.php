@@ -15,7 +15,7 @@ class AmangController extends Controller {
 		}else{
 			//获取到用户的信息
 			$user=M("oa_user u");
-			$userData=$user->field("user_name,user_code,c.config_value user_company,g.config_value user_group,p.config_value user_place,r.config_value user_role,user_higher,user_phone,user_avatar,user_born,user_sex,user_lastlogin,user_entry,user_login,user_state")->where("user_name='".session("oa_user_name")."' AND  u.user_company=c.config_key AND u.user_group=g.config_key AND u.user_place=p.config_key AND u.user_role=r.config_key AND c.config_class='company' AND g.config_class='group' AND p.config_class='place' AND r.config_class='role'")->join("oa_config c,oa_config g,oa_config p,oa_config r")->find();
+			$userData=$user->field("user_name,user_code,c.config_value user_company,g.config_value user_group,p.config_value user_place,r.role_name user_role,user_higher,user_phone,user_avatar,user_born,user_sex,user_lastlogin,user_entry,user_login,user_state")->where("user_name='".session("oa_user_name")."' AND  u.user_company=c.config_key AND u.user_group=g.config_key AND u.user_place=p.config_key AND u.user_role=r.role_id AND c.config_class='company' AND g.config_class='group' AND p.config_class='place'")->join("oa_config c,oa_config g,oa_config p,oa_role r")->find();
 			$userData["user_age"]=get_age($userData["user_born"]);
 			$userData["user_joinDay"]=get_day($userData["user_entry"]);
 			$this->user=$userDat;
@@ -25,7 +25,7 @@ class AmangController extends Controller {
 	//获取html页面
 	public function gethtml(){
 		if(IS_POST){
-			if($this->powers()){
+			if($this->authority()){
 				$this->display(I("html"));
 			}else{
 				$this->show("<h1>对不起！您木有权限</h1>");
@@ -46,11 +46,11 @@ class AmangController extends Controller {
     //登录功能
     public function login(){
     	if(IS_POST){
-    		$user=M("oa_user");
-    		$userData=$user->where("user_name='".I("user_name")."' AND user_passwd='".sha1(I("user_passwd"))."'")->find();
+    		$user=M("oa_user u");
+    		$userData=$user->field("user_id,r.role_upper user_roleg")->where("u.user_name='".I("user_name")."' AND u.user_passwd='".sha1(I("user_passwd"))."' AND u.user_role=r.role_id")->join("oa_role r")->find();
     		if($userData["user_id"]>0){
-    			if(strtoupper(MODULE_NAME)=="ADMIN" AND $userData["user_role"]!=1){
-    				$this->error("抱歉！非超级管理员无法登陆后台",U("index/index"),3);
+    			if(strtoupper(MODULE_NAME)=="ADMIN" AND $userData["user_roleg"]!=1){
+    				$this->error("抱歉！非管理员无法登陆后台",U("index/index"),3);
     			}else{
     				session("oa_islogin","1");
 	    			session("oa_user_name",I("user_name"));
@@ -63,15 +63,20 @@ class AmangController extends Controller {
     	}
     }
     //权限控制
-    public function powers(){
-    	print_r($this->user);
-    	$powers=array("Menu-company","User-list");
+    public function authority(){
+
+    	$authority=array("Menu-company","User-list");
+    	$user=M("oa_user");
+    	$userData=$user->field("user_role")->where("user_name='".session("oa_user_name")."'")->find();
+    	if($userData["user_role"]==2){
+    		return true;
+    	}
     	if(ACTION_NAME=="gethtml"){//通过gethtml方法获取页面的权限名为：控制器+"-"+参数html
     		$powerName=CONTROLLER_NAME."-".I("html");
     	}else{//其他权限名为：控制器+"-"+方法名
     		$powerName=CONTROLLER_NAME."-".ACTION_NAME;
     	}
-    	if(in_array($powerName, $powers)){
+    	if(in_array($powerName, $authority)){
     		return true;
     	}else{
     		return false;
