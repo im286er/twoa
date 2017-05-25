@@ -85,8 +85,7 @@ class AmangController extends Controller {
 	}
     //权限控制
     public function authority(){
-
-    	$authority=array("Menu-company","User-list");
+    	$authority=explode(",", $this->get_auth());
     	$user=M("oa_user");
     	$userData=$user->field("user_role")->where("user_name='".session("oa_user_name")."'")->find();
     	if($userData["user_role"]==2){
@@ -102,7 +101,12 @@ class AmangController extends Controller {
     	}else{
     		return false;
     	}
-
+    }
+    //获取权限
+    public function get_auth(){
+    	$rauth=M("oa_rauth a");
+    	$rauthData=$rauth->field("rauth_auth")->join("oa_user u")->where("u.user_name='".session("oa_user_name")."' AND u.user_role=a.rauth_role")->find();
+    	return $rauthData["rauth_auth"];
     }
 
 }

@@ -30,7 +30,7 @@ class UserController extends AmangController {
 			$this->assign("user_roles",$roleData);
 
 		}else if(I("html")=='edit'){
-			
+
 		}
 		parent::gethtml();
 	}
