@@ -58,7 +58,7 @@
 								<!-- <input id="form-field-1" placeholder="所属部门" class="col-xs-10 col-sm-10" type="text"> -->
 								<select class="chosen-select form-control user-finfo" data-label="所属部门" name="user_group" data-placeholder="选择所属部门">
 									<volist name="user_groups" id="groups">
-										<option value="{$groups.config_key}">{$groups.config_value}</option>
+										<option value="{$groups.group_id}">{$groups.group_name}</option>
 									</volist>
 								</select>
 
@@ -66,8 +66,14 @@
 						</div>
 						<div class="form-group">
 							<label class="col-sm-3 control-label no-padding-right" for="form-field-1"> 职位 </label>
-							<div class="col-sm-9">
-								<input id="form-field-1" placeholder="职位" name="user_place" data-label="职位" class="user-finfo col-xs-10 col-sm-10" type="text">
+							<div class="col-sm-8">
+								<select class="chosen-select form-control user-finfo" data-label="职位" name="user_group" data-placeholder="选择职位">
+									<volist name="user_place" id="place">
+										<option value="{$place.place_id}">{$place.place_name}</option>
+									</volist>
+								</select>
+
+								<!-- <input id="form-field-1" placeholder="职位" name="user_place" data-label="职位" class="user-finfo col-xs-10 col-sm-10" type="text"> -->
 							</div>
 						</div>
 						<div class="form-group">

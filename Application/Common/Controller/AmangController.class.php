@@ -15,19 +15,24 @@ class AmangController extends Controller {
 		}else{
 			//获取到用户的信息
 			$user=M("oa_user u");
-			$userData=$user->field("user_name,user_code,c.config_value user_company,g.config_value user_group,p.config_value user_place,r.role_name user_role,user_higher,user_phone,user_avatar,user_born,user_sex,user_lastlogin,user_entry,user_login,user_state")->where("user_name='".session("oa_user_name")."' AND  u.user_company=c.config_key AND u.user_group=g.config_key AND u.user_place=p.config_key AND u.user_role=r.role_id AND c.config_class='company' AND g.config_class='group' AND p.config_class='place'")->join("oa_config c,oa_config g,oa_config p,oa_role r")->find();
-			$userData["user_age"]=get_age($userData["user_born"]);
-			$userData["user_joinDay"]=get_day($userData["user_entry"]);
-			$this->user=$userData;
+			$userData=$user->field("user_name,user_code,c.config_value user_company,g.group_name user_group,p.place_name user_place,r.role_name user_role,user_higher,user_phone,user_avatar,user_born,user_sex,user_lastlogin,user_entry,user_login,user_state")->where("user_name='".session("oa_user_name")."' AND  u.user_company=c.config_key AND u.user_group=g.group_id AND u.user_place=p.place_id AND u.user_role=r.role_id AND c.config_class='company' AND u.user_state=1")->join("oa_config c,oa_group g,oa_place p,oa_role r")->find();
+
+			if(empty($userData["user_name"])){
+				session("oa_islogin",NULL);
+    			session("oa_user_name",NULL);
+			}else{
+				$userData["user_age"]=get_age($userData["user_born"]);
+				$userData["user_joinDay"]=get_day($userData["user_entry"]);
+				$this->user=$userData;
+				$this->assign("user",$userData);
+			}
 			
-			$this->assign("user",$userData);
 		}
 	}
 	//获取html页面
 	public function gethtml(){
 		if(IS_POST){
 			if($this->authority()){
-				print_r($this->user);
 				$this->display(I("html"));
 			}else{
 				$this->show("<h1>对不起！您木有权限</h1>");
