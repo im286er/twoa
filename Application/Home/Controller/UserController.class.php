@@ -3,14 +3,6 @@
 namespace Home\Controller;
 use Common\Controller\AmangController;
 class UserController extends AmangController {
-	//新建用户
-	// public function create(){
-	// 	$this->display("create");
-	// }
-	// //用户列表
-	// public function lists(){
-	// 	$this->display("list");
-	// }
 	//重组gethtml方法
 	public function gethtml(){
 		if (I("html")=='list'){
