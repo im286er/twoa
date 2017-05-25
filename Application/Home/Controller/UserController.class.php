@@ -27,11 +27,21 @@ class UserController extends AmangController {
 		}
 		parent::gethtml();
 	}
-	//post data
+	//新建用户
 	public function create(){
 		if(IS_POST){
-			
+			$user=M("oa_user");
+			$userData=$_POST;
+			$userData["user_passwd"]=sha1("Aa1234567");//初始化密码
+			if($userData["user_sex"]=="男"){
+				$userData["user_avatar"]="/assets/avatars/man.png";
+			}else{
+				$userData["user_avatar"]="/assets/avatars/lady.png";
+			}	
+			$userData["user_quit"]="0000-00-00";
+			$result=$user->add($userData);
+			var_dump($result);
 		}
-		print_r($_POST);
+		
 	} 
 }
