@@ -29,6 +29,7 @@ class AmangController extends Controller {
 					$userData["user_joinDay"]=get_day($userData["user_entry"]);
 					$this->user=$userData;
 					$this->assign("user",$userData);
+					$this->assign("rand",lcg_value());
 				}
 				
 			}
