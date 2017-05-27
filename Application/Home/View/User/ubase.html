@@ -27,20 +27,36 @@
 			</div>
 			<div class="widget-body">
 				<div class="widget-main">
-					<div class="widget-toolbox padding-8 clearfix">
-						<button class="btn btn-xs btn-success" id="submit-user">
-							<i class="ace-icon fa fa-plus-square bigger-110"></i>
-							<span class="bigger-110">新增公司</span>
-						</button>
-						<button class="btn btn-xs btn-primary" id="submit-user">
-							<i class="ace-icon fa fa-edit bigger-110"></i>
-							<span class="bigger-110">修改公司</span>
-						</button>
-						<button class="btn btn-xs btn-danger" id="submit-user">
-							<i class="ace-icon fa fa-close bigger-110"></i>
-							<span class="bigger-110">删除公司</span>
-						</button>
+					<div class="row">
+						<div class="col-sm-6">
+							<select class="form-control" id="form-field-select-2" multiple="multiple">
+							 	<volist name="user_companys" id="company">
+							 		<option class="ubase-select" data-input="company-data" value="{$company.config_key}">{$company.config_value}</option>
+							 	</volist>
+							</select>
+						</div>
+						<div class="col-sm-6 form-horizontal">
+							<div class="form-group">
+								<div class="col-sm-12">
+									<input type="text" id="company-data" data-val="" placeholder="公司名称" class="col-xs-10 col-sm-10">
+								</div>
+							</div>
+						</div>
 					</div>
+				</div>
+				<div class="widget-toolbox padding-8 clearfix">
+					<button class="btn btn-xs btn-success" id="submit-user">
+						<i class="ace-icon fa fa-plus-square bigger-110"></i>
+						<span class="bigger-110">新增公司</span>
+					</button>
+					<button class="btn btn-xs btn-primary" id="submit-user">
+						<i class="ace-icon fa fa-edit bigger-110"></i>
+						<span class="bigger-110">修改公司</span>
+					</button>
+					<button class="btn btn-xs btn-danger" id="submit-user">
+						<i class="ace-icon fa fa-close bigger-110"></i>
+						<span class="bigger-110">删除公司</span>
+					</button>
 				</div>
 			</div>
 		</div>
@@ -53,20 +69,36 @@
 			</div>
 			<div class="widget-body">
 				<div class="widget-main">
-					<div class="widget-toolbox padding-8 clearfix">
-						<button class="btn btn-xs btn-success" id="submit-user">
-							<i class="ace-icon fa fa-plus-square bigger-110"></i>
-							<span class="bigger-110">新增部门</span>
-						</button>
-						<button class="btn btn-xs btn-primary" id="submit-user">
-							<i class="ace-icon fa fa-edit bigger-110"></i>
-							<span class="bigger-110">修改部门</span>
-						</button>
-						<button class="btn btn-xs btn-danger" id="submit-user">
-							<i class="ace-icon fa fa-close bigger-110"></i>
-							<span class="bigger-110">删除部门</span>
-						</button>
+					<div class="row">
+						<div class="col-sm-6">
+							<select class="form-control" id="form-field-select-2" multiple="multiple">
+							 	<volist name="user_groups" id="groups">
+							 		<option class="ubase-select" data-input="groups-data" value="{$groups.group_id}">{$groups.group_name}</option>
+							 	</volist>
+							</select>
+						</div>
+						<div class="col-sm-6 form-horizontal">
+							<div class="form-group">
+								<div class="col-sm-12">
+									<input type="text" id="groups-data" data-val="" placeholder="部门名称" class="col-xs-10 col-sm-10">
+								</div>
+							</div>
+						</div>
 					</div>
+				</div>
+				<div class="widget-toolbox padding-8 clearfix">
+					<button class="btn btn-xs btn-success" id="submit-user">
+						<i class="ace-icon fa fa-plus-square bigger-110"></i>
+						<span class="bigger-110">新增部门</span>
+					</button>
+					<button class="btn btn-xs btn-primary" id="submit-user">
+						<i class="ace-icon fa fa-edit bigger-110"></i>
+						<span class="bigger-110">修改部门</span>
+					</button>
+					<button class="btn btn-xs btn-danger" id="submit-user">
+						<i class="ace-icon fa fa-close bigger-110"></i>
+						<span class="bigger-110">删除部门</span>
+					</button>
 				</div>
 			</div>
 		</div>
@@ -81,22 +113,49 @@
 			</div>
 			<div class="widget-body">
 					<div class="widget-main">
-						<div class="widget-toolbox padding-8 clearfix">
-							<button class="btn btn-xs btn-success" id="submit-user">
-								<i class="ace-icon fa fa-plus-square bigger-110"></i>
-								<span class="bigger-110">新增职位</span>
-							</button>
-							<button class="btn btn-xs btn-primary" id="submit-user">
-								<i class="ace-icon fa fa-edit bigger-110"></i>
-								<span class="bigger-110">新增职位</span>
-							</button>
-							<button class="btn btn-xs btn-danger" id="submit-user">
-								<i class="ace-icon fa fa-close bigger-110"></i>
-								<span class="bigger-110">新增职位</span>
-							</button>
-						</div>
+						<div class="row">
+							<div class="col-sm-4">
+								<select class="form-control" id="form-field-select-2" multiple="multiple">
+								 	<volist name="user_groups" id="groups">
+								 		<option  class="ubase-select" data-type="place" data-input="place-group-data" value="{$groups.group_id}">{$groups.group_name}</option>
+								 	</volist>
+								</select>
+							</div>
+							<div class="col-sm-4">
+								<select class="form-control" id="form-field-select-2" multiple="multiple">
+								 	<volist name="user_place" id="place">
+								 		<option class="ubase-select" data-input="place-data" value="{$place.place_id}">{$place.place_name}</option>
+								 	</volist>
+								</select>
+							</div>
+							<div class="col-sm-4 form-horizontal">
+								<div class="form-group">
+									<div class="col-sm-12">
+										<input type="text" id="place-group-data" data-val="" placeholder="部门名称" class="col-xs-10 col-sm-10">
+									</div>
+								</div>
+								<div class="form-group">
+									<div class="col-sm-12">
+										<input type="text" id="place-data" data-val="" placeholder="职位名称" class="col-xs-10 col-sm-10">
+									</div>
+								</div>
+							</div>
+						</div>	
 					</div>
-			
+					<div class="widget-toolbox padding-8 clearfix">
+						<button class="btn btn-xs btn-success" id="submit-user">
+							<i class="ace-icon fa fa-plus-square bigger-110"></i>
+							<span class="bigger-110">新增职位</span>
+						</button>
+						<button class="btn btn-xs btn-primary" id="submit-user">
+							<i class="ace-icon fa fa-edit bigger-110"></i>
+							<span class="bigger-110">新增职位</span>
+						</button>
+						<button class="btn btn-xs btn-danger" id="submit-user">
+							<i class="ace-icon fa fa-close bigger-110"></i>
+							<span class="bigger-110">新增职位</span>
+						</button>
+					</div>
 			</div>
 		</div>
 	</div>
@@ -110,28 +169,87 @@
 			</div>
 			<div class="widget-body">
 					<div class="widget-main">
-						<div class="widget-toolbox padding-8 clearfix">
-							<button class="btn btn-xs btn-success" id="submit-user">
-								<i class="ace-icon fa fa-plus-square bigger-110"></i>
-								<span class="bigger-110">新增角色</span>
-							</button>
-							<button class="btn btn-xs btn-primary" id="submit-user">
-								<i class="ace-icon fa fa-edit bigger-110"></i>
-								<span class="bigger-110">修改角色</span>
-							</button>
-							<button class="btn btn-xs btn-danger" id="submit-user">
-								<i class="ace-icon fa fa-close bigger-110"></i>
-								<span class="bigger-110">删除角色</span>
-							</button>
-						</div>
+						<div class="row">
+							<div class="col-sm-4">
+								<select class="form-control" id="form-field-select-2" multiple="multiple">
+								 	<volist name="user_roles" id="roles">
+								 		<option class="ubase-select" data-type="role" data-input="role-group-data" value="{$roles.role_id}">{$roles.role_name}</option>
+								 	</volist>
+								</select>
+							</div>
+							<div class="col-sm-4">
+								<select class="form-control" id="form-field-select-2" multiple="multiple">
+								 	<volist name="user_place" id="place">
+								 		<option class="ubase-select" data-input="role-data" value="{$place.place_id}">{$place.place_name}</option>
+								 	</volist>
+								</select>
+							</div>
+							<div class="col-sm-4 form-horizontal">
+								<div class="form-group">
+									<div class="col-sm-12">
+										<input type="text" id="role-group-data" data-val="" placeholder="角色分组" class="col-xs-10 col-sm-10">
+									</div>
+								</div>
+								<div class="form-group">
+									<div class="col-sm-12">
+										<input type="text" id="role-data" data-val="" placeholder="角色名称" class="col-xs-10 col-sm-10">
+									</div>
+								</div>
+							</div>
+						</div>	
 					</div>
-			
+					<div class="widget-toolbox padding-8 clearfix">
+						<button class="btn btn-xs btn-yellow" id="submit-user">
+							<i class="ace-icon fa fa-plus-square bigger-110"></i>
+							<span class="bigger-110">新增分组</span>
+						</button>
+						<button class="btn btn-xs btn-purple" id="submit-user">
+							<i class="ace-icon fa fa-edit bigger-110"></i>
+							<span class="bigger-110">修改分组</span>
+						</button>
+						<button class="btn btn-xs btn-pink" id="submit-user">
+							<i class="ace-icon fa fa-close bigger-110"></i>
+							<span class="bigger-110">删除分组</span>
+						</button>
+						<button class="btn btn-xs btn-success" id="submit-user">
+							<i class="ace-icon fa fa-plus-square bigger-110"></i>
+							<span class="bigger-110">新增角色</span>
+						</button>
+						<button class="btn btn-xs btn-primary" id="submit-user">
+							<i class="ace-icon fa fa-edit bigger-110"></i>
+							<span class="bigger-110">修改角色</span>
+						</button>
+						<button class="btn btn-xs btn-danger" id="submit-user">
+							<i class="ace-icon fa fa-close bigger-110"></i>
+							<span class="bigger-110">删除角色</span>
+						</button>
+					</div>
 			</div>
 		</div>
 	</div>
 </div>
 <script src="__PUBLIC__/components/bootstrap-datepicker/dist/js/bootstrap-datepicker.js"></script>
-	<script>
+<script>
+	$(function(){
+		$(".ubase-select").on("click",function(){
+			var tid=$(this).data("input")
+			$("#"+tid).val($(this).text())
+			$("#"+tid).data('val',$(this).val())
+			if($(this).data("type")!=undefined){
+			datas={}
+			datas['type']=$(this).data("type")
+			datas['id']=$(this).val()
+				$.ajax({
+					url:"{:U('showlowe')}",
+					type:"post",
+					data:datas,
+					datatype:"html",
+					success:function(data){
+						alert(data);
+					}
+				})
+			}
+		})
+	})
 
-
-	</script>
+</script>
