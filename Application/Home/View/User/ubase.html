@@ -115,16 +115,16 @@
 					<div class="widget-main">
 						<div class="row">
 							<div class="col-sm-4">
-								<select class="form-control" id="form-field-select-2" multiple="multiple">
-								 	<volist name="user_groups" id="groups">
+								<select class="form-control" id="form-field-select-2" multiple="multiple" data-lower="place-select-box">
+								 	<volist name="user_groups" id="groups" >
 								 		<option  class="ubase-select" data-type="place" data-input="place-group-data" value="{$groups.group_id}">{$groups.group_name}</option>
 								 	</volist>
 								</select>
 							</div>
 							<div class="col-sm-4">
-								<select class="form-control" id="form-field-select-2" multiple="multiple">
+								<select class="form-control" id="place-select-box" multiple="multiple">
 								 	<volist name="user_place" id="place">
-								 		<option class="ubase-select" data-input="place-data" value="{$place.place_id}">{$place.place_name}</option>
+								 		<!-- <option class="ubase-select" data-input="place-data" value="{$place.place_id}">{$place.place_name}</option> -->
 								 	</volist>
 								</select>
 							</div>
@@ -231,23 +231,26 @@
 <script src="__PUBLIC__/components/bootstrap-datepicker/dist/js/bootstrap-datepicker.js"></script>
 <script>
 	$(function(){
-		$(".ubase-select").on("click",function(){
+		$(".ubase-select").on("click",function abc(){
 			var tid=$(this).data("input")
 			$("#"+tid).val($(this).text())
 			$("#"+tid).data('val',$(this).val())
 			if($(this).data("type")!=undefined){
-			datas={}
-			datas['type']=$(this).data("type")
-			datas['id']=$(this).val()
-				$.ajax({
-					url:"{:U('showlowe')}",
-					type:"post",
-					data:datas,
-					datatype:"html",
-					success:function(data){
-						alert(data);
-					}
-				})
+				var lower=$(this).parent().data("lower");
+				//alert(lower);
+				datas={}
+				datas['type']=$(this).data("type")
+				datas['id']=$(this).val()
+					$.ajax({
+						url:"{:U('showlowe')}",
+						type:"post",
+						data:datas,
+						datatype:"html",
+						success:function(data){
+							$("#"+lower).html(data);
+							$(".ubase-select").on("click",abc)
+						}
+					})
 			}
 		})
 	})

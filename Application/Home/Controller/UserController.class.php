@@ -60,13 +60,20 @@ class UserController extends AmangController {
 			var_dump($result);
 		}
 	} 
-	//
+	//查看下级信息
 	public function showlowe(){
 		if(IS_POST){
 			switch ($_POST['type']) {
 				case 'place':
 					$place=M('oa_place');
 					$placeData=$place->field("place_id,place_name")->where("place_group='{$_POST["id"]}'")->select();
+					//print_r($placeData);
+					$html="";
+					foreach ($placeData as $placeArray) {
+						$html.="<option class='ubase-select' data-input='place-data' value='{$placeArray["place_id"]}'>{$placeArray["place_name"]}</option>";
+					}
+					echo $html;
+					
 					# code...
 					break;
 				case 'role':
