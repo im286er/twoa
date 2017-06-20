@@ -8,7 +8,7 @@ class UserController extends AmangController {
 		switch (I("html")) {
 			case 'list':
 				$user=M("oa_user u");
-				$userData=$user->field("user_name,user_code,c.config_value user_company,g.group_name user_group,p.place_name user_place,r.role_name user_role,user_higher,user_phone,user_avatar,user_born,user_sex,user_lastlogin,user_entry,user_login,user_state")->where("u.user_company=c.config_key AND u.user_group=g.group_id AND u.user_place=p.place_id AND u.user_role=r.role_id AND c.config_class='company'")->join("oa_config c,oa_group g,oa_place p,oa_role r")->select();
+				$userData=$user->field("user_name,user_code,c.config_value user_company,g.group_name user_group,p.place_name user_place,r.role_name user_role,user_director,user_phone,user_avatar,user_born,user_sex,user_lastlogin,user_entry,user_login,user_state")->where("u.user_company=c.config_key AND u.user_group=g.group_id AND u.user_place=p.place_id AND u.user_role=r.role_id AND c.config_class='company'")->join("oa_config c,oa_group g,oa_place p,oa_role r")->select();
 				$this->assign("userlist",$userData);
 				break;
 			case 'create': case 'ubase':
@@ -49,15 +49,20 @@ class UserController extends AmangController {
 		if(IS_POST){
 			$user=M("oa_user");
 			$userData=$_POST;
-			$userData["user_passwd"]=sha1("Aa1234567");//初始化密码
+			
+			if(empty($userData["user_passwd"])){
+				$userData["user_passwd"]=sha1("Aa1234567");//初始化密码
+			}else{
+				$userData["user_passwd"]=sha1($userData["user_passwd"]);//密码加密
+			}
 			if($userData["user_sex"]=="男"){
 				$userData["user_avatar"]="/assets/avatars/man.png";
-			}else{
+			}else if($userData["user_sex"]=="女"){
 				$userData["user_avatar"]="/assets/avatars/lady.png";
 			}	
 			$userData["user_quit"]="0000-00-00";
 			$result=$user->add($userData);
-			var_dump($result);
+			echo $result;
 		}
 	} 
 	//查看下级信息

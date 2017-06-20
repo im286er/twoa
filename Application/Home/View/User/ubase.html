@@ -231,7 +231,7 @@
 <script src="__PUBLIC__/components/bootstrap-datepicker/dist/js/bootstrap-datepicker.js"></script>
 <script>
 	$(function(){
-		$(".ubase-select").on("click",function abc(){
+		$(document).on("click",".ubase-select",function abc(){
 			var tid=$(this).data("input")
 			$("#"+tid).val($(this).text())
 			$("#"+tid).data('val',$(this).val())
@@ -248,7 +248,7 @@
 						datatype:"html",
 						success:function(data){
 							$("#"+lower).html(data);
-							$(".ubase-select").on("click",abc)
+							//$(".ubase-select").on("click",abc)
 						}
 					})
 			}

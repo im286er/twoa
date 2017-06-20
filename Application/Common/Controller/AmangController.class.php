@@ -15,7 +15,7 @@ class AmangController extends Controller {
 		}else{
 			//获取到用户的信息
 			$user=M("oa_user u");
-			$userData=$user->field("user_name,user_code,r.role_upper user_roleg,c.config_value user_company,g.group_name user_group,p.place_name user_place,r.role_name user_role,user_higher,user_phone,user_avatar,user_born,user_sex,user_lastlogin,user_entry,user_login,user_state")->where("user_name='".session("oa_user_name")."' AND  u.user_company=c.config_key AND u.user_group=g.group_id AND u.user_place=p.place_id AND u.user_role=r.role_id AND c.config_class='company' AND u.user_state=1")->join("oa_config c,oa_group g,oa_place p,oa_role r")->find();
+			$userData=$user->field("user_name,user_code,r.role_upper user_roleg,c.config_value user_company,g.group_name user_group,p.place_name user_place,r.role_name user_role,user_director,user_phone,user_avatar,user_born,user_sex,user_lastlogin,user_entry,user_login,user_state")->where("user_name='".session("oa_user_name")."' AND  u.user_company=c.config_key AND u.user_group=g.group_id AND u.user_place=p.place_id AND u.user_role=r.role_id AND c.config_class='company' AND u.user_state=1")->join("oa_config c,oa_group g,oa_place p,oa_role r")->find();
 
 			if(empty($userData["user_name"])){//防止用户离职后还使用
 				session("oa_islogin",NULL);

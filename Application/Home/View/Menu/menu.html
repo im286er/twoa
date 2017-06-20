@@ -902,23 +902,7 @@
 				}
 				return res;
 			}
-			//获取form 数据
-			function get_form_data(classN){
-				var cElement=$(classN)
-				var jsonData={}
-				for (var i=0; i<cElement.length; i++) {
-					var label=cElement.eq(i).data("label");
-					var name=cElement.eq(i).attr("name");
-					var value=cElement.eq(i).val();
-					if(value!=""){
-						jsonData[name]=value;
-					}else{
-						alert(label+"不能为空");
-						return false;
-					}
-				}
-				return jsonData;
-			}
+
 		</script>
 
 		<script src="__PUBLIC__/components/bootstrap/dist/js/bootstrap.js"></script>

@@ -26,121 +26,159 @@
 				<div class="widget-toolbar"></div>
 			</div>
 			<div class="widget-body">
-					<div class="widget-main">
-						<form class="form-horizontal"  id="user-form">
+				<div class="widget-main">
+					<form class="form-horizontal" id="user-form">
+					<div class="form-group">
+						<label class="col-sm-3 control-label no-padding-right" for="form-field-1"> 姓名 </label>
+						<div class="col-sm-9">
+							<input  placeholder="姓名" name="user_name" class="col-xs-10 col-sm-10 user-finfo" data-label="姓名" type="text">
+						</div>
+					</div>
+					<div class="form-group">
+						<label class="col-sm-3 control-label no-padding-right" for="form-field-1"> 用户编码 </label>
+						<div class="col-sm-9">
+							<input  placeholder="用户编码" name="user_code" readonly="" class="col-xs-10 col-sm-10 user-finfo" data-label="用户编码" type="text" value="{$user_code|default=''}">
+						</div>
+					</div>
+					<div class="form-group">
+						<label class="col-sm-3 control-label no-padding-right" for="form-field-1"> 用户密码 </label>
+						<div class="col-sm-9">
+							<input  placeholder="默认密码Aa1234567" name="user_passwd" class="col-xs-10 col-sm-10 user-finfo" data-label="用户密码" type="password" value="">
+						</div>
+					</div>
+					<div class="form-group">
+						<label class="col-sm-3 control-label no-padding-right" for="form-field-1"> 所属公司 </label>
+						<div class="col-sm-8">
+							<select class="chosen-select form-control user-finfo" data-label="所属公司"  name="user_company" data-placeholder="选择所属公司">
+								<volist name="user_companys" id="company">
+									<option value="{$company.config_key}">{$company.config_value}</option>
+								</volist>
+								
+							</select>
+							<!-- <input  placeholder="所属公司" class="col-xs-10 col-sm-10" type="text"> -->
+						</div>
+					</div>
+					<div class="form-group">
+						<label class="col-sm-3 control-label no-padding-right" for="form-field-1"> 所属部门 </label>
+						<div class="col-sm-8">
+							<!-- <input  placeholder="所属部门" class="col-xs-10 col-sm-10" type="text"> -->
+							<select class="chosen-select form-control user-finfo" data-label="所属部门" name="user_group" data-placeholder="选择所属部门">
+								<volist name="user_groups" id="groups">
+									<option value="{$groups.group_id}">{$groups.group_name}</option>
+								</volist>
+							</select>
+
+						</div>
+					</div>
+					<div class="form-group">
+						<label class="col-sm-3 control-label no-padding-right" for="form-field-1"> 职位 </label>
+						<div class="col-sm-8">
+							<select class="chosen-select form-control user-finfo" data-label="职位" name="user_group" data-placeholder="选择职位">
+								<volist name="user_place" id="place">
+									<option value="{$place.place_id}">{$place.place_name}</option>
+								</volist>
+							</select>
+
+							<!-- <input  placeholder="职位" name="user_place" data-label="职位" class="user-finfo col-xs-10 col-sm-10" type="text"> -->
+						</div>
+					</div>
+					<div class="form-group">
+						<label class="col-sm-3 control-label no-padding-right" for="form-field-1"> 角色 </label>
+						<div class="col-sm-8">
+							<select class="chosen-select form-control user-finfo" data-label="角色" name="user_role" data-placeholder="选择对应角色">
+								<volist name="user_roles" id="roles">
+									<option value="{$roles.role_id}">{$roles.role_name}</option>
+								</volist>
+							</select>
+						</div>
+					</div>
+					<div class="form-group">
+						<label class="col-sm-3 control-label no-padding-right" for="form-field-1"> 上级主管 </label>
+						<div class="col-sm-9">
+							<input  placeholder="上级主管" name="user_director" data-label="上级主管" class="user-finfo col-xs-10 col-sm-10" type="text">
+						</div>
+					</div>
+
+					<div class="form-group">
+						<label class="col-sm-3 control-label no-padding-right" for="form-field-1"> 电话号码 </label>
+						<div class="col-sm-9">
+							<input  placeholder="电话号码" name="user_phone" class="col-xs-10 col-sm-10 user-finfo" data-label="电话号码" type="text">
+						</div>
+					</div>
+					<div class="form-group">
+						<label class="col-sm-3 control-label no-padding-right" for="form-field-1"> 性别 </label>
+						<div class="col-sm-9">
+							<input type="checkbox" id="user-sex-box" name="user_sex" data-label="性别" class="user-finfo ace ace-switch ace-switch-4 btn-flat" />
+							<span class="lbl user-sex-span" data-lbl="女&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;男"></span>
+
+						</div>
+					</div>
+					<div class="form-group">
+						<label class="col-sm-3 control-label no-padding-right" for="form-field-1"> 生日 </label>
+						<div class="col-sm-8">
+							<div class="input-group">
+								<input class="form-control date-picker user-finfo" data-label='生日' name="user_born" id="id-date-born" data-date-format="yyyy-mm-dd" type="text">
+								<span class="input-group-addon">
+									<i class="fa fa-calendar bigger-110"></i>
+								</span>
+							</div>
+						</div>
+					</div>
+					<div class="form-group">
+						<label class="col-sm-3 control-label no-padding-right" for="form-field-1"> 入职时间 </label>
+						<div class="col-sm-8">
+							<div class="input-group">
+								<input class="form-control date-picker user-finfo" data-label="入职时间" name="user_entry" id="id-date-entry" data-date-format="yyyy-mm-dd" type="text">
+								<span class="input-group-addon">
+									<i class="fa fa-calendar bigger-110"></i>
+								</span>
+							</div>
+						</div>
+					</div>
+					</form>
+					
+				</div>
+			</div>
+			<div class="widget-toolbox padding-8 clearfix">
+				<button class="btn btn-xs btn-success pull-right" id="submit-user">
+					<i class="ace-icon fa fa-check bigger-110"></i>
+					<span class="bigger-110">添加人员</span>
+				</button>
+			</div>
+		</div>
+	</div>
+	<div class="col-xs-12 col-sm-12 col-md-4">
+		<div class="widget-box">
+			<div class="widget-header">
+			<h5 class="widget-title smaller">
+				<i class="ace-icon fa fa-bolt bigger-110"></i>快速新增</h5>
+				<div class="widget-toolbar"></div>
+			</div>
+			<div class="widget-body">
+				<div class="widget-main">
+					<form class="form-horizontal"  id="quick-form">
 						<div class="form-group">
 							<label class="col-sm-3 control-label no-padding-right" for="form-field-1"> 姓名 </label>
 							<div class="col-sm-9">
-								<input id="form-field-1" placeholder="姓名" name="user_name" class="col-xs-10 col-sm-10 user-finfo" data-label="姓名" type="text">
+								<input  placeholder="姓名" name="user_name" class="col-xs-10 col-sm-10 user-finfo" data-label="姓名" type="text">
 							</div>
 						</div>
 						<div class="form-group">
 							<label class="col-sm-3 control-label no-padding-right" for="form-field-1"> 用户编码 </label>
 							<div class="col-sm-9">
-								<input id="form-field-1" placeholder="用户编码" name="user_code" readonly="" class="col-xs-10 col-sm-10 user-finfo" data-label="用户编码" type="text" value="{$user_code|default=''}">
+								<input  placeholder="用户编码" name="user_code" readonly="" class="col-xs-10 col-sm-10 user-finfo" data-label="用户编码" type="text" value="{$user_code|default=''}">
 							</div>
 						</div>
-						<div class="form-group">
-							<label class="col-sm-3 control-label no-padding-right" for="form-field-1"> 所属公司 </label>
-							<div class="col-sm-8">
-								<select class="chosen-select form-control user-finfo" data-label="所属公司"  name="user_company" data-placeholder="选择所属公司">
-									<volist name="user_companys" id="company">
-										<option value="{$company.config_key}">{$company.config_value}</option>
-									</volist>
-									
-								</select>
-								<!-- <input id="form-field-1" placeholder="所属公司" class="col-xs-10 col-sm-10" type="text"> -->
-							</div>
-						</div>
-						<div class="form-group">
-							<label class="col-sm-3 control-label no-padding-right" for="form-field-1"> 所属部门 </label>
-							<div class="col-sm-8">
-								<!-- <input id="form-field-1" placeholder="所属部门" class="col-xs-10 col-sm-10" type="text"> -->
-								<select class="chosen-select form-control user-finfo" data-label="所属部门" name="user_group" data-placeholder="选择所属部门">
-									<volist name="user_groups" id="groups">
-										<option value="{$groups.group_id}">{$groups.group_name}</option>
-									</volist>
-								</select>
-
-							</div>
-						</div>
-						<div class="form-group">
-							<label class="col-sm-3 control-label no-padding-right" for="form-field-1"> 职位 </label>
-							<div class="col-sm-8">
-								<select class="chosen-select form-control user-finfo" data-label="职位" name="user_group" data-placeholder="选择职位">
-									<volist name="user_place" id="place">
-										<option value="{$place.place_id}">{$place.place_name}</option>
-									</volist>
-								</select>
-
-								<!-- <input id="form-field-1" placeholder="职位" name="user_place" data-label="职位" class="user-finfo col-xs-10 col-sm-10" type="text"> -->
-							</div>
-						</div>
-						<div class="form-group">
-							<label class="col-sm-3 control-label no-padding-right" for="form-field-1"> 角色 </label>
-							<div class="col-sm-8">
-								<select class="chosen-select form-control user-finfo" data-label="角色" name="user_role" data-placeholder="选择对应角色">
-									<volist name="user_roles" id="roles">
-										<option value="{$roles.role_id}">{$roles.role_name}</option>
-									</volist>
-								</select>
-							</div>
-						</div>
-						<div class="form-group">
-							<label class="col-sm-3 control-label no-padding-right" for="form-field-1"> 上级主管 </label>
-							<div class="col-sm-9">
-								<input id="form-field-1" placeholder="上级主管" name="user_higher" data-label="上级主管" class="user-finfo col-xs-10 col-sm-10" type="text">
-							</div>
-						</div>
-
-						<div class="form-group">
-							<label class="col-sm-3 control-label no-padding-right" for="form-field-1"> 电话号码 </label>
-							<div class="col-sm-9">
-								<input id="form-field-1" placeholder="电话号码" name="user_phone" class="col-xs-10 col-sm-10 user-finfo" data-label="电话号码" type="text">
-							</div>
-						</div>
-						<div class="form-group">
-							<label class="col-sm-3 control-label no-padding-right" for="form-field-1"> 性别 </label>
-							<div class="col-sm-9">
-								<input type="checkbox" id="user-sex-box" name="user_sex" data-label="性别" class="user-finfo ace ace-switch ace-switch-4 btn-flat" />
-								<span class="lbl user-sex-span" data-lbl="女&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;男"></span>
-
-							</div>
-						</div>
-						<div class="form-group">
-							<label class="col-sm-3 control-label no-padding-right" for="form-field-1"> 生日 </label>
-							<div class="col-sm-8">
-								<div class="input-group">
-									<input class="form-control date-picker user-finfo" data-label='生日' name="user_born" id="id-date-born" data-date-format="yyyy-mm-dd" type="text">
-									<span class="input-group-addon">
-										<i class="fa fa-calendar bigger-110"></i>
-									</span>
-								</div>
-							</div>
-						</div>
-						<div class="form-group">
-							<label class="col-sm-3 control-label no-padding-right" for="form-field-1"> 入职时间 </label>
-							<div class="col-sm-8">
-								<div class="input-group">
-									<input class="form-control date-picker user-finfo" data-label="入职时间" name="user_entry" id="id-date-entry" data-date-format="yyyy-mm-dd" type="text">
-									<span class="input-group-addon">
-										<i class="fa fa-calendar bigger-110"></i>
-									</span>
-								</div>
-							</div>
-						</div>
-						</form>
-						<div class="widget-toolbox padding-8 clearfix">
-							<button class="btn btn-xs btn-success pull-right" id="submit-user">
-								<i class="ace-icon fa fa-check bigger-110"></i>
-								<span class="bigger-110">添加人员</span>
-							</button>
-						</div>
-					</div>
-			
+					</form>
+				</div>
+			</div>
+			<div class="widget-toolbox padding-8 clearfix">
+				<button class="btn btn-xs btn-primary pull-right" id="quick-user">
+					<i class="ace-icon fa fa-check bigger-110"></i>
+					<span class="bigger-110">添加人员</span>
+				</button>
+			</div>
 		</div>
-		</div>
-		
 	</div>
 </div>
 
@@ -163,22 +201,15 @@
 			})
 			//提交新增人员资料
 			$("#submit-user").on("click",function(){
-				datas=get_form_data(".user-finfo");
-				//alert(datas);
-				if(datas!=false){
-					$.ajax({
-						url:"{:U('create')}",
-						type:"post",
-						data:datas,
-						datatype:"html",
-						success:function(data){
-							alert(data);
-						}
-					})
-				}
+				createUser("user-form")
 				
 			})
+			//快速添加
+			$("#quick-user").on("click",function(){
+				createUser("quick-form")
+			})
 		})
+		//设置性别
 		function set_sex(){
 			if($("#user-sex-box").is(":checked")){
 				$("#user-sex-box").val("女")
@@ -186,6 +217,34 @@
 				$("#user-sex-box").val("男")
 			}
 		}
+		//新建用户
+		function createUser(formId){
+			datas=$("#"+formId).serializeArray()
+			post=true
+			$.each(datas,function(index, obj){
+				if(obj.name="user_name" && obj.value==""){
+					alert("用户名不能为空");
+					post = false;
+				}
+				
+			})
+			
+			if(post==true){
+				$.ajax({
+					url:"{:U('create')}",
+					type:"post",
+					data:datas,
+					datatype:"html",
+					success:function(data){
+						if(parseInt(data)>0){
+							$(".user-finfo[name='user_code']").val(parseInt($(".user-finfo[name='user_code']").val())+1)
+						}
+					}
+				})
+			}
+		}
+		
+
 		
 
 	</script>
