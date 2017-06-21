@@ -110,9 +110,6 @@
 						<div class="col-sm-9">
 							<input type="checkbox" id="user-sex-box" name="user_sex" data-label="性别" class="user-finfo ace ace-switch ace-switch-4 btn-flat" />
 							<span class="lbl user-sex-span" data-lbl="女&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;男"></span>
-
-						</div>
-					</div>
 					<div class="form-group">
 						<label class="col-sm-3 control-label no-padding-right" for="form-field-1"> 生日 </label>
 						<div class="col-sm-8">
@@ -222,7 +219,7 @@
 			datas=$("#"+formId).serializeArray()
 			post=true
 			$.each(datas,function(index, obj){
-				if(obj.name="user_name" && obj.value==""){
+				if(obj.name=="user_name" && obj.value==""){
 					alert("用户名不能为空");
 					post = false;
 				}
@@ -243,8 +240,4 @@
 				})
 			}
 		}
-		
-
-		
-
 	</script>

@@ -33,7 +33,11 @@
 		<script src="../components/html5shiv/dist/html5shiv.min.js"></script>
 		<script src="../components/respond/dest/respond.min.js"></script>
 		<![endif]-->
-		<style type="text/css">.social-login a i{line-height: 42px;}</style>
+		<style type="text/css">
+			.social-login a i{line-height: 42px;}
+			.captcha{color:#87B87F!important;cursor:pointer;}
+			.captcha:hover{font-size:2em;}
+		</style>
 	</head>
 
 	<body class="login-layout">
@@ -115,9 +119,15 @@
 
 										<div class="toolbar clearfix">
 											<div>
-												<a href="#" data-target="#forgot-box" class="forgot-password-link">
+												<a href="javascript:void(0);" data-target="#forgot-box" class="forgot-password-link">
 													<i class="ace-icon fa fa-arrow-left"></i>
 													忘记密码了？
+												</a>
+											</div>
+											<div>
+												<a href="javascript:void(0);" data-target="#signup-box" class="user-signup-link">
+													新员工注册
+													<i class="ace-icon fa fa-arrow-right"></i>
 												</a>
 											</div>
 										</div>
@@ -138,7 +148,7 @@
 											</p>
 
 											<form>
-												<fieldset>
+												<fieldset class="reg-info">
 													<label class="block clearfix">
 														<span class="block input-icon input-icon-right">
 															<input type="text" class="form-control" placeholder="手机号码" />
@@ -170,9 +180,49 @@
 										</div>
 									</div><!-- /.widget-body -->
 								</div><!-- /.forgot-box -->
+
+								<div id="signup-box" class="signup-box widget-box no-border">
+									<div class="widget-body">
+										<div class="widget-main">
+											<h4 class="header green lighter bigger">
+												<i class="ace-icon fa fa-users blue"></i>
+												欢迎加入我们的大家庭
+											</h4>
+											<p > 请输入您的员工编号: </p>
+											<div class="space-6"></div>
+											<label class="block clearfix">
+												<span class="block input-icon input-icon-right">
+													<input name="user_code" type="text" class="form-control user-infos" autocomplete="off" placeholder="十位数的员工编码" />
+													<i class="ace-icon glyphicon glyphicon-qrcode"></i>
+												</span>
+											</label>
+											<form id="register-form" class="hidden">
+												<fieldset>
+													<label class="block clearfix">
+														<span class="block input-icon input-icon-right">
+															<input type="text" name="user_name" class="form-control user-infos" readonly="" placeholder="姓名" />
+															<i class="ace-icon fa fa-user"></i>
+														</span>
+													</label>
+
+													
+												</fieldset>
+											</form>
+										</div>
+
+										<div class="toolbar center">
+											<a href="#" data-target="#login-box" class="back-to-login-link">
+												<i class="ace-icon fa fa-arrow-left"></i>
+												返回登录页
+											</a>
+										</div>
+									</div><!-- /.widget-body -->
+
+								</div><!-- /.signup-box -->
+
 							</div><!-- /.position-relative -->
 
-							<div class="navbar-fixed-top align-right">
+							<div class="navbar-fixed-top hidden-xs align-right">
 								<br />
 								&nbsp;
 								<a id="btn-login-dark" href="#">黑色</a>
@@ -252,7 +302,94 @@
 			  		$("#user-form").submit();
 			  	}
 			 })
-			 
+			//验证员工编码
+			$(".user-infos[name='user_code']").on("input",function(){
+				var code=$(this).val()
+				if(code.length==10){
+					$.ajax({
+						url:"{:U('getcode')}",
+						data:{user_code:code},
+						type:"post",
+						dateType:"html",
+						success:function(data){
+							if(data!=""){
+								$("#register-form").removeClass("hidden")
+								$(".user-infos[name='user_name']").val(data)
+								$(".user-infos[name='user_code']").attr("readonly","")
+								getreg();
+							}
+						}
+					})
+				}else if(code.length>10){
+					$(this).val(code.substring(0,10))
+				}
+			})
+			//获取高级的注册信息
+			function getreg(){
+				$.ajax({
+					url:"{:U('getreg')}",
+					type:"post",
+					dateType:"html",
+					success:function(data){
+						$(".user-infos[name='user_name']").parent().parent().after(data)
+						// alert(data)
+					}
+				})
+			}
+			//验证手机
+			$("#register-form").on("input",".user-infos[name='user_phone']",function(){
+				var phoneNum=$(this).val()
+				if(phoneNum.length==11){
+					$.ajax({
+						url:"{:U('checkphone')}",
+						data:{type:"checkphone",data:{user_phone:phoneNum}},
+						type:"post",
+						dateType:"html",
+						success:function(data){
+							if(data=="success"){
+								$(".user-infos[name='user_phone']").next().addClass("captcha")
+							}else{
+								alert("该手机号码已存在")
+								$(".user-infos[name='user_phone']").val("")
+							}
+						}
+					})
+				}else if(phoneNum.length>11){
+					$(this).val(phoneNum.substring(0,10))
+				}else{
+					if($(".user-infos[name='user_phone']").next().hasClass("captcha")){
+						$(".user-infos[name='user_phone']").next().removeClass("captcha")
+					}
+				}
+			})
+			//获取验证码
+			$("#register-form").on("click",".captcha",function(){
+				$.ajax({
+					url:"{:U('checkphone')}",
+					data:{type:"getmsg",data:{user_phone:$(".user-infos[name='user_phone']").val()}},
+					type:"post",
+					dateType:"html",
+					success:function(data){
+						// alert(data)
+						$(".chaptcha-label").removeClass("hidden")
+						$(".user-infos[name='user_phone']").next().removeClass("captcha")
+						$(".user-infos[name='user_phone']").attr("readonly","")
+						var capTime=60;
+						capInt=setInterval(function(){
+							if(capTime==0){
+								clearInterval(capInt)
+								$(".user-infos[name='user_phone']").next().addClass("captcha")
+								$(".user-infos[name='user_phone']").removeAttr("readonly")
+								$(".chaptcha-label i").text("");
+							}else{
+								capTime-=1;
+								$(".chaptcha-label i").text(capTime);
+							}
+						},1000)
+					}
+				})
+			})
+
 			});
 		</script>
 	</body>
