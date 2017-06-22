@@ -78,7 +78,17 @@ class UserController extends AmangController {
 						$html.="<option class='ubase-select' data-input='place-data' value='{$placeArray["place_id"]}'>{$placeArray["place_name"]}</option>";
 					}
 					echo $html;
-					
+					break;	
+				case 'subgroup':
+					$subgroup=M('oa_subgroup');
+					$subgroupData=$subgroup->field("subgroup_id,subgroup_name")->where("subgroup_group='{$_POST["id"]}'")->select();
+					//print_r($placeData);
+					$html="";
+					foreach ($subgroupData as $subgroupArray) {
+						$html.="<option class='ubase-select' data-input='subgroup-data' value='{$subgroupArray["subgroup_id"]}'>{$subgroupArray["subgroup_name"]}</option>";
+					}
+					echo $html;
+					break;	
 					# code...
 					break;
 				case 'role':

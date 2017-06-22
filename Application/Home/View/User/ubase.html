@@ -28,7 +28,7 @@
 			<div class="widget-body">
 				<div class="widget-main">
 					<div class="row">
-						<div class="col-sm-6">
+						<div class="col-sm-6 form-group">
 							<select class="form-control" id="form-field-select-2" multiple="multiple">
 							 	<volist name="user_companys" id="company">
 							 		<option class="ubase-select" data-input="company-data" value="{$company.config_key}">{$company.config_value}</option>
@@ -70,34 +70,58 @@
 			<div class="widget-body">
 				<div class="widget-main">
 					<div class="row">
-						<div class="col-sm-6">
-							<select class="form-control" id="form-field-select-2" multiple="multiple">
+						<div class="col-sm-4 form-group">
+							<select class="form-control" id="form-field-select-2" multiple="multiple" data-lower="subgroup-select-box">
 							 	<volist name="user_groups" id="groups">
-							 		<option class="ubase-select" data-input="groups-data" value="{$groups.group_id}">{$groups.group_name}</option>
+							 		<option class="ubase-select" data-input="groups-data" data-type="subgroup" value="{$groups.group_id}">{$groups.group_name}</option>
 							 	</volist>
 							</select>
 						</div>
-						<div class="col-sm-6 form-horizontal">
+						<div class="col-sm-4 form-group">
+							<select class="form-control" id="subgroup-select-box" multiple="multiple">
+							 	<volist name="user_subgroups" id="subgroups">
+							 		<!-- <option class="ubase-select" data-input="subgroups-data" value="{$groups.subgroup_id}">{$subgroups.subgroup_name}</option> -->
+							 	</volist>
+							</select>
+						</div>
+						<div class="col-sm-4 form-horizontal">
 							<div class="form-group">
 								<div class="col-sm-12">
 									<input type="text" id="groups-data" data-val="" placeholder="部门名称" class="col-xs-10 col-sm-10">
+								</div>
+							</div>
+							<div class="form-group">
+								<div class="col-sm-12">
+									<input type="text" id="subgroup-data" data-val="" placeholder="分组名称" class="col-xs-10 col-sm-10">
 								</div>
 							</div>
 						</div>
 					</div>
 				</div>
 				<div class="widget-toolbox padding-8 clearfix">
-					<button class="btn btn-xs btn-success" id="submit-user">
+					<button class="btn btn-xs btn-yellow" id="submit-user">
 						<i class="ace-icon fa fa-plus-square bigger-110"></i>
 						<span class="bigger-110">新增部门</span>
 					</button>
-					<button class="btn btn-xs btn-primary" id="submit-user">
+					<button class="btn btn-xs btn-purple" id="submit-user">
 						<i class="ace-icon fa fa-edit bigger-110"></i>
 						<span class="bigger-110">修改部门</span>
 					</button>
-					<button class="btn btn-xs btn-danger" id="submit-user">
+					<button class="btn btn-xs btn-pink" id="submit-user">
 						<i class="ace-icon fa fa-close bigger-110"></i>
 						<span class="bigger-110">删除部门</span>
+					</button>
+					<button class="btn btn-xs btn-success" id="submit-user">
+						<i class="ace-icon fa fa-plus-square bigger-110"></i>
+						<span class="bigger-110">新增分组</span>
+					</button>
+					<button class="btn btn-xs btn-primary" id="submit-user">
+						<i class="ace-icon fa fa-edit bigger-110"></i>
+						<span class="bigger-110">修改分组</span>
+					</button>
+					<button class="btn btn-xs btn-danger" id="submit-user">
+						<i class="ace-icon fa fa-close bigger-110"></i>
+						<span class="bigger-110">删除分组</span>
 					</button>
 				</div>
 			</div>
@@ -114,14 +138,14 @@
 			<div class="widget-body">
 					<div class="widget-main">
 						<div class="row">
-							<div class="col-sm-4">
+							<div class="col-sm-4 form-group">
 								<select class="form-control" id="form-field-select-2" multiple="multiple" data-lower="place-select-box">
 								 	<volist name="user_groups" id="groups" >
 								 		<option  class="ubase-select" data-type="place" data-input="place-group-data" value="{$groups.group_id}">{$groups.group_name}</option>
 								 	</volist>
 								</select>
 							</div>
-							<div class="col-sm-4">
+							<div class="col-sm-4 form-group">
 								<select class="form-control" id="place-select-box" multiple="multiple">
 								 	<volist name="user_place" id="place">
 								 		<!-- <option class="ubase-select" data-input="place-data" value="{$place.place_id}">{$place.place_name}</option> -->
@@ -170,14 +194,14 @@
 			<div class="widget-body">
 					<div class="widget-main">
 						<div class="row">
-							<div class="col-sm-4">
+							<div class="col-sm-4 form-group">
 								<select class="form-control" id="form-field-select-2" multiple="multiple">
 								 	<volist name="user_roles" id="roles">
 								 		<option class="ubase-select" data-type="role" data-input="role-group-data" value="{$roles.role_id}">{$roles.role_name}</option>
 								 	</volist>
 								</select>
 							</div>
-							<div class="col-sm-4">
+							<div class="col-sm-4 form-group">
 								<select class="form-control" id="form-field-select-2" multiple="multiple">
 								 	<volist name="user_place" id="place">
 								 		<option class="ubase-select" data-input="role-data" value="{$place.place_id}">{$place.place_name}</option>
@@ -231,7 +255,8 @@
 <script src="__PUBLIC__/components/bootstrap-datepicker/dist/js/bootstrap-datepicker.js"></script>
 <script>
 	$(function(){
-		$(document).on("click",".ubase-select",function abc(){
+		$(document).on("click",".ubase-select",function(){
+			// alert("a")
 			var tid=$(this).data("input")
 			$("#"+tid).val($(this).text())
 			$("#"+tid).data('val',$(this).val())
