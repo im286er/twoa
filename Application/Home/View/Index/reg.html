@@ -76,7 +76,7 @@
 	<label class="block clearfix">
 		<span class="block input-icon input-icon-right">
 			<input type="text" name="user_captcha" autocomplete="off" class="form-control" placeholder="验证码" />
-			<i class="ace-icon">60</i>
+			<i class="ace-icon fa"></i>
 		</span>
 	</label>
 </div>
@@ -111,5 +111,34 @@
 				$("#user-sex-box").val("男")
 			}
 		}
+		//验证验证码
+		$(".form-control[name='user_captcha']").on("input",function(){
+			var captchaE=$(".form-control[name='user_captcha']")
+			var captcha=captchaE.val()
+			if(captcha.length==6){
+				$.ajax({
+					url:"{:U('checkphone')}",
+					data:{type:"checkmsg",data:{captcha:captcha}},
+					type:"post",
+					dateType:"html",
+					success:function(data){
+						captchaE.next().text("")
+						clearInterval(capInt)
+						if(data=="success"){
+							captchaE.next().addClass("fa-check-square green")
+							captchaE.next().removeClass("fa-times-circle red")
+						}else{
+							captchaE.next().addClass("fa-times-circle red")
+							captchaE.next().removeClass("fa-times-square green")
+							if(data=="timeout"){
+								alert("验证码已过期，重新获取吧！")
+							}
+						}
+					}
+				})
+			}else if(captcha.length>6){
+				captcha.val(captcha.substring(0,6));
+			}
+		})
 	})
 </script>

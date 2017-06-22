@@ -30,8 +30,25 @@ class IndexController extends AmangController {
 					echo "error";
 				}
 			}else if($_POST["type"]=="getmsg"){
-				echo "send msg";
+				vendor('Sms.Sms');//引入Sms
+				$sms = new \Sms("E讯通");
+				// echo "send msg";
+				// $sms->setOption('27','','','TW集团')->send("","【TW集团】你的验证码是123456");
+				$captcha=rand(111111,999999);
+				session("captcha",sha1($captcha));
+				session("captchaExpire",time()+600);
+				$sms->setOption('','','','TW集团')->send($_POST["data"]["user_phone"],"您的手机号码正在注册集团会员信息，注册验证码是{$captcha}，如非本人操作请及时通知管理员。");
 			}else if($_POST["type"]=="checkmsg"){
+				if(time()>=session("captchaExpire")){
+					echo "timeout";
+				}else{
+					if(sha1($_POST["data"]["captcha"])==session("captcha")){
+						echo "success";
+					}else{
+						echo "error";
+					}
+				}
+				
 
 			}
 		}
