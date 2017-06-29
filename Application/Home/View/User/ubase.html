@@ -29,7 +29,7 @@
 				<div class="widget-main">
 					<div class="row">
 						<div class="col-sm-6 form-group">
-							<select class="form-control" id="form-field-select-2" multiple="multiple">
+							<select class="form-control" name="company"  multiple="multiple">
 							 	<volist name="user_companys" id="company">
 							 		<option class="ubase-select" data-input="company-data" value="{$company.config_key}">{$company.config_value}</option>
 							 	</volist>
@@ -44,16 +44,16 @@
 						</div>
 					</div>
 				</div>
-				<div class="widget-toolbox padding-8 clearfix">
-					<button class="btn btn-xs btn-success" id="submit-user">
+				<div class="widget-toolbox padding-8 clearfix" data-type="company" data-input="company-data">
+					<button class="btn btn-xs btn-success add-button" >
 						<i class="ace-icon fa fa-plus-square bigger-110"></i>
 						<span class="bigger-110">新增公司</span>
 					</button>
-					<button class="btn btn-xs btn-primary" id="submit-user">
+					<button class="btn btn-xs btn-primary update-button" >
 						<i class="ace-icon fa fa-edit bigger-110"></i>
 						<span class="bigger-110">修改公司</span>
 					</button>
-					<button class="btn btn-xs btn-danger" id="submit-user">
+					<button class="btn btn-xs btn-danger del-button" >
 						<i class="ace-icon fa fa-close bigger-110"></i>
 						<span class="bigger-110">删除公司</span>
 					</button>
@@ -71,14 +71,14 @@
 				<div class="widget-main">
 					<div class="row">
 						<div class="col-sm-4 form-group">
-							<select class="form-control" id="form-field-select-2" multiple="multiple" data-lower="subgroup-select-box">
+							<select class="form-control" id="form" name="group" multiple="multiple" data-lower="subgroup-select-box">
 							 	<volist name="user_groups" id="groups">
 							 		<option class="ubase-select" data-input="groups-data" data-type="subgroup" value="{$groups.group_id}">{$groups.group_name}</option>
 							 	</volist>
 							</select>
 						</div>
 						<div class="col-sm-4 form-group">
-							<select class="form-control" id="subgroup-select-box" multiple="multiple">
+							<select class="form-control" id="subgroup-select-box" name="subgroup" multiple="multiple">
 							 	<volist name="user_subgroups" id="subgroups">
 							 		<!-- <option class="ubase-select" data-input="subgroups-data" value="{$groups.subgroup_id}">{$subgroups.subgroup_name}</option> -->
 							 	</volist>
@@ -98,28 +98,28 @@
 						</div>
 					</div>
 				</div>
-				<div class="widget-toolbox padding-8 clearfix">
-					<button class="btn btn-xs btn-yellow" id="submit-user">
+				<div class="widget-toolbox padding-8 clearfix" data-type="group" data-type2="subgroup" data-input="groups-data" data-input2="subgroup-data">
+					<button class="btn btn-xs btn-yellow add-button" >
 						<i class="ace-icon fa fa-plus-square bigger-110"></i>
 						<span class="bigger-110">新增部门</span>
 					</button>
-					<button class="btn btn-xs btn-purple" id="submit-user">
+					<button class="btn btn-xs btn-purple" >
 						<i class="ace-icon fa fa-edit bigger-110"></i>
 						<span class="bigger-110">修改部门</span>
 					</button>
-					<button class="btn btn-xs btn-pink" id="submit-user">
+					<button class="btn btn-xs btn-pink" >
 						<i class="ace-icon fa fa-close bigger-110"></i>
 						<span class="bigger-110">删除部门</span>
 					</button>
-					<button class="btn btn-xs btn-success" id="submit-user">
+					<button class="btn btn-xs btn-success add-button" >
 						<i class="ace-icon fa fa-plus-square bigger-110"></i>
 						<span class="bigger-110">新增分组</span>
 					</button>
-					<button class="btn btn-xs btn-primary" id="submit-user">
+					<button class="btn btn-xs btn-primary" >
 						<i class="ace-icon fa fa-edit bigger-110"></i>
 						<span class="bigger-110">修改分组</span>
 					</button>
-					<button class="btn btn-xs btn-danger" id="submit-user">
+					<button class="btn btn-xs btn-danger" >
 						<i class="ace-icon fa fa-close bigger-110"></i>
 						<span class="bigger-110">删除分组</span>
 					</button>
@@ -138,21 +138,28 @@
 			<div class="widget-body">
 					<div class="widget-main">
 						<div class="row">
-							<div class="col-sm-4 form-group">
-								<select class="form-control" id="form-field-select-2" multiple="multiple" data-lower="place-select-box">
+							<div class="col-sm-3 form-group">
+								<select class="form-control" name="group"  multiple="multiple" data-lower="place-select-box">
 								 	<volist name="user_groups" id="groups" >
 								 		<option  class="ubase-select" data-type="place" data-input="place-group-data" value="{$groups.group_id}">{$groups.group_name}</option>
 								 	</volist>
 								</select>
 							</div>
-							<div class="col-sm-4 form-group">
+							<div class="col-sm-3 form-group">
+								<select class="form-control" name="subgroup" id="subgroup-select-box2" multiple="multiple">
+								 	<volist name="user_subgroups" id="subgroups">
+								 		<!-- <option class="ubase-select" data-input="subgroups-data" value="{$groups.subgroup_id}">{$subgroups.subgroup_name}</option> -->
+								 	</volist>
+								</select>
+							</div>
+							<div class="col-sm-3 form-group">
 								<select class="form-control" id="place-select-box" multiple="multiple">
 								 	<volist name="user_place" id="place">
 								 		<!-- <option class="ubase-select" data-input="place-data" value="{$place.place_id}">{$place.place_name}</option> -->
 								 	</volist>
 								</select>
 							</div>
-							<div class="col-sm-4 form-horizontal">
+							<div class="col-sm-3 form-horizontal">
 								<div class="form-group">
 									<div class="col-sm-12">
 										<input type="text" id="place-group-data" data-val="" placeholder="部门名称" class="col-xs-10 col-sm-10">
@@ -160,22 +167,31 @@
 								</div>
 								<div class="form-group">
 									<div class="col-sm-12">
-										<input type="text" id="place-data" data-val="" placeholder="职位名称" class="col-xs-10 col-sm-10">
+										<input type="text" id="subgroup-data2" data-val="" placeholder="分组名称" class="col-xs-10 col-sm-10">
+									</div>
+								</div>
+								<div class="form-group">
+									<div class="col-sm-12">
+										<!-- <input type="text" id="place-data" data-val="" placeholder="职位名称" class="col-xs-10 col-sm-10"> -->
+										<span class="input-icon input-icon-right col-xs-10 col-sm-10" style="padding:0;">
+											<input type="text" id="place-data" data-val="" class="form-control" placeholder="职位名称">
+											<i class="ace-icon" title="打勾表示该职位属于部门/小组组长有审核权限"><input type="checkbox" style="width:20px;height:20px"/></i>
+										</span>
 									</div>
 								</div>
 							</div>
 						</div>	
 					</div>
-					<div class="widget-toolbox padding-8 clearfix">
-						<button class="btn btn-xs btn-success" id="submit-user">
+					<div class="widget-toolbox padding-8 clearfix" data-type="place" data-input="place-data">
+						<button class="btn btn-xs btn-success add-button" >
 							<i class="ace-icon fa fa-plus-square bigger-110"></i>
 							<span class="bigger-110">新增职位</span>
 						</button>
-						<button class="btn btn-xs btn-primary" id="submit-user">
+						<button class="btn btn-xs btn-primary" >
 							<i class="ace-icon fa fa-edit bigger-110"></i>
 							<span class="bigger-110">新增职位</span>
 						</button>
-						<button class="btn btn-xs btn-danger" id="submit-user">
+						<button class="btn btn-xs btn-danger" >
 							<i class="ace-icon fa fa-close bigger-110"></i>
 							<span class="bigger-110">新增职位</span>
 						</button>
@@ -195,14 +211,14 @@
 					<div class="widget-main">
 						<div class="row">
 							<div class="col-sm-4 form-group">
-								<select class="form-control" id="form-field-select-2" multiple="multiple">
+								<select class="form-control"  multiple="multiple" name="group">
 								 	<volist name="user_roles" id="roles">
 								 		<option class="ubase-select" data-type="role" data-input="role-group-data" value="{$roles.role_id}">{$roles.role_name}</option>
 								 	</volist>
 								</select>
 							</div>
 							<div class="col-sm-4 form-group">
-								<select class="form-control" id="form-field-select-2" multiple="multiple">
+								<select class="form-control"  multiple="multiple" name="subgroup">
 								 	<volist name="user_place" id="place">
 								 		<option class="ubase-select" data-input="role-data" value="{$place.place_id}">{$place.place_name}</option>
 								 	</volist>
@@ -223,27 +239,27 @@
 						</div>	
 					</div>
 					<div class="widget-toolbox padding-8 clearfix">
-						<button class="btn btn-xs btn-yellow" id="submit-user">
+						<button class="btn btn-xs btn-yellow" >
 							<i class="ace-icon fa fa-plus-square bigger-110"></i>
 							<span class="bigger-110">新增分组</span>
 						</button>
-						<button class="btn btn-xs btn-purple" id="submit-user">
+						<button class="btn btn-xs btn-purple" >
 							<i class="ace-icon fa fa-edit bigger-110"></i>
 							<span class="bigger-110">修改分组</span>
 						</button>
-						<button class="btn btn-xs btn-pink" id="submit-user">
+						<button class="btn btn-xs btn-pink" >
 							<i class="ace-icon fa fa-close bigger-110"></i>
 							<span class="bigger-110">删除分组</span>
 						</button>
-						<button class="btn btn-xs btn-success" id="submit-user">
+						<button class="btn btn-xs btn-success" >
 							<i class="ace-icon fa fa-plus-square bigger-110"></i>
 							<span class="bigger-110">新增角色</span>
 						</button>
-						<button class="btn btn-xs btn-primary" id="submit-user">
+						<button class="btn btn-xs btn-primary" >
 							<i class="ace-icon fa fa-edit bigger-110"></i>
 							<span class="bigger-110">修改角色</span>
 						</button>
-						<button class="btn btn-xs btn-danger" id="submit-user">
+						<button class="btn btn-xs btn-danger" >
 							<i class="ace-icon fa fa-close bigger-110"></i>
 							<span class="bigger-110">删除角色</span>
 						</button>
@@ -258,6 +274,7 @@
 		$(document).on("click",".ubase-select",function(){
 			// alert("a")
 			var tid=$(this).data("input")
+			$("#"+tid).parents(".form-group").next().find("input").val("")
 			$("#"+tid).val($(this).text())
 			$("#"+tid).data('val',$(this).val())
 			if($(this).data("type")!=undefined){
@@ -266,17 +283,140 @@
 				datas={}
 				datas['type']=$(this).data("type")
 				datas['id']=$(this).val()
+				if($(this).data("sub")!=undefined){
+					datas['sub']="true"
+				}
 					$.ajax({
 						url:"{:U('showlowe')}",
 						type:"post",
 						data:datas,
 						datatype:"html",
 						success:function(data){
-							$("#"+lower).html(data);
-							//$(".ubase-select").on("click",abc)
+							if(datas['type']=="place"){
+								datajson=JSON.parse(data)
+								$("#subgroup-select-box2").html(datajson["subgroup"]);
+								$("#place-select-box").html(datajson["place"]);
+							}else{
+								$("#"+lower).html(data);
+							}
+							
 						}
 					})
 			}
+		})
+		/**
+		*所有新增按钮
+		*/
+		$(".add-button").on("click",function(){
+			var datas={}
+			// var allBtn=$(this).parent().find("button").length
+			var thisBtnIndex=$($(this).parent().find("button")).index(this)
+			if(thisBtnIndex>=3){
+				datas["type"]=$(this).parent().data("type2")
+				datas["value"]=$("#"+$(this).parent().data("input2")).val()
+				var oSelect=$(this).parent().prev().find("select[name='"+$(this).parent().data("type")+"'] option:selected")
+
+				datas["group"]=oSelect.val()
+				if(datas["group"]==undefined){
+					alert("别逗我，你都没选择！")
+					return false;
+				}
+			}else{
+				datas["type"]=$(this).parent().data("type")
+				datas["value"]=$("#"+$(this).parent().data("input")).val()
+			}
+			
+			var selfele=$(this).parent().prev().find("select[name='"+datas["type"]+"']")
+			if(datas["value"]==""){
+
+				alert(datas["type"]+datas["value"]+"不能为空！"+datas["group"])
+				return false;
+			}
+			/*特殊职位*/
+			if(datas["type"]=="place"){
+
+				var gSelect=$(this).parent().prev().find("select[name='group'] option:selected")
+				datas["group"]=gSelect.val()
+				var sSelect=$(this).parent().prev().find("select[name='subgroup'] option:selected")
+				datas["subgroup"]=sSelect.val()
+				if(sSelect.val()==""){
+					selfele=$(this).parent().prev().find("select[name='group']")
+				}else{
+					selfele=$(this).parent().prev().find("select[name='subgroup']")
+				}
+			}
+			$.ajax({
+				url:"{:U('addinfo')}",
+				type:"post",
+				data:datas,
+				dataType:"html",
+				success:function(data){
+					alert(data)
+					if(data["msg"]=="success"){
+						selfele.append(data["option"]);
+					}else{
+						//alert(data["msg"])
+					}
+				}
+			})
+		})
+		/**
+		*所有更新按钮
+		*/
+		$(".update-button").on("click",function(){
+			var companySel=$(this).parent().prev().find("select option:selected")
+			var companyKey=companySel.val()
+			if(companyKey==undefined){
+				alert("别逗我，你都没选择！")
+				return false;
+			}
+				var datas={}
+				datas["type"]=$(this).parent().data("type")
+				datas["company_key"]=companyKey
+				datas["company_name"]=$("#"+$(this).parent().data("input")).val()
+				if(datas["value"]==""){
+					alert("别闹了，不能留空的！")
+					return false;
+				}
+				$.ajax({
+					url:"{:U('updateinfo')}",
+					type:"post",
+					data:datas,
+					dataType:"html",
+					success:function(data){
+						if(data=="success"){
+							companySel.text(datas["company_name"])
+						}
+					}
+				})
+			
+		})
+		/**
+		*所有删除按钮
+		*/
+		$(".del-button").on("click",function(){
+			var companySel=$(this).parent().prev().find("select option:selected")
+			var companyKey=companySel.val()
+			var comInput=$("#"+$(this).parent().data("input"))
+			if(companyKey==undefined){
+				alert("别逗我，你都没选择！")
+				return false;
+			}
+			var datas={}
+			datas["type"]=$(this).parent().data("type")
+			datas["company_key"]=companyKey
+			$.ajax({
+				url:"{:U('delinfo')}",
+				type:"post",
+				data:datas,
+				dataType:"html",
+				success:function(data){
+					if(data>0){
+						companySel.remove()
+						comInput.val("")
+					}
+				}
+			})
 		})
 	})
 

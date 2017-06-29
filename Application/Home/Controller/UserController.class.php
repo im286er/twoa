@@ -70,14 +70,26 @@ class UserController extends AmangController {
 		if(IS_POST){
 			switch ($_POST['type']) {
 				case 'place':
-					$place=M('oa_place');
-					$placeData=$place->field("place_id,place_name")->where("place_group='{$_POST["id"]}'")->select();
-					//print_r($placeData);
-					$html="";
+					$group=D("Group");
+					$subgroupData=$group->select_subgroup($_POST["id"]);
+					$palceHtml="";
+					$placeData=$group->select_place($_POST["id"]);	
 					foreach ($placeData as $placeArray) {
-						$html.="<option class='ubase-select' data-input='place-data' value='{$placeArray["place_id"]}'>{$placeArray["place_name"]}</option>";
+						$palceHtml.="<option class='ubase-select' data-input='place-data' value='{$placeArray["place_id"]}'>{$placeArray["place_name"]}</option>";
 					}
-					echo $html;
+					if(!isset($_POST["sub"])){
+						$sgHtml="";
+						foreach ($subgroupData as $subgroup) {
+							$sgHtml.="<option class='ubase-select' data-type='place' data-sub='true' data-input='subgroup-data2' value='{$subgroup["subgroup_id"]}'>{$subgroup["subgroup_name"]}</option>";
+						}
+						echo json_encode(array("subgroup"=>$sgHtml,"place"=>$palceHtml));
+					}else{
+						echo json_encode(array("place"=>$palceHtml));
+					}
+					
+					
+					// print_r($_POST);
+					
 					break;	
 				case 'subgroup':
 					$subgroup=M('oa_subgroup');
@@ -97,6 +109,84 @@ class UserController extends AmangController {
 				default:
 					# code...
 					break;
+			}
+		}
+	}
+	//添加信息
+	public function addinfo(){
+		if(IS_POST){
+			switch ($_POST['type']) {
+				case "company":
+					$company=D("Company");
+					$data=$company->add_company($_POST['value']);
+					if($data>0){
+						$newC=$company->find_company(0,$_POST['value']);
+						$jsonData=array("msg"=>"success","option"=>"<option class='ubase-select' data-input='company-data' value='{$newC["config_key"]}'>{$newC["config_value"]}</option>");
+					}else{
+						$jsonData=array("msg"=>$data);
+					}
+					echo json_encode($jsonData);
+				break;
+				case "group":
+					$group=D("Group");
+					$groupData=$group->add_group($_POST['value']);
+					if($groupData>0){
+						$newG=$group->find_group(0,$_POST['value']);
+						$jsonData=array("msg"=>"success","option"=>"<option class='ubase-select' data-input='groups-data' data-type='subgroup' value='{$newG["group_id"]}'>{$newG["group_name"]}</option>");
+					}else{
+						$jsonData=array("msg"=>$groupData);
+					}
+					echo json_encode($jsonData);
+				break;
+				case "subgroup":
+				$subgroup=D("Group");
+				$subgroupData=$subgroup->add_subgroup($_POST['group'],$_POST['value']);	
+				if($subgroupData>0){
+					$newS=$subgroup->find_subgroup($_POST['group'],$_POST['value']);
+					$jsonData=array("msg"=>"success","option"=>"<option class='ubase-select' data-input='subgroup-data' value='{$newS["subgroup_id"]}'>{$newS["subgroup_name"]}</option>");
+				}else{
+					$jsonData=array("msg"=>$subgroupData);
+				}
+					echo json_encode($jsonData);
+				break;
+				case "place":
+				echo print_r($_POST);
+				// $jsonData=array("msg"=>print_r($_POST));
+				// echo json_encode($jsonData);
+				break;
+			}
+		}
+	}
+	//更新信息
+	public function updateinfo(){
+		if(IS_POST){
+			switch ($_POST['type']) {
+				case "company":
+					$company=D("Company");
+					$resultData=$company->set_company($_POST["company_key"],$_POST["company_name"]);
+					if($resultData>0){
+						echo "success";
+					}else{
+						echo $resultData;
+					}
+				break;
+			}
+		}
+	}
+	// 删除信息
+	public function delinfo(){
+		if(IS_POST){
+			switch ($_POST['type']) {
+				case "company":
+					$company=D("Company");
+					// $resultData=$company->set_company($_POST["company_key"],$_POST["company_name"]);
+					echo $company->del_company($_POST["company_key"]);
+					// if($resultData>0){
+					// 	echo "success";
+					// }else{
+					// 	echo $resultData;
+					// }
+				break;
 			}
 		}
 	}
