@@ -29,7 +29,7 @@ class UserController extends AmangController {
 
 				$role=M("oa_role");
 				$roleData=$role->field("role_id,role_name")->where("role_upper=0")->order("role_id ASC")->select();
-				$this->assign("user_roles",$roleData);
+				$this->assign("role_group",$roleData);
 				break;
 			case 'edit':
 				# code...
@@ -73,9 +73,14 @@ class UserController extends AmangController {
 					$group=D("Group");
 					$subgroupData=$group->select_subgroup($_POST["id"]);
 					$palceHtml="";
-					$placeData=$group->select_place($_POST["id"]);	
+					if(isset($_POST["group"])){
+						$placeData=$group->select_place($_POST["group"],$_POST["id"]);	
+					}else{
+						$placeData=$group->select_place($_POST["id"]);	
+					}
+					
 					foreach ($placeData as $placeArray) {
-						$palceHtml.="<option class='ubase-select' data-input='place-data' value='{$placeArray["place_id"]}'>{$placeArray["place_name"]}</option>";
+						$palceHtml.="<option class='ubase-select' data-input='place-data' data-manager='{$placeArray["place_manager"]}' value='{$placeArray["place_id"]}'>{$placeArray["place_name"]}</option>";
 					}
 					if(!isset($_POST["sub"])){
 						$sgHtml="";
@@ -101,10 +106,15 @@ class UserController extends AmangController {
 					}
 					echo $html;
 					break;	
-					# code...
-					break;
 				case 'role':
-					# code...
+					// print_r($_POST);
+					$role=D("Group");
+					$roleHtml="";
+					$roleData=$role->select_role($_POST["id"]);
+					foreach ($roleData as $roleArray) {
+						$roleHtml.="<option class='ubase-select' data-input='role-data' value='{$roleArray["role_id"]}'>{$roleArray["role_name"]}</option>";
+					}
+					echo $roleHtml;
 					break;
 				default:
 					# code...
@@ -150,9 +160,36 @@ class UserController extends AmangController {
 					echo json_encode($jsonData);
 				break;
 				case "place":
-				echo print_r($_POST);
+				// echo print_r($_POST);
+					$palce=D("Group");
+					if(isset($_POST["subgroup"])){
+						$addResult=$palce->add_place($_POST["group"],$_POST["value"],$_POST["manager"],$_POST["subgroup"]);
+
+					}else{
+						$addResult=$palce->add_place($_POST["group"],$_POST["value"],$_POST["manager"]);
+					}
+					if($addResult>0){
+						$placeData=$palce->find_place($addResult);
+						$jsonData=array("msg"=>"success","option"=>"<option class='ubase-select' data-input='place-data' data-manager='{$placeData["place_manager"]}' value='{$placeData["place_id"]}'>{$placeData["place_name"]}</option>");
+					}else{
+						$jsonData=array("msg"=>$addResult);
+					}
+
 				// $jsonData=array("msg"=>print_r($_POST));
-				// echo json_encode($jsonData);
+					echo json_encode($jsonData);
+				break;
+				case "role": case "subrole":
+					// print_r($_POST);
+					$role=D("Group");
+					$role_upper=isset($_POST["group"])?$_POST["group"]:0;
+					$addResult=$role->add_role($_POST["value"],$role_upper);
+					if($addResult>0){
+						$roleData=$role->is_role($_POST["value"],$role_upper);
+						$jsonData=array("msg"=>"success","option"=>"<option class='ubase-select' data-type='role' data-input='role-group-data' value='{$roleData["role_id"]}'>{$roleData["role_name"]}</option>");
+					}else{
+						$jsonData=array("msg"=>$addResult);
+					}
+					echo json_encode($jsonData);
 				break;
 			}
 		}

@@ -29,6 +29,7 @@
 				<div class="widget-main">
 					<div class="row">
 						<div class="col-sm-6 form-group">
+							<p class="text-warning blue">公司列表 <i class="ace-icon fa fa-list bigger-110"></i></p>
 							<select class="form-control" name="company"  multiple="multiple">
 							 	<volist name="user_companys" id="company">
 							 		<option class="ubase-select" data-input="company-data" value="{$company.config_key}">{$company.config_value}</option>
@@ -36,6 +37,7 @@
 							</select>
 						</div>
 						<div class="col-sm-6 form-horizontal">
+						<p class="text-warning blue">名称修改 <i class="ace-icon fa fa-edit bigger-110"></i></p>
 							<div class="form-group">
 								<div class="col-sm-12">
 									<input type="text" id="company-data" data-val="" placeholder="公司名称" class="col-xs-10 col-sm-10">
@@ -71,6 +73,7 @@
 				<div class="widget-main">
 					<div class="row">
 						<div class="col-sm-4 form-group">
+						<p class="text-warning blue">部门列表 <i class="ace-icon fa fa-list bigger-110"></i></p>
 							<select class="form-control" id="form" name="group" multiple="multiple" data-lower="subgroup-select-box">
 							 	<volist name="user_groups" id="groups">
 							 		<option class="ubase-select" data-input="groups-data" data-type="subgroup" value="{$groups.group_id}">{$groups.group_name}</option>
@@ -78,6 +81,7 @@
 							</select>
 						</div>
 						<div class="col-sm-4 form-group">
+						<p class="text-warning blue">分组列表 <i class="ace-icon fa fa-list bigger-110"></i></p>
 							<select class="form-control" id="subgroup-select-box" name="subgroup" multiple="multiple">
 							 	<volist name="user_subgroups" id="subgroups">
 							 		<!-- <option class="ubase-select" data-input="subgroups-data" value="{$groups.subgroup_id}">{$subgroups.subgroup_name}</option> -->
@@ -85,6 +89,7 @@
 							</select>
 						</div>
 						<div class="col-sm-4 form-horizontal">
+						<p class="text-warning blue">名称修改 <i class="ace-icon fa fa-edit bigger-110"></i></p>
 							<div class="form-group">
 								<div class="col-sm-12">
 									<input type="text" id="groups-data" data-val="" placeholder="部门名称" class="col-xs-10 col-sm-10">
@@ -139,6 +144,7 @@
 					<div class="widget-main">
 						<div class="row">
 							<div class="col-sm-3 form-group">
+							<p class="text-warning blue">部门列表 <i class="ace-icon fa fa-list bigger-110"></i></p>
 								<select class="form-control" name="group"  multiple="multiple" data-lower="place-select-box">
 								 	<volist name="user_groups" id="groups" >
 								 		<option  class="ubase-select" data-type="place" data-input="place-group-data" value="{$groups.group_id}">{$groups.group_name}</option>
@@ -146,6 +152,7 @@
 								</select>
 							</div>
 							<div class="col-sm-3 form-group">
+							<p class="text-warning blue">分组列表 <i class="ace-icon fa fa-group bigger-110"></i></p>
 								<select class="form-control" name="subgroup" id="subgroup-select-box2" multiple="multiple">
 								 	<volist name="user_subgroups" id="subgroups">
 								 		<!-- <option class="ubase-select" data-input="subgroups-data" value="{$groups.subgroup_id}">{$subgroups.subgroup_name}</option> -->
@@ -153,13 +160,15 @@
 								</select>
 							</div>
 							<div class="col-sm-3 form-group">
-								<select class="form-control" id="place-select-box" multiple="multiple">
+							<p class="text-warning blue">职位列表 <i class="ace-icon fa fa-user bigger-110"></i></p>
+								<select class="form-control" id="place-select-box" name="place" multiple="multiple">
 								 	<volist name="user_place" id="place">
 								 		<!-- <option class="ubase-select" data-input="place-data" value="{$place.place_id}">{$place.place_name}</option> -->
 								 	</volist>
 								</select>
 							</div>
 							<div class="col-sm-3 form-horizontal">
+							<p class="text-warning blue">名称修改 <i class="ace-icon fa fa-edit bigger-110"></i></p>
 								<div class="form-group">
 									<div class="col-sm-12">
 										<input type="text" id="place-group-data" data-val="" placeholder="部门名称" class="col-xs-10 col-sm-10">
@@ -175,7 +184,7 @@
 										<!-- <input type="text" id="place-data" data-val="" placeholder="职位名称" class="col-xs-10 col-sm-10"> -->
 										<span class="input-icon input-icon-right col-xs-10 col-sm-10" style="padding:0;">
 											<input type="text" id="place-data" data-val="" class="form-control" placeholder="职位名称">
-											<i class="ace-icon" title="打勾表示该职位属于部门/小组组长有审核权限"><input type="checkbox" style="width:20px;height:20px"/></i>
+											<i class="ace-icon" title="打勾表示该职位属于部门/小组组长有审核权限"><input type="checkbox" id="place-manager" style="width:20px;height:20px"/></i>
 										</span>
 									</div>
 								</div>
@@ -189,11 +198,11 @@
 						</button>
 						<button class="btn btn-xs btn-primary" >
 							<i class="ace-icon fa fa-edit bigger-110"></i>
-							<span class="bigger-110">新增职位</span>
+							<span class="bigger-110">修改职位</span>
 						</button>
 						<button class="btn btn-xs btn-danger" >
 							<i class="ace-icon fa fa-close bigger-110"></i>
-							<span class="bigger-110">新增职位</span>
+							<span class="bigger-110">删除职位</span>
 						</button>
 					</div>
 			</div>
@@ -211,20 +220,23 @@
 					<div class="widget-main">
 						<div class="row">
 							<div class="col-sm-4 form-group">
-								<select class="form-control"  multiple="multiple" name="group">
-								 	<volist name="user_roles" id="roles">
-								 		<option class="ubase-select" data-type="role" data-input="role-group-data" value="{$roles.role_id}">{$roles.role_name}</option>
+							<p class="text-warning blue">角色分组 <i class="ace-icon fa fa-list-ul bigger-110"></i></p>
+								<select class="form-control"  multiple="multiple" name="role" data-lower="role-select-box">
+								 	<volist name="role_group" id="roleGroup">
+								 		<option class="ubase-select" data-type="role" data-input="role-group-data" value="{$roleGroup.role_id}">{$roleGroup.role_name}</option>
 								 	</volist>
 								</select>
 							</div>
 							<div class="col-sm-4 form-group">
-								<select class="form-control"  multiple="multiple" name="subgroup">
-								 	<volist name="user_place" id="place">
-								 		<option class="ubase-select" data-input="role-data" value="{$place.place_id}">{$place.place_name}</option>
+							<p class="text-warning blue">角色列表 <i class="ace-icon fa fa-id-card bigger-110"></i></p>
+								<select class="form-control" id="role-select-box"  multiple="multiple" name="subrole">
+								 	<volist name="role_user" id="roleUser">
+								 		<!-- <option class="ubase-select" data-input="role-data" value="{$place.place_id}">{$place.place_name}</option> -->
 								 	</volist>
 								</select>
 							</div>
 							<div class="col-sm-4 form-horizontal">
+								<p class="text-warning blue">名称修改 <i class="ace-icon fa fa-edit bigger-110"></i></p>
 								<div class="form-group">
 									<div class="col-sm-12">
 										<input type="text" id="role-group-data" data-val="" placeholder="角色分组" class="col-xs-10 col-sm-10">
@@ -238,8 +250,8 @@
 							</div>
 						</div>	
 					</div>
-					<div class="widget-toolbox padding-8 clearfix">
-						<button class="btn btn-xs btn-yellow" >
+					<div class="widget-toolbox padding-8 clearfix" data-type="role" data-type2="subrole" data-input="role-group-data" data-input2="role-data">
+						<button class="btn btn-xs btn-yellow add-button" >
 							<i class="ace-icon fa fa-plus-square bigger-110"></i>
 							<span class="bigger-110">新增分组</span>
 						</button>
@@ -251,7 +263,7 @@
 							<i class="ace-icon fa fa-close bigger-110"></i>
 							<span class="bigger-110">删除分组</span>
 						</button>
-						<button class="btn btn-xs btn-success" >
+						<button class="btn btn-xs btn-success add-button" >
 							<i class="ace-icon fa fa-plus-square bigger-110"></i>
 							<span class="bigger-110">新增角色</span>
 						</button>
@@ -274,9 +286,19 @@
 		$(document).on("click",".ubase-select",function(){
 			// alert("a")
 			var tid=$(this).data("input")
-			$("#"+tid).parents(".form-group").next().find("input").val("")
+			$("#"+tid).parents(".form-group").nextAll().find("input").val("")
+			$("#place-manager").prop("checked",false)
 			$("#"+tid).val($(this).text())
 			$("#"+tid).data('val',$(this).val())
+			if(tid=="place-data"){
+				if($(this).data("manager")==1){
+					// alert("哎哟，主管/组长级")
+					$("#place-manager").prop("checked",true)
+				}else{
+					// alert("艾玛，普通员工")
+					$("#place-manager").prop("checked",false)
+				}	
+			}
 			if($(this).data("type")!=undefined){
 				var lower=$(this).parent().data("lower");
 				//alert(lower);
@@ -285,6 +307,8 @@
 				datas['id']=$(this).val()
 				if($(this).data("sub")!=undefined){
 					datas['sub']="true"
+					datas['group']=$(this).parents(".form-group").prev().find("select option:selected").val()
+					// alert($(this).parents(".form-group").prev().find("select option:selected").val())
 				}
 					$.ajax({
 						url:"{:U('showlowe')}",
@@ -332,6 +356,7 @@
 				alert(datas["type"]+datas["value"]+"不能为空！"+datas["group"])
 				return false;
 			}
+			// alert(JSON.stringify(datas))
 			/*特殊职位*/
 			if(datas["type"]=="place"){
 
@@ -339,23 +364,40 @@
 				datas["group"]=gSelect.val()
 				var sSelect=$(this).parent().prev().find("select[name='subgroup'] option:selected")
 				datas["subgroup"]=sSelect.val()
-				if(sSelect.val()==""){
-					selfele=$(this).parent().prev().find("select[name='group']")
+				selfele=$(this).parent().prev().find("select[name='place']")
+				// if(sSelect.val()==""){
+				// 	selfele=$(this).parent().prev().find("select[name='group']")
+				// }else{
+				// 	selfele=$(this).parent().prev().find("select[name='subgroup']")
+				// }
+				if($("#place-manager").is(":checked")){
+					datas["manager"]=1
 				}else{
-					selfele=$(this).parent().prev().find("select[name='subgroup']")
+					datas["manager"]=0
 				}
+			}else if(datas["type"]=="role"){
+				var rolegroup=$(this).parent().prev().find("select[name='role']")
+				var role=$(this).parent().prev().find("select[name='subrole']")
+				// alert(role.find("option:selected").val())
+				if(role.find("option:selected").val()==undefined){
+					selfele=rolegroup
+				}else{
+					selfele=role
+				}
+				// alert(rolegroup.find("option:selected").val())
+
 			}
 			$.ajax({
 				url:"{:U('addinfo')}",
 				type:"post",
 				data:datas,
-				dataType:"html",
+				dataType:"json",
 				success:function(data){
-					alert(data)
+					// alert(data)
 					if(data["msg"]=="success"){
 						selfele.append(data["option"]);
 					}else{
-						//alert(data["msg"])
+						alert(data["msg"])
 					}
 				}
 			})

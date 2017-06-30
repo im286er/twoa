@@ -3,7 +3,7 @@ namespace Common\Model;
 use Think\Model;
 class GroupModel extends Model {
 	protected $trueTableName = 'oa_group'; 
-	protected $fields = array('group_id', 'group_name', 'subgroup_id','subgroup_name','subgroup_group');
+	protected $fields = array('group_id', 'group_name', 'subgroup_id','subgroup_name','subgroup_group','place_id','place_name','place_group','place_subgroup','place_manager','role_id','role_name','role_upper');
 	// protected $fields = array('group_id', 'group_name', 'email','_pk'=>'group_id','_autoinc' => true);
 	/**
 	* 查询oa_group表的数据，默认查所有
@@ -79,6 +79,20 @@ class GroupModel extends Model {
 		}
 	}
 	/**
+	* 新增place
+	* @group_id 新增的group name 
+	* @subgroup_name 新建分组的名称
+	*/
+	function add_place($group_id,$place_name,$manager,$subgroup_id=0){
+		//is_place($group_id,$place_name,$subgroup_id=0)
+		if($this->is_place($group_id,$place_name,$subgroup_id)==""){
+			return $this->table("oa_place")->add(array("place_name"=>$place_name,"place_group"=>$group_id,"place_subgroup"=>$subgroup_id,"place_manager"=>$manager));
+			// return $this->getLastSql();
+		}else{
+			return "该职位在部门/分组中已存在";
+		}
+	}
+	/**
 	* 删除group
 	* @group_id 要删除的gorup id
 	*/
@@ -96,8 +110,61 @@ class GroupModel extends Model {
 	/**
 	* 根据group id查职位
 	* @group_id 要查找的gorup id
+	* @subgroup_id 如果>0表示该职位属于子分组下的
 	*/
-	function select_place($group_id){
-		return $this->table($this->trueTableName." g")->join("oa_place p on g.group_id=p.place_group")->where("g.group_id='{$group_id}'")->select();
+	function select_place($group_id,$subgroup_id=0){
+		// if($subgroup_id>0){
+			 // $this->table($this->trueTableName." g")->join("oa_place p on g.group_id=p.place_group")->join("oa_subgroup s on s.subgroup_id=p.place_subgroup")->where("g.group_id='{$group_id}' AND s.subgroup_id='{$subgroup_id}'")->select();
+		return $this->table("oa_place")->where(array("place_group"=>$group_id,"place_subgroup"=>$subgroup_id))->select();
+		// }else{
+			// return $this->table($this->trueTableName." g")->join("oa_place p on g.group_id=p.place_group")->where("g.group_id='{$group_id}'")->select();
+		// }
+				echo $this->getLastSql();
 	}
+	/**
+	* 根据group id和subgroup id 和place name判断职位是否存在
+	* @group_id 要查找的gorup id
+	* @place_name 要查找的用户名
+	* @subgroup_id 如果>0表示该职位属于子分组下的
+	*/
+	function is_place($group_id,$place_name,$subgroup_id=0){
+		return $this->table("oa_place")->where(array("place_group"=>$group_id,"place_name"=>$place_name,"place_subgroup"=>$subgroup_id))->find();
+		
+		// return $this->getLastSql();
+	}
+	/**
+	* 根据place id 查找place相关信息
+	* @group_id 要查找的gorup id
+	*/
+	function find_place($place_id){
+		return $this->table("oa_place")->where(array("place_id"=>$place_id))->find();
+	}
+	/**
+	* 查找角色
+	* @role_upper 要查的一级组id
+	*/
+	function select_role($role_upper=0){
+		return $this->table("oa_role")->where(array("role_upper"=>$role_upper))->select();
+	}
+	/**
+	* 判断角色是否存在
+	* @role_name 要查的角色名
+	* @role_upper 要查的一级组id
+	*/
+	function is_role($role_name,$role_upper=0){
+		return $this->table("oa_role")->where(array("role_name"=>$role_name,"role_upper"=>$role_upper))->find();
+	}
+	/**
+	* 新增角色
+	* @role_name 角色名
+	* @role_upper 角色上级
+	*/
+	function add_role($role_name,$role_upper=0){
+		if($this->is_role($role_name,$role_upper)==""){
+			return $this->table("oa_role")->add(array("role_name"=>$role_name,"role_upper"=>$role_upper));
+		}else{
+			return "角色名已存在"; 
+		}
+	}
+
 }
