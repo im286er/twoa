@@ -1,4 +1,10 @@
 <?php
+/**
+ * @Author: vition
+ * @Date:   2017-05-18 15:57:50
+ * @Last Modified by:   vition
+ * @Last Modified time: 2017-07-04 18:26:49
+ */
 /*用户功能{list|用户列表,create|新建用户,edit|编辑用户,ubase|基础信息}*/
 namespace Home\Controller;
 use Common\Controller\AmangController;
@@ -180,12 +186,19 @@ class UserController extends AmangController {
 				break;
 				case "role": case "subrole":
 					// print_r($_POST);
+					if($_POST['type']=="role"){
+						$input='role-group-data';
+						$type="data-type='role-data'";
+					}else{
+						$type='';
+						$input='role-data';
+					}
 					$role=D("Group");
 					$role_upper=isset($_POST["group"])?$_POST["group"]:0;
 					$addResult=$role->add_role($_POST["value"],$role_upper);
 					if($addResult>0){
 						$roleData=$role->is_role($_POST["value"],$role_upper);
-						$jsonData=array("msg"=>"success","option"=>"<option class='ubase-select' data-type='role' data-input='role-group-data' value='{$roleData["role_id"]}'>{$roleData["role_name"]}</option>");
+						$jsonData=array("msg"=>"success","option"=>"<option class='ubase-select' {$type} data-input='{$input}' value='{$roleData["role_id"]}'>{$roleData["role_name"]}</option>");
 					}else{
 						$jsonData=array("msg"=>$addResult);
 					}

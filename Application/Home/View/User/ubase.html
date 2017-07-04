@@ -346,6 +346,7 @@
 					return false;
 				}
 			}else{
+
 				datas["type"]=$(this).parent().data("type")
 				datas["value"]=$("#"+$(this).parent().data("input")).val()
 			}
@@ -379,11 +380,16 @@
 				var rolegroup=$(this).parent().prev().find("select[name='role']")
 				var role=$(this).parent().prev().find("select[name='subrole']")
 				// alert(role.find("option:selected").val())
-				if(role.find("option:selected").val()==undefined){
-					selfele=rolegroup
-				}else{
+				if(thisBtnIndex>=3){
 					selfele=role
+				}else{
+					selfele=rolegroup
 				}
+				// if(role.find("option:selected").val()==undefined){
+				// 	selfele=rolegroup
+				// }else{
+				// 	selfele=role
+				// }
 				// alert(rolegroup.find("option:selected").val())
 
 			}
@@ -396,6 +402,9 @@
 					// alert(data)
 					if(data["msg"]=="success"){
 						selfele.append(data["option"]);
+						selfele.find("option").eq(selfele.find("option").attr("selected",false))
+						selfele.find("option").eq(selfele.find("option").length-1).attr("selected",true)
+						selfele.find("option").eq(selfele.find("option").length-1).click()
 					}else{
 						alert(data["msg"])
 					}
