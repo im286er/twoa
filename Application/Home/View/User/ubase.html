@@ -108,11 +108,11 @@
 						<i class="ace-icon fa fa-plus-square bigger-110"></i>
 						<span class="bigger-110">新增部门</span>
 					</button>
-					<button class="btn btn-xs btn-purple" >
+					<button class="btn btn-xs btn-purple update-button" >
 						<i class="ace-icon fa fa-edit bigger-110"></i>
 						<span class="bigger-110">修改部门</span>
 					</button>
-					<button class="btn btn-xs btn-pink" >
+					<button class="btn btn-xs btn-pink del-button" >
 						<i class="ace-icon fa fa-close bigger-110"></i>
 						<span class="bigger-110">删除部门</span>
 					</button>
@@ -120,11 +120,11 @@
 						<i class="ace-icon fa fa-plus-square bigger-110"></i>
 						<span class="bigger-110">新增分组</span>
 					</button>
-					<button class="btn btn-xs btn-primary" >
+					<button class="btn btn-xs btn-primary update-button" >
 						<i class="ace-icon fa fa-edit bigger-110"></i>
 						<span class="bigger-110">修改分组</span>
 					</button>
-					<button class="btn btn-xs btn-danger" >
+					<button class="btn btn-xs btn-danger del-button" >
 						<i class="ace-icon fa fa-close bigger-110"></i>
 						<span class="bigger-110">删除分组</span>
 					</button>
@@ -196,11 +196,11 @@
 							<i class="ace-icon fa fa-plus-square bigger-110"></i>
 							<span class="bigger-110">新增职位</span>
 						</button>
-						<button class="btn btn-xs btn-primary" >
+						<button class="btn btn-xs btn-primary update-button" >
 							<i class="ace-icon fa fa-edit bigger-110"></i>
 							<span class="bigger-110">修改职位</span>
 						</button>
-						<button class="btn btn-xs btn-danger" >
+						<button class="btn btn-xs btn-danger del-button" >
 							<i class="ace-icon fa fa-close bigger-110"></i>
 							<span class="bigger-110">删除职位</span>
 						</button>
@@ -255,11 +255,11 @@
 							<i class="ace-icon fa fa-plus-square bigger-110"></i>
 							<span class="bigger-110">新增分组</span>
 						</button>
-						<button class="btn btn-xs btn-purple" >
+						<button class="btn btn-xs btn-purple update-button" >
 							<i class="ace-icon fa fa-edit bigger-110"></i>
 							<span class="bigger-110">修改分组</span>
 						</button>
-						<button class="btn btn-xs btn-pink" >
+						<button class="btn btn-xs btn-pink del-button" >
 							<i class="ace-icon fa fa-close bigger-110"></i>
 							<span class="bigger-110">删除分组</span>
 						</button>
@@ -267,11 +267,11 @@
 							<i class="ace-icon fa fa-plus-square bigger-110"></i>
 							<span class="bigger-110">新增角色</span>
 						</button>
-						<button class="btn btn-xs btn-primary" >
+						<button class="btn btn-xs btn-primary update-button" >
 							<i class="ace-icon fa fa-edit bigger-110"></i>
 							<span class="bigger-110">修改角色</span>
 						</button>
-						<button class="btn btn-xs btn-danger" >
+						<button class="btn btn-xs btn-danger del-button" >
 							<i class="ace-icon fa fa-close bigger-110"></i>
 							<span class="bigger-110">删除角色</span>
 						</button>
@@ -283,7 +283,7 @@
 <script src="__PUBLIC__/components/bootstrap-datepicker/dist/js/bootstrap-datepicker.js"></script>
 <script>
 	$(function(){
-		$(document).on("click",".ubase-select",function(){
+		$("select").on("click",".ubase-select",function(){
 			// alert("a")
 			var tid=$(this).data("input")
 			$("#"+tid).parents(".form-group").nextAll().find("input").val("")
@@ -415,16 +415,39 @@
 		*所有更新按钮
 		*/
 		$(".update-button").on("click",function(){
-			var companySel=$(this).parent().prev().find("select option:selected")
-			var companyKey=companySel.val()
-			if(companyKey==undefined){
+			var datas={}
+			var thisBtnIndex=$($(this).parent().find("button")).index(this)
+			if(thisBtnIndex>=3){
+				var thisType=$(this).parent().data("type2")
+				datas["value"]=$("#"+$(this).parent().data("input2")).val()
+				datas["group"]=$(this).parent().prev().find("select[name='"+$(this).parent().data("type")+"'] option:selected").val()
+			}else{
+				var thisType=$(this).parent().data("type")
+				if(thisType=="place"){
+					var gSelect=$(this).parent().prev().find("select[name='group'] option:selected")
+					datas["group"]=gSelect.val()
+					var sSelect=$(this).parent().prev().find("select[name='subgroup'] option:selected")
+					datas["subgroup"]=sSelect.val()
+					thisSel=$(this).parent().prev().find("select[name='place']")
+					if($("#place-manager").is(":checked")){
+						datas["manager"]=1
+					}else{
+						datas["manager"]=0
+					}
+				}
+				datas["value"]=$("#"+$(this).parent().data("input")).val()
+			}
+
+			
+			var thisSel=$(this).parent().prev().find("select[name='"+thisType+"']")
+			var thisOpt=thisSel.find("option:selected").val()
+			if(thisOpt==undefined){
 				alert("别逗我，你都没选择！")
 				return false;
 			}
-				var datas={}
-				datas["type"]=$(this).parent().data("type")
-				datas["company_key"]=companyKey
-				datas["company_name"]=$("#"+$(this).parent().data("input")).val()
+				datas["type"]=thisType
+
+				datas["key"]=thisOpt
 				if(datas["value"]==""){
 					alert("别闹了，不能留空的！")
 					return false;
@@ -436,7 +459,9 @@
 					dataType:"html",
 					success:function(data){
 						if(data=="success"){
-							companySel.text(datas["company_name"])
+							thisSel.find("option:selected").text(datas["value"])
+						}else{
+							alert(data)
 						}
 					}
 				})
@@ -446,25 +471,36 @@
 		*所有删除按钮
 		*/
 		$(".del-button").on("click",function(){
-			var companySel=$(this).parent().prev().find("select option:selected")
-			var companyKey=companySel.val()
-			var comInput=$("#"+$(this).parent().data("input"))
-			if(companyKey==undefined){
+			var datas={}
+			var thisBtnIndex=$($(this).parent().find("button")).index(this)
+			if(thisBtnIndex>=3){
+				var thisType=$(this).parent().data("type2")
+				thisInput=$("#"+$(this).parent().data("input2"))
+			}else{
+				var thisType=$(this).parent().data("type")
+				thisInput=$("#"+$(this).parent().data("input"))
+			}
+			
+			var thisSel=$(this).parent().prev().find("select[name='"+thisType+"']")
+			var thisOpt=thisSel.find("option:selected").val()
+			if(thisOpt==undefined){
 				alert("别逗我，你都没选择！")
 				return false;
 			}
-			var datas={}
-			datas["type"]=$(this).parent().data("type")
-			datas["company_key"]=companyKey
+				datas["type"]=thisType
+				datas["key"]=thisOpt
+			
 			$.ajax({
 				url:"{:U('delinfo')}",
 				type:"post",
 				data:datas,
 				dataType:"html",
 				success:function(data){
-					if(data>0){
-						companySel.remove()
-						comInput.val("")
+					if(data=="success"){
+						thisSel.find("option:selected").remove()
+						thisInput.val("")
+					}else{
+						alert(data)
 					}
 				}
 			})

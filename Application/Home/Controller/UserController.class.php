@@ -3,7 +3,7 @@
  * @Author: vition
  * @Date:   2017-05-18 15:57:50
  * @Last Modified by:   vition
- * @Last Modified time: 2017-07-04 18:26:49
+ * @Last Modified time: 2017-07-05 18:43:50
  */
 /*用户功能{list|用户列表,create|新建用户,edit|编辑用户,ubase|基础信息}*/
 namespace Home\Controller;
@@ -158,7 +158,7 @@ class UserController extends AmangController {
 				$subgroup=D("Group");
 				$subgroupData=$subgroup->add_subgroup($_POST['group'],$_POST['value']);	
 				if($subgroupData>0){
-					$newS=$subgroup->find_subgroup($_POST['group'],$_POST['value']);
+					$newS=$subgroup->find_subgroup($subgroupData);
 					$jsonData=array("msg"=>"success","option"=>"<option class='ubase-select' data-input='subgroup-data' value='{$newS["subgroup_id"]}'>{$newS["subgroup_name"]}</option>");
 				}else{
 					$jsonData=array("msg"=>$subgroupData);
@@ -204,6 +204,7 @@ class UserController extends AmangController {
 					}
 					echo json_encode($jsonData);
 				break;
+
 			}
 		}
 	}
@@ -220,6 +221,40 @@ class UserController extends AmangController {
 						echo $resultData;
 					}
 				break;
+				case "group": case "subgroup":
+					$group=D("Group");
+					if($_POST["type"]=="group"){
+						$resultData=$group->set_group($_POST["key"],$_POST["value"]);
+					}else{
+						$resultData=$group->set_subgroup($_POST["key"],$_POST["group"],$_POST["value"]);
+					}
+					if($resultData>0){
+						echo "success";
+					}else{
+						echo $resultData;
+					}
+				break;
+				case "place":
+					$place=D("Group");
+
+					$subgroup=isset($_POST["subgroup"])?$_POST["subgroup"]:0;
+					$resultData = $place->set_place($_POST["key"],$_POST["group"],$_POST["value"],$_POST["manager"],$subgroup);
+					if($resultData>0){
+						echo "success";
+					}else{
+						echo $resultData;
+					}
+				break;
+				case "role": case "subrole":
+					$role=D("Group");
+					$role_upper=isset($_POST["group"])?$_POST["group"]:0;
+					$resultData=$role->set_role($_POST["key"],$_POST["value"],$role_upper);
+					if($resultData>0){
+						echo "success";
+					}else{
+						echo $resultData;
+					}
+				break;
 			}
 		}
 	}
@@ -229,13 +264,35 @@ class UserController extends AmangController {
 			switch ($_POST['type']) {
 				case "company":
 					$company=D("Company");
-					// $resultData=$company->set_company($_POST["company_key"],$_POST["company_name"]);
-					echo $company->del_company($_POST["company_key"]);
-					// if($resultData>0){
-					// 	echo "success";
-					// }else{
-					// 	echo $resultData;
-					// }
+					$delResult=$company->del_company($_POST["company_key"]);
+					echo "success";
+
+				break;
+				case "group": case "subgroup":
+					$group=D("Group");
+					if($_POST["type"]=="group"){
+						$delResult= $group->del_group($_POST["key"]);
+					}else{
+						$delResult= $group->del_subgroup($_POST["key"]);
+					}
+					echo "success";
+				break;
+				case "place":
+					$place=D("Group");
+					$delResult= $place->del_place($_POST["key"]);
+					echo "success";
+				break;
+
+				break;
+				case "role": case "subrole":
+					$role=D("Group");
+					if ($_POST["type"]=="role"){
+						if ($role->select_role($_POST["key"])!="") {
+							echo "该分组下含有其他角色，请删除角色再删除";
+							return false;
+						}
+					}
+					echo $role->del_role($_POST["key"]);
 				break;
 			}
 		}

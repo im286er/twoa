@@ -38,7 +38,11 @@ class GroupModel extends Model {
 	* @group_id 要查询的group id
 	* @subgroup_name 分组名，不同部门允许分组相同，但是同一个部门分组不能相同
 	*/
-	function find_subgroup($group_id,$subgroup_name){
+	function find_subgroup($subgroup_id){
+		return $this->table("oa_subgroup")->where(array("subgroup_id"=>$subgroup_id))->find();
+	}
+
+	function is_subgroup($group_id,$subgroup_name){
 		return $this->table("oa_subgroup")->where(array("subgroup_name"=>$subgroup_name,"subgroup_group"=>$group_id))->find();
 	}
 	/**
@@ -51,6 +55,16 @@ class GroupModel extends Model {
 			return $this->where(array("group_id"=>$group_id))->save(array("group_name"=>$group_name));
 		}else{
 			return "部门名已存在";
+		}
+		// 
+	}
+
+	function set_subgroup($subgroup_id,$subgroup_group,$subgroup_name){
+		$subInfo=$this->is_subgroup($subgroup_group,$subgroup_name);
+		if($subInfo==""){
+			return $this->table("oa_subgroup")->where(array("subgroup_id"=>$subgroup_id))->save(array("subgroup_name"=>$subgroup_name,"subgroup_group"=>$subgroup_group));
+		}else{
+			return "分组名已存在";
 		}
 		// 
 	}
@@ -72,7 +86,7 @@ class GroupModel extends Model {
 	* @subgroup_name 新建分组的名称
 	*/
 	function add_subgroup($group_id,$subgroup_name){
-		if($this->find_subgroup($group_id,$subgroup_name)==""){
+		if($this->is_subgroup($group_id,$subgroup_name)==""){
 			return $this->table("oa_subgroup")->add(array("subgroup_name"=>$subgroup_name,"subgroup_group"=>$group_id));
 		}else{
 			return "分组名已存在";
@@ -85,8 +99,22 @@ class GroupModel extends Model {
 	*/
 	function add_place($group_id,$place_name,$manager,$subgroup_id=0){
 		//is_place($group_id,$place_name,$subgroup_id=0)
-		if($this->is_place($group_id,$place_name,$subgroup_id)==""){
+		if($this->is_place($group_id,$place_name,$manager,$subgroup_id)==""){
 			return $this->table("oa_place")->add(array("place_name"=>$place_name,"place_group"=>$group_id,"place_subgroup"=>$subgroup_id,"place_manager"=>$manager));
+			// return $this->getLastSql();
+		}else{
+			return "该职位在部门/分组中已存在";
+		}
+	}
+	function set_place($place_id,$group_id,$place_name,$manager,$subgroup_id=0){
+		//is_place($group_id,$place_name,$subgroup_id=0)
+		$isResult=$this->is_place($group_id,$place_name,$manager,$subgroup_id);
+		// return $isResult ;
+		if($isResult==""){
+			// return $isResult ;
+			return $this->table("oa_place")->where(array("place_id"=>$place_id))->save(array("place_name"=>$place_name,"place_group"=>$group_id,"place_subgroup"=>$subgroup_id,"place_manager"=>$manager));
+
+			// return $this->table("oa_place")->add(array("place_name"=>$place_name,"place_group"=>$group_id,"place_subgroup"=>$subgroup_id,"place_manager"=>$manager));
 			// return $this->getLastSql();
 		}else{
 			return "该职位在部门/分组中已存在";
@@ -98,6 +126,10 @@ class GroupModel extends Model {
 	*/
 	function del_group($group_id){
 		return $this->where(array("group_id"=>$group_id))->delete();
+	}
+
+	function del_subgroup($subgroup_id){
+		return $this->table("oa_subgroup")->where(array("subgroup_id"=>$subgroup_id))->delete();
 	}
 	/**
 	* 根据group id查分组
@@ -121,14 +153,18 @@ class GroupModel extends Model {
 		// }
 				echo $this->getLastSql();
 	}
+
+	function del_place($place_id){
+		return $this->table("oa_place")->where(array("place_id"=>$place_id))->delete();
+	}
 	/**
 	* 根据group id和subgroup id 和place name判断职位是否存在
 	* @group_id 要查找的gorup id
 	* @place_name 要查找的用户名
 	* @subgroup_id 如果>0表示该职位属于子分组下的
 	*/
-	function is_place($group_id,$place_name,$subgroup_id=0){
-		return $this->table("oa_place")->where(array("place_group"=>$group_id,"place_name"=>$place_name,"place_subgroup"=>$subgroup_id))->find();
+	function is_place($group_id,$place_name,$subgroup_manager,$subgroup_id=0){
+		return $this->table("oa_place")->where(array("place_group"=>$group_id,"place_name"=>$place_name,"place_subgroup"=>$subgroup_id,"place_manager"=>$subgroup_manager))->find();
 		
 		// return $this->getLastSql();
 	}
@@ -165,6 +201,17 @@ class GroupModel extends Model {
 		}else{
 			return "角色名已存在"; 
 		}
+	}
+	function set_role($role_id,$role_name,$role_upper=0){
+		$resultData=$this->is_role($role_name,$role_upper);
+		if($resultData==""){
+			return $this->table("oa_role")->where(array('role_id' =>$role_id ))->save(array("role_name"=>$role_name,"role_upper"=>$role_upper));
+		}else{
+			return "角色名已存在"; 
+		}
+	}
+	function del_role($role_id){
+		return $this->table("oa_role")->where(array("role_id"=>$role_id))->delete();
 	}
 
 }
