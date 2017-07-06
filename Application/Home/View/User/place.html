@@ -1,19 +1,14 @@
 <!-- <link rel="stylesheet" href="__PUBLIC__/components/bootstrap-datepicker/dist/css/bootstrap-datepicker3.css"> -->
 <style>
 
-	/*input.ace.ace-switch.ace-switch-4[type="checkbox"]:checked + .user-sex-span::before{
-		background:#D15B47;
-	}
-	input.ace.ace-switch.ace-switch-4[type="checkbox"] + .user-sex-span::before{
-		background:#82AF6F;
-	}*/
+
 </style>
 <div class="page-header">
 	<h1>
-		用户信息
+	用户信息	
 		<small>
 			<i class="ace-icon fa fa-angle-double-right"></i>
-			新增用户
+			职位分配
 		</small>
 	</h1>
 </div><!-- /.page-header -->
@@ -280,231 +275,10 @@
 		</div>
 	</div>
 </div>
-<!-- <script src="__PUBLIC__/components/bootstrap-datepicker/dist/js/bootstrap-datepicker.js"></script> -->
+<script src="__PUBLIC__/components/bootstrap-datepicker/dist/js/bootstrap-datepicker.js"></script>
 <script>
 	$(function(){
-		$("select").on("click",".ubase-select",function(){
-			// alert("a")
-			var tid=$(this).data("input")
-			$("#"+tid).parents(".form-group").nextAll().find("input").val("")
-			$("#place-manager").prop("checked",false)
-			$("#"+tid).val($(this).text())
-			$("#"+tid).data('val',$(this).val())
-			if(tid=="place-data"){
-				if($(this).data("manager")==1){
-					// alert("哎哟，主管/组长级")
-					$("#place-manager").prop("checked",true)
-				}else{
-					// alert("艾玛，普通员工")
-					$("#place-manager").prop("checked",false)
-				}	
-			}
-			if($(this).data("type")!=undefined){
-				var lower=$(this).parent().data("lower");
-				//alert(lower);
-				datas={}
-				datas['type']=$(this).data("type")
-				datas['id']=$(this).val()
-				if($(this).data("sub")!=undefined){
-					datas['sub']="true"
-					datas['group']=$(this).parents(".form-group").prev().find("select option:selected").val()
-					// alert($(this).parents(".form-group").prev().find("select option:selected").val())
-				}
-					$.ajax({
-						url:"{:U('showlowe')}",
-						type:"post",
-						data:datas,
-						datatype:"html",
-						success:function(data){
-							if(datas['type']=="place"){
-								datajson=JSON.parse(data)
-								$("#subgroup-select-box2").html(datajson["subgroup"]);
-								$("#place-select-box").html(datajson["place"]);
-							}else{
-								$("#"+lower).html(data);
-							}
-							
-						}
-					})
-			}
-		})
-		/**
-		*所有新增按钮
-		*/
-		$(".add-button").on("click",function(){
-			var datas={}
-			// var allBtn=$(this).parent().find("button").length
-			var thisBtnIndex=$($(this).parent().find("button")).index(this)
-			if(thisBtnIndex>=3){
-				datas["type"]=$(this).parent().data("type2")
-				datas["value"]=$("#"+$(this).parent().data("input2")).val()
-				var oSelect=$(this).parent().prev().find("select[name='"+$(this).parent().data("type")+"'] option:selected")
-
-				datas["group"]=oSelect.val()
-				if(datas["group"]==undefined){
-					alert("别逗我，你都没选择！")
-					return false;
-				}
-			}else{
-
-				datas["type"]=$(this).parent().data("type")
-				datas["value"]=$("#"+$(this).parent().data("input")).val()
-			}
-			
-			var selfele=$(this).parent().prev().find("select[name='"+datas["type"]+"']")
-			if(datas["value"]==""){
-
-				alert(datas["type"]+datas["value"]+"不能为空！"+datas["group"])
-				return false;
-			}
-			// alert(JSON.stringify(datas))
-			/*特殊职位*/
-			if(datas["type"]=="place"){
-
-				var gSelect=$(this).parent().prev().find("select[name='group'] option:selected")
-				datas["group"]=gSelect.val()
-				var sSelect=$(this).parent().prev().find("select[name='subgroup'] option:selected")
-				datas["subgroup"]=sSelect.val()
-				selfele=$(this).parent().prev().find("select[name='place']")
-				// if(sSelect.val()==""){
-				// 	selfele=$(this).parent().prev().find("select[name='group']")
-				// }else{
-				// 	selfele=$(this).parent().prev().find("select[name='subgroup']")
-				// }
-				if($("#place-manager").is(":checked")){
-					datas["manager"]=1
-				}else{
-					datas["manager"]=0
-				}
-			}else if(datas["type"]=="role"){
-				var rolegroup=$(this).parent().prev().find("select[name='role']")
-				var role=$(this).parent().prev().find("select[name='subrole']")
-				// alert(role.find("option:selected").val())
-				if(thisBtnIndex>=3){
-					selfele=role
-				}else{
-					selfele=rolegroup
-				}
-				// if(role.find("option:selected").val()==undefined){
-				// 	selfele=rolegroup
-				// }else{
-				// 	selfele=role
-				// }
-				// alert(rolegroup.find("option:selected").val())
-
-			}
-			$.ajax({
-				url:"{:U('addinfo')}",
-				type:"post",
-				data:datas,
-				dataType:"json",
-				success:function(data){
-					// alert(data)
-					if(data["msg"]=="success"){
-						selfele.append(data["option"]);
-						selfele.find("option").eq(selfele.find("option").attr("selected",false))
-						selfele.find("option").eq(selfele.find("option").length-1).attr("selected",true)
-						selfele.find("option").eq(selfele.find("option").length-1).click()
-					}else{
-						alert(data["msg"])
-					}
-				}
-			})
-		})
-		/**
-		*所有更新按钮
-		*/
-		$(".update-button").on("click",function(){
-			var datas={}
-			var thisBtnIndex=$($(this).parent().find("button")).index(this)
-			if(thisBtnIndex>=3){
-				var thisType=$(this).parent().data("type2")
-				datas["value"]=$("#"+$(this).parent().data("input2")).val()
-				datas["group"]=$(this).parent().prev().find("select[name='"+$(this).parent().data("type")+"'] option:selected").val()
-			}else{
-				var thisType=$(this).parent().data("type")
-				if(thisType=="place"){
-					var gSelect=$(this).parent().prev().find("select[name='group'] option:selected")
-					datas["group"]=gSelect.val()
-					var sSelect=$(this).parent().prev().find("select[name='subgroup'] option:selected")
-					datas["subgroup"]=sSelect.val()
-					thisSel=$(this).parent().prev().find("select[name='place']")
-					if($("#place-manager").is(":checked")){
-						datas["manager"]=1
-					}else{
-						datas["manager"]=0
-					}
-				}
-				datas["value"]=$("#"+$(this).parent().data("input")).val()
-			}
-
-			
-			var thisSel=$(this).parent().prev().find("select[name='"+thisType+"']")
-			var thisOpt=thisSel.find("option:selected").val()
-			if(thisOpt==undefined){
-				alert("别逗我，你都没选择！")
-				return false;
-			}
-				datas["type"]=thisType
-
-				datas["key"]=thisOpt
-				if(datas["value"]==""){
-					alert("别闹了，不能留空的！")
-					return false;
-				}
-				$.ajax({
-					url:"{:U('updateinfo')}",
-					type:"post",
-					data:datas,
-					dataType:"html",
-					success:function(data){
-						if(data=="success"){
-							thisSel.find("option:selected").text(datas["value"])
-						}else{
-							alert(data)
-						}
-					}
-				})
-			
-		})
-		/**
-		*所有删除按钮
-		*/
-		$(".del-button").on("click",function(){
-			var datas={}
-			var thisBtnIndex=$($(this).parent().find("button")).index(this)
-			if(thisBtnIndex>=3){
-				var thisType=$(this).parent().data("type2")
-				thisInput=$("#"+$(this).parent().data("input2"))
-			}else{
-				var thisType=$(this).parent().data("type")
-				thisInput=$("#"+$(this).parent().data("input"))
-			}
-			
-			var thisSel=$(this).parent().prev().find("select[name='"+thisType+"']")
-			var thisOpt=thisSel.find("option:selected").val()
-			if(thisOpt==undefined){
-				alert("别逗我，你都没选择！")
-				return false;
-			}
-				datas["type"]=thisType
-				datas["key"]=thisOpt
-			
-			$.ajax({
-				url:"{:U('delinfo')}",
-				type:"post",
-				data:datas,
-				dataType:"html",
-				success:function(data){
-					if(data=="success"){
-						thisSel.find("option:selected").remove()
-						thisInput.val("")
-					}else{
-						alert(data)
-					}
-				}
-			})
-		})
+		
 	})
 
 </script>

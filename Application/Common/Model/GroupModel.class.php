@@ -1,4 +1,11 @@
 <?php
+/**
+ * @Author: vition
+ * @Email:369709991@qq.com
+ * @Date:   2017-06-29 18:48:50
+ * @Last Modified by:   vition
+ * @Last Modified time: 2017-07-06 13:54:30
+ */
 namespace Common\Model;
 use Think\Model;
 class GroupModel extends Model {
