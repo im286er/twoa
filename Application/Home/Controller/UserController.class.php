@@ -3,7 +3,7 @@
  * @Author: vition
  * @Date:   2017-05-18 15:57:50
  * @Last Modified by:   vition
- * @Last Modified time: 2017-07-06 18:22:50
+ * @Last Modified time: 2017-07-06 18:40:11
  */
 /*用户功能{list|用户列表,create|新建用户,edit|编辑用户,ubase|基础信息,addinfo|添加信息}*/
 namespace Home\Controller;
@@ -15,17 +15,13 @@ class UserController extends AmangController {
 			case 'userlist':
 				$user=D("User");
 				$count=$user->where("user_state=1")->count();
-				$Page=new \Think\Page($count,2);
+				$Page=new \Think\Page($count,10);
 				$pageShow=$Page->show();
 
 				$userData=$user->search_all($Page->firstRow,$Page->listRows);
-				// $userData=$user->field("user_name,user_code,c.config_value user_company,g.group_name user_group,s.subgroup_name user_subgroup,p.place_name user_place,r.role_name user_role,user_director,user_phone,user_avatar,user_born,user_sex,user_lastlogin,user_entry,user_login,user_state")->where("u.user_company=c.config_key AND u.user_group=g.group_id AND u.user_place=p.place_id AND u.user_role=r.role_id AND c.config_class='company'")->limit($Page->firstRow.','.$Page->listRows)->join("oa_config c,oa_group g,oa_place p,oa_role r")->select();
-				if(IS_GET){
+				$this->assign("userlist",$userData);
+				$this->assign("page",$pageShow);
 
-				}else{
-					$this->assign("userlist",$userData);
-					$this->assign("page",$pageShow);
-				}
 
 				break;
 			case 'create': case 'ubase':
@@ -321,7 +317,8 @@ class UserController extends AmangController {
 		}
 		// print_r($condition);
 		$count=$user->where("user_state=1")->where($condition)->count();
-		$Page=new \Think\Page($count,2);
+
+		$Page=new \Think\Page($count,$_POST["limit"]);
 		$pageShow=$Page->show();
 
 		$userDataArray=$user->search_all($Page->firstRow,$Page->listRows,$condition);
