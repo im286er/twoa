@@ -3,7 +3,7 @@
  * @Author: vition
  * @Date:   2017-05-18 15:57:50
  * @Last Modified by:   vition
- * @Last Modified time: 2017-07-06 18:40:11
+ * @Last Modified time: 2017-07-07 19:16:58
  */
 /*用户功能{list|用户列表,create|新建用户,edit|编辑用户,ubase|基础信息,addinfo|添加信息}*/
 namespace Home\Controller;
@@ -14,11 +14,16 @@ class UserController extends AmangController {
 		switch (I("html")) {
 			case 'userlist':
 				$user=D("User");
-				$count=$user->where("user_state=1")->count();
+				$count=$user->count();
 				$Page=new \Think\Page($count,10);
 				$pageShow=$Page->show();
 
+				$baseInfo=D("Info");
+				$company=$baseInfo->search_company();
+				$group=$baseInfo->search_group();
 				$userData=$user->search_all($Page->firstRow,$Page->listRows);
+				$this->assign("companyArray",$company);
+				$this->assign("groupArray",$group);
 				$this->assign("userlist",$userData);
 				$this->assign("page",$pageShow);
 
@@ -311,12 +316,17 @@ class UserController extends AmangController {
 
 		$condition=array();
 		foreach ($_POST["condition"] as $key => $value) {
-			if (!empty($value["value"])){
-				$condition[$value["name"]]=array("LIKE","%{$value["value"]}%");
+			if ($value["value"]!=""){
+				if($value["name"]=="user_state"){
+					$condition[$value["name"]]=array("EQ","{$value["value"]}");
+				}else{
+					$condition[$value["name"]]=array("LIKE","%{$value["value"]}%");
+				}
+				
 			}
 		}
 		// print_r($condition);
-		$count=$user->where("user_state=1")->where($condition)->count();
+		$count=$user->where($condition)->count();
 
 		$Page=new \Think\Page($count,$_POST["limit"]);
 		$pageShow=$Page->show();
@@ -324,9 +334,75 @@ class UserController extends AmangController {
 		$userDataArray=$user->search_all($Page->firstRow,$Page->listRows,$condition);
 		$userHtml="";
 		foreach ($userDataArray as $userData) {
-		 	$userHtml.='<tr><td><label class="pos-rel"><input class="ace" type="checkbox"><span class="lbl"></span></label></td><td>'.$userData["user_name"].'</td><td>'.$userData["user_code"].'</td><td>'.$userData["user_company"].'</td><td>'.$userData["user_group"].'</td><td>'.$userData["user_subgroup"].'</td><td>'.$userData["user_role"].'</td><td>'.$userData["user_sex"].'</td><td>'.$userData["user_entry"].'</td><td>'.$userData["user_born"].'</td><td><div class="hidden-sm hidden-xs btn-group"><button class="btn btn-xs btn-info"><i class="ace-icon fa fa-pencil bigger-120"></i></button><button class="btn btn-xs btn-danger"><i class="ace-icon fa fa-trash-o bigger-120"></i></button></div></td></tr>';
+			if($userData["user_state"]=="在职"){
+				$button='<button class="btn btn-xs btn-info user-edit" data-toggle="modal" data-target="#userModal"><i class="ace-icon fa fa-pencil bigger-120"></i></button><button class="btn btn-xs btn-success" disabled="disabled"><i class="ace-icon fa fa-check-circle bigger-120"></i></button><button class="btn btn-xs btn-warning"><i class="ace-icon fa fa-question-circle bigger-120"></i></button><button class="btn btn-xs btn-danger"><i class="ace-icon fa fa-times-circle bigger-120"></i></button>';
+			}else if($userData["user_state"]=="未激活"){
+				$button='<button class="btn btn-xs btn-info user-edit" data-toggle="modal" data-target="#userModal"><i class="ace-icon fa fa-pencil bigger-120"></i></button><button class="btn btn-xs btn-success" ><i class="ace-icon fa fa-check-circle bigger-120"></i></button><button class="btn btn-xs btn-warning" disabled="disabled"><i class="ace-icon fa fa-question-circle bigger-120"></i></button><button class="btn btn-xs btn-danger"><i class="ace-icon fa fa-times-circle bigger-120"></i></button>';
+			}else{
+				$button='<button class="btn btn-xs btn-info user-edit" data-toggle="modal" data-target="#userModal"><i class="ace-icon fa fa-pencil bigger-120"></i></button><button class="btn btn-xs btn-success"><i class="ace-icon fa fa-check-circle bigger-120"></i></button><button class="btn btn-xs btn-warning"><i class="ace-icon fa fa-question-circle bigger-120"></i></button><button class="btn btn-xs btn-danger" disabled="disabled"><i class="ace-icon fa fa-times-circle bigger-120"></i></button>';
+			}
+		 	$userHtml.='<tr><td><label class="pos-rel"><input class="ace" type="checkbox"><span class="lbl"></span></label></td><td>'.$userData["user_name"].'</td><td>'.$userData["user_code"].'</td><td>'.$userData["user_company"].'</td><td>'.$userData["user_group"].'</td><td>'.$userData["user_subgroup"].'</td><td>'.$userData["user_role"].'</td><td>'.$userData["user_sex"].'</td><td>'.$userData["user_entry"].'</td><td>'.$userData["user_born"].'</td><td>'.$userData["user_state"].'</td><td><div class="hidden-sm hidden-xs btn-group user-control" data-userid="'.$userData["user_id"].'">'.$button.'</div></td></tr>';
 		 } 
+
 		echo json_encode(array("userhtml"=>$userHtml,"pagehtml"=>$pageShow)) ;
 		// print_r($userData);
+	}
+	//显示分组
+	function show_subgroup(){
+		if(IS_POST){
+			$subgroup=D("Info");
+			$resultDataArray=$subgroup->search_subgroup($_POST["group_id"]);
+			$subgroupHtml='<option value="">所有分组</option>';
+			foreach ($resultDataArray as $resultData) {
+				$subgroupHtml.='<option value="'.$resultData["subgroup_id"].'">'.$resultData["subgroup_name"].'</option>';
+			}
+
+			$placetDataArray=$subgroup->search_place($_POST["group_id"],0);
+			$placeHtml='<option value="">所有职位</option>';
+			foreach ($placetDataArray as $placeData) {
+				$placeHtml.='<option value="'.$placeData["place_id"].'">'.$placeData["place_name"].'</option>';
+			}
+			echo json_encode(array("subgroup"=>stripslashes($subgroupHtml),"place"=>stripslashes($placeHtml)));
+
+		}
+	}
+	function show_place(){
+		if(IS_POST){
+			$subgroup=D("Info");
+			$placetDataArray=$subgroup->search_place($_POST["group_id"],$_POST["subgroup_id"]);
+
+			$placeHtml='<option value="">所有职位</option>';
+			foreach ($placetDataArray as $placeData) {
+				$placeHtml.='<option value="'.$placeData["place_id"].'">'.$placeData["place_name"].'</option>';
+			}
+
+			echo $placeHtml;
+		}
+	}
+	//取用户模板
+	function get_usertemplate(){
+		if(IS_POST){
+			$user=D("User");
+			$resultData=$user->find_user($_POST["user_id"]);
+		}
+		$baseInfo=D("Info");
+		$company=$baseInfo->search_company();
+		$group=$baseInfo->search_group();
+		$subgroup=$baseInfo->search_subgroup($resultData["user_group"]);
+		$place=$baseInfo->search_place($resultData["user_group"],$resultData["user_subgroup"]);
+		$roles=$baseInfo->search_role();
+		$thisRole=$baseInfo->find_role($resultData["user_role"]);
+		$role=$baseInfo->search_role($thisRole["role_upper"]);
+		$this->assign("companyArray",$company);
+		$this->assign("groupArray",$group);
+		$this->assign("subgroupArray",$subgroup);
+		$this->assign("placeArray",$place);
+		$this->assign("rolesArray",$roles);
+		$this->assign("roleArray",$role);
+
+
+
+		$this->assign("userinfo",$resultData);
+		echo $this->fetch("userinfo");
 	}
 }

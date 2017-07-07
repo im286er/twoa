@@ -1,0 +1,271 @@
+<link rel="stylesheet" href="__PUBLIC__/components/bootstrap-datepicker/dist/css/bootstrap-datepicker3.css">
+<style>
+	input.ace.ace-switch.ace-switch-4[type="checkbox"]:checked + .user-sex-span::before{
+		background:#D15B47;
+	}
+	input.ace.ace-switch.ace-switch-4[type="checkbox"] + .user-sex-span::before{
+		background:#82AF6F;
+	}
+</style>
+<div class="widget-box">
+	<div class="widget-header">
+		<h5 class="widget-title smaller"><i class="ace-icon fa fa-user bigger-110"></i>人员信息</h5>
+		<div class="widget-toolbar"></div>
+	</div>
+	<div class="widget-body">
+		<div class="widget-main">
+			<form class="form-horizontal" id="user-form">
+			<div class="form-group">
+				<label class="col-sm-3 control-label no-padding-right" for="form-field-1"> 姓名 </label>
+				<div class="col-sm-9">
+					<input  placeholder="姓名" name="user_name" class="col-xs-10 col-sm-10 user-finfo" data-label="姓名" type="text" value="{$userinfo.user_name|default=''}">
+				</div>
+			</div>
+			<div class="form-group">
+				<label class="col-sm-3 control-label no-padding-right" for="form-field-1"> 用户编码 </label>
+				<div class="col-sm-9">
+					<input  placeholder="用户编码" name="user_code" readonly="" class="col-xs-10 col-sm-10 user-finfo" data-label="用户编码" type="text" value="{$userinfo.user_code|default=''}">
+				</div>
+			</div>
+			<div class="form-group">
+				<label class="col-sm-3 control-label no-padding-right" for="form-field-1"> 用户密码 </label>
+				<div class="col-sm-9">
+					<input  placeholder="默认密码Aa1234567" name="user_passwd" class="col-xs-10 col-sm-10 user-finfo" data-label="用户密码" type="password" value="">
+				</div>
+			</div>
+			<div class="form-group">
+				<label class="col-sm-3 control-label no-padding-right" for="form-field-1"> 所属公司 </label>
+				<div class="col-sm-8">
+					<select class="chosen-select form-control user-finfo" data-label="所属公司"  name="user_company" data-placeholder="选择所属公司">
+						<volist name="companyArray" id="company">
+							<option value="{$company.config_key}">{$company.config_value}</option>
+						</volist>
+						
+					</select>
+					<!-- <input  placeholder="所属公司" class="col-xs-10 col-sm-10" type="text"> -->
+				</div>
+			</div>
+			<div class="form-group">
+				<label class="col-sm-3 control-label no-padding-right" for="form-field-1"> 所属部门 </label>
+				<div class="col-sm-8">
+					<!-- <input  placeholder="所属部门" class="col-xs-10 col-sm-10" type="text"> -->
+					<select class="chosen-select form-control user-finfo" data-label="所属部门" name="user_group" data-placeholder="选择所属部门">
+						<volist name="groupArray" id="groups">
+							<option value="{$groups.group_id}">{$groups.group_name}</option>
+						</volist>
+					</select>
+
+				</div>
+			</div>
+			<div class="form-group">
+				<label class="col-sm-3 control-label no-padding-right" for="form-field-1"> 所属分组 </label>
+				<div class="col-sm-8">
+					<!-- <input  placeholder="所属部门" class="col-xs-10 col-sm-10" type="text"> -->
+					<select class="chosen-select form-control user-finfo" data-label="所属部门" name="user_subgroup" data-placeholder="选择所属部门">
+						<volist name="subgroupArray" id="subgroup">
+							<option value="{$subgroup.subgroup_id}">{$subgroup.subgroup_name}</option>
+						</volist>
+					</select>
+
+				</div>
+			</div>
+			<div class="form-group">
+				<label class="col-sm-3 control-label no-padding-right" for="form-field-1"> 职位 </label>
+				<div class="col-sm-8">
+					<select class="chosen-select form-control user-finfo" data-label="职位" name="user_place" data-placeholder="选择职位">
+						<volist name="placeArray" id="placelist">
+							<option value="{$placelist.place_id}">{$placelist.place_name}</option>
+						</volist>
+					</select>
+
+					<!-- <input  placeholder="职位" name="user_place" data-label="职位" class="user-finfo col-xs-10 col-sm-10" type="text"> -->
+				</div>
+			</div>
+			<div class="form-group">
+				<label class="col-sm-3 control-label no-padding-right" for="form-field-1"> 角色分组 </label>
+				<div class="col-sm-8">
+					<select class="chosen-select form-control user-finfo" data-label="角色" name="user_role" data-placeholder="选择对应角色">
+						<volist name="rolesArray" id="roleslist">
+							<option value="{$roleslist.role_id}">{$roleslist.role_name}</option>
+						</volist>
+					</select>
+				</div>
+			</div>
+			<div class="form-group">
+				<label class="col-sm-3 control-label no-padding-right" for="form-field-1"> 角色 </label>
+				<div class="col-sm-8">
+					<select class="chosen-select form-control user-finfo" data-label="角色" name="user_role" data-placeholder="选择对应角色">
+						<volist name="roleArray" id="roleslist">
+							<option value="{$roleslist.role_id}">{$roleslist.role_name}</option>
+						</volist>
+					</select>
+				</div>
+			</div>
+			<div class="form-group">
+				<label class="col-sm-3 control-label no-padding-right" for="form-field-1"> 上级主管 </label>
+				<div class="col-sm-9">
+					<input  placeholder="上级主管" name="user_director" data-label="上级主管" class="user-finfo col-xs-10 col-sm-10" type="text" value="{$userinfo.user_director|default=''}">
+				</div>
+			</div>
+
+			<div class="form-group">
+				<label class="col-sm-3 control-label no-padding-right" for="form-field-1"> 电话号码 </label>
+				<div class="col-sm-9">
+					<input  placeholder="电话号码" name="user_phone" class="col-xs-10 col-sm-10 user-finfo" data-label="电话号码" type="text" value="{$userinfo.user_phone|default=''}">
+				</div>
+			</div>
+			<div class="form-group">
+				<label class="col-sm-3 control-label no-padding-right" for="form-field-1"> 性别 </label>
+				<div class="col-sm-9">
+					<input type="checkbox" id="user-sex-box" name="user_sex" data-label="性别" class="user-finfo ace ace-switch ace-switch-4 btn-flat" />
+					<span class="lbl user-sex-span" data-lbl="女&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;男"></span>
+				</div>
+			</div>
+			<div class="form-group">
+				<label class="col-sm-3 control-label no-padding-right" for="form-field-1"> 生日 </label>
+				<div class="col-sm-8">
+					<div class="input-group">
+						<input class="form-control date-picker user-finfo" data-label='生日' name="user_born" id="id-date-born" data-date-format="yyyy-mm-dd" type="text" value="{$userinfo.user_born|default=''}">
+						<span class="input-group-addon">
+							<i class="fa fa-calendar bigger-110"></i>
+						</span>
+					</div>
+				</div>
+			</div>
+			<div class="form-group">
+				<label class="col-sm-3 control-label no-padding-right" for="form-field-1"> 入职时间 </label>
+				<div class="col-sm-8">
+					<div class="input-group">
+						<input class="form-control date-picker user-finfo" data-label="入职时间" name="user_entry" id="id-date-entry" data-date-format="yyyy-mm-dd" type="text" value="{$userinfo.user_entry|default=''}">
+						<span class="input-group-addon">
+							<i class="fa fa-calendar bigger-110"></i>
+						</span>
+					</div>
+				</div>
+			</div>
+			</form>
+			
+		</div>
+	</div>
+	<div class="widget-toolbox padding-8 clearfix">
+		<button class="btn btn-xs btn-success pull-right" id="submit-user">
+			<i class="ace-icon fa fa-check bigger-110"></i>
+			<span class="bigger-110">添加人员</span>
+		</button>
+		<button class="btn btn-xs btn-danger pull-left"  class="close" data-dismiss="modal" aria-label="Close">
+			<i class="ace-icon fa fa-window-close bigger-110"></i>
+			<span class="bigger-110" aria-hidden="true">取消</span>
+		</button>
+	</div>
+</div>
+<script src="__PUBLIC__/components/bootstrap-datepicker/dist/js/bootstrap-datepicker.js"></script>
+
+<script>
+		$(function(){
+			set_sex()
+			//初始化后日期选择器
+			$('#id-date-born').datepicker({
+			   autoclose: true,
+			   todayHighlight: true
+			})
+			//初始化后日期选择器
+			$('#id-date-entry').datepicker({
+			   autoclose: true,
+			   todayHighlight: true
+			})
+			$("#user-sex-box").on("change",function(){
+				set_sex();
+			})
+			//提交新增人员资料
+			$("#submit-user").on("click",function(){
+				createUser("user-form")
+				
+			})
+			//快速添加
+			$("#quick-user").on("click",function(){
+				createUser("quick-form")
+			})
+			//改变分组
+			$("select[name='user_group']").on("change",function(){
+				$.ajax({
+					url:"{:U('show_subgroup')}",
+					type:"post",
+					data:{"group_id":$(this).val()},
+					datatype:"html",
+					success:function(data){
+						$("select[name='user_subgroup']").html(data)
+					}
+				})
+			})
+			//改变分组
+			$("select[name='user_group']").on("change",function(){
+				$.ajax({
+					url:"{:U('show_subgroup')}",
+					type:"post",
+					data:{"group_id":$(this).val()},
+					dataType:"html",
+					success:function(data){
+						dataJson=JSON.parse(data)
+						// alert(dataJson.subgroup)
+						// alert(data.subgroup.replace("\\",""))
+						$("select[name='user_subgroup']").html(dataJson.subgroup)
+						$("select[name='user_place']").html(dataJson.place)
+					}
+				})
+			})
+			//改变职位
+			$("select[name='user_subgroup']").on("change",function(){
+				alert($("select[name='user_group']").find("select option:selected").val())
+				$.ajax({
+					url:"{:U('show_place')}",
+					type:"post",
+					data:{"group_id":$("select[name='user_group']").val(),"subgroup_id":$(this).val()},
+					dataType:"JSON",
+					success:function(data){
+						$("select[name='user_place']").html(data.place)
+					}
+				})
+			})
+
+		})
+		//设置性别
+		function set_sex(){
+			if("{$userinfo.user_sex|default=''}"=="女"){
+				$("#user-sex-box").prop("checked",true)
+			}else{
+				$("#user-sex-box").prop("checked",false)
+			}
+			if($("#user-sex-box").is(":checked")){
+				$("#user-sex-box").val("女")
+			}else{
+				$("#user-sex-box").val("男")
+			}
+		}
+		//新建用户
+		function createUser(formId){
+			datas=$("#"+formId).serializeArray()
+			post=true
+			$.each(datas,function(index, obj){
+				if(obj.name=="user_name" && obj.value==""){
+					alert("用户名不能为空");
+					post = false;
+				}
+				
+			})
+			
+			if(post==true){
+				$.ajax({
+					url:"{:U('create')}",
+					type:"post",
+					data:datas,
+					datatype:"html",
+					success:function(data){
+						if(parseInt(data)>0){
+							$(".user-finfo[name='user_code']").val(parseInt($(".user-finfo[name='user_code']").val())+1)
+						}
+					}
+				})
+			}
+
+		}
+	</script>

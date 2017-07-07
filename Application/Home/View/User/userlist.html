@@ -1,3 +1,6 @@
+<style type="text/css">
+	select{height: 30px!important;}
+</style>
 <div class="page-header">
 	<h1>
 		用户信息
@@ -9,32 +12,84 @@
 </div><!-- /.page-header -->
 
 <div class="row">
-	<div class="col-sm-12 dataTables_wrapper form-inline">
+	<div class="col-sm-12 dataTables_wrapper">
 		<div class="row">
-			<div class="col-sm-1">
-				<div class="dataTables_length" id="dynamic-table_length">
-					<div class="form-group">
-						<div class="col-sm-1">
-							<select name="dynamic-table_length" aria-controls="dynamic-table" class="form-control input-sm" id="showlimit"><option value="10">10</option><option value="25">25</option><option value="50">50</option><option value="100">100</option></select>
-						</div>
-					</div>
-				</div>
-			</div>
-			<div class="col-xs-8">
+			<div class="col-sm-12">
 				<div id="dynamic-table_filter" class="dataTables_filter">
 					<form id="condition-form">
-						<label>姓名:</label><input name="user_name" class="form-control input-sm" placeholder="" aria-controls="dynamic-table" type="search">
-						<label>编码:</label><input name="user_code" class="form-control input-sm" placeholder="" aria-controls="dynamic-table" type="search">
-						<label>公司:</label><input name="user_company" class="form-control input-sm" placeholder="" aria-controls="dynamic-table" type="search">
-						<label>部门:</label><input name="user_group" class="form-control input-sm" placeholder="" aria-controls="dynamic-table" type="search">
-						<label>分组:</label><input name="user_subgroup" class="form-control input-sm" placeholder="" aria-controls="dynamic-table" type="search">
-						<label>性别:</label><input name="user_sex" class="form-control input-sm" placeholder="" aria-controls="dynamic-table" type="search">
-					</form>
-						
+						<div class="form-group">
+							<div class="col-sm-1">
+								<select aria-controls="dynamic-table" class="form-control input-sm" id="showlimit"><option value="10">10</option><option value="25">25</option><option value="50">50</option><option value="100">100</option></select>
+							</div>
+						</div>
+						<div class="form-group">
+							<div class="col-sm-1">
+								<input name="user_name" class="form-control col-md-12" placeholder="姓名" aria-controls="dynamic-table" type="search">
+							</div>
+						</div>
+						<div class="form-group">
+							<div class="col-sm-1">
+								<input name="user_code" class="form-control hidden-md col-md-12" placeholder="编码" aria-controls="dynamic-table" type="search">
+							</div>
+						</div>
+
+
+						<div class="form-group">
+							<div class="col-sm-1">
+								<select name="user_company" class="form-control">
+									<option value="">所有公司</option>
+									<volist name="companyArray" id="companylist">
+										<option value="{$companylist.config_key}">{$companylist.config_value}</option>
+									</volist>
+								</select>
+							</div>
+						</div>
+
+						<div class="form-group">
+							<div class="col-sm-1">
+								<select name="user_group" class="form-control">
+									<option value="">所有部门</option>
+									<volist name="groupArray" id="grouplist">
+										<option value="{$grouplist.group_id}">{$grouplist.group_name}</option>
+									</volist>
+								</select>
+							</div>
+						</div>
+
+						<div class="form-group">
+							<div class="col-sm-1">
+								<select name="user_sex" class="form-control">
+									<option value="">所有性别</option>
+									<option value="男">男</option>
+									<option value="女">女</option>
+								</select>
+							</div>
+						</div>
+						<div class="form-group">
+							<div class="col-sm-1">
+								<select name="user_subgroup" class="form-control">
+									<option value="">所有组别</option>
+								</select>
+							</div>
+						</div>
+						<div class="form-group">
+							<div class="col-sm-1">
+								<select name="user_state" class="form-control">
+									<option value="">所有状态</option>
+									<option value=1>在职</option>
+									<option value=0>未激活</option>
+									<option value=2>离职</option>
+								</select>
+							</div>
+						</div>
+					</form>	
+						<div class="form-group">
+							<div class="col-sm-1">
+								<button class="btn btn-sm btn-primary search-btn"><i class="ace-icon fa fa-search"></i>查询</button>
+							</div>
+						</div>
+					
 				</div>
-			</div>
-			<div class="col-xs-1">
-				<button class="btn btn-sm btn-primary search-btn"><i class="ace-icon fa fa-search"></i>查询</button>
 			</div>
 		</div>
 		<table id="user-table" class="table table-striped table-bordered table-hover center">
@@ -55,6 +110,7 @@
 					<th class="center">性别</th>
 					<th class="center">入职</th>
 					<th class="center">生日</th>
+					<th class="center">状态</th>
 					<th class="center">操作</th>
 				</tr>
 			</thead>
@@ -76,8 +132,12 @@
 						<td>{$userinfo.user_sex}</td>
 						<td>{$userinfo.user_entry}</td>
 						<td>{$userinfo.user_born}</td>
+						<td>{$userinfo.user_state}</td>
 						<td>
 							<div class="hidden-sm hidden-xs btn-group">
+								<button class="btn btn-xs btn-purple">
+									<i class="ace-icon fa fa-times-circle bigger-120"></i>
+								</button>
 								<button class="btn btn-xs btn-info">
 									<i class="ace-icon fa fa-pencil bigger-120"></i>
 								</button>
@@ -94,6 +154,20 @@
 	</div>
 </div>
 
+<!-- Modal -->
+<div class="modal fade" id="userModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+
+      </div>
+      <div class="modal-body">
+        ...
+      </div>
+    </div>
+  </div>
+</div>
 <!-- <script src="__PUBLIC__/components/datatables/media/js/jquery.dataTables.js"></script> -->
 <!-- <script src="__PUBLIC__/components/_mod/datatables/jquery.dataTables.bootstrap.js"></script> -->
 <!-- <script src="__PUBLIC__/components/datatables.net-buttons/js/dataTables.buttons.js"></script> -->
@@ -105,9 +179,38 @@
 
 	<script>
 	jQuery(function($){
-
+		search_user()
 		$(".dataTables_wrapper").on("click",".paginate_button",search_user)
 		$(".search-btn").on("click",search_user)
+		$("#showlimit").on("change",search_user)
+		$("select[name='user_group']").on("change",function(){
+			datas={"group_id":$(this).val()}
+			$.ajax({
+				url:"{:U('show_subgroup')}",
+				type:"post",
+				dataType:"html",
+				data:datas,
+				success:function(data){
+					// alert($("select[name='user_group']").html())
+					$("select[name='user_subgroup']").html(data)
+				}
+			})	
+		})
+		/**
+		 * 编辑用户
+		 */
+		$("#user-table").on("click",".user-edit",function(){
+			var userid=$(this).parent().data("userid")
+			$.ajax({
+				url:"{:U('get_usertemplate')}",
+				type:"post",
+				dataType:"html",
+				data:{"user_id":userid},
+				success:function(data){
+					$("#userModal .modal-content").html(data)
+				}
+			})
+		})
 	})
 	function search_user(){
 		datas={}
