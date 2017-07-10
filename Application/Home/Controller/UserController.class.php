@@ -1,15 +1,12 @@
 <?php
 /**
  * @Author: vition
+ * @Email:369709991@qq.com
  * @Date:   2017-05-18 15:57:50
-<<<<<<< HEAD
  * @Last Modified by:   vition
- * @Last Modified time: 2017-07-10 10:16:17
-=======
- * @Last Modified by:   369709991@qq.com
- * @Last Modified time: 2017-07-07 22:26:37
->>>>>>> bc31dc6053e5ef62421a0dc609b233f261ff8096
+ * @Last Modified time: 2017-07-10 10:29:19
  */
+
 /*用户功能{list|用户列表,create|新建用户,edit|编辑用户,ubase|基础信息,addinfo|添加信息}*/
 namespace Home\Controller;
 use Common\Controller\AmangController;
