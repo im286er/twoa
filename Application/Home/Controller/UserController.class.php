@@ -4,7 +4,7 @@
  * @Email:369709991@qq.com
  * @Date:   2017-05-18 15:57:50
  * @Last Modified by:   vition
- * @Last Modified time: 2017-07-10 10:29:19
+ * @Last Modified time: 2017-07-10 13:06:46
  */
 
 /*用户功能{list|用户列表,create|新建用户,edit|编辑用户,ubase|基础信息,addinfo|添加信息}*/
@@ -356,15 +356,20 @@ class UserController extends AmangController {
 			$resultDataArray=$subgroup->search_subgroup($_POST["group_id"]);
 			$subgroupHtml="<option value=''>所有分组</option>";
 			foreach ($resultDataArray as $resultData) {
-				$subgroupHtml.="<option value='{$resultData["subgroup_id"]}'>$resultData["subgroup_name"]</option>";
+				$subgroupHtml.="<option value='{$resultData["subgroup_id"]}'>{$resultData["subgroup_name"]}</option>";
 			}
 
 			$placetDataArray=$subgroup->search_place($_POST["group_id"],0);
 			$placeHtml="<option value=''>所有职位</option>";
 			foreach ($placetDataArray as $placeData) {
-				$placeHtml.="<option value='{$placeData["place_id"]}'></option>";
+				$placeHtml.="<option value='{$placeData["place_id"]}'>{$placeData["place_name"]}</option>";
 			}
-			echo json_encode(array("subgroup"=>$subgroupHtml,"place"=>$placeHtml));
+			// echo "{'subgroup':'".$subgroupHtml."','place':'".$placeHtml."'}";
+			$json='{"subgroup":"'.$subgroupHtml.'","place":"'.$placeHtml.'"}';
+			// echo '{subgroup:"<option value="">所有分组</option>",place:"<option value="">所有职位</option><option value="5">"}';
+			echo $json;
+			// {'subgroup':'<option value=''>所有分组</option>','place':'<option value=''>所有职位</option><option value='5'></option>'}
+			// echo json_encode(array("subgroup"=>urlencode($subgroupHtml),"place"=>urlencode($placeHtml)));
 
 		}
 	}

@@ -206,10 +206,11 @@
 					dataType:"html",
 					success:function(data){
 						dataJson=JSON.parse(data)
-						// alert(dataJson.subgroup)
+
+						// alert(dataJson["subgroup"])
 						// alert(data.subgroup.replace("\\",""))
-						$("select[name='user_subgroup']").html(dataJson.subgroup)
-						$("select[name='user_place']").html(dataJson.place)
+						$("select[name='user_subgroup']").html(dataJson["subgroup"])
+						$("select[name='user_place']").html(dataJson["place"])
 					}
 				})
 			})
