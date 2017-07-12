@@ -186,17 +186,17 @@
 				createUser("quick-form")
 			})
 			//改变分组
-			$("select[name='user_group']").on("change",function(){
-				$.ajax({
-					url:"{:U('show_subgroup')}",
-					type:"post",
-					data:{"group_id":$(this).val()},
-					datatype:"html",
-					success:function(data){
-						$("select[name='user_subgroup']").html(data)
-					}
-				})
-			})
+			// $("select[name='user_group']").on("change",function(){
+			// 	$.ajax({
+			// 		url:"{:U('show_subgroup')}",
+			// 		type:"post",
+			// 		data:{"group_id":$(this).val()},
+			// 		datatype:"html",
+			// 		success:function(data){
+			// 			$("select[name='user_subgroup']").html(data)
+			// 		}
+			// 	})
+			// })
 			//改变分组
 			$("select[name='user_group']").on("change",function(){
 				$.ajax({
@@ -216,14 +216,13 @@
 			})
 			//改变职位
 			$("select[name='user_subgroup']").on("change",function(){
-				alert($("select[name='user_group']").find("select option:selected").val())
 				$.ajax({
 					url:"{:U('show_place')}",
 					type:"post",
-					data:{"group_id":$("select[name='user_group']").val(),"subgroup_id":$(this).val()},
-					dataType:"JSON",
+					data:{"group_id":$(this).parents(".form-group").prev().find("select").val(),"subgroup_id":$(this).val()},
+					dataType:"html",
 					success:function(data){
-						$("select[name='user_place']").html(data.place)
+						$("select[name='user_place']").html(data)
 					}
 				})
 			})
@@ -269,4 +268,5 @@
 			}
 
 		}
+		
 	</script>

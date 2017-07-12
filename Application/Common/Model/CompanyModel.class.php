@@ -1,107 +1,89 @@
 <?php
+/**
+ * 公司管理模型
+ * @Author: vition
+ * @Email:369709991@qq.com
+ * @Date:   2017-06-29 18:48:50
+ * @Last Modified by:   vition
+ * @Last Modified time: 2017-07-12 10:37:21
+ */
 namespace Common\Model;
 use Think\Model;
 class CompanyModel extends Model {
-	protected $trueTableName = 'oa_config'; 
-	protected $fields = array('config_id', 'config_class','config_key','config_value','_pk'=>'config_id','_autoinc' => true);
-	protected $class=array();
+	protected $trueTableName = 'oa_company'; 
+	protected $fields = array('company_id', 'company_name');
 
 	/**
 	*初始化值
 	*/
 	function _initialize(){
-		$this->class[0]['config_class']='company';
-		$this->where($this->class);
+		// $this->table("oa_company");	
 	}
 	/**
-	* 查询oa_config表中company的数据，默认查所有
-	* @start limit的起始位置
-	* @limit limit的条数
-	* 当只有一个参数的时候默认查询条数
-	*/
-	function select_company($start="",$limit=""){
+	 * [查询公司名列表]
+	 * @param  string $start [起始值]
+	 * @param  string $limit [限制条数]
+	 * @return [type]        [上述两个参数都为空的时候，默认查询所有；$start存在而$limit为空的时候，查询条数；两个参数都存在则查询指定起始和限制条数]
+	 */
+	function search_company($start="",$limit=""){
 		
-		// $this->class["config_class"]="company";
 		if($start=="" && $limit==""){
 			return $companyData=$this->select();
-			 // return $this->getLastSql();
 		}else if($start!="" && $limit==""){
 			return $companyData=$this->limit("{$start}")->select();
 		}else{
 			return $companyData=$this->limit("{$start},{$limit}")->select();
 		}
-		
+		return $this->getLastSql();	
 	}
 	/**
-	* 查询指定的company
-	* @company_key 要查询的config_key
-	* @company_name 默认值为空，如果当此参数不为空的时候company_key 参数失效，即通过company_name查company_key
-	*/
-	function find_company($company_key,$company_name=""){
+	 * [查找指定的公司名]
+	 * @param  [type] $company_id   [公司id]
+	 * @param  string $company_name [公司名，如果这个参数存在，那么第一个参数失效，意思为通过公司名查id]
+	 * @return [type]               [只返回一条记录]
+	 */
+	function find_company($company_id,$company_name=""){
 		if($company_name!=""){
-			$condition['config_value']=$company_name;
+			$condition['company_name']=$company_name;
 			return $this->where($condition)->find();
-			// return $this->getLastSql();
 		}else{
-			$condition['config_key']=$company_key;
+			$condition['company_id']=$company_id;
 			return $this->where($condition)->find();
-			// return $this->getLastSql();
 		}
 
 	}
 	/**
-	* 更新指定company名
-	* @company_key 要更新的company key
-	* @company_name 新的company name
-	*/
-	function set_company($company_key,$company_name){
+	 * 修改公司名
+	 * @param [type] $company_id   [指定的公司id]
+	 * @param [type] $company_name [修改后的公司名]
+	 */
+	function set_company($company_id,$company_name){
 		if($this->find_company(0,$company_name)==""){
-			return $this->where(array("config_key"=>$company_key))->save(array("config_value"=>$company_name));
+			return $this->where(array("company_id"=>$company_id))->save(array("company_name"=>$company_name));
 		}else{
 			return "公司名已存在";
 		}
-		// 
 	}
 
 	/**
-	* 新增company
-	* @company_name 新增的company name 
-	*/
+	 * 新增公司名
+	 * @param [type] $company_name 新增的名字
+	 */
 	function add_company($company_name){
 
 		if($this->find_company(0,$company_name)==""){
-			// return $this->new_key();
-			return $this->add(array("config_class"=>"company","config_key"=>$this->new_key(),"config_value"=>$company_name));
+			return $this->add(array("company_name"=>$company_name));
 		}else{
 			return "公司名已存在";
 		}
 	}
-	/**
-	* 生成新的key
-	*/
-	protected function new_key(){
-		return $this->field("config_key")->order("config_key DESC")->find()["config_key"]+1;
-	}
-	/**
-	* 删除company
-	* @company_key 要删除的company_key
-	*/
-	function del_company($company_key){
-		return $this->where(array("config_key"=>$company_key))->delete();
-	}
-	/**
-	* 根据group id查分组
-	* @group_id 要查找的gorup id
-	*/
-	function select_subgroup($group_id){
-		return $this->table($this->trueTableName." g")->join("oa_subgroup s on g.group_id=s.subgroup_group")->where("g.group_id='{$group_id}'")->select();
-	}
 
 	/**
-	* 根据group id查职位
-	* @group_id 要查找的gorup id
-	*/
-	function select_place($group_id){
-		return $this->table($this->trueTableName." g")->join("oa_place p on g.group_id=p.place_group")->where("g.group_id='{$group_id}'")->select();
+	 * 删除指定的公司
+	 * @param  [type] $company_id [指定的公司名]
+	 * @return [type]             
+	 */
+	function del_company($company_id){
+		return $this->where(array("company_id"=>$company_id))->delete();
 	}
 }

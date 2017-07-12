@@ -2,53 +2,57 @@
 /**
  * @Author: vition
  * @Email:369709991@qq.com
- * @Date:   2017-07-07 10:16:00
+ * @Date:   2017-07-11 16:04:09
  * @Last Modified by:   vition
- * @Last Modified time: 2017-07-07 17:05:14
+ * @Last Modified time: 2017-07-11 16:44:05
  */
 namespace Common\Model;
 use Think\Model;
+/**
+ * 整合所有基本的信息管理
+ */
 class InfoModel extends Model{
-		protected $trueTableName = 'oa_config'; 
-		protected $fields = array('group_id', 'group_name', 'subgroup_id','subgroup_name','subgroup_group','place_id','place_name','place_group','place_subgroup','place_manager','role_id','role_name','role_upper');
-		/*配置方法*/
+	protected $trueTableName = 'oa_config';
+	// protected $fields = array('config_id');	
+	/**
+	 * [company 公司管理模型]
+	 * @return [object] [返回CompanyModel对象]
+	 */
+	function company(){
+		$company=D("Company");
+		return $company;
+	}
 
-		/*公司方法*/
-		function search_company($start=0,$limit=0){
-			if($start==0 && $limit==0){
-				return $this->table("oa_config")->where("config_class='company'")->limit($start.",".$limit)->select();
-			}else{
-				return $this->table("oa_config")->where("config_class='company'")->select();
-			}
-			
-		}
-		/*部门方法*/
-		function search_group($start=0,$limit=0){
-			if($start==0 && $limit==0){
-				return $this->table("oa_group")->limit($start.",".$limit)->select();
-			}else{
-				return $this->table("oa_group")->select();
-			}
-		}
-		/*分组方法*/
-		function search_subgroup($group_id,$start=0,$limit=0){
-			if($start==0 && $limit==0){
-				return $this->table("oa_subgroup")->where("subgroup_group=".$group_id)->limit($start.",".$limit)->select();
-			}else{
-				return $this->table("oa_subgroup")->where("subgroup_group=".$group_id)->select();
-			}
-		}
-		
-		/*职位方法*/
-		function search_place($place_group,$place_subgroup){
-			return $this->table("oa_place")->where(array("place_group"=>$place_group,"place_subgroup"=>$place_subgroup))->select();
-		}
+	/**
+	 * [department 部门管理模型]
+	 * @return [object] [返回DepartmentModel]
+	 */
+	function department(){
+		return D("Department");
+	}
 
-		/*角色方法*/
-		function search_role($role_upper=0){
-			return $this->table("oa_role")->where(array("role_upper"=>$role_upper))->select();
-		}
-		function find_role($role_id){
-			return $this->table("oa_role")->where(array("role_id"=>$role_id))->find();
-		}
+	/**
+	 * [group 分组管理模型]
+	 * @return [object] [返回GroupModel]
+	 */
+	function group(){
+		return D("Group");
+	}
+
+	/**
+	 * [place 职位管理模型]
+	 * @return [object] [返回PlaceModel]
+	 */
+	function place(){
+		return D("Place");
+	}
+
+	/**
+	 * [role 角色管理模型]
+	 * @return [object] [返回RoleModel]
+	 */
+	function role(){
+		return D("Role");
+	}
+
 }

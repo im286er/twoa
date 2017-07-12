@@ -4,7 +4,7 @@
  * @Email:369709991@qq.com
  * @Date:   2017-07-06 13:52:07
  * @Last Modified by:   vition
- * @Last Modified time: 2017-07-07 15:46:34
+ * @Last Modified time: 2017-07-11 17:43:31
  */
 namespace Common\Model;
 use Think\Model;
@@ -18,7 +18,7 @@ class UserModel extends Model{
 	 * @return [type]            [description]
 	 */
 	function search_all($start,$limit,$dataArray=array()){
-		$tableObject=$this->field("DISTINCT(user_id),user_name,user_code,c.config_value user_company,g.group_name user_group,s.subgroup_name user_subgroup,p.place_name user_place,r.role_name user_role,user_director,user_phone,user_avatar,user_born,user_sex,user_lastlogin,user_entry,user_login,CASE user_state WHEN 0 THEN '未激活' WHEN 1 THEN '在职' ELSE '离职' END user_state")->join(array("left join oa_config c on u.user_company=c.config_key ","left join oa_group g on u.user_group=g.group_id","left join oa_place p on u.user_place=p.place_id","left join oa_subgroup s on s.subgroup_id= u.user_subgroup","left join oa_role r on u.user_role=r.role_id"))->limit($start.','.$limit);
+		$tableObject=$this->field("DISTINCT(user_id),user_name,user_code,c.config_value user_company,d.department_name user_department,g.group_name user_group,p.place_name user_place,r.role_name user_role,user_director,user_phone,user_avatar,user_born,user_sex,user_lastlogin,user_entry,user_login,CASE user_state WHEN 0 THEN '未激活' WHEN 1 THEN '在职' ELSE '离职' END user_state")->join(array("left join oa_company c on u.user_company=c.oa_company ","left join oa_department d on u.user_department=d.department_id","left join oa_place p on u.user_place=p.place_id","left join oa_group g on g.group_id= u.user_group","left join oa_role r on u.user_role=r.role_id"))->limit($start.','.$limit);
 		if (empty($dataArray)){
 			return $tableObject->select();
 		}else{
@@ -29,5 +29,14 @@ class UserModel extends Model{
 	}	 
 	function find_user($user_id){
 		return $this->where("user_id=".$user_id)->find();
+	}
+
+	/**
+	 * [get_new_code 获取最新的员工编码]
+	 * @return [type] [description]
+	 */
+	function get_new_code(){
+		$userData=$this->field("user_code")->order("user_code DESC")->find();
+		return $userData["user_code"]+1;
 	}
 }

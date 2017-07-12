@@ -32,7 +32,7 @@
 							<p class="text-warning blue">公司列表 <i class="ace-icon fa fa-list bigger-110"></i></p>
 							<select class="form-control" name="company"  multiple="multiple">
 							 	<volist name="user_companys" id="company">
-							 		<option class="ubase-select" data-input="company-data" value="{$company.config_key}">{$company.config_value}</option>
+							 		<option class="ubase-select" data-input="company-data" value="{$company.company_id}">{$company.company_name}</option>
 							 	</volist>
 							</select>
 						</div>
@@ -74,17 +74,17 @@
 					<div class="row">
 						<div class="col-sm-4 form-group">
 						<p class="text-warning blue">部门列表 <i class="ace-icon fa fa-list bigger-110"></i></p>
-							<select class="form-control" id="form" name="group" multiple="multiple" data-lower="subgroup-select-box">
-							 	<volist name="user_groups" id="groups">
-							 		<option class="ubase-select" data-input="groups-data" data-type="subgroup" value="{$groups.group_id}">{$groups.group_name}</option>
+							<select class="form-control" id="form" name="department" multiple="multiple" data-lower="group-select-box">
+							 	<volist name="user_department" id="department">
+							 		<option class="ubase-select" data-input="department-data" data-type="group" value="{$department.department_id}">{$department.department_name}</option>
 							 	</volist>
 							</select>
 						</div>
 						<div class="col-sm-4 form-group">
 						<p class="text-warning blue">分组列表 <i class="ace-icon fa fa-list bigger-110"></i></p>
-							<select class="form-control" id="subgroup-select-box" name="subgroup" multiple="multiple">
-							 	<volist name="user_subgroups" id="subgroups">
-							 		<!-- <option class="ubase-select" data-input="subgroups-data" value="{$groups.subgroup_id}">{$subgroups.subgroup_name}</option> -->
+							<select class="form-control" id="group-select-box" name="group" multiple="multiple">
+							 	<volist name="user_groups" id="groups">
+							 		<!-- <option class="ubase-select" data-input="subdepartment-data" value="{$groups.subgroup_id}">{$subgroups.subgroup_name}</option> -->
 							 	</volist>
 							</select>
 						</div>
@@ -92,18 +92,18 @@
 						<p class="text-warning blue">名称修改 <i class="ace-icon fa fa-edit bigger-110"></i></p>
 							<div class="form-group">
 								<div class="col-sm-12">
-									<input type="text" id="groups-data" data-val="" placeholder="部门名称" class="col-xs-10 col-sm-10">
+									<input type="text" id="department-data" data-val="" placeholder="部门名称" class="col-xs-10 col-sm-10">
 								</div>
 							</div>
 							<div class="form-group">
 								<div class="col-sm-12">
-									<input type="text" id="subgroup-data" data-val="" placeholder="分组名称" class="col-xs-10 col-sm-10">
+									<input type="text" id="group-data" data-val="" placeholder="分组名称" class="col-xs-10 col-sm-10">
 								</div>
 							</div>
 						</div>
 					</div>
 				</div>
-				<div class="widget-toolbox padding-8 clearfix" data-type="group" data-type2="subgroup" data-input="groups-data" data-input2="subgroup-data">
+				<div class="widget-toolbox padding-8 clearfix" data-type="department" data-type2="group" data-input="department-data" data-input2="group-data">
 					<button class="btn btn-xs btn-yellow add-button" >
 						<i class="ace-icon fa fa-plus-square bigger-110"></i>
 						<span class="bigger-110">新增部门</span>
@@ -145,17 +145,17 @@
 						<div class="row">
 							<div class="col-sm-3 form-group">
 							<p class="text-warning blue">部门列表 <i class="ace-icon fa fa-list bigger-110"></i></p>
-								<select class="form-control" name="group"  multiple="multiple" data-lower="place-select-box">
-								 	<volist name="user_groups" id="groups" >
-								 		<option  class="ubase-select" data-type="place" data-input="place-group-data" value="{$groups.group_id}">{$groups.group_name}</option>
+								<select class="form-control" name="department"  multiple="multiple" data-lower="place-select-box">
+								 	<volist name="user_department" id="department" >
+								 		<option  class="ubase-select" data-type="place" data-input="place-group-data" value="{$department.department_id}">{$department.department_name}</option>
 								 	</volist>
 								</select>
 							</div>
 							<div class="col-sm-3 form-group">
 							<p class="text-warning blue">分组列表 <i class="ace-icon fa fa-group bigger-110"></i></p>
-								<select class="form-control" name="subgroup" id="subgroup-select-box2" multiple="multiple">
+								<select class="form-control" name="group" id="group-select-box2" multiple="multiple">
 								 	<volist name="user_subgroups" id="subgroups">
-								 		<!-- <option class="ubase-select" data-input="subgroups-data" value="{$groups.subgroup_id}">{$subgroups.subgroup_name}</option> -->
+								 		<!-- <option class="ubase-select" data-input="subdepartment-data" value="{$groups.subgroup_id}">{$subgroups.subgroup_name}</option> -->
 								 	</volist>
 								</select>
 							</div>
@@ -176,7 +176,7 @@
 								</div>
 								<div class="form-group">
 									<div class="col-sm-12">
-										<input type="text" id="subgroup-data2" data-val="" placeholder="分组名称" class="col-xs-10 col-sm-10">
+										<input type="text" id="group-data2" data-val="" placeholder="分组名称" class="col-xs-10 col-sm-10">
 									</div>
 								</div>
 								<div class="form-group">
@@ -307,7 +307,7 @@
 				datas['id']=$(this).val()
 				if($(this).data("sub")!=undefined){
 					datas['sub']="true"
-					datas['group']=$(this).parents(".form-group").prev().find("select option:selected").val()
+					datas['department']=$(this).parents(".form-group").prev().find("select option:selected").val()
 					// alert($(this).parents(".form-group").prev().find("select option:selected").val())
 				}
 					$.ajax({
@@ -318,7 +318,7 @@
 						success:function(data){
 							if(datas['type']=="place"){
 								datajson=JSON.parse(data)
-								$("#subgroup-select-box2").html(datajson["subgroup"]);
+								$("#group-select-box2").html(datajson["group"]);
 								$("#place-select-box").html(datajson["place"]);
 							}else{
 								$("#"+lower).html(data);
@@ -340,8 +340,8 @@
 				datas["value"]=$("#"+$(this).parent().data("input2")).val()
 				var oSelect=$(this).parent().prev().find("select[name='"+$(this).parent().data("type")+"'] option:selected")
 
-				datas["group"]=oSelect.val()
-				if(datas["group"]==undefined){
+				datas["department"]=oSelect.val()
+				if(datas["department"]==undefined){
 					alert("别逗我，你都没选择！")
 					return false;
 				}
@@ -354,16 +354,16 @@
 			var selfele=$(this).parent().prev().find("select[name='"+datas["type"]+"']")
 			if(datas["value"]==""){
 
-				alert(datas["type"]+datas["value"]+"不能为空！"+datas["group"])
+				alert(datas["value"]+"不能为空！")
 				return false;
 			}
 			// alert(JSON.stringify(datas))
 			/*特殊职位*/
 			if(datas["type"]=="place"){
 
-				var gSelect=$(this).parent().prev().find("select[name='group'] option:selected")
-				datas["group"]=gSelect.val()
-				var sSelect=$(this).parent().prev().find("select[name='subgroup'] option:selected")
+				var gSelect=$(this).parent().prev().find("select[name='department'] option:selected")
+				datas["department"]=gSelect.val()
+				var sSelect=$(this).parent().prev().find("select[name='group'] option:selected")
 				datas["subgroup"]=sSelect.val()
 				selfele=$(this).parent().prev().find("select[name='place']")
 				// if(sSelect.val()==""){
@@ -420,14 +420,14 @@
 			if(thisBtnIndex>=3){
 				var thisType=$(this).parent().data("type2")
 				datas["value"]=$("#"+$(this).parent().data("input2")).val()
-				datas["group"]=$(this).parent().prev().find("select[name='"+$(this).parent().data("type")+"'] option:selected").val()
+				datas["department"]=$(this).parent().prev().find("select[name='"+$(this).parent().data("type")+"'] option:selected").val()
 			}else{
 				var thisType=$(this).parent().data("type")
 				if(thisType=="place"){
-					var gSelect=$(this).parent().prev().find("select[name='group'] option:selected")
-					datas["group"]=gSelect.val()
-					var sSelect=$(this).parent().prev().find("select[name='subgroup'] option:selected")
-					datas["subgroup"]=sSelect.val()
+					var gSelect=$(this).parent().prev().find("select[name='department'] option:selected")
+					datas["department"]=gSelect.val()
+					var sSelect=$(this).parent().prev().find("select[name='group'] option:selected")
+					datas["group"]=sSelect.val()
 					thisSel=$(this).parent().prev().find("select[name='place']")
 					if($("#place-manager").is(":checked")){
 						datas["manager"]=1
