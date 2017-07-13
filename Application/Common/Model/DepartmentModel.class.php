@@ -5,7 +5,7 @@
  * @Email:369709991@qq.com
  * @Date:   2017-07-11 12:15:19
  * @Last Modified by:   vition
- * @Last Modified time: 2017-07-13 15:53:32
+ * @Last Modified time: 2017-07-13 18:52:40
  */
 namespace Common\Model;
 use Think\Model;
@@ -20,13 +20,17 @@ class DepartmentModel extends Model{
 	 * @param  [type] $limit [限制条数]
 	 * @return [type]        [上述两个参数都为空的时候，默认查询所有；$start存在而$limit为空的时候，查询条数；两个参数都存在则查询指定起始和限制条数]
 	 */
-	function search_department($department_leader=0,$start="",$limit=""){
-		if($start=="" && $limit==""){
-			return $departmentData=$this->select();
-		}else if($start!="" && $limit==""){
-			return $departmentData=$this->limit("{$start}")->select();
+	function search_department($department_leader=0,$start=0,$limit=0,$condition=""){
+
+		if(is_array($condition)){
+			$this->where($condition);
+		}
+		if($start==0 && $limit==0){
+			return $this->select();
+		}else if($start>0 && $limit==0){
+			return $this->limit("{$start}")->select();
 		}else{
-			return $departmentData=$this->limit("{$start},{$limit}")->select();
+			return $this->limit("{$start},{$limit}")->select();
 		}	
 	}
 
@@ -93,4 +97,5 @@ class DepartmentModel extends Model{
 	function del_department($department_id){
 		return $this->where(array("department_id"=>$department_id))->delete();
 	}
+
 }

@@ -4,7 +4,7 @@
  * @Email:369709991@qq.com
  * @Date:   2017-07-11 15:01:41
  * @Last Modified by:   vition
- * @Last Modified time: 2017-07-13 16:56:52
+ * @Last Modified time: 2017-07-13 17:02:21
  */
 namespace Common\Model;
 use Think\Model;
@@ -95,7 +95,10 @@ class PlaceModel extends Model{
 	function del_place($place_id){
 		return $this->where(array("place_id"=>$place_id))->delete();
 	}
-
+	/**
+	 * [get_leader 获取属于管理层的职位]
+	 * @return [type] [description]
+	 */
 	function get_leader(){
 		return $this->join("left join oa_department d on d.department_id=place_department")->where("d.department_leader>0 and place_manager>0")->select();
 	}

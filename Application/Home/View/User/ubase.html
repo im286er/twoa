@@ -1,6 +1,9 @@
 <!-- <link rel="stylesheet" href="__PUBLIC__/components/bootstrap-datepicker/dist/css/bootstrap-datepicker3.css"> -->
 <style>
-
+	.extent-change{
+		cursor:pointer;
+	}
+	.extent-change i{font-size: 19px;}
 	/*input.ace.ace-switch.ace-switch-4[type="checkbox"]:checked + .user-sex-span::before{
 		background:#D15B47;
 	}
@@ -224,28 +227,32 @@
 			<div class="widget-body">
 					<div class="widget-main">
 						<div class="row">
-							<div class="col-sm-4 form-group">
+							<div class="col-sm-3 form-group">
 							<p class="text-warning blue">管理层职位 <i class="ace-icon fa fa-sitemap bigger-110"></i></p>
-								<select class="form-control"  multiple="multiple" name="role" data-lower="role-select-box">
-								 	<volist name="role_group" id="roleGroup">
-								 		<option class="ubase-select" data-type="role" data-input="role-group-data" value="{$roleGroup.role_id}">{$roleGroup.role_name}</option>
+								<select class="form-control"  multiple="multiple" name="leaders" >
+								 	<volist name="place_leader" id="pLeader">
+								 		<option class="place_leader" value="{$pLeader.place_id}">{$pLeader.place_name}</option>
 								 	</volist>
 								</select>
 							</div>
-							<div class="col-sm-4 form-group">
+							<div class="col-sm-3 form-group">
 							<p class="text-warning blue">可选部门 <i class="ace-icon fa fa-list-ul bigger-110"></i></p>
-								<select class="form-control" id="role-select-box"  multiple="multiple" name="subrole">
-								 	<volist name="role_user" id="roleUser">
-								 		<!-- <option class="ubase-select" data-input="role-data" value="{$place.place_id}">{$place.place_name}</option> -->
-								 	</volist>
+								<select class="form-control"  multiple="multiple" name="depart-optional">
 								</select>
 							</div>
-							<div class="col-sm-4 form-group">
+							<div class="col-sm-2 form-group" style="text-align: center;">
+								<p class="text-warning blue"> <i class="ace-icon fa fa-exchange bigger-110"></i> 操作</p>
+								<div class="col-sm-12 form-group">
+									<span class="extent-change label label-xlg label-primary arrowed arrowed-right arrowed-in" data-type="add"> 添加 <i class="ace-icon fa fa-angle-double-right"></i></span>
+								</div>
+								<p></p>
+								<div class="col-sm-12 form-group">
+									<span class="extent-change label label-xlg label-primary arrowed arrowed-left arrowed-in-right" data-type="reduce"><i class="ace-icon fa  fa-angle-double-left"></i> 减少 </span>
+								</div>
+							</div>
+							<div class="col-sm-3 form-group">
 							<p class="text-warning blue">已选部门 <i class="ace-icon fa fa-list-ol bigger-110"></i></p>
-								<select class="form-control" id="role-select-box"  multiple="multiple" name="subrole">
-								 	<volist name="role_user" id="roleUser">
-								 		<!-- <option class="ubase-select" data-input="role-data" value="{$place.place_id}">{$place.place_name}</option> -->
-								 	</volist>
+								<select class="form-control"  multiple="multiple" name="depart-selected">
 								</select>
 							</div>
 						</div>	
@@ -564,6 +571,39 @@
 				}
 			})
 		})
+		/**
+		 * [description]
+		 * @param  {[type]} ){		} [description]
+		 * @return {[type]}         [description]
+		 */
+		$("select[name='leaders']").on("click",".place_leader",function(){
+			datas={}
+			datas["type"]="extent"
+			datas["place_id"]=$(this).val();
+			$.ajax({
+				url:"{:U('change_extent')}",
+				type:"post",
+				data:datas,
+				datatype:"html",
+				success:function(data){
+					dataJson=JSON.parse(data)
+					$("select[name='depart-optional']").html(dataJson.optional)
+					$("select[name='depart-selected']").html(dataJson.selected)
+				}
+			})
+		})
+		$(".extent-change").on("click",function(){
+			datas={}
+			datas["type"]=$(this).data("type");
+			if(datas["type"]=="add"){
+				var selected= $("select[name='depart-optional'] option:selected")
+				alert(selected.length)
+			}else{
+
+			}
+		})
+		//
+		//
 	})
 
 </script>

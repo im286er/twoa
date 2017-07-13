@@ -4,7 +4,7 @@
  * @Email:369709991@qq.com
  * @Date:   2017-05-18 15:57:50
  * @Last Modified by:   vition
- * @Last Modified time: 2017-07-13 16:30:57
+ * @Last Modified time: 2017-07-13 18:52:27
  */
 
 /*用户功能{list|用户列表,create|新建用户,edit|编辑用户,ubase|基础信息,addinfo|添加信息}*/
@@ -57,8 +57,8 @@ class UserController extends AmangController {
 				$roleData=$this->baseInfo->role()->search_role();
 				$this->assign("role_group",$roleData);
 				if(I("html")=="ubase"){
-					$roleData=$this->baseInfo->role()->search_role();
-					$this->assign("role_group",$roleData);
+					$leaderData=$this->baseInfo->place()->get_leader();
+					$this->assign("place_leader",$leaderData);
 				}
 				break;
 			case 'edit':
@@ -448,9 +448,55 @@ class UserController extends AmangController {
 		$this->assign("companyArray",$company);
 		$this->assign("departmentArray",$department);
 		$this->assign("rolesArray",$roles);
-		
-
-		
 		echo $this->fetch("userinfo");
+	}
+
+	/**
+	 * [change_extent 改变管理层管辖的部门]
+	 * @return [type] [description]
+	 */
+	function change_extent(){
+		if(IS_POST){
+			switch ($_POST["type"]) {
+				case "extent":
+					$placeArray=$this->baseInfo->place()->find_place($_POST["place_id"]);
+
+					$optionalHtml="";
+					$selectedHtml="";
+
+					$condition=array();
+					$condition["department_leader"]=array("EQ",0);
+
+					
+					if(!empty($placeArray["place_extent"])){
+						$condition["department_id"]=array("IN",$placeArray["place_extent"]);
+						$selectedArray=$this->baseInfo->department()->search_department(0,0,0,$condition);
+						foreach ($selectedArray as $selecte) {
+							$selecteHtml.="<option value='{$selecte["department_id"]}'>{$selecte["department_name"]}</option>";
+						}
+						$condition["department_id"]=array("NOT IN",$placeArray["place_extent"]);
+					}
+
+					$optionalArray=$this->baseInfo->department()->search_department(0,0,0,$condition);
+					foreach ($optionalArray as $optional) {
+						$optionalHtml.="<option value='{$optional["department_id"]}'>{$optional["department_name"]}</option>";
+					}
+					// echo $this->baseInfo->department()->getLastSql();
+					echo '{"optional":"'.$optionalHtml.'","selected":"'.$selectedHtml.'"}';
+
+
+					break;
+				case 'add':
+					# code...
+					break;
+				
+				case 'reduce':
+
+					break;
+				default:
+					# code...
+					break;
+			}
+		}
 	}
 }
