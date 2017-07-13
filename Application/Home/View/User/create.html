@@ -19,8 +19,8 @@
 </div><!-- /.page-header -->
 
 <div class="row">
-	<div class="col-xs-12 col-sm-12 col-md-4">
-		<div class="widget-box">
+	<div class="col-xs-12 col-sm-12 col-md-4" id="new-user-box">
+		<!-- <div class="widget-box">
 			<div class="widget-header">
 				<h5 class="widget-title smaller"><i class="ace-icon fa fa-user bigger-110"></i>人员信息</h5>
 				<div class="widget-toolbar"></div>
@@ -55,13 +55,11 @@
 								</volist>
 								
 							</select>
-							<!-- <input  placeholder="所属公司" class="col-xs-10 col-sm-10" type="text"> -->
 						</div>
 					</div>
 					<div class="form-group">
 						<label class="col-sm-3 control-label no-padding-right" for="form-field-1"> 所属部门 </label>
 						<div class="col-sm-8">
-							<!-- <input  placeholder="所属部门" class="col-xs-10 col-sm-10" type="text"> -->
 							<select class="chosen-select form-control user-finfo" data-label="所属部门" name="user_group" data-placeholder="选择所属部门">
 								<volist name="user_groups" id="groups">
 									<option value="{$groups.group_id}">{$groups.group_name}</option>
@@ -79,7 +77,7 @@
 								</volist>
 							</select>
 
-							<!-- <input  placeholder="职位" name="user_place" data-label="职位" class="user-finfo col-xs-10 col-sm-10" type="text"> -->
+							<input  placeholder="职位" name="user_place" data-label="职位" class="user-finfo col-xs-10 col-sm-10" type="text">
 						</div>
 					</div>
 					<div class="form-group">
@@ -144,7 +142,7 @@
 					<span class="bigger-110">添加人员</span>
 				</button>
 			</div>
-		</div>
+		</div> -->
 	</div>
 	<div class="col-xs-12 col-sm-12 col-md-4">
 		<div class="widget-box">
@@ -184,62 +182,77 @@
 <script src="__PUBLIC__/components/bootstrap-datepicker/dist/js/bootstrap-datepicker.js"></script>
 	<script>
 		$(function(){
-			set_sex()
+			get_userinfo();
+			// set_sex()
 			//初始化后日期选择器
-			$('#id-date-born').datepicker({
-			   autoclose: true,
-			   todayHighlight: true
-			})
-			//初始化后日期选择器
-			$('#id-date-entry').datepicker({
-			   autoclose: true,
-			   todayHighlight: true
-			})
-			$("#user-sex-box").on("change",function(){
-				set_sex();
-			})
-			//提交新增人员资料
-			$("#submit-user").on("click",function(){
-				createUser("user-form")
+			// $('#id-date-born').datepicker({
+			//    autoclose: true,
+			//    todayHighlight: true
+			// })
+			// //初始化后日期选择器
+			// $('#id-date-entry').datepicker({
+			//    autoclose: true,
+			//    todayHighlight: true
+			// })
+			// $("#user-sex-box").on("change",function(){
+			// 	set_sex();
+			// })
+			// //提交新增人员资料
+			// $("#submit-user").on("click",function(){
+			// 	createUser("user-form")
 				
-			})
-			//快速添加
-			$("#quick-user").on("click",function(){
-				createUser("quick-form")
-			})
+			// })
+			// //快速添加
+			// $("#quick-user").on("click",function(){
+			// 	createUser("quick-form")
+			// })
 		})
 		//设置性别
-		function set_sex(){
-			if($("#user-sex-box").is(":checked")){
-				$("#user-sex-box").val("女")
-			}else{
-				$("#user-sex-box").val("男")
-			}
-		}
-		//新建用户
-		function createUser(formId){
-			datas=$("#"+formId).serializeArray()
-			post=true
-			$.each(datas,function(index, obj){
-				if(obj.name=="user_name" && obj.value==""){
-					alert("用户名不能为空");
-					post = false;
-				}
+		// function set_sex(){
+		// 	if($("#user-sex-box").is(":checked")){
+		// 		$("#user-sex-box").val("女")
+		// 	}else{
+		// 		$("#user-sex-box").val("男")
+		// 	}
+		// }
+		// //新建用户
+		// function createUser(formId){
+		// 	datas=$("#"+formId).serializeArray()
+		// 	post=true
+		// 	$.each(datas,function(index, obj){
+		// 		if(obj.name=="user_name" && obj.value==""){
+		// 			alert("用户名不能为空");
+		// 			post = false;
+		// 		}
 				
-			})
+		// 	})
 			
-			if(post==true){
-				$.ajax({
-					url:"{:U('create')}",
-					type:"post",
-					data:datas,
-					datatype:"html",
-					success:function(data){
-						if(parseInt(data)>0){
-							$(".user-finfo[name='user_code']").val(parseInt($(".user-finfo[name='user_code']").val())+1)
-						}
-					}
-				})
-			}
+		// 	if(post==true){
+		// 		$.ajax({
+		// 			url:"{:U('create')}",
+		// 			type:"post",
+		// 			data:datas,
+		// 			datatype:"html",
+		// 			success:function(data){
+		// 				if(parseInt(data)>0){
+		// 					$(".user-finfo[name='user_code']").val(parseInt($(".user-finfo[name='user_code']").val())+1)
+		// 				}
+		// 			}
+		// 		})
+		// 	}
+		// }
+		/**
+		 * [get_userinfo 获取userinfo的模板]
+		 * @return {[type]} [description]
+		 */
+		function get_userinfo(){
+			$.ajax({
+				url:"{:U('get_usertemplate')}",
+				type:"post",
+				datatype:"html",
+				success:function(data){
+					$("#new-user-box").html(data)
+				}
+			})
 		}
 	</script>

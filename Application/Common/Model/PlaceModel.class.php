@@ -4,7 +4,7 @@
  * @Email:369709991@qq.com
  * @Date:   2017-07-11 15:01:41
  * @Last Modified by:   vition
- * @Last Modified time: 2017-07-12 10:38:13
+ * @Last Modified time: 2017-07-13 16:56:52
  */
 namespace Common\Model;
 use Think\Model;
@@ -95,4 +95,9 @@ class PlaceModel extends Model{
 	function del_place($place_id){
 		return $this->where(array("place_id"=>$place_id))->delete();
 	}
+
+	function get_leader(){
+		return $this->join("left join oa_department d on d.department_id=place_department")->where("d.department_leader>0 and place_manager>0")->select();
+	}
 }
+//select p.place_name,p.place_id,p.place_extent from oa_place p left join oa_department d on d.department_id=p.place_department where d.department_leader>0 and p.place_manager>0;

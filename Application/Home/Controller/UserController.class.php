@@ -4,7 +4,7 @@
  * @Email:369709991@qq.com
  * @Date:   2017-05-18 15:57:50
  * @Last Modified by:   vition
- * @Last Modified time: 2017-07-12 13:50:38
+ * @Last Modified time: 2017-07-13 16:30:57
  */
 
 /*用户功能{list|用户列表,create|新建用户,edit|编辑用户,ubase|基础信息,addinfo|添加信息}*/
@@ -56,7 +56,10 @@ class UserController extends AmangController {
 
 				$roleData=$this->baseInfo->role()->search_role();
 				$this->assign("role_group",$roleData);
-
+				if(I("html")=="ubase"){
+					$roleData=$this->baseInfo->role()->search_role();
+					$this->assign("role_group",$roleData);
+				}
 				break;
 			case 'edit':
 				# code...
@@ -106,7 +109,7 @@ class UserController extends AmangController {
 					}
 					
 					foreach ($placeData as $placeArray) {
-						$palceHtml.="<option class='ubase-select' data-input='place-data' data-manager='{$placeArray["place_manager"]}' value='{$placeArray["place_id"]}'>{$placeArray["place_name"]}</option>";
+						$palceHtml.="<option class='ubase-select' data-input='place-data' data-checked='{$placeArray["place_manager"]}' value='{$placeArray["place_id"]}'>{$placeArray["place_name"]}</option>";
 					}
 					if(!isset($_POST["sub"])){
 						$sgHtml="";
@@ -161,10 +164,10 @@ class UserController extends AmangController {
 					echo json_encode($jsonData);
 				break;
 				case "department"://新增部门
-					$departmentData=$this->baseInfo->department()->add_department($_POST['value']);
+					$departmentData=$this->baseInfo->department()->add_department($_POST['value'],$_POST['checked']);
 					if($departmentData>0){
 						$newResult=$this->baseInfo->department()->find_department(0,$_POST['value']);
-						$jsonData=array("msg"=>"success","option"=>"<option class='ubase-select' data-input='department-data' data-type='group' value='{$newResult["department_id"]}'>{$newResult["department_name"]}</option>");
+						$jsonData=array("msg"=>"success","option"=>"<option class='ubase-select' data-input='department-data' data-type='group' data-checked='{$newResult["department_leader"]}' value='{$newResult["department_id"]}'>{$newResult["department_name"]}</option>");
 					}else{
 						$jsonData=array("msg"=>$departmentData);
 					}
@@ -184,14 +187,14 @@ class UserController extends AmangController {
 				case "place":
 
 					if(isset($_POST["subgroup"])){
-						$addResult=$this->baseInfo->place()->add_place($_POST["department"],$_POST["value"],$_POST["manager"],$_POST["subgroup"]);
+						$addResult=$this->baseInfo->place()->add_place($_POST["department"],$_POST["value"],$_POST["checked"],$_POST["subgroup"]);
 
 					}else{
-						$addResult=$this->baseInfo->place()->add_place($_POST["department"],$_POST["value"],$_POST["manager"]);
+						$addResult=$this->baseInfo->place()->add_place($_POST["department"],$_POST["value"],$_POST["checked"]);
 					}
 					if($addResult>0){
 						$placeData=$this->baseInfo->place()->find_place($addResult);
-						$jsonData=array("msg"=>"success","option"=>"<option class='ubase-select' data-input='place-data' data-manager='{$placeData["place_manager"]}' value='{$placeData["place_id"]}'>{$placeData["place_name"]}</option>");
+						$jsonData=array("msg"=>"success","option"=>"<option class='ubase-select' data-input='place-data' data-checked='{$placeData["place_manager"]}' value='{$placeData["place_id"]}'>{$placeData["place_name"]}</option>");
 					}else{
 						$jsonData=array("msg"=>$addResult);
 					}
@@ -225,6 +228,7 @@ class UserController extends AmangController {
 	//更新信息
 	public function updateinfo(){
 		if(IS_POST){
+
 			switch ($_POST['type']) {
 				case "company":
 					$resultData=$this->baseInfo->company()->set_company($_POST["key"],$_POST["value"]);
@@ -236,7 +240,7 @@ class UserController extends AmangController {
 				break;
 				case "department": case "group":
 					if($_POST["type"]=="department"){
-						$resultData=$this->baseInfo->department()->set_department($_POST["key"],$_POST["value"]);
+						$resultData=$this->baseInfo->department()->set_department($_POST["key"],$_POST["value"],$_POST['checked']);
 					}else{
 						$resultData=$this->baseInfo->group()->set_group($_POST["key"],$_POST["value"],$_POST["department"]);
 					}
@@ -250,7 +254,7 @@ class UserController extends AmangController {
 					// print_r($_POST);
 
 					$group=isset($_POST["group"])?$_POST["group"]:0;
-					$resultData = $this->baseInfo->place()->set_place($_POST["key"],$_POST["department"],$_POST["value"],$_POST["manager"],$group);
+					$resultData = $this->baseInfo->place()->set_place($_POST["key"],$_POST["department"],$_POST["value"],$_POST["checked"],$group);
 
 					if($resultData>0){
 						echo "success";
@@ -342,80 +346,111 @@ class UserController extends AmangController {
 		$userDataArray=$user->search_all($Page->firstRow,$Page->listRows,$condition);
 		$userHtml="";
 		foreach ($userDataArray as $userData) {
-			if($userData["user_state"]=="在职"){
-				$button='<button class="btn btn-xs btn-info user-edit" data-toggle="modal" data-target="#userModal"><i class="ace-icon fa fa-pencil bigger-120"></i></button><button class="btn btn-xs btn-success" disabled="disabled"><i class="ace-icon fa fa-check-circle bigger-120"></i></button><button class="btn btn-xs btn-warning"><i class="ace-icon fa fa-question-circle bigger-120"></i></button><button class="btn btn-xs btn-danger"><i class="ace-icon fa fa-times-circle bigger-120"></i></button>';
-			}else if($userData["user_state"]=="未激活"){
-				$button='<button class="btn btn-xs btn-info user-edit" data-toggle="modal" data-target="#userModal"><i class="ace-icon fa fa-pencil bigger-120"></i></button><button class="btn btn-xs btn-success" ><i class="ace-icon fa fa-check-circle bigger-120"></i></button><button class="btn btn-xs btn-warning" disabled="disabled"><i class="ace-icon fa fa-question-circle bigger-120"></i></button><button class="btn btn-xs btn-danger"><i class="ace-icon fa fa-times-circle bigger-120"></i></button>';
-			}else{
-				$button='<button class="btn btn-xs btn-info user-edit" data-toggle="modal" data-target="#userModal"><i class="ace-icon fa fa-pencil bigger-120"></i></button><button class="btn btn-xs btn-success"><i class="ace-icon fa fa-check-circle bigger-120"></i></button><button class="btn btn-xs btn-warning"><i class="ace-icon fa fa-question-circle bigger-120"></i></button><button class="btn btn-xs btn-danger" disabled="disabled"><i class="ace-icon fa fa-times-circle bigger-120"></i></button>';
-			}
-		 	$userHtml.='<tr><td><label class="pos-rel"><input class="ace" type="checkbox"><span class="lbl"></span></label></td><td>'.$userData["user_name"].'</td><td>'.$userData["user_code"].'</td><td>'.$userData["user_company"].'</td><td>'.$userData["user_group"].'</td><td>'.$userData["user_subgroup"].'</td><td>'.$userData["user_role"].'</td><td>'.$userData["user_sex"].'</td><td>'.$userData["user_entry"].'</td><td>'.$userData["user_born"].'</td><td>'.$userData["user_state"].'</td><td><div class="hidden-sm hidden-xs btn-group user-control" data-userid="'.$userData["user_id"].'">'.$button.'</div></td></tr>';
+			$state=array("","","");
+			$state[$userData["user_state"]]='disabled="disabled"';
+			$this->assign("state",$state);
+			$this->assign("userData",$userData);
+			$userListHtml.=$this->fetch("user/html/user_list");
 		 } 
 
-		echo json_encode(array("userhtml"=>$userHtml,"pagehtml"=>$pageShow)) ;
+		echo json_encode(array("userhtml"=>$userListHtml,"pagehtml"=>$pageShow)) ;
 		// print_r($userData);
 	}
 	//显示分组
-	function show_subgroup(){
+	function show_group(){
 		if(IS_POST){
 
-			$resultDataArray=$this->baseInfo->subgroup()->search_group($_POST["group_id"]);
-			$subgroupHtml="<option value=''>所有分组</option>";
+			$resultDataArray=$this->baseInfo->group()->search_group($_POST["group_id"]);
+			$subgroupHtml="<option value='0'>所有分组</option>";
 			foreach ($resultDataArray as $resultData) {
-				$subgroupHtml.="<option value='{$resultData["subgroup_id"]}'>{$resultData["subgroup_name"]}</option>";
+				$subgroupHtml.="<option value='{$resultData["group_id"]}'>{$resultData["group_name"]}</option>";
 			}
 
 			$placetDataArray=$this->baseInfo->place()->search_place($_POST["group_id"],0);
-			$placeHtml="<option value=''>所有职位</option>";
+			$placeHtml="<option value='0'>所有职位</option>";
 			foreach ($placetDataArray as $placeData) {
 				$placeHtml.="<option value='{$placeData["place_id"]}'>{$placeData["place_name"]}</option>";
 			}
-			// echo "{'subgroup':'".$subgroupHtml."','place':'".$placeHtml."'}";
-			$json='{"subgroup":"'.$subgroupHtml.'","place":"'.$placeHtml.'"}';
-			// echo '{subgroup:"<option value="">所有分组</option>",place:"<option value="">所有职位</option><option value="5">"}';
+
+			$manager=$this->user->get_manager($_POST["group_id"]);
+			$json='{"group":"'.$subgroupHtml.'","place":"'.$placeHtml.'","manager":"'.$manager.'"}';
+
 			echo $json;
-			// {'subgroup':'<option value=''>所有分组</option>','place':'<option value=''>所有职位</option><option value='5'></option>'}
-			// echo json_encode(array("subgroup"=>urlencode($subgroupHtml),"place"=>urlencode($placeHtml)));
+
 
 		}
 	}
+	/**
+	 * [show_place 显示职位]
+	 * @return [type] [description]
+	 */
 	function show_place(){
 		if(IS_POST){
-			$subgroup=D("Info");
-			$placetDataArray=$subgroup->search_place($_POST["group_id"],$_POST["subgroup_id"]);
+			$placetDataArray=$this->baseInfo->place()->search_place($_POST["department_id"],$_POST["group_id"]);
 
-			$placeHtml='<option value="">所有职位</option>';
+			$placeHtml="<option value='0'>所有职位</option>";
 			foreach ($placetDataArray as $placeData) {
-				$placeHtml.='<option value="'.$placeData["place_id"].'">'.$placeData["place_name"].'</option>';
+				$placeHtml.="<option value='{$placeData["place_id"]}'>{$placeData["place_name"]}</option>";
 			}
 
-			echo $placeHtml;
+			$manager=$this->user->get_manager($_POST["department_id"],$_POST["group_id"]);
+
+			$json='{"place":"'.$placeHtml.'","manager":"'.$manager.'"}';
+			echo $json;
+		}
+	}
+	/**
+	 * [show_role description]
+	 * @return [type] [description]
+	 */
+	function show_role(){
+		if(IS_POST){
+			$roleDataArray=$this->baseInfo->role()->search_role($_POST["role_upper"]);
+			$roleHtml='<option value="0">所有角色</option>';
+			foreach ($roleDataArray as $roleData) {
+				$roleHtml.='<option value="'.$roleData["role_id"].'">'.$roleData["role_name"].'</option>';
+			}
+
+			echo $roleHtml;
 		}
 	}
 	//取用户模板
 	function get_usertemplate(){
 		if(IS_POST){
 			$user=D("User");
-			$resultData=$user->find_user($_POST["user_id"]);
+			$company=$this->baseInfo->company()->search_company();
+			$department=$this->baseInfo->department()->search_department();
+			$roles=$this->baseInfo->role()->search_role();
+			if(isset($_POST["user_id"])){
+				$resultData=$user->find_user($_POST["user_id"]);
+				$this->assign("userinfo",$resultData);
+				$add="false";
+			}else{
+				$add="true";
+				$newcode=$user->get_new_code();	
+				$this->assign("newcode",$newcode);
+				$resultData["user_department"]=1;
+				$resultData["user_group"]=1;
+				$resultData["user_role"]=1;
+				$thisRole["role_upper"]=1;
+			}
 		}
 
-		$company=$this->baseInfo->company()->search_company();
-		$department=$this->baseInfo->department()->search_department();
-		$group=$this->baseInfo->group()->search_group($resultData["user_group"]);
-		$place=$this->baseInfo->place()->search_place($resultData["user_group"],$resultData["user_subgroup"]);
-		$roles=$this->baseInfo->role()->search_role();
+		$group=$this->baseInfo->group()->search_group($resultData["user_department"]);
+		$place=$this->baseInfo->place()->search_place($resultData["user_department"],$resultData["user_group"]);
 		$thisRole=$this->baseInfo->role()->find_role($resultData["user_role"]);
-		$role=$this->baseInfo->role->search_role($thisRole["role_upper"]);
-		$this->assign("companyArray",$company);
-		$this->assign("groupArray",$department);
-		$this->assign("subgroupArray",$group);
+		$role=$this->baseInfo->role()->search_role($thisRole["role_upper"]);
+		$this->assign("groupArray",$group);
 		$this->assign("placeArray",$place);
-		$this->assign("rolesArray",$roles);
 		$this->assign("roleArray",$role);
+		$this->assign("add",$add);
+		
+		$this->assign("companyArray",$company);
+		$this->assign("departmentArray",$department);
+		$this->assign("rolesArray",$roles);
+		
 
-
-
-		$this->assign("userinfo",$resultData);
+		
 		echo $this->fetch("userinfo");
 	}
 }

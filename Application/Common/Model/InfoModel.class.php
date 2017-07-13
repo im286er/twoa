@@ -4,7 +4,7 @@
  * @Email:369709991@qq.com
  * @Date:   2017-07-11 16:04:09
  * @Last Modified by:   vition
- * @Last Modified time: 2017-07-11 16:44:05
+ * @Last Modified time: 2017-07-13 12:07:27
  */
 namespace Common\Model;
 use Think\Model;
@@ -54,5 +54,14 @@ class InfoModel extends Model{
 	function role(){
 		return D("Role");
 	}
+
+	/**
+	 * [user 用户管理模型]
+	 * @return [type] [返回UserModel]
+	 */
+	function user(){
+		return D("User");
+	}
+
 
 }

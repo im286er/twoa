@@ -76,7 +76,7 @@
 						<p class="text-warning blue">部门列表 <i class="ace-icon fa fa-list bigger-110"></i></p>
 							<select class="form-control" id="form" name="department" multiple="multiple" data-lower="group-select-box">
 							 	<volist name="user_department" id="department">
-							 		<option class="ubase-select" data-input="department-data" data-type="group" value="{$department.department_id}">{$department.department_name}</option>
+							 		<option class="ubase-select" data-input="department-data" data-checked="{$department.department_leader}" data-type="group" value="{$department.department_id}">{$department.department_name}</option>
 							 	</volist>
 							</select>
 						</div>
@@ -92,7 +92,11 @@
 						<p class="text-warning blue">名称修改 <i class="ace-icon fa fa-edit bigger-110"></i></p>
 							<div class="form-group">
 								<div class="col-sm-12">
-									<input type="text" id="department-data" data-val="" placeholder="部门名称" class="col-xs-10 col-sm-10">
+									<span class="input-icon input-icon-right col-xs-10 col-sm-10" style="padding:0;">
+										<input type="text" id="department-data" data-val="" class="form-control" placeholder="部门名称">
+										<i class="ace-icon" title="打勾表示该分组为高级管理层"><input type="checkbox" id="department-leader" style="width:20px;height:20px"/></i>
+									</span>
+									<!-- <input type="text" id="department-data" data-val="" placeholder="部门名称" class="col-xs-10 col-sm-10"> -->
 								</div>
 							</div>
 							<div class="form-group">
@@ -209,6 +213,48 @@
 		</div>
 	</div>
 </div>
+<!-- 管理层分配部门开始 -->
+<div class="row">
+	<div class="col-xs-12 col-sm-12 col-md-12">
+		<div class="widget-box">
+			<div class="widget-header">
+				<h5 class="widget-title smaller"><i class="ace-icon fa fa-cogs bigger-110"></i>管理层分配</h5>
+				<div class="widget-toolbar"></div>
+			</div>
+			<div class="widget-body">
+					<div class="widget-main">
+						<div class="row">
+							<div class="col-sm-4 form-group">
+							<p class="text-warning blue">管理层职位 <i class="ace-icon fa fa-sitemap bigger-110"></i></p>
+								<select class="form-control"  multiple="multiple" name="role" data-lower="role-select-box">
+								 	<volist name="role_group" id="roleGroup">
+								 		<option class="ubase-select" data-type="role" data-input="role-group-data" value="{$roleGroup.role_id}">{$roleGroup.role_name}</option>
+								 	</volist>
+								</select>
+							</div>
+							<div class="col-sm-4 form-group">
+							<p class="text-warning blue">可选部门 <i class="ace-icon fa fa-list-ul bigger-110"></i></p>
+								<select class="form-control" id="role-select-box"  multiple="multiple" name="subrole">
+								 	<volist name="role_user" id="roleUser">
+								 		<!-- <option class="ubase-select" data-input="role-data" value="{$place.place_id}">{$place.place_name}</option> -->
+								 	</volist>
+								</select>
+							</div>
+							<div class="col-sm-4 form-group">
+							<p class="text-warning blue">已选部门 <i class="ace-icon fa fa-list-ol bigger-110"></i></p>
+								<select class="form-control" id="role-select-box"  multiple="multiple" name="subrole">
+								 	<volist name="role_user" id="roleUser">
+								 		<!-- <option class="ubase-select" data-input="role-data" value="{$place.place_id}">{$place.place_name}</option> -->
+								 	</volist>
+								</select>
+							</div>
+						</div>	
+					</div>
+			</div>
+		</div>
+	</div>
+</div>
+<!-- 管理层分配部门结束 -->
 <div class="row">
 	<div class="col-xs-12 col-sm-12 col-md-12">
 		<div class="widget-box">
@@ -291,12 +337,16 @@
 			$("#"+tid).val($(this).text())
 			$("#"+tid).data('val',$(this).val())
 			if(tid=="place-data"){
-				if($(this).data("manager")==1){
-					// alert("哎哟，主管/组长级")
+				if($(this).data("checked")==1){
 					$("#place-manager").prop("checked",true)
 				}else{
-					// alert("艾玛，普通员工")
 					$("#place-manager").prop("checked",false)
+				}	
+			}else if(tid=="department-data"){
+				if($(this).data("checked")==1){
+					$("#department-leader").prop("checked",true)
+				}else{
+					$("#department-leader").prop("checked",false)
 				}	
 			}
 			if($(this).data("type")!=undefined){
@@ -372,9 +422,9 @@
 				// 	selfele=$(this).parent().prev().find("select[name='subgroup']")
 				// }
 				if($("#place-manager").is(":checked")){
-					datas["manager"]=1
+					datas["checked"]=1
 				}else{
-					datas["manager"]=0
+					datas["checked"]=0
 				}
 			}else if(datas["type"]=="role"){
 				var rolegroup=$(this).parent().prev().find("select[name='role']")
@@ -385,13 +435,14 @@
 				}else{
 					selfele=rolegroup
 				}
-				// if(role.find("option:selected").val()==undefined){
-				// 	selfele=rolegroup
-				// }else{
-				// 	selfele=role
-				// }
-				// alert(rolegroup.find("option:selected").val())
 
+			}else if(datas["type"]=="department"){
+
+				if($("#department-leader").is(":checked")){
+					datas["checked"]=1
+				}else{
+					datas["checked"]=0
+				}
 			}
 			$.ajax({
 				url:"{:U('addinfo')}",
@@ -430,14 +481,21 @@
 					datas["group"]=sSelect.val()
 					thisSel=$(this).parent().prev().find("select[name='place']")
 					if($("#place-manager").is(":checked")){
-						datas["manager"]=1
+						datas["checked"]=1
 					}else{
-						datas["manager"]=0
+						datas["checked"]=0
+					}
+
+				}else if(thisType=="department"){
+
+					if($("#department-leader").is(":checked")){
+						datas["checked"]=1
+					}else{
+						datas["checked"]=0
 					}
 				}
 				datas["value"]=$("#"+$(this).parent().data("input")).val()
 			}
-
 			
 			var thisSel=$(this).parent().prev().find("select[name='"+thisType+"']")
 			var thisOpt=thisSel.find("option:selected").val()
@@ -460,6 +518,7 @@
 					success:function(data){
 						if(data=="success"){
 							thisSel.find("option:selected").text(datas["value"])
+							thisSel.find("option:selected").data("checked",datas["checked"])
 						}else{
 							alert(data)
 						}
