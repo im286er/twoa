@@ -4,7 +4,7 @@
  * @Email:369709991@qq.com
  * @Date:   2017-05-18 15:57:50
  * @Last Modified by:   vition
- * @Last Modified time: 2017-07-13 18:52:27
+ * @Last Modified time: 2017-07-14 11:55:49
  */
 
 /*用户功能{list|用户列表,create|新建用户,edit|编辑用户,ubase|基础信息,addinfo|添加信息}*/
@@ -472,7 +472,7 @@ class UserController extends AmangController {
 						$condition["department_id"]=array("IN",$placeArray["place_extent"]);
 						$selectedArray=$this->baseInfo->department()->search_department(0,0,0,$condition);
 						foreach ($selectedArray as $selecte) {
-							$selecteHtml.="<option value='{$selecte["department_id"]}'>{$selecte["department_name"]}</option>";
+							$selectedHtml.="<option value='{$selecte["department_id"]}'>{$selecte["department_name"]}</option>";
 						}
 						$condition["department_id"]=array("NOT IN",$placeArray["place_extent"]);
 					}
@@ -487,11 +487,15 @@ class UserController extends AmangController {
 
 					break;
 				case 'add':
+					// print_r($_POST);
+					$this->baseInfo->place()->add_extent($_POST["place_id"],$_POST["place_extent"]);
+					// echo $this->baseInfo->place()->getLastSql();
 					# code...
 					break;
 				
 				case 'reduce':
-
+					$this->baseInfo->place()->reduce_extent($_POST["place_id"],$_POST["place_extent"]);
+					// echo $this->baseInfo->place()->getLastSql();
 					break;
 				default:
 					# code...

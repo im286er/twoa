@@ -577,33 +577,68 @@
 		 * @return {[type]}         [description]
 		 */
 		$("select[name='leaders']").on("click",".place_leader",function(){
-			datas={}
-			datas["type"]="extent"
-			datas["place_id"]=$(this).val();
-			$.ajax({
-				url:"{:U('change_extent')}",
-				type:"post",
-				data:datas,
-				datatype:"html",
-				success:function(data){
-					dataJson=JSON.parse(data)
-					$("select[name='depart-optional']").html(dataJson.optional)
-					$("select[name='depart-selected']").html(dataJson.selected)
-				}
-			})
+			show_extent($(this).val())
 		})
 		$(".extent-change").on("click",function(){
 			datas={}
 			datas["type"]=$(this).data("type");
+			datas["place_extent"]=""
+
 			if(datas["type"]=="add"){
 				var selected= $("select[name='depart-optional'] option:selected")
-				alert(selected.length)
+				for (i=0;i<selected.length;i++) {
+					datas["place_extent"]+=selected.eq(i).val()+","
+				}
 			}else{
+				var selected= $("select[name='depart-selected'] option:selected")
+				var select= $("select[name='depart-selected'] option")
+				for (i=0;i<select.length;i++){
+					if(!select.eq(i).is(":selected")){
+						datas["place_extent"]+=select.eq(i).val()+","
+					}
+				}
 
 			}
+			if(selected.length>0){ 
+				datas["place_id"]=$("select[name='leaders'] option:selected").val()
+				$.ajax({
+					url:"{:U('change_extent')}",
+					type:"post",
+					data:datas,
+					datatype:"html",
+					success:function(data){
+						show_extent(datas["place_id"])
+					}
+				})
+			}else{
+				alert("请选择部门，按Ctrl可以多选")
+					return false;
+			}
+			
+
 		})
-		//
-		//
 	})
+
+	/**
+	 * [show_extent 显示管理层的管辖部门]
+	 * @param  {[type]} $readerId [管理层的place id]
+	 * @return {[type]}           [none]
+	 */
+	function show_extent($readerId){
+		datas={}
+		datas["type"]="extent"
+		datas["place_id"]=$readerId;
+		$.ajax({
+			url:"{:U('change_extent')}",
+			type:"post",
+			data:datas,
+			datatype:"html",
+			success:function(data){
+				dataJson=JSON.parse(data)
+				$("select[name='depart-optional']").html(dataJson.optional)
+				$("select[name='depart-selected']").html(dataJson.selected)
+			}
+		})
+	}
 
 </script>

@@ -4,14 +4,14 @@
  * @Email:369709991@qq.com
  * @Date:   2017-07-11 15:01:41
  * @Last Modified by:   vition
- * @Last Modified time: 2017-07-13 17:02:21
+ * @Last Modified time: 2017-07-14 11:57:35
  */
 namespace Common\Model;
 use Think\Model;
 
 class PlaceModel extends Model{
 	protected $trueTableName = 'oa_place'; 
-	protected $fields = array('place_id', 'place_name','place_department','place_group','place_manager');
+	protected $fields = array('place_id', 'place_name','place_department','place_group','place_manager','place_extent');
 
 	/**
 	 * [查询职位]
@@ -102,5 +102,24 @@ class PlaceModel extends Model{
 	function get_leader(){
 		return $this->join("left join oa_department d on d.department_id=place_department")->where("d.department_leader>0 and place_manager>0")->select();
 	}
+
+	/**
+	 * [add_extent 增加extent]
+	 * @param [type] $place_id      [指定的place id]
+	 * @param [type] $eplace_extent [需要新增的extent]
+	 */
+	function add_extent($place_id,$eplace_extent){
+		$map['place_extent'] = array("exp","concat ('{$eplace_extent}',place_extent)");
+		$this->where(array("place_id"=>$place_id))->save($map);
+	}
+
+	/**
+	 * [reduce_extent 减小extent]
+	 * @param  [type] $place_id     [指定的place id]
+	 * @param  [type] $place_extent [减少后的extent]
+	 * @return [type]               [none]
+	 */
+	function reduce_extent($place_id,$place_extent){
+		$this->where(array("place_id"=>$place_id))->save(array("place_extent"=>$place_extent));
+	}
 }
-//select p.place_name,p.place_id,p.place_extent from oa_place p left join oa_department d on d.department_id=p.place_department where d.department_leader>0 and p.place_manager>0;
