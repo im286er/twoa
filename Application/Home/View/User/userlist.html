@@ -10,7 +10,7 @@
 		</small>
 	</h1>
 </div><!-- /.page-header -->
-
+<div class="alert-box"></div>
 <div class="row">
 	<div class="col-sm-12 dataTables_wrapper">
 		<div class="row">
@@ -47,7 +47,7 @@
 
 						<div class="form-group">
 							<div class="col-sm-1">
-								<select name="user_group" class="form-control">
+								<select name="user_department" class="form-control">
 									<option value="">所有部门</option>
 									<volist name="departmentArray" id="department">
 										<option value="{$department.department_id}">{$department.department_name}</option>
@@ -55,7 +55,13 @@
 								</select>
 							</div>
 						</div>
-
+						<div class="form-group">
+							<div class="col-sm-1">
+								<select name="user_group" class="form-control">
+									<option value="">所有分组</option>
+								</select>
+							</div>
+						</div>
 						<div class="form-group">
 							<div class="col-sm-1">
 								<select name="user_sex" class="form-control">
@@ -101,12 +107,14 @@
 							<span class="lbl"></span>
 						</label>
 					</th>
+					<th class="center">用户名</th>
 					<th class="center">姓名</th>
 					<th class="center">编码</th>
 					<th class="center">公司</th>
 					<th class="center">部门</th>
 					<th class="center">分组</th>
 					<th class="center">职位</th>
+					<th class="center">上级</th>
 					<th class="center">角色</th>
 					<th class="center">性别</th>
 					<th class="center">入职</th>
@@ -180,20 +188,24 @@
 
 	<script>
 	jQuery(function($){
-		search_user()
+		search_user()//默认查询
 		$(".dataTables_wrapper").on("click",".paginate_button",search_user)
 		$(".search-btn").on("click",search_user)
 		$("#showlimit").on("change",search_user)
-		$("select[name='user_group']").on("change",function(){
+	
+		/*
+		 * 通过选择部门获取分组信息
+		 */
+		$("select[name='user_department']").on("change",function(){
 			datas={"group_id":$(this).val()}
 			$.ajax({
-				url:"{:U('show_subgroup')}",
+				url:"{:U('show_group')}",
 				type:"post",
 				dataType:"html",
 				data:datas,
 				success:function(data){
-					// alert($("select[name='user_group']").html())
-					$("select[name='user_subgroup']").html(data)
+					dataJson=JSON.parse(data)
+					$("select[name='user_group']").html(dataJson["group"])
 				}
 			})	
 		})
@@ -212,7 +224,29 @@
 				}
 			})
 		})
+
+		/*
+		 * 下列三条对员工状态进行修改
+		 */
+		$("#user-table").on("click",".user-active",function(){
+			var userid=$(this).parent().data("userid")
+			set_state(userid,'1')
+		})
+		$("#user-table").on("click",".user-inactive",function(){
+			var userid=$(this).parent().data("userid")
+
+			set_state(userid,'0')
+		})
+		$("#user-table").on("click",".user-quit",function(){
+			var userid=$(this).parent().data("userid")
+
+			set_state(userid,'2')
+		})
 	})
+
+	/*
+	 * 查询用户的信息
+	 */
 	function search_user(){
 		datas={}
 		datas["p"]=$(this).find("a").data("page")
@@ -229,5 +263,20 @@
 				$("#page-div").html(data["pagehtml"])
 			}
 		})	
+	}
+
+	function set_state(userId,userState){
+		$.ajax({
+			url:"{:U('con_user')}",
+			type:"post",
+			dataType:"html",
+			data:{"type":"state","user_id":userId,"user_state":userState},
+			success:function(data){
+				$(".alert-box").html(data)
+				$('.alert-box .alert-success').delay(3000).hide(0);
+				// $('.page-header').next(".alert-success").remove();
+				search_user()
+			}
+		})
 	}
 	</script>

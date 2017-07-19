@@ -4,7 +4,7 @@
  * @Email:369709991@qq.com
  * @Date:   2017-05-18 15:57:50
  * @Last Modified by:   vition
- * @Last Modified time: 2017-07-14 11:55:49
+ * @Last Modified time: 2017-07-19 14:00:53
  */
 
 /*用户功能{list|用户列表,create|新建用户,edit|编辑用户,ubase|基础信息,addinfo|添加信息}*/
@@ -15,8 +15,10 @@ class UserController extends AmangController {
 	protected $user;//用户模型
 	//重组gethtml方法
 	function _initialize(){
+		parent::_initialize();
 		$this->baseInfo=D("Info");
 		$this->user=D("User");
+		// parent::_initialize();
 	}
 	/**
 	 * [gethtml 重写gethtml方法]
@@ -69,26 +71,48 @@ class UserController extends AmangController {
 		}
 		parent::gethtml();
 	}
-	//新建用户
-	public function create(){
-
+	//用户新建和修改
+	public function con_user(){
 		if(IS_POST){
-
-			$userData=$_POST;
-			
+			$userData=$_POST["data"];
+			// $userId=$userData["user_id"];
+			// unset($userData["user_id"]);
 			if(empty($userData["user_passwd"])){
-				$userData["user_passwd"]=sha1("Aa1234567");//初始化密码
+				if($_POST["type"]=="add"){
+					$userData["user_passwd"]=sha1("Aa1234567");//初始化密码
+				}else{
+					unset($userData["user_passwd"]);
+				}
 			}else{
 				$userData["user_passwd"]=sha1($userData["user_passwd"]);//密码加密
 			}
-			if($userData["user_sex"]=="男"){
+			 if($userData["user_sex"]=="男"){
 				$userData["user_avatar"]="/assets/avatars/man.png";
 			}else if($userData["user_sex"]=="女"){
 				$userData["user_avatar"]="/assets/avatars/lady.png";
-			}	
-			$userData["user_quit"]="0000-00-00";
-			$result=$this->user->add($userData);
-			echo $result;
+			}
+
+			switch ($_POST["type"]) {
+				case 'add':
+					$this->user->add($userData);
+					break;
+				case 'update':
+					echo $this->user->set_user($userData["user_id"],$userData);
+					break;
+				case 'state':
+					$resultData=$this->user->set_state($_POST["user_id"],$_POST["user_state"]);
+					
+					if($resultData>0){
+						$content="成功改变用户状态";
+						$this->assign("content",$content);
+						echo $this->fetch("Common@alert/success");	
+					}
+					
+					break;
+				default:
+					# code...
+					break;
+			}
 		}
 	} 
 	//查看下级信息
@@ -372,8 +396,15 @@ class UserController extends AmangController {
 				$placeHtml.="<option value='{$placeData["place_id"]}'>{$placeData["place_name"]}</option>";
 			}
 
+			$directorArray=$this->baseInfo->user()->show_director($_POST["group_id"]);
+			$directorHtml="";
+			foreach ($directorArray as $directorData) {
+				$directorHtml.="<option value='{$directorData["user_code"]}'>{$directorData["user_name"]}</option>";
+			}
+
+			print_r($abcr);
 			$manager=$this->user->get_manager($_POST["group_id"]);
-			$json='{"group":"'.$subgroupHtml.'","place":"'.$placeHtml.'","manager":"'.$manager.'"}';
+			$json='{"group":"'.$subgroupHtml.'","place":"'.$placeHtml.'","manager":"'.$manager.'","director":"'.$directorHtml.'"}';
 
 			echo $json;
 
@@ -393,9 +424,16 @@ class UserController extends AmangController {
 				$placeHtml.="<option value='{$placeData["place_id"]}'>{$placeData["place_name"]}</option>";
 			}
 
+
 			$manager=$this->user->get_manager($_POST["department_id"],$_POST["group_id"]);
 
-			$json='{"place":"'.$placeHtml.'","manager":"'.$manager.'"}';
+			$directorArray=$this->baseInfo->user()->show_director($_POST["department_id"],false);
+			$directorHtml="";
+			foreach ($directorArray as $directorData) {
+				$directorHtml.="<option value='{$directorData["user_code"]}'>{$directorData["user_name"]}</option>";
+			}
+
+			$json='{"place":"'.$placeHtml.'","manager":"'.$manager.'","director":"'.$directorHtml.'"}';
 			echo $json;
 		}
 	}
@@ -425,6 +463,7 @@ class UserController extends AmangController {
 				$resultData=$user->find_user($_POST["user_id"]);
 				$this->assign("userinfo",$resultData);
 				$add="false";
+
 			}else{
 				$add="true";
 				$newcode=$user->get_new_code();	
@@ -433,6 +472,7 @@ class UserController extends AmangController {
 				$resultData["user_group"]=1;
 				$resultData["user_role"]=1;
 				$thisRole["role_upper"]=1;
+				
 			}
 		}
 
@@ -440,6 +480,7 @@ class UserController extends AmangController {
 		$place=$this->baseInfo->place()->search_place($resultData["user_department"],$resultData["user_group"]);
 		$thisRole=$this->baseInfo->role()->find_role($resultData["user_role"]);
 		$role=$this->baseInfo->role()->search_role($thisRole["role_upper"]);
+		$directorArray=$this->baseInfo->user()->show_director($resultData["user_department"],false);
 		$this->assign("groupArray",$group);
 		$this->assign("placeArray",$place);
 		$this->assign("roleArray",$role);
@@ -447,6 +488,8 @@ class UserController extends AmangController {
 		
 		$this->assign("companyArray",$company);
 		$this->assign("departmentArray",$department);
+		$this->assign("directorArray",$directorArray);
+
 		$this->assign("rolesArray",$roles);
 		echo $this->fetch("userinfo");
 	}
@@ -481,21 +524,16 @@ class UserController extends AmangController {
 					foreach ($optionalArray as $optional) {
 						$optionalHtml.="<option value='{$optional["department_id"]}'>{$optional["department_name"]}</option>";
 					}
-					// echo $this->baseInfo->department()->getLastSql();
 					echo '{"optional":"'.$optionalHtml.'","selected":"'.$selectedHtml.'"}';
 
 
 					break;
 				case 'add':
-					// print_r($_POST);
 					$this->baseInfo->place()->add_extent($_POST["place_id"],$_POST["place_extent"]);
-					// echo $this->baseInfo->place()->getLastSql();
-					# code...
 					break;
 				
 				case 'reduce':
 					$this->baseInfo->place()->reduce_extent($_POST["place_id"],$_POST["place_extent"]);
-					// echo $this->baseInfo->place()->getLastSql();
 					break;
 				default:
 					# code...
@@ -504,3 +542,5 @@ class UserController extends AmangController {
 		}
 	}
 }
+
+//select user_id,user_name,user_code from oa_user where user_place in (select place_id from oa_place where find_in_set(1,place_extent));

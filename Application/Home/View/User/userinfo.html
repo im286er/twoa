@@ -15,6 +15,7 @@
 	<div class="widget-body">
 		<div class="widget-main">
 			<form class="form-horizontal" id="user-form">
+				<input  name="user_id" class="user-finfo" type="hidden" value="{$userinfo.user_id|default='0'}">
 			<div class="form-group">
 				<label class="col-sm-3 control-label no-padding-right" for="form-field-1"> 姓名 </label>
 				<div class="col-sm-9">
@@ -103,8 +104,14 @@
 			</div>
 			<div class="form-group">
 				<label class="col-sm-3 control-label no-padding-right" for="form-field-1"> 上级主管 </label>
-				<div class="col-sm-9">
-					<input  placeholder="上级主管" name="user_director" data-label="上级主管" class="user-finfo col-xs-10 col-sm-10" type="text" value="{$userinfo.user_director|default=''}">
+				<div class="col-sm-8">
+					<select class="chosen-select form-control user-finfo" data-label="上级主管" name="user_director" data-placeholder="上级主管">
+						<volist name="directorArray" id="directorList">
+							<option value="{$directorList.user_code}">{$directorList.user_name}</option>
+						</volist>
+						<!-- <option value='{$userinfo["directorArray"]}'>{$userinfo["user_director"]}</option> -->
+					</select>
+					<!-- <input  placeholder="上级主管" name="user_director" data-label="上级主管" class="user-finfo col-xs-10 col-sm-10" type="text" value="{$userinfo.user_director|default=''}"> -->
 				</div>
 			</div>
 
@@ -125,7 +132,7 @@
 				<label class="col-sm-3 control-label no-padding-right" for="form-field-1"> 生日 </label>
 				<div class="col-sm-8">
 					<div class="input-group">
-						<input class="form-control date-picker user-finfo" data-label='生日' name="user_born" id="id-date-born" data-date-format="yyyy-mm-dd" type="text" value="{$userinfo.user_born|default=''}">
+						<input class="form-control date-picker user-finfo" data-label='生日' name="user_born" id="id-date-born" data-date-format="yyyy-mm-dd" type="text" value="{$userinfo.user_born|date2format}">
 						<span class="input-group-addon">
 							<i class="fa fa-calendar bigger-110"></i>
 						</span>
@@ -136,7 +143,7 @@
 				<label class="col-sm-3 control-label no-padding-right" for="form-field-1"> 入职时间 </label>
 				<div class="col-sm-8">
 					<div class="input-group">
-						<input class="form-control date-picker user-finfo" data-label="入职时间" name="user_entry" id="id-date-entry" data-date-format="yyyy-mm-dd" type="text" value="{$userinfo.user_entry|default=''}">
+						<input class="form-control date-picker user-finfo" data-label="入职时间" name="user_entry" id="id-date-entry" data-date-format="yyyy-mm-dd" type="text" value="{$userinfo.user_entry|date2format}">
 						<span class="input-group-addon">
 							<i class="fa fa-calendar bigger-110"></i>
 						</span>
@@ -153,7 +160,7 @@
 				<span class="bigger-110">添加人员</span>
 			</button>
 		<else />
-			<button class="btn btn-xs btn-info pull-right" id="submit-user">
+			<button class="btn btn-xs btn-info pull-right" id="edit-user">
 				<i class="ace-icon fa fa-check bigger-110"></i>
 				<span class="bigger-110">修改人员</span>
 			</button>
@@ -170,7 +177,9 @@
 
 <script>
 		$(function(){
-			set_sex()
+
+			init()
+			
 			//初始化后日期选择器
 			$('#id-date-born').datepicker({
 			   autoclose: true,
@@ -186,12 +195,17 @@
 			})
 			//提交新增人员资料
 			$("#submit-user").on("click",function(){
-				createUser("user-form")
+				con_user("user-form","add")
 				
 			})
 			//快速添加
 			$("#quick-user").on("click",function(){
-				createUser("quick-form")
+				con_user("quick-form","add")
+			})
+
+			$("#edit-user").on("click",function(){
+				con_user("user-form","update")
+				
 			})
 			//改变分组
 			// $("select[name='user_group']").on("change",function(){
@@ -217,7 +231,8 @@
 
 						$("select[name='user_group']").html(dataJson["group"])
 						$("select[name='user_place']").html(dataJson["place"])
-						$("input[name='user_director']").val(dataJson["manager"])
+						$("select[name='user_director']").html(dataJson["director"])
+
 					}
 				})
 			})
@@ -231,7 +246,7 @@
 					success:function(data){
 						dataJson=JSON.parse(data)
 						$("select[name='user_place']").html(dataJson["place"])
-						$("input[name='user_director']").val(dataJson["manager"])
+						$("select[name='user_director']").html(dataJson["director"])
 					}
 				})
 			})
@@ -251,11 +266,6 @@
 		})
 		//设置性别
 		function set_sex(){
-			if("{$userinfo.user_sex|default=''}"=="女"){
-				$("#user-sex-box").prop("checked",true)
-			}else{
-				$("#user-sex-box").prop("checked",false)
-			}
 			if($("#user-sex-box").is(":checked")){
 				$("#user-sex-box").val("女")
 			}else{
@@ -273,7 +283,7 @@
 				}
 				
 			})
-			
+
 			if(post==true){
 				$.ajax({
 					url:"{:U('create')}",
@@ -287,7 +297,54 @@
 					}
 				})
 			}
+		}
 
+	    /**
+	     * [init 初始化]
+	     * @return {[type]} [description]
+	     */
+		function init(){
+			
+			$("select[name='user_company']").find("option[value='{$userinfo['user_company']}']").attr("selected",true);
+			$("select[name='user_department']").find("option[value='{$userinfo['user_department']}']").attr("selected",true);
+			$("select[name='user_group']").find("option[value='{$userinfo['user_group']}']").attr("selected",true);
+			$("select[name='user_place']").find("option[value='{$userinfo['user_place']}']").attr("selected",true);
+			$("select[name='user_roles']").find("option[value='{$userinfo['user_roles']}']").attr("selected",true);
+			$("select[name='user_role']").find("option[value='{$userinfo['user_role']}']").attr("selected",true);
+			$("select[name='user_director']").find("option[value='{$userinfo['user_director']}']").attr("selected",true);
+			if("{$userinfo.user_sex|default=''}"=="女"){
+				$("#user-sex-box").prop("checked",true)
+			}else{
+				$("#user-sex-box").prop("checked",false)
+			}
+			// $(".selector").find("option[text='pxx']").attr("selected",true);
+		}
+
+		function con_user(formId,type){
+			datas={}
+			datas["type"]=type
+			userData=$("#"+formId).serializeArray();
+
+			datas["data"]={}
+			$.each(userData,function(i,v){
+		        datas["data"][v.name] = v.value;
+		    }) 
+		    if($("#user-sex-box").is(":checked")){
+				datas["data"]["user_sex"]="女"
+			}else{
+				datas["data"]["user_sex"]="男"
+			}
+
+			$.ajax({
+				url:"{:U('con_user')}",
+				type:"post",
+				data:datas,
+				datatype:"html",
+				success:function(data){
+					$('#userModal').modal('toggle')
+					search_user()
+				}
+			})
 		}
 		
 	</script>

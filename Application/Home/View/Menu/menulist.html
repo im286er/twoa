@@ -1,0 +1,52 @@
+<li class="">
+	<a href="javascript:void(0);" class="dropdown-toggle">
+		<i class="menu-icon fa fa-users"></i>
+		<span class="menu-text">
+			人员信息
+		</span>
+
+		<b class="arrow fa fa-angle-down"></b>
+	</a>
+
+	<b class="arrow"></b>
+
+	<ul class="submenu">
+		<li class="">
+			<a href="javascript:void(0);" class="ajax-html" data-con="{:U('User/gethtml')}" data-html="create" >
+				<i class="menu-icon glyphicon glyphicon-user"></i>
+				添加/修改
+			</a>
+			<b class="arrow"></b>
+		</li>
+		<li class="">
+			<a href="javascript:void(0);" class="ajax-html" data-con="{:U('User/gethtml')}" data-html="userlist">
+				<i class="menu-icon fa fa-users"></i>
+				人员列表
+			</a>
+			<b class="arrow"></b>
+		</li>
+		<li class="">
+			<a href="javascript:void(0);" class="ajax-html" data-con="{:U('User/gethtml')}" data-html="place">
+				<i class="menu-icon fa fa-group"></i>
+				职位分配
+			</a>
+			<b class="arrow"></b>
+		</li>
+		<li class="">
+			<a href="javascript:void(0);" class="ajax-html" data-con="{:U('User/gethtml')}" data-html="role">
+				<i class="menu-icon fa fa-user-secret"></i>
+				角色管理
+			</a>
+			<b class="arrow"></b>
+		</li>
+		<li class="">
+			<a href="javascript:void(0);" class="ajax-html" data-con="{:U('User/gethtml')}" data-html="ubase">
+				<i class="menu-icon glyphicon glyphicon-send"></i>
+				基础信息
+			</a>
+			<b class="arrow"></b>
+		</li>
+	</ul>
+</li>
+update oa_rauth set rauth_auth='{"Menu":{"name":"主菜单","menus":[{"name":"企业信息","menus":"company","icon":"fa fa-users"}],"icon":"fa fa-tachometer"},"User":{"name":"人员信息","menus":[{"name":"添加用户","menus":"create","icon":"glyphicon glyphicon-user"},{"name":"员工列表","menus
+":"userlist","icon":"fa fa-users"},{"name":"基础信息","menus":"ubase","icon":"glyphicon glyphicon-send"}],"icon":"fa fa-users"}}' where rauth_id=1;

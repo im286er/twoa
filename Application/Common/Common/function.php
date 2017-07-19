@@ -12,3 +12,16 @@
 
 		return floor($day);
 	}
+
+	/**
+	 * [date_format description]
+	 * @param  [type] $dateStr [description]
+	 * @return [type]          [description]
+	 */
+	function date2format($dateStr){
+		if($dateStr=="0000-00-00"){
+			return date("Y-m-d");
+		}else{
+			return $dateStr;
+		}
+	}

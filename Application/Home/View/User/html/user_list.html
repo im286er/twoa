@@ -2,12 +2,14 @@
 	<td>
 		<label class="pos-rel"><input class="ace" type="checkbox"><span class="lbl"></span></label>
 	</td>
+	<td>{$userData["user_username"]}</td>
 	<td>{$userData["user_name"]}</td>
 	<td>{$userData["user_code"]}</td>
 	<td>{$userData["user_company"]}</td>
 	<td>{$userData["user_department"]}</td>
 	<td>{$userData["user_group"]}</td>
 	<td>{$userData["user_place"]}</td>
+	<td>{$userData["user_director"]}</td>
 	<td>{$userData["user_role"]}</td>
 	<td>{$userData["user_sex"]}</td>
 	<td>{$userData["user_entry"]}</td>
@@ -18,13 +20,13 @@
 			<button class="btn btn-xs btn-info user-edit" data-toggle="modal" data-target="#userModal">
 				<i class="ace-icon fa fa-pencil bigger-120"></i>
 			</button>
-			<button class="btn btn-xs btn-success" {$state[1]}>
+			<button class="btn btn-xs btn-success user-active" {$state[1]}>
 				<i class="ace-icon fa fa-check-circle bigger-120"></i>
 			</button>
-			<button class="btn btn-xs btn-warning" {$state[0]}>
+			<button class="btn btn-xs btn-warning user-inactive" {$state[0]}>
 				<i class="ace-icon fa fa-question-circle bigger-120"></i>
 			</button>
-			<button class="btn btn-xs btn-danger" {$state[2]}>
+			<button class="btn btn-xs btn-danger user-quit" {$state[2]}>
 				<i class="ace-icon fa fa-times-circle bigger-120"></i>
 			</button>
 		</div>
