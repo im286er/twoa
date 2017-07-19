@@ -94,21 +94,16 @@ class AmangController extends Controller {
     //权限控制
     public function authority(){
     	$authority=$this->get_auth();
-    	$ControllerName=CONTROLLER_NAME;
-    	if(isset($authority[$ControllerName])){
-    		foreach ($authority[$ControllerName]["menus"] as $names => $menus) {
-    			if($this->menu_list($menus,I("html"))){
-    				return true;
-    			}
-    		}
-    		return false;
-    		
-    		// if(in_array(I("html"), $authority[$ControllerName])){
-    		// 	return true;
-    		// }else{
-    		// 	return false;
-    		// }
-    	}
+    		if(isset($authority[CONTROLLER_NAME])){
+	    		foreach ($authority[CONTROLLER_NAME]["menus"] as $names => $menus) {
+	    			if($this->menu_list($menus,I("html"))){
+	    				return true;
+	    			}
+	    		}
+	    		return false;
+	    	}
+    	
+    	
     	// foreach ($authority as $key => $value) {
     	// 	$html=explode(",", $value);
     	// }
@@ -137,10 +132,13 @@ class AmangController extends Controller {
     	$rauthData=json_decode($rauth->field("rauth_auth")->join("oa_user u")->where("u.user_username='".session("oa_user_username")."' AND u.user_role=a.rauth_role")->find()["rauth_auth"],true);
     	if(!empty($elimArray)){
     		foreach ($elimArray as $elim) {
-    			unset($rauthData[$elim]);
+    			if(isset($rauthData[MODULE_NAME][$elim])){
+    				unset($rauthData[$elim]);
+    			}
+    			
     		}
     	}
-    	return $rauthData;
+    	return $rauthData[MODULE_NAME];
     }
 
     /**
