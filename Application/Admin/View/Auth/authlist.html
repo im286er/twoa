@@ -11,66 +11,287 @@
 
 <div class="row">
 	<div class="col-xs-12">
-		<div class="col-xs-12 col-sm-6">
-			<button class="btn btn-success"><i class="ace-icon fa fa-refresh"></i>刷新所有</button>
+		<div class="col-xs-12 col-sm-2">
+			<select name="roles" id="" class="col-xs-10 col-sm-10">
+				<option value='0'>选择角色分组</option>
+				<volist name="rolesDataArray" id="rolesData">
+					<option value="{$rolesData.role_id}">{$rolesData["role_name"]}</option>
+				</volist>
+			</select>
 		</div>
-		<div class="col-xs-12 col-sm-6">
-			<button class="btn btn-success"><i class="ace-icon fa fa-refresh"></i>刷新所有</button>
+		<div class="col-xs- col-sm-2">
+			<select name="role" id="" class="col-xs-10 col-sm-10">
+				<option value='0'>选择角色</option>
+			</select>
+		</div>
+		<div class="col-xs-12 col-sm-2">
+			<input  type="text" value="" placeholder="要搜索的角色" />
+		</div>
+		<div class="col-xs-4 col-sm-1">
+			<button class="btn btn-sm btn-primary pull-right select-all">
+			<i class="ace-icon fa fa-check-square"></i>
+				<span class="">全选</span>
+			</button>
+		</div>
+		<div class="col-xs-4 col-sm-1">
+			<button class="btn btn-sm btn-purple pull-right cancel-select">
+			<i class="ace-icon fa fa-square-o"></i>
+				<span class="">取消全选</span>
+			</button>
+		</div>
+		<div class="col-xs-4 col-sm-1">
+			<button class="btn btn-sm btn-pink pull-right select-invert">
+			<i class="ace-icon fa fa-check-square-o"></i>
+				<span class="">反选</span>
+			</button>
+		</div>
+		<div class="col-xs-4 col-sm-1">
+			<button class="btn btn-sm btn-success pull-right save-btn">
+			<i class="ace-icon fa fa-save"></i>
+				<span class="">保存</span>
+			</button>
 		</div>
 	</div>
 </div>
 <div class="space-8"></div>
-<volist name="condata" id="controllers">
-	<div class="col-xs-12 col-sm-6">
-		<!-- PAGE CONTENT BEGINS -->
-		<div class="main-widget-container">
-			<div class="row">
-				<div class="col-sm-12 col-xs-12 widget-container-col">
-					<!-- #section:custom/widget-box -->
-					<div class="widget-box" id="widget-box-1">
-						<div class="widget-header">
-							<h5 class="widget-title">{$controllers.name.cn}</h5>
+<div id="auth-box">
+<volist name="condata" id="modules">
+	<div class="col-xs-12 col-sm-12 widget-container-col ui-sortable main-module" name="{$key}">
+		<div class="widget-box widget-color-blue ui-sortable-handle">
+					<div class="widget-header">
+						<h5 class="widget-title bigger lighter">{$key}</h5>
+						<div class="widget-toolbar">
+							<a href="#" data-action="fullscreen" class="orange2">
+								<i class="ace-icon fa fa-expand"></i>
+							</a>
 
-							<!-- #section:custom/widget-box.toolbar -->
-							<div class="widget-toolbar">
+							<a href="#" data-action="reload">
+								<i class="ace-icon fa fa-refresh"></i>
+							</a>
 
-								<a href="#" data-action="fullscreen" class="orange2">
-									<i class="ace-icon fa fa-expand"></i>
-								</a>
+							<a href="#" data-action="collapse">
+								<i class="ace-icon fa fa-chevron-up"></i>
+							</a>
 
-								<a href="#" data-action="reload">
-									<i class="ace-icon fa fa-refresh"></i>
-								</a>
-
-								<a href="#" data-action="collapse">
-									<i class="ace-icon fa fa-chevron-up"></i>
-								</a>
-
-								<a href="#" data-action="close">
-									<i class="ace-icon fa fa-times"></i>
-								</a>
-							</div>
-
-							<!-- /section:custom/widget-box.toolbar -->
-						</div>
-
-						<div class="widget-body">
-							<div class="widget-main">
-								<p class="alert alert-success">
-									<volist name="controllers['controller']" id="thicon">
-										<span class="label>
-											<label class="inline">
-												<input name="{$thicon[0]}" data-control="{$controllers.name.en}-{$thicon[0]}" type="checkbox" class="ace">
-												<span class="lbl">{$thicon[1]}</span>
-											</label>
-										</span>
-									</volist>
-								</p>
-							</div>
+							<a href="#" data-action="close">
+								<i class="ace-icon fa fa-times"></i>
+							</a>
 						</div>
 					</div>
-				</div>
-			</div><!-- /.row -->
-		</div><!-- PAGE CONTENT ENDS -->
-	</div><!-- /.col -->
+					<div class="widget-body">
+						<div class="widget-main no-padding">
+							<volist name="modules" id="controllers">
+								<div class="col-xs-12 col-sm-6">
+									<div class="main-widget-container widget-box main-control" name="{$controllers.name.en}">
+										<div class="row">
+											<div class="col-sm-12 col-xs-12 widget-container-col">
+												<div class="widget-header">
+													<h5 class="widget-title"><i class="ace-icon {$controllers.name.icon}"></i>{$controllers.name.cn}</h5>
+													<div class="widget-toolbar">
+														<a href="#" data-action="fullscreen" class="orange2">
+															<i class="ace-icon fa fa-expand"></i>
+														</a>
+
+														<a href="#" data-action="reload">
+															<i class="ace-icon fa fa-refresh"></i>
+														</a>
+
+														<a href="#" data-action="collapse">
+															<i class="ace-icon fa fa-chevron-up"></i>
+														</a>
+
+														<a href="#" data-action="close">
+															<i class="ace-icon fa fa-times"></i>
+														</a>
+													</div>
+												</div>
+												<div class="widget-body">
+													<div class="widget-main">
+														<p class="alert alert-success">
+															<volist name="controllers['controller']" id="thicon">
+																<!-- <span class="label"> -->
+																	<i class="ace-icon {$thicon[2]}"></i>
+																	<label class="inline">
+																		<input name="{$thicon[0]}" data-control="{$controllers.name.en}-{$thicon[0]}" type="checkbox" class="ace">
+																		<span class="lbl action-name">{$thicon[1]}</span>
+																	</label>
+																&nbsp;&nbsp;
+															</volist>
+														</p>
+													</div>
+												</div>
+											</div>
+										</div>
+									</div>
+								</div>
+							</volist>
+						</div>
+					</div>
+		</div>
+	</div>
 </volist>
+</div>
+<script>
+	$(function(){
+		/**
+		 * [更改角色]
+		 */
+		$("select[name='roles']").on("change",function(){
+			var rolesId=$(this).val();
+			$.ajax({
+				url:"{:U('show_role')}",
+				type:"POST",
+				dataType:"html",
+				data:{"role_id":rolesId},
+				success:function(data){
+					$("select[name='role']").html(data)
+				}
+
+			})
+		})
+
+		/*
+		 * 根据不同角色获取不同的权限
+		 */
+		$("select[name='role']").on("change",function(){
+			$(".ace[type='checkbox']").prop("checked",false)
+			var roleId=$(this).val();
+			$.ajax({
+				url:"{:U('show_rauth')}",
+				type:"POST",
+				dataType:"json",
+				data:{"role_id":roleId},
+				success:function(data){
+					for (module in data) {
+						for (control in data[module]) {
+							set_auths(module,control,data[module][control]["menus"])
+						}
+					}
+					
+				}
+
+			})
+		})
+
+		/*
+		 * 保存角色权限
+		 */
+		$(".save-btn").on("click",function(){
+			var modules=$(".main-module")
+			var i=0,c=0,a=0
+			var modulesJson=""
+			for(i=0;i<modules.length;i++){
+				if((i+1)>=modules.length){
+					var mCm=""
+				}else{
+					var mCm=","
+				}
+				var controls=$(".main-module[name='"+modules.eq(i).attr("name")+"']").find(".main-control")
+				var controlsJson=""
+				for(c=0;c<controls.length;c++){
+
+					if((c+1)>=controls.length){
+						var cCm=""
+					}else{
+						var cCm=","
+					}
+					var action=$(".main-module[name='"+modules.eq(i).attr("name")+"']").find(".main-control[name='"+controls.eq(c).attr("name")+"']").find("input[type='checkbox']:checked")
+					var actionJson=""
+					for(a=0;a<action.length;a++){
+						if((a+1)>=action.length){
+							var aCm=""
+						}else{
+							var aCm=","
+						}
+						actionJson+='{"name":"'+action.eq(a).next(".action-name").text()+'","menus":"'+action.eq(a).attr("name")+'","icon":"'+action.eq(a).parent().prev(".ace-icon").attr("class").replace("ace-icon ","")+'"}'+aCm;
+					}
+					controlsJson+='"'+controls.eq(c).attr("name")+'":{"name":"'+controls.eq(c).find("h5").text()+'",'+'"menus":'+'['+actionJson+']'+',"icon":"'+controls.eq(c).find("h5").find(".ace-icon").attr("class").replace("ace-icon ","")+'"}'+cCm;
+				}
+				modulesJson+='"'+modules.eq(i).attr("name")+'":'+'{'+controlsJson+'}'+mCm;
+			}
+
+			var roleId=$("select[name='role'] option:selected").val()
+			var rolesId=$("select[name='roles'] option:selected").val()
+			if(roleId==0 && rolesId==0){
+				alert("未选择")
+				return false
+			}else if(roleId==0){
+				var rauth_role=rolesId
+			}else{
+				var rauth_role=roleId
+			}
+
+			$.ajax({
+				url:"{:U('set_rauth')}",
+				type:"POST",
+				dataType:"html",
+				data:{"rauth_role":rauth_role,"rauth_auth":'{'+modulesJson+'}'},
+				success:function(data){
+					console.log(data)
+				}
+			})
+			// console.log('{'+modulesJson+'}');
+			
+		})
+
+		/*
+		 * 全选
+		 */
+		$(".select-all").on("click",function(){
+			$("#auth-box input[type='checkbox']").prop("checked",true);
+		})
+		/*
+		 * 取消全选
+		 */
+		$(".cancel-select").on("click",function(){
+			$("#auth-box input[type='checkbox']").prop("checked",false);
+			
+		})
+		/*
+		 * 反选
+		 */
+		$(".select-invert").on("click",function(){
+			 $("#auth-box input[type='checkbox']").each(function () {  
+                $(this).prop("checked", !$(this).prop("checked"));  
+            });  
+		})
+
+
+		/**
+		 * [set_auths 循环知道找到方法并且设置checked]
+		 * @param {[type]} module  [模块名称]
+		 * @param {[type]} control [控制器名称]
+		 * @param {[type]} array   [判断的数据]
+		 */
+		function set_auths(module,control,array){
+
+			if(typeof(array)=="object"){
+				
+				for(i in array){
+					set_auths(module,control,array[i]["menus"])	
+				}
+			}else{
+				$(".main-module[name='"+module+"']").find(".main-control[name='"+control+"']").find(".ace[name='"+array+"']").prop("checked",true)
+				// console.log($(".main-module[name='"+module+"']").find(".main-control[name='"+control+"']").html())
+			}
+		}
+
+		// $(".ace[name='authlist']").prop("checked",true)
+		// console.log("ok")
+		// console.log($(".ace[name='authlist']").next())
+		// console.log($(".ace[name='authlist']").is(":checked"))
+		// $("select[name='role']").on("change",function(){
+		// 	var roleId=$(this).val();
+		// 	$.ajax({
+		// 		url:"{:U('show_rauth')}",
+		// 		type:"POST",
+		// 		dataType:"html",
+		// 		data:{"role_id":roleId},
+		// 		success:function(data){
+		// 			console.log(data)
+		// 		}
+
+		// 	})
+		// }
+	})
+</script>

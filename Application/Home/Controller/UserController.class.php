@@ -4,10 +4,10 @@
  * @Email:369709991@qq.com
  * @Date:   2017-05-18 15:57:50
  * @Last Modified by:   vition
- * @Last Modified time: 2017-07-19 14:00:53
+ * @Last Modified time: 2017-07-20 16:35:46
  */
 
-/*用户功能{list|用户列表,create|新建用户,edit|编辑用户,ubase|基础信息,addinfo|添加信息}*/
+/*用户功能{userlist|用户列表|fa fa-users,create|新建用户|glyphicon glyphicon-user,ubase|基础信息|glyphicon glyphicon-send}fa fa-users*/
 namespace Home\Controller;
 use Common\Controller\AmangController;
 class UserController extends AmangController {

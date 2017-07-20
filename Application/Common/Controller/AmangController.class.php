@@ -127,18 +127,30 @@ class AmangController extends Controller {
     	// }
     }
     //获取权限
-    public function get_auth($elimArray=""){
+    public function get_auth($elimArray="",$module=true,$user_role=0){
+
+    	
     	$rauth=M("oa_rauth a");
-    	$rauthData=json_decode($rauth->field("rauth_auth")->join("oa_user u")->where("u.user_username='".session("oa_user_username")."' AND u.user_role=a.rauth_role")->find()["rauth_auth"],true);
-    	if(!empty($elimArray)){
-    		foreach ($elimArray as $elim) {
-    			if(isset($rauthData[MODULE_NAME][$elim])){
-    				unset($rauthData[$elim]);
-    			}
-    			
-    		}
+    	if($user_role>0){
+    		$rauthData=json_decode($rauth->field("rauth_auth")->where("a.rauth_role='{$user_role}'")->find()["rauth_auth"],true);
+    	}else{
+    		$rauthData=json_decode($rauth->field("rauth_auth")->join("oa_user u")->where("u.user_username='".session("oa_user_username")."' AND u.user_role=a.rauth_role")->find()["rauth_auth"],true);
     	}
-    	return $rauthData[MODULE_NAME];
+    	
+
+    	if($module){
+    		$rAtuhArray=$rauthData[MODULE_NAME];
+    		if(!empty($elimArray)){
+	    		foreach ($elimArray as $elim) {
+	    			if(isset($rAtuhArray[$elim])){
+	    				unset($rAtuhArray[$elim]);
+	    			}
+	    		}
+	    	}
+    	}else{
+			$rAtuhArray=$rauthData;
+    	}
+    	return $rAtuhArray;
     }
 
     /**

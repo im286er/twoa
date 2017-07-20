@@ -1,5 +1,5 @@
 <?php
-/*主菜单{company|企业信息,profile|个人信息}*/
+/*主菜单{company|企业信息|fa fa-tachometer,profile|个人信息|fa fa-user}fa fa-tachometer*/
 namespace Home\Controller;
 use Common\Controller\AmangController;
 class MenuController extends AmangController {

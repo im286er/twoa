@@ -4,7 +4,7 @@
  * @Email:369709991@qq.com
  * @Date:   2017-07-11 15:37:56
  * @Last Modified by:   vition
- * @Last Modified time: 2017-07-12 10:38:01
+ * @Last Modified time: 2017-07-20 16:55:12
  */
 namespace Common\Model;
 use Think\Model;
@@ -27,7 +27,7 @@ class RoleModel extends Model{
 	function search_role($role_upper=0,$start="",$limit=""){
 		$role=$this->where(array("role_upper"=>$role_upper));
 		if($start=="" && $limit==""){
-			return $roleData=$role->select();
+			return $role->select();
 		}else if($start!="" && $limit==""){
 			return $role->limit("{$start}")->select();
 		}else{
