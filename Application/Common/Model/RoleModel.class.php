@@ -4,7 +4,7 @@
  * @Email:369709991@qq.com
  * @Date:   2017-07-11 15:37:56
  * @Last Modified by:   vition
- * @Last Modified time: 2017-07-20 16:55:12
+ * @Last Modified time: 2017-07-21 09:59:31
  */
 namespace Common\Model;
 use Think\Model;
@@ -24,8 +24,12 @@ class RoleModel extends Model{
 	 * @param  [type] $limit [限制条数]
 	 * @return [type]        [上述两个参数都为空的时候，默认查询所有；$start存在而$limit为空的时候，查询条数；两个参数都存在则查询指定起始和限制条数]
 	 */
-	function search_role($role_upper=0,$start="",$limit=""){
-		$role=$this->where(array("role_upper"=>$role_upper));
+	function search_role($role_upper=0,$all_upper=false,$start="",$limit=""){
+		if($all_upper==true){
+			$role=$this;
+		}else{
+			$role=$this->where(array("role_upper"=>$role_upper));
+		}
 		if($start=="" && $limit==""){
 			return $role->select();
 		}else if($start!="" && $limit==""){

@@ -4,7 +4,7 @@
  * @Email:369709991@qq.com
  * @Date:   2017-05-18 15:57:50
  * @Last Modified by:   vition
- * @Last Modified time: 2017-07-20 16:35:46
+ * @Last Modified time: 2017-07-21 11:00:45
  */
 
 /*用户功能{userlist|用户列表|fa fa-users,create|新建用户|glyphicon glyphicon-user,ubase|基础信息|glyphicon glyphicon-send}fa fa-users*/
@@ -58,6 +58,10 @@ class UserController extends AmangController {
 
 				$roleData=$this->baseInfo->role()->search_role();
 				$this->assign("role_group",$roleData);
+
+				$allRole=$this->baseInfo->role()->search_role(0,true);
+				$this->assign("allRoleArray",$allRole);
+
 				if(I("html")=="ubase"){
 					$leaderData=$this->baseInfo->place()->get_leader();
 					$this->assign("place_leader",$leaderData);
@@ -324,14 +328,20 @@ class UserController extends AmangController {
 				break;
 				case "role": case "subrole":
 					// print_r($_POST);
-					if ($_POST["type"]=="role"){
-						$returnArray= $this->baseInfo->role()->search_role($_POST["key"]);
-						if (!empty($returnArray)) {
-							echo "该分组下含有其他角色，请删除角色再删除";
-							return false;
+
+					if($_POST["key"]<=2){
+						echo "该角色不允许删除";
+					}else{
+						if ($_POST["type"]=="role"){
+							$returnArray= $this->baseInfo->role()->search_role($_POST["key"]);
+							if (!empty($returnArray)) {
+								echo "该分组下含有其他角色，请删除角色再删除";
+								return false;
+							}
 						}
+						$delResult= $this->baseInfo->role()->del_role($_POST["key"]);
 					}
-					$delResult= $this->baseInfo->role()->del_role($_POST["key"]);
+					
 				break;
 			}
 			if($delResult>0){
@@ -494,6 +504,31 @@ class UserController extends AmangController {
 		echo $this->fetch("userinfo");
 	}
 
+	function default_role(){
+		if(IS_POST){
+			switch ($_POST["type"]) {
+				case 'get':
+					if($_POST["place_id"]<=2){
+						echo "对不起！您无权操作此角色";
+					}else{
+						echo $this->baseInfo->place()->find_place($_POST["place_id"])["place_role"];
+					}
+					# code...
+					break;
+				case 'put':
+					if($_POST["place_role"]<=2){
+						echo "对不起！您无权操作此角色";
+					}else{
+						echo $this->baseInfo->place()->set_place_role($_POST["place_id"],$_POST["place_role"]);
+					}
+					# code...
+					break;
+				default:
+					# code...
+					break;
+			}
+		}
+	}
 	/**
 	 * [change_extent 改变管理层管辖的部门]
 	 * @return [type] [description]

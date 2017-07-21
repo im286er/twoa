@@ -4,14 +4,14 @@
  * @Email:369709991@qq.com
  * @Date:   2017-07-11 15:01:41
  * @Last Modified by:   vition
- * @Last Modified time: 2017-07-14 11:57:35
+ * @Last Modified time: 2017-07-21 10:52:50
  */
 namespace Common\Model;
 use Think\Model;
 
 class PlaceModel extends Model{
 	protected $trueTableName = 'oa_place'; 
-	protected $fields = array('place_id', 'place_name','place_department','place_group','place_manager','place_extent');
+	protected $fields = array('place_id', 'place_name','place_department','place_group','place_manager','place_extent','place_role');
 
 	/**
 	 * [查询职位]
@@ -121,5 +121,14 @@ class PlaceModel extends Model{
 	 */
 	function reduce_extent($place_id,$place_extent){
 		$this->where(array("place_id"=>$place_id))->save(array("place_extent"=>$place_extent));
+	}
+
+	/**
+	 * [set_place_role 修改默认角色]
+	 * @param [type] $place_id   [指定place id]
+	 * @param [type] $place_role [修改的role id]
+	 */
+	function set_place_role($place_id,$place_role){
+		$this->where(array("place_id"=>$place_id))->save(array("place_role"=>$place_role));
 	}
 }

@@ -158,7 +158,7 @@
 								 	</volist>
 								</select>
 							</div>
-							<div class="col-sm-3 form-group">
+							<div class="col-sm-2 form-group">
 							<p class="text-warning blue">分组列表 <i class="ace-icon fa fa-group bigger-110"></i></p>
 								<select class="form-control" name="group" id="group-select-box2" multiple="multiple">
 								 	<volist name="user_subgroups" id="subgroups">
@@ -166,11 +166,19 @@
 								 	</volist>
 								</select>
 							</div>
-							<div class="col-sm-3 form-group">
+							<div class="col-sm-2 form-group">
 							<p class="text-warning blue">职位列表 <i class="ace-icon fa fa-user bigger-110"></i></p>
 								<select class="form-control" id="place-select-box" name="place" multiple="multiple">
 								 	<volist name="user_place" id="place">
 								 		<!-- <option class="ubase-select" data-input="place-data" value="{$place.place_id}">{$place.place_name}</option> -->
+								 	</volist>
+								</select>
+							</div>
+							<div class="col-sm-2 form-group">
+							<p class="text-warning blue">默认角色 <i class="ace-icon fa fa-id-card bigger-110"></i></p>
+								<select class="form-control" name="place-role">
+								 	<volist name="allRoleArray" id="allRole">
+								 		<option value="{$allRole.role_id}">{$allRole.role_name}</option>
 								 	</volist>
 								</select>
 							</div>
@@ -210,6 +218,10 @@
 						<button class="btn btn-xs btn-danger del-button" >
 							<i class="ace-icon fa fa-close bigger-110"></i>
 							<span class="bigger-110">删除职位</span>
+						</button>
+						<button class="btn btn-xs btn-info rel-role" >
+							<i class="ace-icon fa fa-link bigger-110"></i>
+							<span class="bigger-110">关联角色</span>
 						</button>
 					</div>
 			</div>
@@ -336,6 +348,9 @@
 <!-- <script src="__PUBLIC__/components/bootstrap-datepicker/dist/js/bootstrap-datepicker.js"></script> -->
 <script>
 	$(function(){
+		/**
+		 * 所有select 点击触发
+		 */
 		$("select").on("click",".ubase-select",function(){
 			// alert("a")
 			var tid=$(this).data("input")
@@ -348,7 +363,17 @@
 					$("#place-manager").prop("checked",true)
 				}else{
 					$("#place-manager").prop("checked",false)
-				}	
+				}
+				$.ajax({
+					url:"{:U('default_role')}",
+					type:"post",
+					data:{"type":"get","place_id":$(this).val()},
+					datatype:"html",
+					success:function(data){
+						$("select[name='place-role']").find("option[value='"+data+"']").prop("selected",true);
+					}
+				})
+				// console.log($(this).val())	
 			}else if(tid=="department-data"){
 				if($(this).data("checked")==1){
 					$("#department-leader").prop("checked",true)
@@ -616,6 +641,35 @@
 			}
 			
 
+		})
+
+		/*
+		 * 关联角色
+		 */
+		$(".rel-role").on("click",function(){
+			var placeId=$("select[name='place'] option:selected").val();
+			var roleId=$("select[name='place-role'] option:selected").val();
+			console.log(roleId)
+			if(placeId==undefined && roleId==undefined){
+				alert("没有选择职位和角色")
+				return false
+			}else if(placeId==undefined){
+				alert("没有选择职位")
+				return false
+			}else if(placeId==undefined){
+				alert("没有选择职位")
+				return false
+			}
+			
+			$.ajax({
+				url:"{:U('default_role')}",
+				type:"post",
+				data:{"type":"put","place_id":placeId,"place_role":roleId},
+				datatype:"html",
+				success:function(data){
+					alert(data)
+				}
+			})
 		})
 	})
 
