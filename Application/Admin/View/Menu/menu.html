@@ -627,36 +627,30 @@
 						</ul>
 					</li>
 
-					<li class="">
-						<a href="#" class="dropdown-toggle">
-							<i class="menu-icon fa fa-lock"></i>
-							<span class="menu-text">
-								权限管理
-							</span>
-
-							<b class="arrow fa fa-angle-down"></b>
-						</a>
-
-						<b class="arrow"></b>
-
-						<ul class="submenu">
-							<li class="">
-								<a href="javascript:void(0);" class="ajax-html" data-con="{:U('Auth/gethtml')}" data-html="authlist" >
-									<i class="menu-icon glyphicon glyphicon-user"></i>
-									权限列表
-								</a>
-								<b class="arrow"></b>
-							</li>
-							<li class="">
-								<a href="javascript:void(0);" class="ajax-html" data-con="{:U('User/gethtml')}" data-html="list">
-									<i class="menu-icon fa fa-users"></i>
-									人员列表
-								</a>
-								<b class="arrow"></b>
-							</li>
-						</ul>
-					</li>
-
+					
+					<volist name="authoMenu" id="menulist">
+						<li class="main-menu" data-module="{$key}">
+							<a href="javascript:void(0);" class="dropdown-toggle">
+								<i class="menu-icon {$menulist['icon']}"></i>
+								<span class="menu-text">
+									{$menulist["name"]}
+								</span>
+								<b class="arrow fa fa-angle-down"></b>
+							</a>
+							<b class="arrow"></b>
+							<ul class="submenu">
+								<volist name="menulist['menus']" id="menulists">
+									<li class="">
+										<a href="javascript:void(0);" class="ajax-html" data-html="{$menulists['menus']}" >
+											<i class="menu-icon {$menulists['icon']}"></i>
+											{$menulists['name']}
+										</a>
+										<b class="arrow"></b>
+									</li>
+								</volist>
+							</ul>
+						</li>	
+					</volist>
 
 					<li class="">
 						<a href="widgets.html">
@@ -863,8 +857,8 @@
 				// get_html($("#menu-company").data("con"),$("#menu-company").data("html"));
 				//get_html({"html":$("#menu-company").data("html")});
 				$(".ajax-html").on("click",function(){
-					//var data={"html":$(this).data("html")};
-					get_html($(this).data("con"),$(this).data("html"));
+					var url="{:U('"+$(this).parents(".main-menu").data("module")+"/gethtml')}";
+					get_html(url,$(this).data("html"));
 				})
 				//gethtml页面
 				function get_html(url,hdata){

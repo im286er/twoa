@@ -4,13 +4,13 @@
  * @Email:369709991@qq.com
  * @Date:   2017-05-18 15:57:50
  * @Last Modified by:   vition
- * @Last Modified time: 2017-07-21 11:00:45
+ * @Last Modified time: 2017-07-21 15:59:01
  */
 
 /*用户功能{userlist|用户列表|fa fa-users,create|新建用户|glyphicon glyphicon-user,ubase|基础信息|glyphicon glyphicon-send}fa fa-users*/
 namespace Home\Controller;
-use Common\Controller\AmangController;
-class UserController extends AmangController {
+use Common\Controller\AmongController;
+class UserController extends AmongController {
 	protected $baseInfo;//定义基本信息
 	protected $user;//用户模型
 	//重组gethtml方法

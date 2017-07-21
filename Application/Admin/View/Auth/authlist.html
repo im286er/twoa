@@ -61,48 +61,40 @@
 					<div class="widget-header">
 						<h5 class="widget-title bigger lighter">{$key}</h5>
 						<div class="widget-toolbar">
-							<a href="#" data-action="fullscreen" class="orange2">
-								<i class="ace-icon fa fa-expand"></i>
-							</a>
+							<button class="btn btn-success btn-xs select-all" data-type="{$key}">
+								<i class="ace-icon fa fa-check-square bigger-150 icon-only"></i>
+							</button>
 
-							<a href="#" data-action="reload">
-								<i class="ace-icon fa fa-refresh"></i>
-							</a>
+							<button class="btn btn-purple btn-xs cancel-select" data-type="{$key}">
+								<i class="ace-icon fa fa-square-o  bigger-150 icon-only"></i>
+							</button>
 
-							<a href="#" data-action="collapse">
-								<i class="ace-icon fa fa-chevron-up"></i>
-							</a>
-
-							<a href="#" data-action="close">
-								<i class="ace-icon fa fa-times"></i>
-							</a>
+							<button class="btn btn-pink btn-xs  select-invert" data-type="{$key}">
+								<i class="ace-icon fa fa-check-square-o  bigger-150 icon-only"></i>
+							</button>
 						</div>
 					</div>
 					<div class="widget-body">
 						<div class="widget-main no-padding">
 							<volist name="modules" id="controllers">
 								<div class="col-xs-12 col-sm-6">
-									<div class="main-widget-container widget-box main-control" name="{$controllers.name.en}">
+									<div class="main-widget-container widget-box main-control widget-container-col" name="{$controllers.name.en}">
 										<div class="row">
-											<div class="col-sm-12 col-xs-12 widget-container-col">
+											<div class="col-sm-12 col-xs-12 ">
 												<div class="widget-header">
 													<h5 class="widget-title"><i class="ace-icon {$controllers.name.icon}"></i>{$controllers.name.cn}</h5>
 													<div class="widget-toolbar">
-														<a href="#" data-action="fullscreen" class="orange2">
-															<i class="ace-icon fa fa-expand"></i>
-														</a>
+														<button class="btn btn-success btn-xs select-all" data-type="{$controllers.name.en}">
+															<i class="ace-icon fa fa-check-square bigger-150 icon-only"></i>
+														</button>
 
-														<a href="#" data-action="reload">
-															<i class="ace-icon fa fa-refresh"></i>
-														</a>
+														<button class="btn btn-purple btn-xs cancel-select" data-type="{$controllers.name.en}">
+															<i class="ace-icon fa fa-square-o  bigger-150 icon-only"></i>
+														</button>
 
-														<a href="#" data-action="collapse">
-															<i class="ace-icon fa fa-chevron-up"></i>
-														</a>
-
-														<a href="#" data-action="close">
-															<i class="ace-icon fa fa-times"></i>
-														</a>
+														<button class="btn btn-pink btn-xs  select-invert" data-type="{$controllers.name.en}">
+															<i class="ace-icon fa fa-check-square-o  bigger-150 icon-only"></i>
+														</button>
 													</div>
 												</div>
 												<div class="widget-body">
@@ -137,14 +129,16 @@
 		 * [更改角色]
 		 */
 		$("select[name='roles']").on("change",function(){
+			$(".ace[type='checkbox']").prop("checked",false)
 			var rolesId=$(this).val();
 			$.ajax({
 				url:"{:U('show_role')}",
 				type:"POST",
-				dataType:"html",
-				data:{"role_id":rolesId},
+				dataType:"json",
+				data:{"role_id":rolesId,"stype":"auth"},
 				success:function(data){
-					$("select[name='role']").html(data)
+					$("select[name='role']").html(data["roleHtml"])
+					set_auths(data["auth"])
 				}
 
 			})
@@ -162,12 +156,8 @@
 				dataType:"json",
 				data:{"role_id":roleId},
 				success:function(data){
-					for (module in data) {
-						for (control in data[module]) {
-							set_auths(module,control,data[module][control]["menus"])
-						}
-					}
-					
+					set_auths(data)
+			
 				}
 
 			})
@@ -238,22 +228,38 @@
 		 * 全选
 		 */
 		$(".select-all").on("click",function(){
-			$("#auth-box input[type='checkbox']").prop("checked",true);
+			if($(this).data("type")==undefined){
+				$("#auth-box input[type='checkbox']").prop("checked",true);
+			}else{
+				$(".widget-container-col[name='"+$(this).data("type")+"']").find("input[type='checkbox']").prop("checked",true)
+			}
+			
 		})
 		/*
 		 * 取消全选
 		 */
 		$(".cancel-select").on("click",function(){
-			$("#auth-box input[type='checkbox']").prop("checked",false);
+			if($(this).data("type")==undefined){
+				$("#auth-box input[type='checkbox']").prop("checked",false);
+			}else{
+				$(".widget-container-col[name='"+$(this).data("type")+"']").find("input[type='checkbox']").prop("checked",false)
+			}
+			
 			
 		})
 		/*
 		 * 反选
 		 */
 		$(".select-invert").on("click",function(){
-			 $("#auth-box input[type='checkbox']").each(function () {  
-                $(this).prop("checked", !$(this).prop("checked"));  
-            });  
+			if($(this).data("type")==undefined){
+				$("#auth-box input[type='checkbox']").each(function () {  
+	                $(this).prop("checked", !$(this).prop("checked"));  
+	            });  
+			}else{
+				$(".widget-container-col[name='"+$(this).data("type")+"']").find("input[type='checkbox']").each(function () {  
+	                $(this).prop("checked", !$(this).prop("checked"));  
+	            });
+			}
 		})
 
 
@@ -263,12 +269,11 @@
 		 * @param {[type]} control [控制器名称]
 		 * @param {[type]} array   [判断的数据]
 		 */
-		function set_auths(module,control,array){
+		function set_recursion(module,control,array){
 
 			if(typeof(array)=="object"){
-				
 				for(i in array){
-					set_auths(module,control,array[i]["menus"])	
+					set_recursion(module,control,array[i]["menus"])	
 				}
 			}else{
 				$(".main-module[name='"+module+"']").find(".main-control[name='"+control+"']").find(".ace[name='"+array+"']").prop("checked",true)
@@ -276,6 +281,13 @@
 			}
 		}
 
+		function set_auths(jsonData){
+			for (module in jsonData) {
+				for (control in jsonData[module]) {
+					set_recursion(module,control,jsonData[module][control]["menus"])
+				}
+			}
+		}
 		// $(".ace[name='authlist']").prop("checked",true)
 		// console.log("ok")
 		// console.log($(".ace[name='authlist']").next())

@@ -629,7 +629,7 @@
 					</li>
 
 					<volist name="authoMenu" id="menulist">
-						<li class="">
+						<li class="main-menu" data-module="{$key}">
 							<a href="javascript:void(0);" class="dropdown-toggle">
 								<i class="menu-icon {$menulist['icon']}"></i>
 								<span class="menu-text">
@@ -859,7 +859,8 @@
 				//get_html({"html":$("#menu-company").data("html")});
 				$(".ajax-html").on("click",function(){
 					//var data={"html":$(this).data("html")};
-					get_html($(this).data("con"),$(this).data("html"));
+					var url="{:U('"+$(this).parents(".main-menu").data("module")+"/gethtml')}";
+					get_html(url,$(this).data("html"));
 				})
 				//gethtml页面
 				function get_html(url,hdata){

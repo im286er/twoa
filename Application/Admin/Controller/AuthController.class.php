@@ -1,9 +1,9 @@
 <?php
-/*权限管理{authlist|权限列表|fa fa-lock}glyphicon glyphicon-user*/
+/*权限管理{authlist|页面权限|fa fa-eye,authtable|数据表权限|fa fa-database}glyphicon glyphicon-user*/
 namespace Admin\Controller;
 // use Think\Controller;
-use Common\Controller\AmangController;
-class AuthController extends AmangController {
+use Common\Controller\AmongController;
+class AuthController extends AmongController {
 	protected $baseInfo;
 	protected $rauth;
 
@@ -14,12 +14,21 @@ class AuthController extends AmangController {
 
 	//重新加载方法
 	public function gethtml(){
-		if (I("html")=='authlist'){
-			$condata=$this->showCon();
-			$rolesDataArray=$this->baseInfo->role()->search_role();
-			$this->assign("rolesDataArray",$rolesDataArray);
-			// print_r($condata);
-			$this->assign("condata",$condata);
+		switch (I("html")) {
+			case 'authlist':
+				$condata=$this->showCon();
+				$rolesDataArray=$this->baseInfo->role()->search_role();
+				$this->assign("rolesDataArray",$rolesDataArray);
+				$this->assign("condata",$condata);
+				break;
+			case 'authtable':
+				$rolesDataArray=$this->baseInfo->role()->search_role();
+				$this->assign("rolesDataArray",$rolesDataArray);
+				$dataTablesArray=$this->showModel();
+				$this->assign("dataTablesArray",$dataTablesArray);
+			default:
+				# code...
+				break;
 		}
 		parent::gethtml();
 	}
@@ -31,12 +40,18 @@ class AuthController extends AmangController {
 	function show_role(){
 		if(IS_POST){
 			$roleDataArray=$this->baseInfo->role()->search_role($_POST["role_id"]);
-			echo $this->baseInfo->role()->getLastSql();
+			// echo $this->baseInfo->role()->getLastSql();
 			$roleHtml="<option value='0'>选择角色</option>";
 			foreach ($roleDataArray as $roleData) {
 				$roleHtml.="<option value='{$roleData['role_id']}'>{$roleData['role_name']}</option>";
 			}
-			echo $roleHtml;
+			if($_POST["stype"]=="auth"){
+				$auth=$this->rauth->find_auth("",false,$_POST["role_id"]);
+			}else{
+				$auth=$this->rauth->find_table($_POST["role_id"]);
+			}
+			
+			echo json_encode(array("roleHtml"=>$roleHtml,"auth"=>$auth));
 		}
 	}
 
@@ -47,7 +62,28 @@ class AuthController extends AmangController {
 
 	function set_rauth(){
 		if(IS_POST){
-			echo $this->rauth->add_auth($_POST["rauth_role"],$_POST["rauth_auth"]);
+			if($_POST["rauth_role"]<=2){
+				echo "不能更改此角色权限";
+			}else{
+				echo $this->rauth->add_auth($_POST["rauth_role"],$_POST["rauth_auth"]);
+			}
+			
+		}
+	}
+
+	function show_autable(){
+		$table=$this->rauth->find_table($_POST["role_id"]);
+		echo json_encode($table);
+	}
+
+	function set_autable(){
+		if(IS_POST){
+			if($_POST["rauth_role"]<2){
+				echo "不能更改此角色权限";
+			}else{
+				echo $this->rauth->add_table($_POST["rauth_role"],$_POST["rauth_table"]);
+			}
+			
 		}
 	}
 	//取控制器信息了
@@ -78,9 +114,24 @@ class AuthController extends AmangController {
 			}
 			$authArray[$model]=$tempModel;
 		}
-		
-
 		return $authArray;//返回三维数组信息
-		 
 	}  
+	private function showModel(){
+		$url=APP_PATH."/Common/Model";
+		$elimArray=array("InfoModel.class.php","AmongModel.class.php");
+		$files=scandir($url);
+		$dataTables=array();
+		for($i=1;$i<count($files);$i++){//循环目录下所有文件
+			preg_match('/([\S]*)Model.class.php/', $files[$i],$conMatch);
+			if(!in_array($conMatch[0], $elimArray)){
+				if(count($conMatch)>1){
+					// echo "oa_".strtolower($conMatch[1])."</br>";
+					array_push($dataTables, "oa_".strtolower($conMatch[1]));
+				}
+			}
+			
+		}
+		return $dataTables;
+	}
 }
+

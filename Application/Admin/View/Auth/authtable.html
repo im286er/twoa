@@ -1,0 +1,287 @@
+<style>
+	table,table tr th{text-align: center;}
+</style>
+<div class="page-header">
+	<h1>
+		全局所有权限
+		<small>
+			<i class="ace-icon fa fa-angle-double-right"></i>
+			罗列出全站数据库权限
+		</small>
+	</h1>
+</div>
+
+<div class="row">
+	<div class="col-xs-12">
+		<div class="col-xs-12 col-sm-2">
+			<select name="roles" id="" class="col-xs-10 col-sm-10">
+				<option value='0'>选择角色分组</option>
+				<volist name="rolesDataArray" id="rolesData">
+					<option value="{$rolesData.role_id}">{$rolesData["role_name"]}</option>
+				</volist>
+			</select>
+		</div>
+		<div class="col-xs- col-sm-2">
+			<select name="role" id="" class="col-xs-10 col-sm-10">
+				<option value='0'>选择角色</option>
+			</select>
+		</div>
+		<div class="col-xs-4 col-sm-2">
+			<button class="btn btn-sm btn-success pull-right save-btn">
+			<i class="ace-icon fa fa-save"></i>
+				<span class="">保存</span>
+			</button>
+		</div>
+	</div>
+</div>
+<div class="space-8"></div>
+<div class="col-xs-12 col-sm-6 widget-container-col" id="database-widget">
+	<div class="widget-box widget-color-blue" id="widget-box-2">
+		<div class="widget-header">
+			<h5 class="widget-title bigger lighter">
+				<i class="ace-icon fa fa-database"></i>
+				角色指定数据表权限
+			</h5>
+			<div class="widget-toolbar">
+				<button class="btn btn-primary btn-xs select-all">
+					<i class="ace-icon fa fa-check-square bigger-150 icon-only"></i>
+				</button>
+
+				<button class="btn btn-primary btn-xs cancel-select">
+					<i class="ace-icon fa fa-square-o  bigger-150 icon-only"></i>
+				</button>
+
+				<button class="btn btn-primary btn-xs select-invert">
+					<i class="ace-icon fa fa-check-square-o  bigger-150 icon-only"></i>
+				</button>
+			</div>
+		</div>
+		<div class="widget-body">
+			<div class="widget-main no-padding">
+				<table class="table table-striped table-bordered table-hover">
+					<thead class="thin-border-bottom">
+						<tr>
+							<th>
+								<i class="ace-icon fa fa-database"></i>
+								数据表
+							</th>
+							<th>
+								<i class="ace-icon fa fa-search"></i>
+								查找
+								<button class="btn btn-success btn-xs select-all" data-type="table-select">
+									<i class="ace-icon fa fa-check-square bigger-150 icon-only"></i>
+								</button>
+
+								<button class="btn btn-purple btn-xs cancel-select" data-type="table-select">
+									<i class="ace-icon fa fa-square-o  bigger-150 icon-only"></i>
+								</button>
+
+								<button class="btn btn-pink btn-xs select-invert" data-type="table-select">
+									<i class="ace-icon fa fa-check-square-o  bigger-150 icon-only"></i>
+								</button>
+
+							</th>
+							<th>
+								<i class="ace-icon fa fa-plus-square"></i>
+								添加
+								<button class="btn btn-success btn-xs select-all" data-type="table-insert">
+									<i class="ace-icon fa fa-check-square bigger-150 icon-only"></i>
+								</button>
+
+								<button class="btn btn-purple btn-xs cancel-select" data-type="table-insert">
+									<i class="ace-icon fa fa-square-o  bigger-150 icon-only"></i>
+								</button>
+
+								<button class="btn btn-pink btn-xs select-invert" data-type="table-insert">
+									<i class="ace-icon fa fa-check-square-o  bigger-150 icon-only"></i>
+								</button>
+							</th>
+							<th>
+								<i class="ace-icon fa fa-edit"></i>
+								修改
+								<button class="btn btn-success btn-xs select-all" data-type="table-update">
+									<i class="ace-icon fa fa-check-square bigger-150 icon-only"></i>
+								</button>
+
+								<button class="btn btn-purple btn-xs cancel-select" data-type="table-update">
+									<i class="ace-icon fa fa-square-o  bigger-150 icon-only"></i>
+								</button>
+
+								<button class="btn btn-pink btn-xs select-invert" data-type="table-update">
+									<i class="ace-icon fa fa-check-square-o  bigger-150 icon-only"></i>
+								</button>
+							</th>
+							<th>
+								<i class="ace-icon fa fa-times-circle"></i>
+								删除
+								<button class="btn btn-success btn-xs select-all" data-type="table-delete">
+									<i class="ace-icon fa fa-check-square bigger-150 icon-only"></i>
+								</button>
+
+								<button class="btn btn-purple btn-xs cancel-select" data-type="table-delete">
+									<i class="ace-icon fa fa-square-o  bigger-150 icon-only"></i>
+								</button>
+
+								<button class="btn btn-pink btn-xs  select-invert" data-type="table-delete">
+									<i class="ace-icon fa fa-check-square-o  bigger-150 icon-only"></i>
+								</button>
+							</th>
+						</tr>
+					</thead>
+					<tbody>
+						<volist name="dataTablesArray" id="dataTables">
+							<tr class="datatables-auth" name="{$dataTables}">
+								<td>{$dataTables}</td>
+								<td><input type="checkbox" class="table-select" name="select" id=""></td>
+								<td><input type="checkbox" class="table-insert" name="insert" id=""></td>
+								<td><input type="checkbox" class="table-update" name="update" id=""></td>
+								<td><input type="checkbox" class="table-delete" name="delete" id=""></td>
+							</tr>
+						</volist>
+					</tbody>
+				</table>
+			</div>
+		</div>
+	</div>
+</div><!-- /.span -->
+<script>
+	$(function(){
+		$("#database-widget input[class='table-select'] ").prop("checked",true)
+
+		$(".select-all").on("click",function(){
+			if($(this).data("type")==undefined){
+				$("#database-widget input[type='checkbox']").prop("checked",true)
+			}else{
+				$("#database-widget input[class='"+$(this).data("type")+"'] ").prop("checked",true)
+			}
+		})
+
+		$(".cancel-select").on("click",function(){
+			if($(this).data("type")==undefined){
+				$("#database-widget input[type='checkbox']").prop("checked",false)
+			}else{
+				$("#database-widget input[class='"+$(this).data("type")+"']").prop("checked",false)
+			}
+		})
+
+		$(".select-invert").on("click",function(){
+			if($(this).data("type")==undefined){
+
+				$("#database-widget input[type='checkbox']").each(function () {  
+	                $(this).prop("checked", !$(this).prop("checked"));  
+	            });  
+			}else{
+
+				$("#database-widget input[class='"+$(this).data("type")+"']").each(function () {  
+	                $(this).prop("checked", !$(this).prop("checked"));  
+	            }); 
+			}
+		})
+
+		$("select[name='roles']").on("change",function(){
+			$("#database-widget input[type='checkbox']").prop("checked",false)
+			var rolesId=$(this).val();
+			$.ajax({
+				url:"{:U('show_role')}",
+				type:"POST",
+				dataType:"json",
+				data:{"role_id":rolesId,"stype":"table"},
+				success:function(data){
+					$("select[name='role']").html(data["roleHtml"])
+					set_table(data["auth"])
+				}
+
+			})
+		})
+
+		/*
+		 * 根据不同角色获取不同的权限
+		 */
+		$("select[name='role']").on("change",function(){
+			$("#database-widget input[type='checkbox']").prop("checked",false)
+			$(".ace[type='checkbox']").prop("checked",false)
+			var roleId=$(this).val();
+			if(roleId==0){
+				return false;
+			}
+			$.ajax({
+				url:"{:U('show_autable')}",
+				type:"POST",
+				dataType:"json",
+				data:{"role_id":roleId},
+				success:function(data){
+					set_table(data)
+					
+					// data.each(function(){
+					// 	console.log(this)
+					// })
+					// for (module in data) {
+					// 	for (control in data[module]) {
+					// 		set_auths(module,control,data[module][control]["menus"])
+					// 	}
+					// }					
+				}
+
+			})
+		})
+
+		/*
+		
+		 */
+		$(".save-btn").on("click",function(){
+			var tableN="";
+			var tlenth=$(".datatables-auth").length
+			$(".datatables-auth").each(function(t){
+				if((t+1)>=tlenth){
+					var tCm=""
+				}else{
+					var tCm=","
+				}
+				var auth="";
+				var alenth=$(this).find("input[type=checkbox]:checked").length
+				$(this).find("input[type=checkbox]:checked").each(function(i){
+					if((i+1)>=alenth){
+						var aCm=""
+					}else{
+						var aCm=","
+					}
+					auth+='"'+$(this).attr("name")+'"'+aCm;
+				})
+
+				tableN+='"'+$(this).children("td").text()+'":['+auth+']'+tCm;
+
+			})
+			var roleId=$("select[name='role'] option:selected").val()
+			var rolesId=$("select[name='roles'] option:selected").val()
+			if(roleId==0 && rolesId==0){
+				alert("未选择")
+				return false
+			}else if(roleId==0){
+				var rauth_role=rolesId
+			}else{
+				var rauth_role=roleId
+			}
+			// console.log('{'+tableN+'}')	
+			$.ajax({
+				url:"{:U('set_autable')}",
+				type:"POST",
+				dataType:"html",
+				data:{"rauth_role":rauth_role,"rauth_table":'{'+tableN+'}'},
+				success:function(data){
+					console.log(data)
+				}
+			})
+
+		})
+
+		function set_table(jsonData){
+			jQuery.each(jsonData,function(i,val){
+				jQuery.each(val,function(ii,sval){
+					$(".datatables-auth[name='"+i+"']").find("input[name='"+sval+"']").prop("checked",true);
+				})
+			})
+		}
+		 //
+	
+	})
+</script>

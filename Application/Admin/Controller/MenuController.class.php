@@ -1,11 +1,12 @@
 <?php
 namespace Admin\Controller;
-use Common\Controller\AmangController;
-class MenuController extends AmangController {
+use Common\Controller\AmongController;
+class MenuController extends AmongController {
 	//menu
 	
 	public function menu(){
-		
+		$authoMenu=$this->get_auth();
+		$this->assign("authoMenu",$authoMenu);	
 		$this->display("menu");
 	}
 	//退出

@@ -1,7 +1,7 @@
 <?php
 namespace Home\Controller;
-use Common\Controller\AmangController;
-class IndexController extends AmangController {
+use Common\Controller\AmongController;
+class IndexController extends AmongController {
 	//获取员工编码
 	function getcode(){
 		if(IS_POST){

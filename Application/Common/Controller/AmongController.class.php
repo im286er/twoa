@@ -2,7 +2,7 @@
 /*作为中间层的类*/
 namespace Common\Controller;
 use Think\Controller;
-class AmangController extends Controller {
+class AmongController extends Controller {
 	//初始化，类似构造方法，判断是否登录
 	public function _initialize(){
 		$oa_login=session("oa_islogin");
