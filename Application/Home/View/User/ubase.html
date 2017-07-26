@@ -370,6 +370,7 @@
 					data:{"type":"get","place_id":$(this).val()},
 					datatype:"html",
 					success:function(data){
+						console.log(data)
 						$("select[name='place-role']").find("option[value='"+data+"']").prop("selected",true);
 					}
 				})

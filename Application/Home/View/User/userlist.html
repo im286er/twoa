@@ -71,13 +71,7 @@
 								</select>
 							</div>
 						</div>
-						<div class="form-group">
-							<div class="col-sm-1">
-								<select name="user_subgroup" class="form-control">
-									<option value="">所有组别</option>
-								</select>
-							</div>
-						</div>
+
 						<div class="form-group">
 							<div class="col-sm-1">
 								<select name="user_state" class="form-control">
@@ -89,12 +83,17 @@
 							</div>
 						</div>
 					</form>	
-						<div class="form-group">
-							<div class="col-sm-1">
-								<button class="btn btn-sm btn-primary search-btn"><i class="ace-icon fa fa-search"></i>查询</button>
-							</div>
+					<div class="form-group">
+						<div class="col-sm-1">
+							<button class="btn btn-sm btn-primary search-btn"><i class="ace-icon fa fa-search"></i>查询</button>
 						</div>
-					
+					</div>
+					<div class="form-group">
+						<div class="col-sm-1">
+							<button class="btn btn-sm btn-primary search-btn"><i class="ace-icon fa fa-search"></i>图标</button>
+						</div>
+					</div>
+
 				</div>
 			</div>
 		</div>
@@ -250,6 +249,9 @@
 	function search_user(){
 		datas={}
 		datas["p"]=$(this).find("a").data("page")
+		if(datas["p"]==undefined){
+			datas["p"]=$(".pagination .active a").data("page")
+		}
 		datas["condition"]=$("#condition-form").serializeArray()
 		datas["limit"]=$("#showlimit").val()
 		

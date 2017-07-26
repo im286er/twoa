@@ -62,7 +62,7 @@ class AuthController extends AmongController {
 
 	function set_rauth(){
 		if(IS_POST){
-			if($_POST["rauth_role"]<=2){
+			if($_POST["rauth_role"]<=0){
 				echo "不能更改此角色权限";
 			}else{
 				echo $this->rauth->add_auth($_POST["rauth_role"],$_POST["rauth_auth"]);
@@ -78,7 +78,7 @@ class AuthController extends AmongController {
 
 	function set_autable(){
 		if(IS_POST){
-			if($_POST["rauth_role"]<2){
+			if($_POST["rauth_role"]<0){
 				echo "不能更改此角色权限";
 			}else{
 				echo $this->rauth->add_table($_POST["rauth_role"],$_POST["rauth_table"]);

@@ -16,6 +16,14 @@
 		<div class="widget-main">
 			<form class="form-horizontal" id="user-form">
 				<input  name="user_id" class="user-finfo" type="hidden" value="{$userinfo.user_id|default='0'}">
+			<if condition="$add eq 'true'">
+				<div class="form-group">
+					<label class="col-sm-3 control-label no-padding-right" for="form-field-1"> 用户名 </label>
+					<div class="col-sm-9">
+						<input  placeholder="用户名" name="user_username" class="col-xs-10 col-sm-10 user-finfo" data-label="用户名" type="text" value="{$userinfo.user_username|default=''}">
+					</div>
+				</div>
+			</if>
 			<div class="form-group">
 				<label class="col-sm-3 control-label no-padding-right" for="form-field-1"> 姓名 </label>
 				<div class="col-sm-9">
@@ -51,6 +59,7 @@
 				<div class="col-sm-8">
 					<!-- <input  placeholder="所属部门" class="col-xs-10 col-sm-10" type="text"> -->
 					<select class="chosen-select form-control user-finfo" data-label="所属部门" name="user_department" data-placeholder="选择所属部门">
+						<option value='0'>所有部门</option>
 						<volist name="departmentArray" id="department">
 							<option value="{$department.department_id}">{$department.department_name}</option>
 						</volist>
@@ -63,6 +72,7 @@
 				<div class="col-sm-8">
 					<!-- <input  placeholder="所属部门" class="col-xs-10 col-sm-10" type="text"> -->
 					<select class="chosen-select form-control user-finfo" data-label="所属分组" name="user_group" data-placeholder="选择所属部门">
+						<option value='0'>所有分组</option>
 						<volist name="groupArray" id="group">
 							<option value="{$group.group_id}">{$group.group_name}</option>
 						</volist>
@@ -74,6 +84,7 @@
 				<label class="col-sm-3 control-label no-padding-right" for="form-field-1"> 职位 </label>
 				<div class="col-sm-8">
 					<select class="chosen-select form-control user-finfo" data-label="职位" name="user_place" data-placeholder="选择职位">
+						<option value='0'>所有职位</option>
 						<volist name="placeArray" id="placelist">
 							<option value="{$placelist.place_id}">{$placelist.place_name}</option>
 						</volist>
@@ -86,6 +97,7 @@
 				<label class="col-sm-3 control-label no-padding-right" for="form-field-1"> 角色分组 </label>
 				<div class="col-sm-8">
 					<select class="chosen-select form-control user-finfo" data-label="角色" name="user_roles" data-placeholder="选择对应角色">
+						<option value='0'>所有角色</option>
 						<volist name="rolesArray" id="roleslist">
 							<option value="{$roleslist.role_id}">{$roleslist.role_name}</option>
 						</volist>
@@ -96,6 +108,7 @@
 				<label class="col-sm-3 control-label no-padding-right" for="form-field-1"> 角色 </label>
 				<div class="col-sm-8">
 					<select class="chosen-select form-control user-finfo" data-label="角色" name="user_role" data-placeholder="选择对应角色">
+					<option value='0'>所有角色</option>
 						<volist name="roleArray" id="roleslist">
 							<option value="{$roleslist.role_id}">{$roleslist.role_name}</option>
 						</volist>
@@ -106,10 +119,10 @@
 				<label class="col-sm-3 control-label no-padding-right" for="form-field-1"> 上级主管 </label>
 				<div class="col-sm-8">
 					<select class="chosen-select form-control user-finfo" data-label="上级主管" name="user_director" data-placeholder="上级主管">
+						<option value='0'>无</option>
 						<volist name="directorArray" id="directorList">
 							<option value="{$directorList.user_code}">{$directorList.user_name}</option>
 						</volist>
-						<!-- <option value='{$userinfo["directorArray"]}'>{$userinfo["user_director"]}</option> -->
 					</select>
 					<!-- <input  placeholder="上级主管" name="user_director" data-label="上级主管" class="user-finfo col-xs-10 col-sm-10" type="text" value="{$userinfo.user_director|default=''}"> -->
 				</div>
@@ -220,7 +233,7 @@
 			// 	})
 			// })
 			//改变分组
-			$("select[name='user_department']").on("change",function(){
+			$(".widget-box select[name='user_department']").on("change",function(){
 				$.ajax({
 					url:"{:U('show_group')}",
 					type:"post",
@@ -237,7 +250,7 @@
 				})
 			})
 			//改变职位
-			$("select[name='user_group']").on("change",function(){
+			$(".widget-box select[name='user_group']").on("change",function(){
 				$.ajax({
 					url:"{:U('show_place')}",
 					type:"post",
@@ -251,14 +264,35 @@
 				})
 			})
 			//改变角色
-			$("select[name='user_roles']").on("change",function(){
+			$(".widget-box select[name='user_roles']").on("change",function(){
 				$.ajax({
 					url:"{:U('show_role')}",
 					type:"post",
 					data:{"role_upper":$(this).val()},
 					dataType:"html",
 					success:function(data){
-						$("select[name='user_role']").html(data)
+						$(".widget-box select[name='user_role']").html(data)
+					}
+				})
+			})
+
+			//判断用户名是否存在
+			$(".widget-box input[name='user_username']").on("input",function(){
+				// console.log($(this).val());
+				var selfEle=this
+				$.ajax({
+					url:"{:U('has_username')}",
+					type:"post",
+					data:{"user_username":$(this).val()},
+					dataType:"html",
+					success:function(data){
+						if(data=="error"){
+							$(selfEle).parents(".form-group").addClass("has-error")
+							alert("用户名已存在")
+						}else{
+							$(selfEle).parents(".form-group").removeClass("has-error")
+						}
+						// console.log(data)
 					}
 				})
 			})
@@ -305,13 +339,13 @@
 	     */
 		function init(){
 			
-			$("select[name='user_company']").find("option[value='{$userinfo['user_company']}']").attr("selected",true);
-			$("select[name='user_department']").find("option[value='{$userinfo['user_department']}']").attr("selected",true);
-			$("select[name='user_group']").find("option[value='{$userinfo['user_group']}']").attr("selected",true);
-			$("select[name='user_place']").find("option[value='{$userinfo['user_place']}']").attr("selected",true);
-			$("select[name='user_roles']").find("option[value='{$userinfo['user_roles']}']").attr("selected",true);
-			$("select[name='user_role']").find("option[value='{$userinfo['user_role']}']").attr("selected",true);
-			$("select[name='user_director']").find("option[value='{$userinfo['user_director']}']").attr("selected",true);
+			$(".widget-box select[name='user_company']").find("option[value='{$userinfo['user_company']}']").attr("selected",true);
+			$(".widget-box select[name='user_department']").find("option[value='{$userinfo['user_department']}']").attr("selected",true);
+			$(".widget-box select[name='user_group']").find("option[value='{$userinfo['user_group']}']").attr("selected",true);
+			$(".widget-box select[name='user_place']").find("option[value='{$userinfo['user_place']}']").attr("selected",true);
+			$(".widget-box select[name='user_roles']").find("option[value='{$userinfo['user_roles']}']").attr("selected",true);
+			$(".widget-box select[name='user_role']").find("option[value='{$userinfo['user_role']}']").attr("selected",true);
+			$(".widget-box select[name='user_director']").find("option[value='{$userinfo['user_director']}']").attr("selected",true);
 			if("{$userinfo.user_sex|default=''}"=="女"){
 				$("#user-sex-box").prop("checked",true)
 			}else{
@@ -320,6 +354,12 @@
 			// $(".selector").find("option[text='pxx']").attr("selected",true);
 		}
 
+		/**
+		 * [con_user 函数，新增或者修改用户]
+		 * @param  {[type]} formId [指定的表单id]
+		 * @param  {[type]} type   [类型 add或者update]
+		 * @return {[type]}        [description]
+		 */
 		function con_user(formId,type){
 			datas={}
 			datas["type"]=type

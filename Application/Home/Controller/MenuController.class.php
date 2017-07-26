@@ -5,6 +5,7 @@ use Common\Controller\AmongController;
 class MenuController extends AmongController {
 	//menu
 	public function menu(){
+
 		$authoMenu=$this->get_auth(array("Menu"));
 		$this->assign("authoMenu",$authoMenu);
 		$this->display("menu");

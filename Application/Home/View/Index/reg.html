@@ -6,69 +6,84 @@
 		background:#82AF6F;
 	}
 </style>
+<div class="active-form">
+<input type="hidden" class="user-finfo" name="user_id" value="{$userIdData}" />
 <label class="block clearfix">
 	<span class="block input-icon input-icon-right">
-		<input type="password" class="form-control" placeholder="密码" />
+		<input type="text" class="form-control user-finfo" name="user_username" placeholder="用户名[后续不能更改，登录凭证]" />
+		<i class="ace-icon fa fa-user"></i>
+	</span>
+</label>
+<label class="block clearfix">
+	<span class="block input-icon input-icon-right">
+		<input type="password" class="form-control" name="firstpasswd" placeholder="密码" />
 		<i class="ace-icon fa fa-lock"></i>
 	</span>
 </label>
 
 <label class="block clearfix">
 	<span class="block input-icon input-icon-right">
-		<input type="password" class="form-control" placeholder="重复密码" />
+		<input type="password" class="form-control user-finfo" name="user_passwd" placeholder="重复密码" />
 		<i class="ace-icon fa fa-retweet"></i>
 	</span>
 </label>
 <label class="block clearfix">
 	<select class="chosen-select form-control user-finfo" data-label="所属公司"  name="user_company" data-placeholder="选择所属公司">
-		<volist name="user_companys" id="company">
-			<option value="{$company.config_key}">{$company.config_value}</option>
+		<volist name="companyDataArray" id="companyData">
+			<option value="{$companyData.company_id}">{$companyData.company_name}</option>
 		</volist>
 	</select>
 </label>	
 <label class="block clearfix">
-	<select class="chosen-select form-control user-finfo" data-label="所属部门" name="user_group" data-placeholder="选择所属部门">
-		<volist name="user_groups" id="groups">
-			<option value="{$groups.group_id}">{$groups.group_name}</option>
+	<select class="chosen-select form-control user-finfo" data-label="所属部门" name="user_department" data-placeholder="选择所属部门">
+		<option value="0">选择所属部门</option>
+		<volist name="departmentDataArray" id="departmentData">
+			<option value="{$departmentData.department_id}">{$departmentData.department_name}</option>
 		</volist>
 	</select>
 </label>
 <label class="block clearfix">
-	<select class="chosen-select form-control user-finfo" data-label="所属小组" name="user_subgroup" data-placeholder="选择所属小组">
-		<volist name="user_subgroups" id="subgroups">
+	<select class="chosen-select form-control user-finfo" data-label="所属小组" name="user_group" data-placeholder="选择所属小组">
+		<option value="0">选择所属小组</option>
+		<!-- <volist name="user_subgroups" id="subgroups">
 			<option value="{$subgroups.subgroup_id}">{$subgroups.subgroup_name}</option>
-		</volist>
+		</volist> -->
 	</select>
 </label>
 <label class="block clearfix">
-	<select class="chosen-select form-control user-finfo" data-label="职位" name="user_group" data-placeholder="选择职位">
-		<volist name="user_place" id="place">
+	<select class="chosen-select form-control user-finfo" data-label="职位" name="user_place" data-placeholder="选择职位">
+		<option value="0">选择职位</option>
+		<!-- <volist name="user_place" id="place">
 			<option value="{$place.place_id}">{$place.place_name}</option>
-		</volist>
+		</volist> -->
 	</select>
 </label>	
 <label class="block clearfix">
-	<span class="block input-icon input-icon-right">
-		<input type="text" class="form-control" readonly="" placeholder="上级主管/组长" />
-		<i class="ace-icon fa fa-group"></i>
-	</span>	
+	<select class="chosen-select form-control user-finfo" data-label="上级主管" name="user_director" data-placeholder="上级主管">
+		<option value="0">上级主管</option>
+		<volist name="directorArray" id="directorList">
+			<option value="{$directorList.user_code}">{$directorList.user_name}</option>
+		</volist>
+	</select>
 </label>	
 <label class="block clearfix">
 	<input type="checkbox" id="user-sex-box" name="user_sex" data-label="性别" class="user-finfo ace ace-switch ace-switch-4 btn-flat" />
 	<span class="lbl user-sex-span" data-lbl="女&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;男"></span>
 </label>
+<p > 请选择您的生日: </p>
 <label class="block clearfix">
 	<span class="block input-icon input-icon-right">
-		<input class="form-control date-picker user-finfo" data-label='生日' name="user_born" id="id-date-born" data-date-format="yyyy-mm-dd" type="text">	
+		<input class="form-control date-picker user-finfo" data-label='生日' name="user_born" id="id-date-born" data-date-format="yyyy-mm-dd" type="text" value='{$todayTime|date="Y-m-d",###}'>	
 		<i class="ace-icon fa fa-calendar bigger-110"></i>
 	</span>
 </label>
+<input class="user-finfo" name="user_entry" type="hidden" value='{$todayTime|date="Y-m-d",###}'>
 <!-- <label class="block clearfix">
 	
 </label> -->
 <label class="block clearfix">
 	<span class="block input-icon input-icon-right">
-		<input type="text" name="user_phone" autocomplete="off" class="form-control user-infos" placeholder="手机号码" />
+		<input type="text" name="user_phone" autocomplete="off" class="form-control user-finfo" placeholder="手机号码" />
 		<i class="ace-icon glyphicon glyphicon-phone"></i>
 	</span>
 </label>
@@ -80,13 +95,13 @@
 		</span>
 	</label>
 </div>
+</div>
 <div class="space-24"></div>
 
 <div class="clearfix">
 
-	<button type="button" class="btn-block btn btn-sm btn-success">
-		<span class="bigger-110">注册</span>
-
+	<button type="button" class="btn-block btn btn-sm btn-success" id="improve-user">
+		<span class="bigger-110">完善资料</span>
 		<i class="ace-icon fa fa-arrow-right icon-on-right"></i>
 	</button>
 </div>
@@ -111,34 +126,214 @@
 				$("#user-sex-box").val("男")
 			}
 		}
-		//验证验证码
-		$(".form-control[name='user_captcha']").on("input",function(){
-			var captchaE=$(".form-control[name='user_captcha']")
-			var captcha=captchaE.val()
-			if(captcha.length==6){
+		//判断用户名是否存在
+		$(".active-form").on("input","input[name='user_username']",function(){
+			// console.log($(this).val());
+			var selfEle=this
+			if($(this).val()==""){
+				return false;
+			}
+			$.ajax({
+				url:"{:U('User/has_username')}",
+				type:"post",
+				data:{"user_username":$(this).val()},
+				dataType:"html",
+				success:function(data){
+					if(data=="error"){
+						$(selfEle).parents(".clearfix").addClass("has-error")
+						alert("用户名已存在,自动给你加1")
+						$(selfEle).val($(selfEle).val()+"1")
+					}else{
+						$(selfEle).parents(".clearfix").removeClass("has-error")
+					}
+					// console.log(data)
+				}
+			})
+		})
+		//密码一确认
+		//
+		$(".active-form").on("input","input[name='user_passwd']",function(){
+			var fpd=$("input[name='firstpasswd']").val();
+			if($(this).val()!=fpd){
+				$(this).parents(".clearfix").addClass("has-error")
+				$(this).next("i").removeClass("fa-check-circle green")
+				$(this).next("i").removeClass("fa-retweet")
+
+				if(!$(this).next("i").hasClass("fa-times-circle")){
+					$(this).next("i").addClass("fa-times-circle red")
+				}
+			}else{
+				$(this).parents(".clearfix").removeClass("has-error")
+				if(!$(this).next("i").hasClass("fa-check-circle")){
+					$(this).next("i").addClass("fa-check-circle green")
+					$(this).next("i").removeClass("fa-times-circle red")
+				}
+			}
+		})
+		//改变分组
+		$("select[name='user_department']").on("change",function(){
+			console.log($(this).val())
+			$.ajax({
+				url:"{:U('User/show_group')}",
+				type:"post",
+				data:{"group_id":$(this).val()},
+				dataType:"html",
+				success:function(data){
+					dataJson=JSON.parse(data)
+					// console.log(data)
+					$("select[name='user_group']").html(dataJson["group"])
+					$("select[name='user_place']").html(dataJson["place"])
+					$("select[name='user_director']").html(dataJson["director"])
+				}
+			})
+		})
+		//改变职位
+		$("select[name='user_group']").on("change",function(){
+			$.ajax({
+				url:"{:U('User/show_place')}",
+				type:"post",
+				data:{"department_id":$(this).parents(".clearfix").prev().find("select").val(),"group_id":$(this).val()},
+				dataType:"html",
+				success:function(data){
+					dataJson=JSON.parse(data)
+					$("select[name='user_place']").html(dataJson["place"])
+					$("select[name='user_director']").html(dataJson["director"])
+				}
+			})
+		})
+		//验证手机
+		$("#register-form").on("input",".user-finfo[name='user_phone']",function(){
+			var phoneNum=$(this).val()
+			if(phoneNum.length==11){
 				$.ajax({
 					url:"{:U('checkphone')}",
-					data:{type:"checkmsg",data:{captcha:captcha}},
+					data:{type:"checkphone",data:{user_phone:phoneNum}},
 					type:"post",
 					dateType:"html",
 					success:function(data){
-						captchaE.next().text("")
-						clearInterval(capInt)
 						if(data=="success"){
-							captchaE.next().addClass("fa-check-square green")
-							captchaE.next().removeClass("fa-times-circle red")
+							$(".user-finfo[name='user_phone']").next().addClass("captcha")
 						}else{
-							captchaE.next().addClass("fa-times-circle red")
-							captchaE.next().removeClass("fa-times-square green")
-							if(data=="timeout"){
-								alert("验证码已过期，重新获取吧！")
-							}
+							alert("该手机号码已存在")
+							$(".user-finfo[name='user_phone']").val("")
 						}
 					}
 				})
-			}else if(captcha.length>6){
-				captcha.val(captcha.substring(0,6));
+			}else if(phoneNum.length>11){
+				$(this).val(phoneNum.substring(0,10))
+			}else{
+				if($(".user-finfo[name='user_phone']").next().hasClass("captcha")){
+					$(".user-finfo[name='user_phone']").next().removeClass("captcha")
+				}
 			}
+		})
+		//获取验证码
+		$("#register-form").on("click",".captcha",function(){
+			var selfe=$(this)
+			$.ajax({
+				url:"{:U('checkphone')}",
+				data:{type:"getmsg",data:{user_phone:$(".user-finfo[name='user_phone']").val()}},
+				type:"post",
+				dateType:"html",
+				success:function(data){
+					// alert(data)
+					console.log(data)
+					$(".chaptcha-label").removeClass("hidden")
+					$(".user-finfo[name='user_phone']").next().removeClass("captcha")
+					$(".user-finfo[name='user_phone']").attr("readonly","")
+					var capTime=60;
+					capInt=setInterval(function(){
+						if(capTime==0){
+							clearInterval(capInt)
+							$(".user-finfo[name='user_phone']").next().addClass("captcha")
+							$(".user-finfo[name='user_phone']").removeAttr("readonly")
+							selfe.text("");
+						}else{
+							capTime-=1;
+							selfe.text(capTime);
+						}
+					},1000)
+				}
+			})
+		})
+		//验证短信
+		$("#register-form").on("input","input[name='user_captcha']",function(){
+			var captcha=$(this)
+			if(captcha.val().length==6){
+				$.ajax({
+				url:"{:U('checkphone')}",
+				data:{type:"checkmsg",data:{captcha:captcha.val()}},
+				type:"post",
+				dateType:"html",
+				success:function(data){
+					console.log(data)
+					if(data=="success"){
+						captcha.next("i").removeClass("fa-times-circle red micon")
+						if(!captcha.next("i").hasClass("fa-check-circle green")){
+							captcha.next("i").addClass("fa-check-circle green micon")
+						}
+					}else{
+						captcha.next("i").removeClass("fa-check-circle green micon")
+						if(!captcha.next("i").hasClass("fa-times-circle red")){
+							captcha.next("i").addClass("fa-times-circle red micon")
+						}
+					}
+					
+				}
+			})
+			}else if(captcha.val().length>6){
+				captcha.val(captcha.val().substring(0,6))
+			}
+			
+		})
+		//完善信息
+		$("#improve-user").on("click",function(){
+			var datas={}
+			datas["type"]="update"
+			datas["data"]={}
+			$(".user-finfo").each(function(index){
+
+				// console.log($(this).attr("name")+$(this).val())
+				if($(this).val()==""){
+					alert("请不要留空")
+					return false
+				}
+				if($(this).attr("name")=="user_passwd"){
+					if($(this).next("i").hasClass("fa-times-circle")){
+						alert("密码不一致")
+						return false
+					}
+				}
+				if($(this).attr("name")=="user_department"){
+					if($(this).val()<=0){
+						alert("部门必须选择")
+						return false
+					}
+				}
+				if($(this).attr("name")=="user_place"){
+					if($(this).val()<=0){
+						alert("职位必须选择")
+						return false
+					}
+				}
+				datas["data"][$(this).attr("name")]=$(this).val()	
+			})
+			if(!$("input[name='user_captcha']").next("i").hasClass("fa-check-circle")){
+				alert("短信验证失败")
+				return false
+			}
+			$.ajax({
+				url:"{:U('User/con_user')}",
+				data:datas,
+				type:"post",
+				dateType:"html",
+				success:function(data){
+					if(data==1){
+						alert("信息完善成功，请等待审核！")
+						window.location.reload();
+					}
+				}
+			})
 		})
 	})
 </script>

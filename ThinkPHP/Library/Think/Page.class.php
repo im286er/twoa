@@ -132,7 +132,7 @@ class Page{
                 }
             }else{
                 if($page > 0 && $this->totalPages != 1){
-                    $link_page .= '<li class="paginate_button active" aria-controls="dynamic-table" tabindex="0"><a href="javascript:void(0);" data-page="{$page}">' . $page . '</a></li>';
+                    $link_page .= '<li class="paginate_button active" aria-controls="dynamic-table" tabindex="0"><a href="javascript:void(0);" data-page="'.$page.'">' . $page . '</a></li>';
                 }
             }
         }

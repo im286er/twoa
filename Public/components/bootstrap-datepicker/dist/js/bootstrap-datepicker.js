@@ -982,9 +982,9 @@
 				startMonth = this.o.startDate !== -Infinity ? this.o.startDate.getUTCMonth() : -Infinity,
 				endYear = this.o.endDate !== Infinity ? this.o.endDate.getUTCFullYear() : Infinity,
 				endMonth = this.o.endDate !== Infinity ? this.o.endDate.getUTCMonth() : Infinity,
-				todaytxt = dates[this.o.language].today || dates['en'].today || '',
-				cleartxt = dates[this.o.language].clear || dates['en'].clear || '',
-				titleFormat = dates[this.o.language].titleFormat || dates['en'].titleFormat,
+				todaytxt = dates[this.o.language].today || dates['cn'].today || '',
+				cleartxt = dates[this.o.language].clear || dates['cn'].clear || '',
+				titleFormat = dates[this.o.language].titleFormat || dates['cn'].titleFormat,
 				tooltip,
 				before;
 			if (isNaN(year) || isNaN(month))
@@ -1062,7 +1062,7 @@
 			}
 			this.picker.find('.datepicker-days tbody').empty().append(html.join(''));
 
-			var monthsTitle = dates[this.o.language].monthsTitle || dates['en'].monthsTitle || 'Months';
+			var monthsTitle = dates[this.o.language].monthsTitle || dates['cn'].monthsTitle || 'Months';
 			var months = this.picker.find('.datepicker-months')
 						.find('.datepicker-switch')
 							.text(this.o.maxViewMode < 2 ? monthsTitle : year)
@@ -1769,7 +1769,7 @@
 		forceParse: true,
 		format: 'mm/dd/yyyy',
 		keyboardNavigation: true,
-		language: 'en',
+		language: 'cn',
 		minViewMode: 0,
 		maxViewMode: 4,
 		multidate: false,
@@ -1808,6 +1808,16 @@
 			monthsShort: ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"],
 			today: "Today",
 			clear: "Clear",
+			titleFormat: "MM yyyy"
+		},
+		cn:{
+			days: ["星期日", "星期一", "星期二", "星期三", "星期四", "星期五", "星期六"],
+			daysShort: ["周日", "周一", "周二", "周三", "周四", "周五", "周六"],
+			daysMin: ["日", "一", "二", "三", "四", "五", "六"],
+			months: ["一月", "二月", "三月", "四月", "五月", "六月", "七月", "八月", "九月", "十月", "十一月", "十二月"],
+			monthsShort: ["1月", "2月", "3月", "4月", "5月", "6月", "7月", "8月", "9月", "10月", "11月", "12月"],
+			today: "今天",
+			clear: "清除",
 			titleFormat: "MM yyyy"
 		}
 	};
@@ -2015,7 +2025,7 @@
 				DD: dates[language].days[date.getUTCDay()],
 				m: date.getUTCMonth() + 1,
 				M: dates[language].monthsShort[date.getUTCMonth()],
-				MM: dates[language].months[date.getUTCMonth()],
+				MM: dates[language].monthsShort[date.getUTCMonth()],
 				yy: date.getUTCFullYear().toString().substring(2),
 				yyyy: date.getUTCFullYear()
 			};

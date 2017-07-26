@@ -11,7 +11,7 @@
 		<!-- bootstrap & fontawesome -->
 		<link rel="stylesheet" href="__PUBLIC__/assets/css/bootstrap.css" />
 		<link rel="stylesheet" href="__PUBLIC__/components/font-awesome/css/font-awesome.css" />
-
+		<link rel="stylesheet" href="__PUBLIC__/components/bootstrap-datepicker/dist/css/bootstrap-datepicker3.css">
 		<!-- text fonts -->
 		<link rel="stylesheet" href="__PUBLIC__/assets/css/ace-fonts.css" />
 
@@ -126,7 +126,7 @@
 											</div>
 											<div>
 												<a href="javascript:void(0);" data-target="#signup-box" class="user-signup-link">
-													新员工注册
+													新员工激活
 													<i class="ace-icon fa fa-arrow-right"></i>
 												</a>
 											</div>
@@ -336,59 +336,7 @@
 					}
 				})
 			}
-			//验证手机
-			$("#register-form").on("input",".user-infos[name='user_phone']",function(){
-				var phoneNum=$(this).val()
-				if(phoneNum.length==11){
-					$.ajax({
-						url:"{:U('checkphone')}",
-						data:{type:"checkphone",data:{user_phone:phoneNum}},
-						type:"post",
-						dateType:"html",
-						success:function(data){
-							if(data=="success"){
-								$(".user-infos[name='user_phone']").next().addClass("captcha")
-							}else{
-								alert("该手机号码已存在")
-								$(".user-infos[name='user_phone']").val("")
-							}
-						}
-					})
-				}else if(phoneNum.length>11){
-					$(this).val(phoneNum.substring(0,10))
-				}else{
-					if($(".user-infos[name='user_phone']").next().hasClass("captcha")){
-						$(".user-infos[name='user_phone']").next().removeClass("captcha")
-					}
-				}
-			})
-			//获取验证码
-			$("#register-form").on("click",".captcha",function(){
-				$.ajax({
-					url:"{:U('checkphone')}",
-					data:{type:"getmsg",data:{user_phone:$(".user-infos[name='user_phone']").val()}},
-					type:"post",
-					dateType:"html",
-					success:function(data){
-						// alert(data)
-						$(".chaptcha-label").removeClass("hidden")
-						$(".user-infos[name='user_phone']").next().removeClass("captcha")
-						$(".user-infos[name='user_phone']").attr("readonly","")
-						var capTime=60;
-						capInt=setInterval(function(){
-							if(capTime==0){
-								clearInterval(capInt)
-								$(".user-infos[name='user_phone']").next().addClass("captcha")
-								$(".user-infos[name='user_phone']").removeAttr("readonly")
-								$(".chaptcha-label i").text("");
-							}else{
-								capTime-=1;
-								$(".chaptcha-label i").text(capTime);
-							}
-						},1000)
-					}
-				})
-			})
+		
 
 			});
 		</script>

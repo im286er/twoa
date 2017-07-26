@@ -14,7 +14,7 @@
 	<td>{$userData["user_sex"]}</td>
 	<td>{$userData["user_entry"]}</td>
 	<td>{$userData["user_born"]}</td>
-	<td>{$userData["user_status"]}</td>
+	<td>{$userData["user_status"]}{$userData["user_quit"]|date2format='true'}</td>
 	<td>
 		<div class="hidden-sm hidden-xs btn-group user-control" data-userid="{$userData['user_id']}">
 			<button class="btn btn-xs btn-info user-edit" data-toggle="modal" data-target="#userModal">

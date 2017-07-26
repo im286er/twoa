@@ -2,23 +2,18 @@
 namespace Home\Controller;
 use Common\Controller\AmongController;
 class IndexController extends AmongController {
-	//获取员工编码
+	
+	//获取员工姓名
 	function getcode(){
 		if(IS_POST){
-			$user=M("oa_user");
-			$userData=$user->where($_POST)->find();
-			// print_r($userData);
-			if(!empty($userData["user_id"])){
-				if($userData["user_state"]!=1){
-					session("reg_code",$_POST["user_code"]);
-					echo $userData["user_name"];
-				}
+			if($this->selfUser["user_code"]!=1){
+				echo $this->selfUser["user_name"];
 			}
 		}
 	}
 	//验证手机
 	function checkphone(){
-		if(IS_POST && session("reg_code")){
+		if(IS_POST && session("is_register")){
 			if($_POST["type"]=="checkphone"){
 				$user=M("oa_user");
 				$userData=$user->field("user_id")->where($_POST["data"])->find();
@@ -35,8 +30,9 @@ class IndexController extends AmongController {
 				$captcha=rand(111111,999999);
 				session("captcha",sha1($captcha));
 				session("captchaExpire",time()+600);
+				echo $captcha;
 				/*这里涉及到账号配置，暂时保密*/	
-				$sms->setOption('','','','')->send($_POST["data"]["user_phone"],"您的手机号码正在注册集团会员信息，注册验证码是{$captcha}，如非本人操作请及时通知管理员。");
+				// $sms->setOption('','','','')->send($_POST["data"]["user_phone"],"您的手机号码正在注册集团会员信息，注册验证码是{$captcha}，如非本人操作请及时通知管理员。");
 			}else if($_POST["type"]=="checkmsg"){
 				if(time()>=session("captchaExpire")){
 					echo "timeout";
@@ -54,22 +50,27 @@ class IndexController extends AmongController {
 	}
 	//对注册页的信息进行初始化
 	function getreg(){
-		if(IS_POST && session("reg_code")){
-			$config=M("oa_config");
-			$companyData=$config->field("config_key,config_value")->where("config_class='company'")->select();
-			$this->assign("user_companys",$companyData);
+		
+		if(IS_POST && session("is_register")){
 
-			$group=M("oa_group g");
-			$groupData=$group->field("group_id,group_name")->select();
-			$this->assign("user_groups",$groupData);
+			$this->assign("userIdData",$this->selfUser["user_id"]);
 
-			$subgroup=M("oa_subgroup");
-			$subgroupData=$subgroup->field("subgroup_id,subgroup_name")->select();
-			$this->assign("user_subgroups",$subgroupData);
+			$companyData=$this->baseInfo->company()->search_company();
+			$this->assign("companyDataArray",$companyData);
 
-			$place=M("oa_place");
-			$placeData=$place->field("place_id,place_name")->select();
+			$departmentData=$this->baseInfo->department()->search_department();
+			$this->assign("departmentDataArray",$departmentData);
+
+			$placeData=$this->baseInfo->place()->search_place();
 			$this->assign("user_place",$placeData);
+
+			$roleData=$this->baseInfo->role()->search_role();
+			$this->assign("role_group",$roleData);
+
+			$allRole=$this->baseInfo->role()->search_role(0,true);
+			$this->assign("allRoleArray",$allRole);
+			$this->assign("todayTime",time());
+
 
 			echo $this->fetch("reg");
 		}

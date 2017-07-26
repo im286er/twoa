@@ -330,7 +330,7 @@
 						</li>
 
 						<!-- #section:basics/navbar.user_menu -->
-						<li class="light-blue dropdown-modal">
+						<li class="light-blue dropdown-modal main-menu" data-module="Menu">
 							<a data-toggle="dropdown" href="javascript:void(0);" class="dropdown-toggle">
 								<img class="nav-user-photo" src="__PUBLIC__/assets/avatars/user.jpg" alt="Jason's Photo" />
 								<span class="user-info">
@@ -350,7 +350,7 @@
 								</li>
 
 								<li>
-									<a class="ajax-html" href="javascript:void(0);"  data-con="{:U('Menu/gethtml')}" data-html="profile">
+									<a class="ajax-html" href="javascript:void(0);"  data-con="gethtml" data-html="profile">
 										<i class="ace-icon fa fa-user"></i>
 										个人信息
 									</a>
@@ -359,7 +359,7 @@
 								<li class="divider"></li>
 
 								<li>
-									<a class="ajax-html" href="javascript:void(0);" data-con="{:U('Menu/logout')}" data-html="logout">
+									<a class="ajax-html" href="javascript:void(0);" data-con="logout" data-html="logout">
 										<i class="ace-icon fa fa-power-off"></i>
 										退出
 									</a>
@@ -641,7 +641,7 @@
 							<ul class="submenu">
 								<volist name="menulist['menus']" id="menulists">
 									<li class="">
-										<a href="javascript:void(0);" class="ajax-html" data-con="{:U('User/gethtml')}" data-html="{$menulists['menus']}" >
+										<a href="javascript:void(0);" class="ajax-html" data-con="gethtml" data-html="{$menulists['menus']}" >
 											<i class="menu-icon {$menulists['icon']}"></i>
 											{$menulists['name']}
 										</a>
@@ -859,7 +859,7 @@
 				//get_html({"html":$("#menu-company").data("html")});
 				$(".ajax-html").on("click",function(){
 					//var data={"html":$(this).data("html")};
-					var url="{:U('"+$(this).parents(".main-menu").data("module")+"/gethtml')}";
+					var url="{:U('"+$(this).parents(".main-menu").data("module")+"/"+$(this).data("con")+"')}";
 					get_html(url,$(this).data("html"));
 				})
 				//gethtml页面

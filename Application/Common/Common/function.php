@@ -14,12 +14,16 @@
 	}
 
 	/**
-	 * [date_format description]
+	 * [date_format 日期转换格式]
 	 * @param  [type] $dateStr [description]
 	 * @return [type]          [description]
 	 */
-	function date2format($dateStr){
+	function date2format($dateStr,$empty=false){
+
 		if($dateStr=="0000-00-00"){
+			if($empty==true){
+				return "";
+			}
 			return date("Y-m-d");
 		}else{
 			return $dateStr;

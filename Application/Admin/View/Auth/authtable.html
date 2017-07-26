@@ -152,7 +152,12 @@
 			if($(this).data("type")==undefined){
 				$("#database-widget input[type='checkbox']").prop("checked",true)
 			}else{
-				$("#database-widget input[class='"+$(this).data("type")+"'] ").prop("checked",true)
+				if($(this).data("type")=="table-delete"){
+					$("#database-widget input[class='"+$(this).data("type")+"']").parents(".datatables-auth").find("input[type='checkbox']").prop("checked",true);
+				}else{
+					$("#database-widget input[class='"+$(this).data("type")+"'] ").prop("checked",true)
+				}
+
 			}
 		})
 
@@ -160,7 +165,12 @@
 			if($(this).data("type")==undefined){
 				$("#database-widget input[type='checkbox']").prop("checked",false)
 			}else{
-				$("#database-widget input[class='"+$(this).data("type")+"']").prop("checked",false)
+				if($(this).data("type")=="table-select"){
+					$("#database-widget input[class='"+$(this).data("type")+"']").parents(".datatables-auth").find("input[type='checkbox']").prop("checked",false);
+				}else{
+					$("#database-widget input[class='"+$(this).data("type")+"']").prop("checked",false)
+				}
+				
 			}
 		})
 

@@ -4,18 +4,18 @@
  * @Email:369709991@qq.com
  * @Date:   2017-05-18 15:57:50
  * @Last Modified by:   vition
- * @Last Modified time: 2017-07-21 15:59:01
+ * @Last Modified time: 2017-07-26 16:21:27
  */
 
-/*用户功能{userlist|用户列表|fa fa-users,create|新建用户|glyphicon glyphicon-user,ubase|基础信息|glyphicon glyphicon-send}fa fa-users*/
+/*人事管理{create|新建用户|glyphicon glyphicon-user,userlist|用户列表|fa fa-users,ubase|基础信息|glyphicon glyphicon-send}fa fa-users*/
 namespace Home\Controller;
 use Common\Controller\AmongController;
 class UserController extends AmongController {
 	protected $baseInfo;//定义基本信息
 	protected $user;//用户模型
 	//重组gethtml方法
-	function _initialize(){
-		parent::_initialize();
+	function __construct(){
+		parent::__construct();
 		$this->baseInfo=D("Info");
 		$this->user=D("User");
 		// parent::_initialize();
@@ -48,6 +48,7 @@ class UserController extends AmongController {
 				$this->assign("user_code",$userData);
 
 				$companyData=$this->baseInfo->company()->search_company();
+
 				$this->assign("user_companys",$companyData);
 
 				$departmentData=$this->baseInfo->department()->search_department();
@@ -96,11 +97,22 @@ class UserController extends AmongController {
 				$userData["user_avatar"]="/assets/avatars/lady.png";
 			}
 
+			
 			switch ($_POST["type"]) {
 				case 'add':
+					if(isset($userData["user_roles"])==Null && isset($userData["user_role"])==Null){
+						$userData["user_role"]=35;//这里后续需要定义
+					}
 					$this->user->add($userData);
 					break;
 				case 'update':
+					if(isset($userData["user_roles"])==Null && isset($userData["user_role"])==Null){
+						$place_role=$this->baseInfo->place()->find_place($userData["user_place"])["place_role"];
+						$role=$this->baseInfo->role()->find_role($place_role);
+						$userData["user_roles"]=$role["role_upper"];
+						$userData["user_role"]=$role["role_id"];
+						
+					}
 					echo $this->user->set_user($userData["user_id"],$userData);
 					break;
 				case 'state':
@@ -374,7 +386,11 @@ class UserController extends AmongController {
 		// print_r($condition);
 		$count=$user->where($condition)->count();
 
+		if($_POST["p"]>ceil($count/$_POST["limit"])){
+			$_POST["p"]=1;
+		}
 		$Page=new \Think\Page($count,$_POST["limit"]);
+
 		$pageShow=$Page->show();
 
 		$userDataArray=$user->search_all($Page->firstRow,$Page->listRows,$condition);
@@ -407,7 +423,7 @@ class UserController extends AmongController {
 			}
 
 			$directorArray=$this->baseInfo->user()->show_director($_POST["group_id"]);
-			$directorHtml="";
+			$directorHtml="<option value='0'>无</option>";
 			foreach ($directorArray as $directorData) {
 				$directorHtml.="<option value='{$directorData["user_code"]}'>{$directorData["user_name"]}</option>";
 			}
@@ -438,7 +454,8 @@ class UserController extends AmongController {
 			$manager=$this->user->get_manager($_POST["department_id"],$_POST["group_id"]);
 
 			$directorArray=$this->baseInfo->user()->show_director($_POST["department_id"],false);
-			$directorHtml="";
+
+			$directorHtml="<option value='0'>无</option>";
 			foreach ($directorArray as $directorData) {
 				$directorHtml.="<option value='{$directorData["user_code"]}'>{$directorData["user_name"]}</option>";
 			}
@@ -504,6 +521,10 @@ class UserController extends AmongController {
 		echo $this->fetch("userinfo");
 	}
 
+	/**
+	 * [default_role 设置默认角色]
+	 * @return [type] [description]
+	 */
 	function default_role(){
 		if(IS_POST){
 			switch ($_POST["type"]) {
@@ -574,6 +595,17 @@ class UserController extends AmongController {
 					# code...
 					break;
 			}
+		}
+	}
+
+	function has_username(){
+		if(IS_POST){
+			$user_id=$this->user->has_username($_POST["user_username"]);
+			if($user_id>0){
+				echo "error";
+			}else{
+				echo "success";
+			}	
 		}
 	}
 }

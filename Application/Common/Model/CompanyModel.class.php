@@ -5,11 +5,11 @@
  * @Email:369709991@qq.com
  * @Date:   2017-06-29 18:48:50
  * @Last Modified by:   vition
- * @Last Modified time: 2017-07-12 10:37:21
+ * @Last Modified time: 2017-07-25 11:56:10
  */
 namespace Common\Model;
-use Think\Model;
-class CompanyModel extends Model {
+use Common\Model\AmongModel;
+class CompanyModel extends AmongModel {
 	protected $trueTableName = 'oa_company'; 
 	protected $fields = array('company_id', 'company_name');
 
@@ -26,15 +26,18 @@ class CompanyModel extends Model {
 	 * @return [type]        [上述两个参数都为空的时候，默认查询所有；$start存在而$limit为空的时候，查询条数；两个参数都存在则查询指定起始和限制条数]
 	 */
 	function search_company($start="",$limit=""){
+		if($this->has_auth("select")){
+
+			if($start=="" && $limit==""){
+				return $companyData=$this->select();
+			}else if($start!="" && $limit==""){
+				return $companyData=$this->limit("{$start}")->select();
+			}else{
+				return $companyData=$this->limit("{$start},{$limit}")->select();
+			}
+			return $this->getLastSql();	
+		}	
 		
-		if($start=="" && $limit==""){
-			return $companyData=$this->select();
-		}else if($start!="" && $limit==""){
-			return $companyData=$this->limit("{$start}")->select();
-		}else{
-			return $companyData=$this->limit("{$start},{$limit}")->select();
-		}
-		return $this->getLastSql();	
 	}
 	/**
 	 * [查找指定的公司名]
@@ -43,6 +46,9 @@ class CompanyModel extends Model {
 	 * @return [type]               [只返回一条记录]
 	 */
 	function find_company($company_id,$company_name=""){
+		if(!$this->has_auth("select")){
+			return false;
+		}
 		if($company_name!=""){
 			$condition['company_name']=$company_name;
 			return $this->where($condition)->find();
@@ -58,6 +64,9 @@ class CompanyModel extends Model {
 	 * @param [type] $company_name [修改后的公司名]
 	 */
 	function set_company($company_id,$company_name){
+		if(!$this->has_auth("update")){
+			return false;
+		}
 		if($this->find_company(0,$company_name)==""){
 			return $this->where(array("company_id"=>$company_id))->save(array("company_name"=>$company_name));
 		}else{
@@ -70,7 +79,9 @@ class CompanyModel extends Model {
 	 * @param [type] $company_name 新增的名字
 	 */
 	function add_company($company_name){
-
+		if(!$this->has_auth("insert")){
+			return false;
+		}
 		if($this->find_company(0,$company_name)==""){
 			return $this->add(array("company_name"=>$company_name));
 		}else{
@@ -84,6 +95,9 @@ class CompanyModel extends Model {
 	 * @return [type]             
 	 */
 	function del_company($company_id){
+		if(!$this->has_auth("delete")){
+			return false;
+		}
 		return $this->where(array("company_id"=>$company_id))->delete();
 	}
 }

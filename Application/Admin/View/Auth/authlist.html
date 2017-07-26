@@ -150,6 +150,9 @@
 		$("select[name='role']").on("change",function(){
 			$(".ace[type='checkbox']").prop("checked",false)
 			var roleId=$(this).val();
+			if(roleId==0){
+				roleId=$("select[name='roles']").val();
+			}
 			$.ajax({
 				url:"{:U('show_rauth')}",
 				type:"POST",
@@ -171,35 +174,31 @@
 			var i=0,c=0,a=0
 			var modulesJson=""
 			for(i=0;i<modules.length;i++){
-				if((i+1)>=modules.length){
-					var mCm=""
-				}else{
-					var mCm=","
-				}
+
 				var controls=$(".main-module[name='"+modules.eq(i).attr("name")+"']").find(".main-control")
 				var controlsJson=""
 				for(c=0;c<controls.length;c++){
-
-					if((c+1)>=controls.length){
-						var cCm=""
-					}else{
-						var cCm=","
-					}
 					var action=$(".main-module[name='"+modules.eq(i).attr("name")+"']").find(".main-control[name='"+controls.eq(c).attr("name")+"']").find("input[type='checkbox']:checked")
 					var actionJson=""
 					for(a=0;a<action.length;a++){
-						if((a+1)>=action.length){
-							var aCm=""
-						}else{
-							var aCm=","
-						}
-						actionJson+='{"name":"'+action.eq(a).next(".action-name").text()+'","menus":"'+action.eq(a).attr("name")+'","icon":"'+action.eq(a).parent().prev(".ace-icon").attr("class").replace("ace-icon ","")+'"}'+aCm;
+						actionJson+='{"name":"'+action.eq(a).next(".action-name").text()+'","menus":"'+action.eq(a).attr("name")+'","icon":"'+action.eq(a).parent().prev(".ace-icon").attr("class").replace("ace-icon ","")+'"}'+",";
 					}
-					controlsJson+='"'+controls.eq(c).attr("name")+'":{"name":"'+controls.eq(c).find("h5").text()+'",'+'"menus":'+'['+actionJson+']'+',"icon":"'+controls.eq(c).find("h5").find(".ace-icon").attr("class").replace("ace-icon ","")+'"}'+cCm;
+					
+					if(actionJson!==""){
+						actionJson=actionJson.substring(0,actionJson.length-1)
+						controlsJson+='"'+controls.eq(c).attr("name")+'":{"name":"'+controls.eq(c).find("h5").text()+'",'+'"menus":'+'['+actionJson+']'+',"icon":"'+controls.eq(c).find("h5").find(".ace-icon").attr("class").replace("ace-icon ","")+'"}'+",";
+					}
+					
 				}
-				modulesJson+='"'+modules.eq(i).attr("name")+'":'+'{'+controlsJson+'}'+mCm;
+				if(controlsJson!==""){
+					controlsJson=controlsJson.substring(0,controlsJson.length-1)
+				}
+				
+				modulesJson+='"'+modules.eq(i).attr("name")+'":'+'{'+controlsJson+'}'+",";
+				
 			}
-
+			modulesJson=modulesJson.substring(0,modulesJson.length-1)
+			console.log(modulesJson)
 			var roleId=$("select[name='role'] option:selected").val()
 			var rolesId=$("select[name='roles'] option:selected").val()
 			if(roleId==0 && rolesId==0){
@@ -220,7 +219,7 @@
 					console.log(data)
 				}
 			})
-			// console.log('{'+modulesJson+'}');
+
 			
 		})
 
