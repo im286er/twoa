@@ -1,0 +1,551 @@
+<link rel="stylesheet" href="__PUBLIC__/components/bootstrap-datepicker/dist/css/bootstrap-datepicker3.css">
+<style>
+
+</style>
+<div class="widget-box">
+	<div class="widget-header">
+		<h5 class="widget-title smaller"><i class="ace-icon fa fa-user bigger-110"></i>新建档案</h5>
+		<div class="widget-toolbar"></div>
+	</div>
+	<div class="widget-body">
+		<div class="widget-main">
+			<form class="form-horizontal" id="user-form">
+				<input  name="user_id" class="user-finfo" type="hidden" value="{$archiveData.archives_id|default='0'}">
+			<div class="form-group">
+				<label class="col-sm-3 control-label no-padding-right" for="form-field-1"> 用户编码 </label>
+				<div class="col-sm-9">
+					<input  placeholder="用户编码" name="archives_usercode" class="col-xs-10 col-sm-10 user-ainfo" data-label="用户编码" type="text" value="{$archiveData.archives_usercode|default=''}">
+				</div>
+			</div>
+			<div class="form-group">
+				<label class="col-sm-3 control-label no-padding-right" for="form-field-1"> 人员姓名 </label>
+				<div class="col-sm-9">
+					<input  placeholder="人员姓名" readonly="" name="archives_name" class="col-xs-10 col-sm-10" data-label="用户编码" type="text" value="{$archiveData.archives_name|default=''}">
+				</div>
+			</div>
+			<div class="form-group">
+				<label class="col-sm-3 control-label no-padding-right" for="form-field-1"> 学历证明 </label>
+				<div class="col-sm-8">
+					<select class="chosen-select form-control user-ainfo" data-label="学历"  name="archives_degree" data-placeholder="学历">
+						<option value='初中'>初中</option>
+						<option value='高中'>高中</option>
+						<option value='大专'>大专</option>
+						<option value='本科'>本科</option>
+						<option value='硕士'>硕士</option>
+						<option value='博士'>博士</option>
+					</select>
+					<!-- <input  placeholder="所属公司" class="col-xs-10 col-sm-10" type="text"> -->
+				</div>
+			</div>
+			<div class="form-group">
+				<label class="col-sm-3 control-label no-padding-right" for="form-field-1"> 身份证号码 </label>
+				<div class="col-sm-9">
+					<input  placeholder="身份证号码" name="archives_idn" class="col-xs-10 col-sm-10 user-ainfo" data-label="身份证号码" type="text" value="{$archiveData.archives_idn|default=''}">
+				</div>
+			</div>
+			<div class="form-group">
+				<label class="col-sm-3 control-label no-padding-right" for=""> 身份证到期时间 </label>
+				<div class="col-sm-8">
+					<div class="input-group">
+						<input class="form-control date-picker user-ainfo" data-label="身份证到期时间" name="archives_idexp" id="idexp-data" data-date-format="yyyy-mm-dd" type="text" value="{$archiveData.archives_idexp|default=''}">
+						<span class="input-group-addon">
+							<i class="fa fa-calendar bigger-110"></i>
+						</span>
+					</div>
+				</div>
+			</div>
+			<div class="form-group">
+				<label class="col-sm-3 control-label no-padding-right" for="form-field-1">银行卡信息</label>
+				<div class="col-sm-8">
+					<textarea class="form-control user-ainfo" name="archives_bank" id="form-field-8" placeholder="银行卡信息">{$archiveData.archives_bank|default=''}</textarea>
+				</div>
+			</div>
+			<div class="form-group">
+				<label class="col-sm-3 control-label no-padding-right" for="form-field-1">
+				<if condition="$archiveData.archives_enformp neq ''">
+					<i class="fa fa-picture-o green" aria-hidden="true" data-url='{$archiveData["archives_enformp"]}'></i>
+				</if>
+				入职表</label>
+				<div class="col-sm-8">
+					<input type="file" name="archives_enformp" class="input-files" />
+				</div>
+			</div>
+			<div class="form-group">
+				<label class="col-sm-3 control-label no-padding-right" for="form-field-1">
+				<if condition='$archiveData["archives_cvp"] neq ""'>
+					<i class="fa fa-picture-o" aria-hidden="true" data-url='{$archiveData["archives_cvp"]}'></i>
+				</if>
+				简历</label>
+				<div class="col-sm-8">
+					<input type="file" name="archives_cvp" class="input-files" />
+				</div>
+			</div>
+			<div class="form-group">
+				<label class="col-sm-3 control-label no-padding-right" for="form-field-1">
+					<if condition='$archiveData["archives_degreep"] neq ""'>
+						<i class="fa fa-picture-o" aria-hidden="true" data-url='{$archiveData["archives_degreep"]}'></i>
+					</if>
+				学历证明</label>
+				<div class="col-sm-8">
+					<input type="file" name="archives_degreep" class="input-files" />
+				</div>
+			</div>
+			<div class="form-group">
+				<label class="col-sm-3 control-label no-padding-right" for="form-field-1">
+					<if condition='$archiveData["archives_idp"] neq ""'>
+						<i class="fa fa-picture-o" aria-hidden="true" data-url='{$archiveData["archives_idp"]}'></i>
+					</if>
+
+				身份证</label>
+				<div class="col-sm-8">
+					<input type="file" name="archives_idp" class="input-files" />
+				</div>
+			</div>
+			<div class="form-group">
+				<label class="col-sm-3 control-label no-padding-right" for="form-field-1">
+					<if condition='$archiveData["archives_horp"] neq ""'>
+						<i class="fa fa-picture-o" aria-hidden="true" data-url='{$archiveData["archives_horp"]}'></i>
+					</if>
+
+				户口本</label>
+				<div class="col-sm-8">
+					<input type="file" name="archives_horp" class="input-files" />
+				</div>
+			</div>
+			<div class="form-group">
+				<label class="col-sm-3 control-label no-padding-right" for="form-field-1">
+					<if condition='$archiveData["archives_bankp"] neq ""'>
+						<i class="fa fa-picture-o" aria-hidden="true" data-url='{$archiveData["archives_bankp"]}'></i>
+					</if>
+				银行卡</label>
+				<div class="col-sm-8">
+					<input type="file" name="archives_bankp" class="input-files" />
+				</div>
+			</div>
+			<div class="form-group">
+				<label class="col-sm-3 control-label no-padding-right" for="form-field-1">
+					<if condition='$archiveData["archives_physicalp"] neq ""'>
+						<i class="fa fa-picture-o" aria-hidden="true" data-url='{$archiveData["archives_physicalp"]}'></i>
+					</if>
+				体检报告</label>
+				<div class="col-sm-8">
+					<input type="file" name="archives_physicalp" class="input-files" />
+				</div>
+			</div>
+			<div class="form-group">
+				<label class="col-sm-3 control-label no-padding-right" for="form-field-1">
+					<if condition='$archiveData["archives_cultivatep"] neq ""'>
+						<i class="fa fa-picture-o" aria-hidden="true" data-url='{$archiveData["archives_cultivatep"]}'></i>
+					</if>
+				培训记录</label>
+				<div class="col-sm-8">
+					<input type="file" name="archives_cultivatep" class="input-files" />
+				</div>
+			</div>
+			<div class="form-group">
+				<label class="col-sm-3 control-label no-padding-right" for="form-field-1">
+					<if condition='$archiveData["archives_receivep"] neq ""'>
+						<i class="fa fa-picture-o" aria-hidden="true" data-url='{$archiveData["archives_receivep"]}'></i>
+					</if>
+				领用物品清单</label>
+				<div class="col-sm-8">
+					<input type="file" name="archives_receivep" class="input-files" />
+				</div>
+			</div>
+			<div class="form-group">
+				<label class="col-sm-3 control-label no-padding-right" for="form-field-1">
+					<if condition='$archiveData["archives_agreement"] neq ""'>
+						<i class="fa fa-picture-o" aria-hidden="true" data-url='{$archiveData["archives_agreement"]}'></i>
+					</if>
+				劳动合同</label>
+				<div class="col-sm-8">
+					<input type="file" name="archives_agreement" class="input-files" />
+				</div>
+			</div>
+			<div class="form-group">
+				<label class="col-sm-3 control-label no-padding-right" for="form-field-1">
+					<if condition='$archiveData["archives_secretp"] neq ""'>
+						<i class="fa fa-picture-o" aria-hidden="true" data-url='{$archiveData["archives_secretp"]}'></i>
+					</if>
+				保密合同</label>
+				<div class="col-sm-8">
+					<input type="file" name="archives_secretp" class="input-files" />
+				</div>
+			</div>
+			<div class="form-group">
+				<label class="col-sm-3 control-label no-padding-right" for="form-field-1">
+					<if condition='$archiveData["archives_quitp"] neq ""'>
+						<i class="fa fa-picture-o" aria-hidden="true" data-url='{$archiveData["archives_quitp"]}'></i>
+					</if>
+				离职资料</label>
+				<div class="col-sm-8">
+					<input type="file" name="archives_quitp" class="input-files" />
+				</div>
+			</div>
+					
+			</form>
+		</div>
+	</div>
+	<div class="widget-toolbox padding-8 clearfix">
+		<if condition="$add eq 'true'">
+			<button class="btn btn-xs btn-success pull-right" id="insert-arch">
+				<i class="ace-icon fa fa-check bigger-110"></i>
+				<span class="bigger-110">新增档案</span>
+			</button>
+		<else />
+			<button class="btn btn-xs btn-info pull-right" id="edit-user">
+				<i class="ace-icon fa fa-check bigger-110"></i>
+				<span class="bigger-110">修改档案</span>
+			</button>
+		</if>
+		
+
+		<button class="btn btn-xs btn-danger pull-left"  class="close" data-dismiss="modal" aria-label="Close">
+			<i class="ace-icon fa fa-window-close bigger-110"></i>
+			<span class="bigger-110" aria-hidden="true">取消</span>
+		</button>
+	</div>
+</div>
+
+
+<script src="__PUBLIC__/components/bootstrap-datepicker/dist/js/bootstrap-datepicker.js"></script>
+<!-- <script src="__PUBLIC__/components/moment/moment.js"></script>
+<script src="__PUBLIC__/components/jquery-inputlimiter/jquery.inputlimiter.js"></script>
+<script src="__PUBLIC__/components/jquery.maskedinput/dist/jquery.maskedinput.js"></script> -->
+<script src="__PUBLIC__/assets/js/src/elements.fileinput.js"></script>
+
+<script>
+		$(function(){
+
+			set_degree()
+			/**
+			 * [通过用户编码获取用户名]
+			 * @param  {[type]} ){			} [description]
+			 * @return {[type]}          [description]
+			 */
+			$("input[name='archives_usercode']").on("input",function(){
+				var selfEle=$(this)
+				var selfVal=$(this).val()
+				if(selfVal.length>10){
+					selfEle.val(selfVal.substring(0,10))
+				}
+
+				if(selfVal.length==10){
+					$.ajax({
+						url:"{:U('nameTransform')}",
+						type:"post",
+						data:{"user_code":selfEle.val()},
+						datatype:"html",
+						success:function(data){
+							$("input[name='archives_name']").val(data)
+						}
+					})
+				}else{
+					$("input[name='archives_name']").val("")
+				}
+				
+			})
+			/**
+			 * [身份证不能超过18位]
+			 * @param  {[type]} ){	var selfEle       [description]
+			 * @return {[type]}            [description]
+			 */
+			$("input[name='archives_idn']").on("input",function(){
+				var selfEle=$(this)
+				var selfVal=$(this).val()
+				if(selfVal.length>18){
+					selfEle.val(selfVal.substring(0,18))
+				}
+			})
+			//初始化后日期选择器
+			$('#idexp-data').datepicker({
+			   autoclose: true,
+			   todayHighlight: true
+			})
+			
+			//初始化input file 样式
+			$('.input-files').ace_file_input({
+				no_file:'没有文件',
+				btn_choose:'选择文件',
+				btn_change:'修改文件',
+				droppable:true,
+				maxSize:1000000,
+				onchange:true,
+				thumbnail:true,
+				allowExt:  ['jpg', 'jpeg', 'png', 'pdf']
+			}).on('file.error.ace', function(event, info) {
+				for(index in info.error_count){
+					if(info.error_count[index]==1){
+						console.log(index+"错误")
+					}
+					
+				}
+			})
+			//
+			$("#insert-arch").on("click",function(){
+				var datas={}
+				datas["type"]="insert"
+				datas["data"]={}
+				
+				$(".user-ainfo").each(function(){
+
+					var selfName=$(this).attr("name")
+					var selfVal=$(this).val()
+					datas["data"][selfName]=selfVal
+					if(selfName=="archives_usercode" || selfName=="archives_idn"){
+						if(selfVal==""){
+							alert("编码和身份证号不能为空")
+							return false
+						}
+					}
+				})
+				datas["files"]={}
+				var filePath="./Public/images/upload/archives/";
+				var dfd = $.Deferred();
+				var selectedImg=$(".selected").length
+				
+				$('.input-files').each(function(index){
+					if(this.files.length>0){
+						var fileKey=$(this).attr("name")
+						var fileObjec=this.files[0]
+						var fileName=fileObjec.name
+						datas["data"][fileKey]=fileName
+						var fileRead = new FileReader();
+						fileRead.readAsDataURL(fileObjec);
+						fileRead.onload=function(){
+							datas["files"][fileKey]=this.result
+							if(index==(selectedImg-1)){
+								$.ajax({
+									url:"{:U('conArchives')}",
+									data:datas,
+									type:"post",
+									async:false,
+									dataType:"html",
+									success:function(data){
+										console.log(data)
+									}
+								})
+							}
+						}
+
+					}
+				})
+
+			})
+		})
+		// $(function(){
+
+		// 	init()
+			
+		// 	//初始化后日期选择器
+		// 	$('#idexp-data').datepicker({
+		// 	   autoclose: true,
+		// 	   todayHighlight: true
+		// 	})
+		// 	//初始化后日期选择器
+		// 	$('#id-date-entry').datepicker({
+		// 	   autoclose: true,
+		// 	   todayHighlight: true
+		// 	})
+		// 	$("#user-sex-box").on("change",function(){
+		// 		set_sex();
+		// 	})
+		// 	//提交新增人员资料
+		// 	$("#submit-user").on("click",function(){
+		// 		con_user("user-form","add")
+				
+		// 	})
+		// 	//快速添加
+		// 	$("#quick-user").on("click",function(){
+		// 		con_user("quick-form","add")
+		// 	})
+
+		// 	$("#edit-user").on("click",function(){
+		// 		con_user("user-form","update")
+				
+		// 	})
+		// 	//改变分组
+		// 	// $("select[name='user_group']").on("change",function(){
+		// 	// 	$.ajax({
+		// 	// 		url:"{:U('show_subgroup')}",
+		// 	// 		type:"post",
+		// 	// 		data:{"group_id":$(this).val()},
+		// 	// 		datatype:"html",
+		// 	// 		success:function(data){
+		// 	// 			$("select[name='user_subgroup']").html(data)
+		// 	// 		}
+		// 	// 	})
+		// 	// })
+		// 	//改变分组
+		// 	$(".widget-box select[name='user_department']").on("change",function(){
+		// 		$.ajax({
+		// 			url:"{:U('show_group')}",
+		// 			type:"post",
+		// 			data:{"group_id":$(this).val()},
+		// 			dataType:"html",
+		// 			success:function(data){
+		// 				dataJson=JSON.parse(data)
+
+		// 				$("select[name='user_group']").html(dataJson["group"])
+		// 				$("select[name='user_place']").html(dataJson["place"])
+		// 				$("select[name='user_director']").html(dataJson["director"])
+
+		// 			}
+		// 		})
+		// 	})
+		// 	//改变职位
+		// 	$(".widget-box select[name='user_group']").on("change",function(){
+		// 		$.ajax({
+		// 			url:"{:U('show_place')}",
+		// 			type:"post",
+		// 			data:{"department_id":$(this).parents(".form-group").prev().find("select").val(),"group_id":$(this).val()},
+		// 			dataType:"html",
+		// 			success:function(data){
+		// 				dataJson=JSON.parse(data)
+		// 				$("select[name='user_place']").html(dataJson["place"])
+		// 				$("select[name='user_director']").html(dataJson["director"])
+		// 			}
+		// 		})
+		// 	})
+		// 	//改变角色
+		// 	$(".widget-box select[name='user_roles']").on("change",function(){
+		// 		$.ajax({
+		// 			url:"{:U('show_role')}",
+		// 			type:"post",
+		// 			data:{"role_upper":$(this).val()},
+		// 			dataType:"html",
+		// 			success:function(data){
+		// 				$(".widget-box select[name='user_role']").html(data)
+		// 			}
+		// 		})
+		// 	})
+
+		// 	//判断用户名是否存在
+		// 	$(".widget-box input[name='user_username']").on("input",function(){
+		// 		// console.log($(this).val());
+		// 		var selfEle=this
+		// 		$.ajax({
+		// 			url:"{:U('has_username')}",
+		// 			type:"post",
+		// 			data:{"user_username":$(this).val()},
+		// 			dataType:"html",
+		// 			success:function(data){
+		// 				if(data=="error"){
+		// 					$(selfEle).parents(".form-group").addClass("has-error")
+		// 					alert("用户名已存在")
+		// 				}else{
+		// 					$(selfEle).parents(".form-group").removeClass("has-error")
+		// 				}
+		// 				// console.log(data)
+		// 			}
+		// 		})
+		// 	})
+
+		// })
+		// //设置性别
+		// function set_sex(){
+		// 	if($("#user-sex-box").is(":checked")){
+		// 		$("#user-sex-box").val("女")
+		// 	}else{
+		// 		$("#user-sex-box").val("男")
+		// 	}
+		// }
+		// //新建用户
+		// function createUser(formId){
+		// 	datas=$("#"+formId).serializeArray()
+		// 	post=true
+		// 	$.each(datas,function(index, obj){
+		// 		if(obj.name=="user_name" && obj.value==""){
+		// 			alert("用户名不能为空");
+		// 			post = false;
+		// 		}
+				
+		// 	})
+
+		// 	if(post==true){
+		// 		$.ajax({
+		// 			url:"{:U('create')}",
+		// 			type:"post",
+		// 			data:datas,
+		// 			datatype:"html",
+		// 			success:function(data){
+		// 				if(parseInt(data)>0){
+		// 					$(".user-finfo[name='user_code']").val(parseInt($(".user-finfo[name='user_code']").val())+1)
+		// 				}
+		// 			}
+		// 		})
+		// 	}
+		// }
+
+	 //    /**
+	 //     * [init 初始化]
+	 //     * @return {[type]} [description]
+	 //     */
+		// function init(){
+			
+		// 	$(".widget-box select[name='user_company']").find("option[value='{$userinfo['user_company']}']").attr("selected",true);
+		// 	$(".widget-box select[name='user_department']").find("option[value='{$userinfo['user_department']}']").attr("selected",true);
+		// 	$(".widget-box select[name='user_group']").find("option[value='{$userinfo['user_group']}']").attr("selected",true);
+		// 	$(".widget-box select[name='user_place']").find("option[value='{$userinfo['user_place']}']").attr("selected",true);
+		// 	$(".widget-box select[name='user_roles']").find("option[value='{$userinfo['user_roles']}']").attr("selected",true);
+		// 	$(".widget-box select[name='user_role']").find("option[value='{$userinfo['user_role']}']").attr("selected",true);
+		// 	$(".widget-box select[name='user_director']").find("option[value='{$userinfo['user_director']}']").attr("selected",true);
+		// 	if("{$userinfo.user_sex|default=''}"=="女"){
+		// 		$("#user-sex-box").prop("checked",true)
+		// 	}else{
+		// 		$("#user-sex-box").prop("checked",false)
+		// 	}
+		// 	// $(".selector").find("option[text='pxx']").attr("selected",true);
+		// }
+
+		// /**
+		//  * [con_user 函数，新增或者修改用户]
+		//  * @param  {[type]} formId [指定的表单id]
+		//  * @param  {[type]} type   [类型 add或者update]
+		//  * @return {[type]}        [description]
+		//  */
+		// function con_user(formId,type){
+		// 	datas={}
+		// 	datas["type"]=type
+		// 	userData=$("#"+formId).serializeArray();
+
+		// 	datas["data"]={}
+		// 	$.each(userData,function(i,v){
+		//         datas["data"][v.name] = v.value;
+		//     }) 
+		//     if($("#user-sex-box").is(":checked")){
+		// 		datas["data"]["user_sex"]="女"
+		// 	}else{
+		// 		datas["data"]["user_sex"]="男"
+		// 	}
+
+		// 	$.ajax({
+		// 		url:"{:U('con_user')}",
+		// 		type:"post",
+		// 		data:datas,
+		// 		datatype:"html",
+		// 		success:function(data){
+		// 			$('#userModal').modal('toggle')
+		// 			search_user()
+		// 		}
+		// 	})
+		// }
+	/**
+	 * [in_array 判断某元素是否存在数组中]
+	 * @param  {[type]} search [要判断的值]
+	 * @param  {[type]} array  [判断的数组]
+	 * @return {[type]}        [返回bool]
+	 */
+	function in_array(search,array){
+	    for(var i in array){
+	        if(array[i]==search){
+	            return true;
+	        }
+	    }
+	    return false;
+	}
+
+	function set_degree(){
+		$("select[name='archives_degree']").find("option[value='{$archiveData['archives_degree']}']").attr("selected",true);
+	}	
+	</script>

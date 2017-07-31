@@ -29,3 +29,31 @@
 			return $dateStr;
 		}
 	}
+
+	/**
+	 * [blob_trans_file base64转文件]
+	 * @param  [type] $blob [二进制文件]
+	 * @param  [type] $name [文件名]
+	 * @param  [type] $dir  [文件目录]
+	 * @return [type]       [description]
+	 */
+	function blob_to_file($blob,$name,$dir){
+		if(is_dir($dir)){
+			// echo "存在";
+		}else{
+			mkdir($dir);
+		}
+
+		//获取到一个data:image/jpeg;base64,数据
+		$headData=explode(",",$blob);
+		$headSB=explode(";",$headData[0]);
+		$headS=explode("/",$headSB[0]);
+		$suffix=$headS[1];
+		$base64=base64_decode($headData[1]);
+		$name.=".".$suffix;
+		$fileName=$dir."/".$name;
+		$resource = fopen($fileName, 'w+');  
+		fwrite($resource, $base64);  
+		fclose($resource); 
+		return $fileName;
+	}

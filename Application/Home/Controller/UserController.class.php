@@ -4,20 +4,22 @@
  * @Email:369709991@qq.com
  * @Date:   2017-05-18 15:57:50
  * @Last Modified by:   vition
- * @Last Modified time: 2017-07-26 16:21:27
+ * @Last Modified time: 2017-07-31 16:11:38
  */
 
-/*人事管理{create|新建用户|glyphicon glyphicon-user,userlist|用户列表|fa fa-users,ubase|基础信息|glyphicon glyphicon-send}fa fa-users*/
+/*人事管理{create|新建用户|glyphicon glyphicon-user,userlist|用户列表|fa fa-users,archives|档案管理|fa fa-file-archive-o,ubase|基础信息|glyphicon glyphicon-send,charts|图表统计|fa fa-bar-chart-o}fa fa-users*/
 namespace Home\Controller;
 use Common\Controller\AmongController;
 class UserController extends AmongController {
 	protected $baseInfo;//定义基本信息
 	protected $user;//用户模型
+	protected $archives;
 	//重组gethtml方法
 	function __construct(){
 		parent::__construct();
 		$this->baseInfo=D("Info");
 		$this->user=D("User");
+		$this->archives=D("Archives");
 		// parent::_initialize();
 	}
 	/**
@@ -68,7 +70,12 @@ class UserController extends AmongController {
 					$this->assign("place_leader",$leaderData);
 				}
 				break;
-			case 'edit':
+			case 'charts':
+				$companyData=$this->baseInfo->company()->search_company();
+				$this->assign("companyDataArray",$companyData);
+
+				$departmentData=$this->baseInfo->department()->search_department();
+				$this->assign("departmentDataArray",$departmentData);
 				# code...
 				break;
 			default:
@@ -597,7 +604,10 @@ class UserController extends AmongController {
 			}
 		}
 	}
-
+	/**
+	 * [has_username 判断是否存在用户]
+	 * @return boolean [description]
+	 */
 	function has_username(){
 		if(IS_POST){
 			$user_id=$this->user->has_username($_POST["user_username"]);
@@ -607,6 +617,153 @@ class UserController extends AmongController {
 				echo "success";
 			}	
 		}
+	}
+	/**
+	 * [charts_data 筛选数据画图]
+	 * @return [type] [description]
+	 */
+	function charts_data(){
+		$chartsData=$this->user->table("oa_user u")->field("c.company_name user_company,count(u.user_id) count")->join("left join oa_company c on c.company_id=u.user_company")->group("u.user_company")->where("u.user_company in ({$_POST["postData"]})")->select();
+		echo json_encode($chartsData);
+	}
+
+	/*下列是档案管理涉及到的方法*/
+
+	/**
+	 * [getCreateArch 获取档案模板]
+	 * @return [type] [description]
+	 */
+	function getCreateArch(){
+		if(IS_POST){
+			if(isset($_POST["user_id"])){
+				$add="false";
+			}else{
+				$add="true";
+			}
+			$this->assign("add",$add);
+			echo $this->fetch("createarch");
+		}
+	}
+
+	/**
+	 * [nameTransform 通过编码获取用户姓名]
+	 */
+	function nameTransform(){
+		if(IS_POST){
+			echo $this->user->nameTrans($_POST["user_code"],3)["user_name"];
+		}
+	}
+	/**
+	 * [createArchive 添加档案]
+	 * @return [type] [description]
+	 */
+	function conArchives(){
+		if(IS_POST){
+			switch ($_POST["type"]) {
+				case 'insert':
+					$filePath="./Public/images/upload/archives/";
+
+					$archivesData=$_POST["data"];
+					foreach ($_POST["files"] as $name => $blobData) {
+						$dirFile=explode("_", $name);
+						$user_name=$this->user->nameTrans($archivesData["archives_usercode"],3)["user_name"];
+						if(!empty($user_name)){
+							$archivesData[$name]=blob_to_file($blobData,$archivesData["archives_usercode"],$filePath.$dirFile[1]);
+						}
+					}
+					$this->archives->add_archive($archivesData);
+					break;
+				case 'update':
+					# code...
+					break;
+				default:
+					# code...
+					break;
+			}
+		}
+	}
+	/**
+	 * [search_user 用户列表中查询并返回]
+	 * @return [type] [description]
+	 */
+	function search_archives(){
+		$archives=D("Archives");
+		$count=$archives->count();
+
+		$condition=array();
+		foreach ($_POST["condition"] as $key => $value) {
+			if ($value["value"]!=""){
+				if($value["name"]=="user_state"){
+					$condition["u.".$value["name"]]=array("EQ","{$value["value"]}");
+				}else{
+					$condition["u.".$value["name"]]=array("LIKE","%{$value["value"]}%");
+				}
+				
+			}
+		}
+		// print_r($_POST);
+		$count=$archives->join("left join oa_user u on u.user_code=oa_archives.archives_usercode")->where($condition)->count();
+
+		if($_POST["p"]>ceil($count/$_POST["limit"])){
+			$_POST["p"]=1;
+		}
+		$Page=new \Think\Page($count,$_POST["limit"]);
+
+		$pageShow=$Page->show();
+
+		$archivesDataArray=$archives->search_all($Page->firstRow,$Page->listRows,$condition);
+		// echo $archives->getLastSql();
+		$archiveListHtml="";
+		
+		foreach ($archivesDataArray as $archivesData) {
+			$this->assign("archivesData",$archivesData);
+			$archiveListHtml.=$this->fetch("user/html/archive_list");
+		 } 
+
+		echo json_encode(array("userhtml"=>$archiveListHtml,"pagehtml"=>$pageShow)) ;
+		// print_r($userData);
+	}
+	function uploadFile(){
+		if(IS_POST){
+			$dirFile=explode("_", $_POST["key"]);
+			// echo $_POST["filePath"];
+			$user_name=$this->user->nameTrans($_POST["data"]["archives_usercode"],3)["user_name"];
+			echo "名字".$user_name."名字";
+			blob_to_file($_POST["data"],$_POST["name"],$_POST["filePath"].$dirFile[1]);
+		}
+	}
+
+	function get_archivetemplate(){
+		if(IS_POST){
+			$archives=D("Archives");
+
+			if(isset($_POST["archives_id"])){
+				$archiveData=$archives->find_archive($_POST["archives_id"]);
+				$this->assign("archiveData",$archiveData);
+				$add="false";
+
+			}else{
+				$add="true";
+				
+			}
+		}
+
+		// $group=$this->baseInfo->group()->search_group($resultData["user_department"]);
+		// $place=$this->baseInfo->place()->search_place($resultData["user_department"],$resultData["user_group"]);
+		// $thisRole=$this->baseInfo->role()->find_role($resultData["user_role"]);
+		// $role=$this->baseInfo->role()->search_role($thisRole["role_upper"]);
+		// $directorArray=$this->baseInfo->user()->show_director($resultData["user_department"],false);
+		// $this->assign("groupArray",$group);
+		// $this->assign("placeArray",$place);
+		// $this->assign("roleArray",$role);
+		// $this->assign("add",$add);
+		
+		// $this->assign("companyArray",$company);
+		// $this->assign("departmentArray",$department);
+		// $this->assign("directorArray",$directorArray);
+
+		// $this->assign("rolesArray",$roles);
+		echo $this->fetch("createarch");
 	}
 }
 

@@ -4,7 +4,7 @@
  * @Email:369709991@qq.com
  * @Date:   2017-07-06 13:52:07
  * @Last Modified by:   vition
- * @Last Modified time: 2017-07-26 15:10:51
+ * @Last Modified time: 2017-07-28 15:40:53
  */
 namespace Common\Model;
 use Common\Model\AmongModel;
@@ -37,7 +37,6 @@ class UserModel extends AmongModel{
 			}
 			return $tableObject->where($newDataArray)->select();
 			// echo $this->getLastSql();
-
 		}
 	}	 
 	/**
@@ -56,8 +55,6 @@ class UserModel extends AmongModel{
 		}else{
 			return $this->table($this->tableNameAs)->field($this->fieldStr)->join($this->joins)->where("u.user_id=".$user_id)->find();
 		}
-
-		
 	}
 
 	/**
@@ -147,9 +144,30 @@ class UserModel extends AmongModel{
 	 * @return boolean                [description]
 	 */
 	function has_username($user_username){
-
+		if(!$this->has_auth("select")){
+			return false;
+		}
 		return $this->field("user_id")->where(array("user_username"=>$user_username))->find()["user_id"];
 
+	}
+
+	/**
+	 * [nameTransform 通过编码获取用户姓名]
+	 * @param  [type]  $value [药要转换的值]
+	 * @param  integer $type  [转换的类型：1，username 转 name 和code；2，name 转 username 和 code（可能存在多个）；3 or other，code 转 username 和 name]
+	 * @return [type]         [description]
+	 */
+	function nameTrans($value,$type=1){
+		if(!$this->has_auth("select")){
+			return false;
+		}
+		if($type==1){
+			return $this->field("user_name,user_code")->where(array("user_username"=>$value))->find();
+		}else if($type==2){
+			return $this->field("user_username,user_code")->where(array("user_name"=>$value))->select();
+		}else{
+			return $this->field("user_name,user_username")->where(array("user_code"=>$value))->find();
+		}
 	}
 
 }

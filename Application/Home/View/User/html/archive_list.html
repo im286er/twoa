@@ -1,0 +1,60 @@
+<tr>
+	<td>
+		<label class="pos-rel"><input class="ace" type="checkbox"><span class="lbl"></span></label>
+	</td>
+	<td>{$archivesData["archives_name"]}</td>
+	<td>{$archivesData["archives_usercode"]}</td>
+	<td>{$archivesData["archives_degree"]}</td>
+	<td>{$archivesData["archives_idn"]}</td>
+	<td>{$archivesData["archives_idexp"]}</td>
+	<td>{$archivesData["archives_bank"]}</td>
+	<if condition="$archivesData['archives_enformp'] eq ''">
+		<td></td>
+	<else />
+		<td><i class="fa fa-picture-o" aria-hidden="true" data-url='{$archivesData["archives_enformp"]}'></i>
+	</if>
+	<if condition="$archivesData['archives_cvp'] eq ''">
+		<td></td>
+	<else />
+		<td><i class="fa fa-picture-o" aria-hidden="true" data-url='{$archivesData["archives_cvp"]}'></i>
+	</if>
+	<if condition="$archivesData['archives_degreep'] eq ''">
+		<td></td>
+	<else />
+		<td><i class="fa fa-picture-o" aria-hidden="true" data-url='{$archivesData["archives_degreep"]}'></i>
+	</if>
+	<if condition="$archivesData['archives_horp'] eq ''">
+		<td></td>
+	<else />
+		<td><i class="fa fa-picture-o" aria-hidden="true" data-url='{$archivesData["archives_horp"]}'></i>
+	</if>
+	<if condition="$archivesData['archives_receivep'] eq ''">
+		<td></td>
+	<else />
+		<td><i class="fa fa-picture-o" aria-hidden="true" data-url='{$archivesData["archives_receivep"]}'></i>
+	</if>
+	<td>{$archivesData["archives_status"]}</i>
+
+	<if condition="$archivesData['archives_quitp'] eq ''">
+		<td></td>
+	<else />
+		<td><i class="fa fa-picture-o" aria-hidden="true" data-url='{$archivesData["archives_quitp"]}'></i>
+	</if>
+
+<!-- 	
+	
+	
+	<td><i class="fa fa-picture-o" aria-hidden="true" data-url='{$archivesData["archives_horp"]}'></i>
+	
+	 -->
+</td>
+
+	<td>
+		<div class="hidden-sm hidden-xs btn-group user-control" data-archiveid="{$archivesData['archives_id']}">
+			<button class="btn btn-xs btn-info archive-edit" data-toggle="modal" data-target="#archiveModal">
+				<i class="ace-icon fa fa-pencil bigger-120"></i>
+			</button>
+
+		</div>
+	</td>
+</tr>
