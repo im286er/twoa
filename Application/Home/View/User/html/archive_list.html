@@ -11,7 +11,7 @@
 	<if condition="$archivesData['archives_enformp'] eq ''">
 		<td></td>
 	<else />
-		<td><i class="fa fa-picture-o" aria-hidden="true" data-url='{$archivesData["archives_enformp"]}'></i>
+		<td><i class="fa fa-picture-o img-view" aria-hidden="true"  data-url='{$archivesData["archives_enformp"]}' data-toggle="modal" data-target="#imgModal"></i>
 	</if>
 	<if condition="$archivesData['archives_cvp'] eq ''">
 		<td></td>

@@ -3,8 +3,8 @@
  * @Author: vition
  * @Email:369709991@qq.com
  * @Date:   2017-05-18 15:57:50
- * @Last Modified by:   vition
- * @Last Modified time: 2017-07-31 16:11:38
+ * @Last Modified by:   369709991@qq.com
+ * @Last Modified time: 2017-07-31 23:05:20
  */
 
 /*人事管理{create|新建用户|glyphicon glyphicon-user,userlist|用户列表|fa fa-users,archives|档案管理|fa fa-file-archive-o,ubase|基础信息|glyphicon glyphicon-send,charts|图表统计|fa fa-bar-chart-o}fa fa-users*/
@@ -764,6 +764,10 @@ class UserController extends AmongController {
 
 		// $this->assign("rolesArray",$roles);
 		echo $this->fetch("createarch");
+	}
+
+	function showFiles(){
+		echo "<img src='{$_POST["url"]}'/>"	;
 	}
 }
 
