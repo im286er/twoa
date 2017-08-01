@@ -3,8 +3,8 @@
  * @Author: vition
  * @Email:369709991@qq.com
  * @Date:   2017-05-18 15:57:50
- * @Last Modified by:   369709991@qq.com
- * @Last Modified time: 2017-07-31 23:05:20
+ * @Last Modified by:   vition
+ * @Last Modified time: 2017-08-01 18:41:35
  */
 
 /*人事管理{create|新建用户|glyphicon glyphicon-user,userlist|用户列表|fa fa-users,archives|档案管理|fa fa-file-archive-o,ubase|基础信息|glyphicon glyphicon-send,charts|图表统计|fa fa-bar-chart-o}fa fa-users*/
@@ -641,7 +641,7 @@ class UserController extends AmongController {
 				$add="true";
 			}
 			$this->assign("add",$add);
-			echo $this->fetch("createarch");
+			echo $this->fetch("archiveinfo");
 		}
 	}
 
@@ -654,26 +654,32 @@ class UserController extends AmongController {
 		}
 	}
 	/**
-	 * [createArchive 添加档案]
+	 * [archiveinfoive 添加档案]
 	 * @return [type] [description]
 	 */
 	function conArchives(){
 		if(IS_POST){
+			$filePath=$_POST["filePath"];
+			$archivesData=$_POST["data"];
+			$user_name=$this->user->nameTrans($archivesData["archives_usercode"],3)["user_name"];
+			if(empty($user_name)){
+				echo "error";
+				return false;
+			}
+			if(!$this->archives->has_auth("update")){
+				return false;
+			}
+			foreach ($_POST["files"] as $name => $blobData) {
+				$dirFile=explode("_", $name);
+				$archivesData[$name]=blob_to_file($blobData,$archivesData["archives_usercode"],$filePath.$dirFile[1]);
+			}
+			
 			switch ($_POST["type"]) {
 				case 'insert':
-					$filePath="./Public/images/upload/archives/";
-
-					$archivesData=$_POST["data"];
-					foreach ($_POST["files"] as $name => $blobData) {
-						$dirFile=explode("_", $name);
-						$user_name=$this->user->nameTrans($archivesData["archives_usercode"],3)["user_name"];
-						if(!empty($user_name)){
-							$archivesData[$name]=blob_to_file($blobData,$archivesData["archives_usercode"],$filePath.$dirFile[1]);
-						}
-					}
-					$this->archives->add_archive($archivesData);
+					echo $this->archives->add_archive($archivesData);
 					break;
 				case 'update':
+					echo $this->archives->setArchive($archivesData["archives_usercode"],$archivesData);
 					# code...
 					break;
 				default:
@@ -683,26 +689,28 @@ class UserController extends AmongController {
 		}
 	}
 	/**
-	 * [search_user 用户列表中查询并返回]
+	 * [search_archives 档案查询并返回]
 	 * @return [type] [description]
 	 */
 	function search_archives(){
 		$archives=D("Archives");
 		$count=$archives->count();
-
 		$condition=array();
 		foreach ($_POST["condition"] as $key => $value) {
 			if ($value["value"]!=""){
 				if($value["name"]=="user_state"){
 					$condition["u.".$value["name"]]=array("EQ","{$value["value"]}");
+				}else if($value["name"]=="archives_idexp"){
+					// echo  $value;
+					$condition[$value["name"]]=array("EXP","<=date_sub(now(),interval {$value["value"]})");
 				}else{
 					$condition["u.".$value["name"]]=array("LIKE","%{$value["value"]}%");
 				}
 				
 			}
 		}
-		// print_r($_POST);
 		$count=$archives->join("left join oa_user u on u.user_code=oa_archives.archives_usercode")->where($condition)->count();
+
 
 		if($_POST["p"]>ceil($count/$_POST["limit"])){
 			$_POST["p"]=1;
@@ -763,12 +771,10 @@ class UserController extends AmongController {
 		// $this->assign("directorArray",$directorArray);
 
 		// $this->assign("rolesArray",$roles);
-		echo $this->fetch("createarch");
+		echo $this->fetch("archiveinfo");
 	}
 
-	function showFiles(){
-		echo "<img src='{$_POST["url"]}'/>"	;
-	}
+
 }
 
 //select user_id,user_name,user_code from oa_user where user_place in (select place_id from oa_place where find_in_set(1,place_extent));

@@ -34,7 +34,7 @@
 
 						<div class="form-group">
 							<div class="col-sm-1">
-								<select name="user_state" class="form-control">
+								<select name="user_state" class="form-control input-sm">
 									<option value="">所有状态</option>
 									<option value=1>在职</option>
 									<option value=0>未激活</option>
@@ -42,10 +42,25 @@
 								</select>
 							</div>
 						</div>
+						<div class="form-group">
+							<div class="col-sm-1">
+								<select name="archives_idexp" class="form-control input-sm">
+									<option value="">全部日期</option>
+									<option value="-1 YEAR">一年</option>
+									<option value="-6 MONTH">半年</option>
+									<option value="-3 MONTH">三个月</option>
+									<option value="-2 MONTH">两个月</option>
+									<option value="-1 MONTH">一个月</option>
+									<option value="-3 WEEK">三周</option>
+									<option value="-2 WEEK">两周</option>
+									<option value="-1 WEEK">一周</option>
+								</select>
+							</div>
+						</div>
 					</form>	
 					<div class="form-group">
 						<div class="col-sm-1">
-							<button class="btn btn-sm btn-primary search-btn"><i class="ace-icon fa fa-search"></i>查询</button>
+							<button class="btn btn-sm btn-primary search-btn "><i class="ace-icon fa fa-search"></i>查询</button>
 						</div>
 					</div>
 					<div class="form-group">
@@ -103,8 +118,8 @@
   </div>
 </div>
 
-<div id="imgModal" class="modal fade" tabindex="-1">
-	<div class="modal-dialog" role="archiveModal" style="width:80px;">
+<div id="imgModal" class="modal fade" tabindex="-1" style="text-align: center;">
+	<div class="modal-dialog" role="archiveModal">
 		<div class="modal-content" >
 
 			<div class="modal-body">
@@ -119,7 +134,9 @@
 		</div><!-- /.modal-content -->
 	</div><!-- /.modal-dialog -->
 </div>
+<script src="__PUBLIC__/assets/js/pdfobject.js"></script>
 <script>
+
 	jQuery(function($){
 			
 		search_archives();
@@ -153,81 +170,24 @@
 		})
 		
 		/**
+		 * 通过PDFobject插件显示文件 图片和pdf
 		 * 
 		 */
 		$("#content-box").on("click",".img-view",function(){
 			var fileUrl=$(this).data("url");
-			console.log(fileUrl)
-			$.ajax({
-				url:"{:U('showFiles')}",
-				type:"post",
-				dataType:"html",
-				data:{url:fileUrl},
-				success:function(data){
-					$("#imgModal .modal-content").html(data)
-				}
-			})
+			var options = {
+			   width: "70%",
+			   height: "100%"
+			};
+			PDFObject.embed(fileUrl, "#imgModal",options);
+
 		})
 		$('#imgModal').on('hidden.bs.modal', function() {
              $(document.body).addClass("modal-open");
         })
-		// search_user()//默认查询
-		// $(".dataTables_wrapper").on("click",".paginate_button",search_user)
-		// $(".search-btn").on("click",search_user)
-		// $("#showlimit").on("change",search_user)
-	
-		// /*
-		//  * 通过选择部门获取分组信息
-		//  */
-		// $("select[name='user_department']").on("change",function(){
-		// 	datas={"group_id":$(this).val()}
-		// 	$.ajax({
-		// 		url:"{:U('show_group')}",
-		// 		type:"post",
-		// 		dataType:"html",
-		// 		data:datas,
-		// 		success:function(data){
-		// 			dataJson=JSON.parse(data)
-		// 			$("select[name='user_group']").html(dataJson["group"])
-		// 		}
-		// 	})	
-		// })
-		/**
-		 * 编辑用户
-		 */
-		// $("#user-table").on("click",".user-edit",function(){
-		// 	var userid=$(this).parent().data("userid")
-		// 	$.ajax({
-		// 		url:"{:U('get_usertemplate')}",
-		// 		type:"post",
-		// 		dataType:"html",
-		// 		data:{"user_id":userid},
-		// 		success:function(data){
-		// 			$("#userModal .modal-content").html(data)
-		// 		}
-		// 	})
-		// })
-
-		/*
-		 * 下列三条对员工状态进行修改
-		 */
-		// $("#user-table").on("click",".user-active",function(){
-		// 	var userid=$(this).parent().data("userid")
-		// 	set_state(userid,'1')
-		// })
-		// $("#user-table").on("click",".user-inactive",function(){
-		// 	var userid=$(this).parent().data("userid")
-
-		// 	set_state(userid,'0')
-		// })
-		// $("#user-table").on("click",".user-quit",function(){
-		// 	var userid=$(this).parent().data("userid")
-
-		// 	set_state(userid,'2')
-		// })
 	})
 	/*
-	 * 查询用户的信息
+	 * 查询档案的信息
 	 */
 	function search_archives(){
 		datas={}
@@ -288,5 +248,3 @@
 	// 	})
 	// }
 	</script>
-
-	<!-- create table oa_archives (archivs_id int(9) primary key auto_increment comment 'id',archives_usercode bigint(10) NOT NULL UNIQUE COMMENT '关联oa_user的user_code',archives_degree varchar(20) NOT NULL DEFAULT "" COMMENT '学历',archives_idn bigint(18) NOT NULL UNIQUE COMMENT '身份证号码',archives_idexp date COMMENT '身份证到期日期',archives_bank varchar(100) NULL DEFAULT '' COMMENT '银行信息',archives_enformp varchar(200) NULL DEFAULT '' COMMENT '入职表扫描件',archives_cvp varchar(200) NULL DEFAULT '' COMMENT '简历扫描件',archives_degreep varchar(200) NULL DEFAULT '' COMMENT '学历证书扫描件',archives_idp varchar(200) NULL DEFAULT '' COMMENT '身份证扫描件',archives_horp varchar(200) NULL DEFAULT '' COMMENT '户口本扫描件',archives_bankp varchar(200) NULL DEFAULT '' COMMENT '银行卡扫描件',archives_physicalp varchar(200) NULL DEFAULT '' COMMENT '体检报告扫描件',archives_cultivatep varchar(200) NULL DEFAULT '' COMMENT '培训记录扫描件',archives_receivep varchar(200) NULL DEFAULT '' COMMENT '领取物品扫描件',archives_agreement varchar(200) NULL DEFAULT '' COMMENT '劳动合同扫描件',archives_secretp varchar(200) NULL DEFAULT '' COMMENT '保密合同扫描件',archives_quitp varchar(200) NULL DEFAULT '' COMMENT '离职扫描件'); -->

@@ -36,7 +36,7 @@
 
 						<div class="form-group">
 							<div class="col-sm-1">
-								<select name="user_company" class="form-control">
+								<select name="user_company" class="form-control input-sm">
 									<option value="">所有公司</option>
 									<volist name="companyArray" id="companylist">
 										<option value="{$companylist.company_id}">{$companylist.company_name}</option>
@@ -47,7 +47,7 @@
 
 						<div class="form-group">
 							<div class="col-sm-1">
-								<select name="user_department" class="form-control">
+								<select name="user_department" class="form-control input-sm">
 									<option value="">所有部门</option>
 									<volist name="departmentArray" id="department">
 										<option value="{$department.department_id}">{$department.department_name}</option>
@@ -57,14 +57,14 @@
 						</div>
 						<div class="form-group">
 							<div class="col-sm-1">
-								<select name="user_group" class="form-control">
+								<select name="user_group" class="form-control input-sm">
 									<option value="">所有分组</option>
 								</select>
 							</div>
 						</div>
 						<div class="form-group">
 							<div class="col-sm-1">
-								<select name="user_sex" class="form-control">
+								<select name="user_sex" class="form-control input-sm">
 									<option value="">所有性别</option>
 									<option value="男">男</option>
 									<option value="女">女</option>
@@ -74,7 +74,7 @@
 
 						<div class="form-group">
 							<div class="col-sm-1">
-								<select name="user_state" class="form-control">
+								<select name="user_state" class="form-control input-sm">
 									<option value="">所有状态</option>
 									<option value=1>在职</option>
 									<option value=0>未激活</option>

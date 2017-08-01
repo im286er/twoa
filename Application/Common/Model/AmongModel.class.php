@@ -4,7 +4,7 @@
  * @Email:369709991@qq.com
  * @Date:   2017-07-21 16:00:59
  * @Last Modified by:   vition
- * @Last Modified time: 2017-07-25 15:03:04
+ * @Last Modified time: 2017-08-01 18:36:51
  */
 namespace Common\Model;
 use Think\Model;
@@ -43,7 +43,7 @@ class AmongModel extends Model{
 	 * @return boolean       [description]
 	 */
 	function has_auth($type){
-		if(!empty($this->selfAuth)){
+		if(!empty($this->selfAuth) && !empty($this->selfAuth[$this->trueTableName])){
 			if(array_search($type, $this->selfAuth[$this->trueTableName])!==false){
 				return true;
 			}else{

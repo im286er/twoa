@@ -38,10 +38,11 @@
 	 * @return [type]       [description]
 	 */
 	function blob_to_file($blob,$name,$dir){
-		if(is_dir($dir)){
-			// echo "存在";
-		}else{
-			mkdir($dir);
+		$root=__ROOT__ ;
+		$url=preg_replace("/^\\".__ROOT__."/", ".", $dir);
+
+		if(!is_dir($url)){
+			mkdir($url);
 		}
 
 		//获取到一个data:image/jpeg;base64,数据
@@ -51,9 +52,9 @@
 		$suffix=$headS[1];
 		$base64=base64_decode($headData[1]);
 		$name.=".".$suffix;
-		$fileName=$dir."/".$name;
+		$fileName=$url."/".$name;
 		$resource = fopen($fileName, 'w+');  
 		fwrite($resource, $base64);  
 		fclose($resource); 
-		return $fileName;
+		return $dir."/".$name;
 	}

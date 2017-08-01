@@ -4,7 +4,7 @@
  * @Email:369709991@qq.com
  * @Date:   2017-07-28 15:26:56
  * @Last Modified by:   vition
- * @Last Modified time: 2017-07-31 16:18:21
+ * @Last Modified time: 2017-08-01 11:12:07
  */
 namespace Common\Model;
 use Common\Model\AmongModel;
@@ -63,5 +63,12 @@ class ArchivesModel extends AmongModel{
 		if(empty($hasArch)){
 			return $this->add($dataArray);
 		}
+	}
+
+	function setArchive($archives_usercode,$dataArray){
+		if(!$this->has_auth("update")){
+			return false;
+		}
+		return $this->where(array("archives_usercode"=>$archives_usercode))->save($dataArray);
 	}
 }
