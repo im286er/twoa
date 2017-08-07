@@ -17,7 +17,7 @@ class AmongController extends Controller {
 
 		if(empty($oa_login)){
             vendor('WeixinQy.WeixinQy');//引入Sms
-            $this->Wxqy = new \WeixinQy("wx650b23fa694c8ff7","w_oV6aNTMaNUrOjwah0zupDxnWeYmtDR3QiUcD3Uqf584CpwYPB-U79QuhLLD_eJ");
+            $this->Wxqy = new \WeixinQy("wx650b23fa694c8ff7","GDTwLEDVdhiCz0ViKGOVKJZbQc3eLN9URy9ugIVJNm0");
 			//防止死循环跳转
             if($_GET["code"]){
                 $userInfo=$this->Wxqy->user()->getUserInfo($_GET["code"],true);
