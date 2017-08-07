@@ -14,13 +14,16 @@ class AmongController extends Controller {
         $this->baseInfo=D("Info");
         $this->user=D("User");
 		$oa_login=session("oa_islogin");
+        vendor('WeixinQy.WeixinQy');//引入Sms
+        $this->Wxqy = new \WeixinQy("wx650b23fa694c8ff7","ppkZedcpTOs_XMJEfccFBNQwPUBTTloqjidc8hoetnU");
 
 		if(empty($oa_login)){
-            vendor('WeixinQy.WeixinQy');//引入Sms
-            $this->Wxqy = new \WeixinQy("wx650b23fa694c8ff7","GDTwLEDVdhiCz0ViKGOVKJZbQc3eLN9URy9ugIVJNm0");
 			//防止死循环跳转
             if($_GET["code"]){
+                // print_r($_GET);
                 $userInfo=$this->Wxqy->user()->getUserInfo($_GET["code"],true);
+                // print_r($userInfo);
+                // return false;
                 if($userInfo->userid!=""){
                     session("oa_islogin","1");
                     session("oa_user_code",$userInfo->userid);

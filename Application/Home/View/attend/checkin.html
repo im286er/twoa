@@ -19,6 +19,7 @@
 			.tabbable ul li{width: 50%;}
 			#checkin-way{padding-top:3px;padding-left: 3px; }
 			#accordion .panel-body{text-align: center;}
+			#imageModal .modal-body img{width:90%;}
 		</style>
     </head>
     <body>
@@ -36,7 +37,7 @@
 										<h4 class="panel-title">
 											<a class="accordion-toggle" data-toggle="collapse" data-parent="#accordion" href="#collapseOne">
 												<i class="ace-icon fa fa-angle-down bigger-110" data-icon-hide="ace-icon fa fa-angle-down" data-icon-show="ace-icon fa fa-angle-right"></i>
-												&nbsp;正常上下班打卡
+												&nbsp;正常上下班打卡 {$usercode}
 											</a>
 										</h4>
 									</div>
@@ -139,14 +140,15 @@
 											<div class="profile-info-name"> 位置坐标 </div>
 
 											<div class="profile-info-value">
-												<span class="editable" id="username">23.18877-103.55455</span>
+												<span class="editable" id="latlong"></span>
+												<i class="fa fa-map-marker bigger-175 primary" aria-hidden="true"></i>
 											</div>
 										</div>
 										<div class="profile-info-row">
 											<div class="profile-info-name"> 定位地址： </div>
 
 											<div class="profile-info-value">
-												<span class="editable" id="username">广东省</span>
+												<span class="editable" id="position"></span>
 											</div>
 										</div>
 									</div>
@@ -154,7 +156,8 @@
 								</div>
 
 								<div id="profile4" class="tab-pane">
-									<button class="btn btn-pink"><i class="ace-icon fa fa-camera align-top bigger-125"> 拍照上传</i></button>
+									<button class="btn btn-pink chooseImage" ><i class="ace-icon fa fa-camera align-top bigger-125"> 拍照</i></button>
+									<!-- data-toggle="modal" data-target="#imageModal" -->
 								</div>
 							</div>
 						</div>
@@ -165,6 +168,7 @@
    			
    		</div>
     </div>
+
    		
    	<script src="__PUBLIC__/components/jquery/dist/jquery.js"></script>	 
 	<script src="__PUBLIC__/components/bootstrap/dist/js/bootstrap.js"></script>			
@@ -172,11 +176,13 @@
 	<script src="__PUBLIC__/components/eonasdan-bootstrap-datetimepicker/src/js/bootstrap-datetimepicker.js"></script>
 	<script src="__PUBLIC__/assets/js/src/ace.js"></script>
 	<script src="__PUBLIC__/assets/js/src/ace.basics.js"></script>
+	<script src="http://res.wx.qq.com/open/js/jweixin-1.2.0.js"></script>
 
 
 
 	<script type="text/javascript">
 		jQuery(function($) {
+			var images = {localId: [],serverId: []};
 			set_monitor_date()
 			$("input[name='monitor']").on("click",function(){
 				set_monitor_date()
@@ -198,8 +204,88 @@
 			}).next().on(ace.click_event, function(){
 				$(this).prev().focus();
 			});
+			//微信js
+		    wx.config({
+		        debug: false, // 开启调试模式,调用的所有api的返回值会在客户端alert出来，若要查看传入的参数，可以在pc端打开，参数信息会通过log打出，仅在pc端时才会打印。
+		        appId: '{$SignPackage["appId"]}', // 必填，企业微信的cropID
+		        timestamp:"{$SignPackage['timestamp']}" , // 必填，生成签名的时间戳
+		        nonceStr: '{$SignPackage["nonceStr"]}', // 必填，生成签名的随机串
+		        signature: '{$SignPackage["signature"]}',// 必填，签名，见附录1
+		        jsApiList: ["chooseImage","previewImage","uploadImage","downloadImage","getLocation",] // 必填，需要使用的JS接口列表，所有JS接口列表见附录2
+		    });
+		    wx.ready(function(){
+		    		/**
+		    		 * [getLocation 获取定位]
+		    		 * @param  {[type]} res) {				                   var latitude [description]
+		    		 * @return {[type]}      [description]
+		    		 */
+		    	    wx.getLocation({
+				        type: 'gcj02', // 默认为wgs84的gps坐标，如果要返回直接给openLocation用的火星坐标，可传入'gcj02'
+				        success: function (res) {
+				            var latitude = res.latitude; // 纬度，浮点数，范围为90 ~ -90
+				            var longitude = res.longitude; // 经度，浮点数，范围为180 ~ -180。
+				            var speed = res.speed; // 速度，以米/每秒计
+				            var accuracy = res.accuracy; // 位置精度
+				            $("#latlong").text(latitude+"-"+longitude)
+				            $.ajax({
+				            	url:"{:U('getPosition')}",
+				            	type:"POST",
+				            	dataType:"html",
+				            	data:{latitude:latitude,longitude:longitude},
+				            	success:function(data){
+				            		$("#position").text(data)
+				            		$(".fa-map-marker").on("click",function(){
+				            			wx.openLocation({
+									        latitude: latitude, // 纬度，浮点数，范围为90 ~ -90
+									        longitude: longitude, // 经度，浮点数，范围为180 ~ -180。
+									        name: '当前位置', // 位置名
+									        address: 'data', // 地址详情说明
+									        scale: 28, // 地图缩放级别,整形值,范围从1~28。默认为16
+									    });
+				            		})
+				            	}
+				            })
+				             
+				       //          
+				        }
+				    });
+
+		    	    /*点击拍照触发拍照*/
+		    	    $(".chooseImage").on("click",function(){
+		    	    	images = {localId: [],serverId: []};
+						if(images.localId!==""){
+							images.localId=null;
+						}
+						/*调用jssdk 拍照*/
+		    	    	wx.chooseImage({
+					        count: 1, // 默认9
+					        sizeType: ['compressed'], // 可以指定是原图还是压缩图，默认二者都有
+					        sourceType: ['camera'], // 可以指定来源是相册还是相机，默认二者都有
+					        success: function (res) {
+
+					        	/*生成图片预览按钮*/
+					        	$(".chooseImage").after('&nbsp;&nbsp;<button class="btn btn-warning previewImage" ><i class="ace-icon fa fa-image align-top bigger-125"> 预览照片</i></button>')
+					            images.localId = res.localIds;
+					            $("#profile4").on("click",".previewImage",function(){
+					            	/*预览图片*/
+					            	wx.previewImage({
+								        current: images.localId[0], // 当前显示图片的http链接
+								        urls: [images.localId[0]] // 需要预览的图片http链接列表
+								    });
+					            })
+					        }
+					    });
+		    	    })
+			        
+
+
+				    
+		    });
 		})
 		
+		/**
+		 * [set_monitor_date 设置监控时间显示]
+		 */
 		function set_monitor_date(){
 			if($("input[name='monitor']").is(":checked")){
 				$("#date-monitor").parent().removeClass("hide")
