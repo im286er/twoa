@@ -4,10 +4,10 @@
  * @Email:369709991@qq.com
  * @Date:   2017-05-18 15:57:50
  * @Last Modified by:   vition
- * @Last Modified time: 2017-08-01 18:41:35
+ * @Last Modified time: 2017-08-04 15:46:22
  */
 
-/*人事管理{create|新建用户|glyphicon glyphicon-user,userlist|用户列表|fa fa-users,archives|档案管理|fa fa-file-archive-o,ubase|基础信息|glyphicon glyphicon-send,charts|图表统计|fa fa-bar-chart-o}fa fa-users*/
+/*{"control":"User","name":"人事管理","icon":"fa fa-users","menus":[{"name":"新建用户","icon":"glyphicon glyphicon-user","menus":"create"},{"name":"用户列表","icon":"fa fa-users","menus":"userlist"},{"name":"档案管理","icon":"fa fa-file-archive-o","menus":"archives"},{"name":"基础信息","icon":"glyphicon glyphicon-send","menus":"ubase"},{"name":"图表统计","icon":"fa fa-bar-chart-o","menus":"charts"}]}*/
 namespace Home\Controller;
 use Common\Controller\AmongController;
 class UserController extends AmongController {

@@ -1,11 +1,12 @@
 <?php
-/*主菜单{company|企业信息|fa fa-tachometer,profile|个人信息|fa fa-user}fa fa-tachometer*/
+
+
+/*{"control":"Menu","name":"主菜单","icon":"fa fa-tachometer","menus":[{"name":"企业信息","icon":"fa fa-tachometer","menus":"company"},{"name":"个人信息","icon":"fa fa-user","menus":"profile"}]}*/
 namespace Home\Controller;
 use Common\Controller\AmongController;
 class MenuController extends AmongController {
 	//menu
 	public function menu(){
-
 		$authoMenu=$this->get_auth(array("Menu"));
 		$this->assign("authoMenu",$authoMenu);
 		$this->display("menu");

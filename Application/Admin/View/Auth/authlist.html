@@ -78,21 +78,21 @@
 						<div class="widget-main no-padding">
 							<volist name="modules" id="controllers">
 								<div class="col-xs-12 col-sm-6">
-									<div class="main-widget-container widget-box main-control widget-container-col" name="{$controllers.name.en}">
+									<div class="main-widget-container widget-box main-control widget-container-col" name="{$controllers.control}">
 										<div class="row">
 											<div class="col-sm-12 col-xs-12 ">
 												<div class="widget-header">
-													<h5 class="widget-title"><i class="ace-icon {$controllers.name.icon}"></i>{$controllers.name.cn}</h5>
+													<h5 class="widget-title"><i class="ace-icon {$controllers.icon}"></i>{$controllers.name}</h5>
 													<div class="widget-toolbar">
-														<button class="btn btn-success btn-xs select-all" data-type="{$controllers.name.en}">
+														<button class="btn btn-success btn-xs select-all" data-type="{$controllers.control}">
 															<i class="ace-icon fa fa-check-square bigger-150 icon-only"></i>
 														</button>
 
-														<button class="btn btn-purple btn-xs cancel-select" data-type="{$controllers.name.en}">
+														<button class="btn btn-purple btn-xs cancel-select" data-type="{$controllers.control}">
 															<i class="ace-icon fa fa-square-o  bigger-150 icon-only"></i>
 														</button>
 
-														<button class="btn btn-pink btn-xs  select-invert" data-type="{$controllers.name.en}">
+														<button class="btn btn-pink btn-xs  select-invert" data-type="{$controllers.control}">
 															<i class="ace-icon fa fa-check-square-o  bigger-150 icon-only"></i>
 														</button>
 													</div>
@@ -100,12 +100,12 @@
 												<div class="widget-body">
 													<div class="widget-main">
 														<p class="alert alert-success">
-															<volist name="controllers['controller']" id="thicon">
+															<volist name="controllers['menus']" id="thicon">
 																<!-- <span class="label"> -->
-																	<i class="ace-icon {$thicon[2]}"></i>
+																	<i class="ace-icon {$thicon.icon}"></i>
 																	<label class="inline">
-																		<input name="{$thicon[0]}" data-control="{$controllers.name.en}-{$thicon[0]}" type="checkbox" class="ace">
-																		<span class="lbl action-name">{$thicon[1]}</span>
+																		<input name="{$thicon.menus}" data-control="{$controllers.control}-{$thicon.menus}" type="checkbox" class="ace">
+																		<span class="lbl action-name">{$thicon.name}</span>
 																	</label>
 																&nbsp;&nbsp;
 															</volist>

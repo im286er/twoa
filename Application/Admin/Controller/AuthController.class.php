@@ -1,5 +1,9 @@
 <?php
-/*权限管理{authlist|页面权限|fa fa-eye,authtable|数据表权限|fa fa-database}glyphicon glyphicon-user*/
+
+
+/*{"control":"Auth","name":"权限管理","icon":"glyphicon glyphicon-user","menus":[{"name":"页面权限","icon":"fa fa-eye","menus":"authlist"},{"name":"数据表权限","icon":"fa fa-database","menus":"authtable"}]}*/
+
+
 namespace Admin\Controller;
 // use Think\Controller;
 use Common\Controller\AmongController;
@@ -17,6 +21,7 @@ class AuthController extends AmongController {
 		switch (I("html")) {
 			case 'authlist':
 				$condata=$this->showCon();
+				// print_r($condata);
 				$rolesDataArray=$this->baseInfo->role()->search_role();
 				$this->assign("rolesDataArray",$rolesDataArray);
 				$this->assign("condata",$condata);
@@ -100,16 +105,24 @@ class AuthController extends AmongController {
 				preg_match('/([\S]*)Controller.class.php/', $files[$i],$conMatch);
 				if(count($conMatch)>1){
 					$conFile=file_get_contents($url."/".$conMatch[0]);
-					preg_match('/\/\*([\S]*){([\S\ ]*)}([\S\ ]*)\*\//', $conFile,$cMatch);
-					$conNameArray=array();
+					// preg_match('/\/\*([\S]*){([\S\ ]*)}([\S\ ]*)\*\//', $conFile,$cMatch);
+					preg_match('/\/\*(\{[\ \S]*\})\*\//', $conFile,$cMatch);
+					// print_r($cMatch[1]);
+					// echo $cMatch[1];
 					if(count($cMatch)>1){
-						// echo $cMatch[0];
-						$controll=explode(",", $cMatch[2]);
-						for($c=0;$c<count($controll);$c++){
-							array_push($conNameArray, explode("|", $controll[$c]));
-						}
-						array_push($tempModel, array("name"=>array("cn"=>$cMatch[1],"en"=>$conMatch[1],"icon"=>$cMatch[3]),"controller"=>$conNameArray));
+						
+						array_push($tempModel,json_decode($cMatch[1],true));
+						// print_r($tempModel);
 					}
+					// $conNameArray=array();
+					// if(count($cMatch)>1){
+					// 	// echo $cMatch[0];
+					// 	$controll=explode(",", $cMatch[2]);
+					// 	for($c=0;$c<count($controll);$c++){
+					// 		array_push($conNameArray, explode("|", $controll[$c]));
+					// 	}
+					// 	array_push($tempModel, array("name"=>array("cn"=>$cMatch[1],"en"=>$conMatch[1],"icon"=>$cMatch[3]),"controller"=>$conNameArray));
+					// }
 				}
 			}
 			$authArray[$model]=$tempModel;

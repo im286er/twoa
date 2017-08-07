@@ -5,7 +5,7 @@
  * @Email:369709991@qq.com
  * @Date:   2017-07-20 16:46:41
  * @Last Modified by:   vition
- * @Last Modified time: 2017-07-24 12:45:10
+ * @Last Modified time: 2017-08-03 15:35:08
  */
 namespace Common\Model;
 use Common\Model\AmongModel;
@@ -39,7 +39,9 @@ class RauthModel extends AmongModel{
 	 * @return [type]             [description]
 	 */
 	function find_auth($elimArray="",$module=true,$user_role=0){
-		if($this->has_auth("select")){
+		if(!$this->has_auth("select")){	
+			return false;
+		}
 			if($user_role>0){
 	    		$rauthData=json_decode($this->field("rauth_auth")->where("rauth_role='{$user_role}'")->find()["rauth_auth"],true);
 	    	}else{
@@ -64,7 +66,7 @@ class RauthModel extends AmongModel{
 				$rAtuhArray=$rauthData;
 	    	}
 	    	return $rAtuhArray;
-		}
+		
 	}
 
 	/**

@@ -6,6 +6,8 @@ class AmongController extends Controller {
     protected $selfUser;
     protected $baseInfo;//定义基本信息
     protected $user;//用户模型
+    protected $Wxqy;//用户模型
+
 	//初始化，类似构造方法，判断是否登录
 	public function __construct(){
         parent::__construct();
@@ -14,17 +16,27 @@ class AmongController extends Controller {
 		$oa_login=session("oa_islogin");
 
 		if(empty($oa_login)){
+            vendor('WeixinQy.WeixinQy');//引入Sms
+            $this->Wxqy = new \WeixinQy("wx650b23fa694c8ff7","w_oV6aNTMaNUrOjwah0zupDxnWeYmtDR3QiUcD3Uqf584CpwYPB-U79QuhLLD_eJ");
 			//防止死循环跳转
+            if($_GET["code"]){
+                $userInfo=$this->Wxqy->user()->getUserInfo($_GET["code"],true);
+                if($userInfo->userid!=""){
+                    session("oa_islogin","1");
+                    session("oa_user_code",$userInfo->userid);
+                }
+            }
+
 			if (strtoupper(CONTROLLER_NAME)!="INDEX" && session("oa_user_code")==null) {
 				$url=U("index/index");
 				echo "<script>top.location.href='$url'</script>";exit;
 			}else{
 
-                if(!empty(I("user_code"))){
+                if(I("user_code")!==null){
                     session("is_register",I("user_code"));
                 } 
                 //**这里是新员工注册涉及的权限
-                if(!empty(session("is_register"))){
+                if(session("is_register")!==null){
                     $user=M("oa_user");
                     $this->selfUser=$user->where(array("user_code"=>session("is_register"),"user_state"=>"0"))->find();
                     if(!empty($this->selfUser["user_code"])){
@@ -124,7 +136,9 @@ class AmongController extends Controller {
 	}
     //权限控制
     public function authority(){
+
     	$authority=$this->get_auth();
+
     		if(isset($authority[CONTROLLER_NAME])){
 	    		foreach ($authority[CONTROLLER_NAME]["menus"] as $names => $menus) {
 	    			if($this->menu_list($menus,I("html"))){
@@ -180,8 +194,6 @@ class AmongController extends Controller {
             }
     		
     	}
-    	
-
     	if($module){
     		$rAtuhArray=$rauthData[MODULE_NAME];
     		if(!empty($elimArray)){

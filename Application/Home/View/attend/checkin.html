@@ -1,0 +1,212 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8">
+        <meta name="description" content="Draggabble Widget Boxes with Persistent Position and State" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0" />
+
+
+		<link rel="stylesheet" href="__PUBLIC__/assets/css/bootstrap.css" />
+		<link rel="stylesheet" href="__PUBLIC__/components/font-awesome/css/font-awesome.css" />
+		<link rel="stylesheet" href="__PUBLIC__/components/eonasdan-bootstrap-datetimepicker/build/css/bootstrap-datetimepicker.css" />
+
+		<!-- <link rel="stylesheet" href="__PUBLIC__/components/_mod/jquery-ui.custom/jquery-ui.custom.css" /> -->
+
+
+		<!-- <link rel="stylesheet" href="__PUBLIC__/assets/css/ace-fonts.css" /> -->
+		<link rel="stylesheet" href="__PUBLIC__/assets/css/ace.css" class="ace-main-stylesheet" id="main-ace-style" />
+		<style>
+			.tabbable ul li{width: 50%;}
+			#checkin-way{padding-top:3px;padding-left: 3px; }
+			#accordion .panel-body{text-align: center;}
+		</style>
+    </head>
+    <body>
+    <div class="page-content">
+    	<div class="row">
+    		<div class="widget-box" id="widget-box-1">
+
+				<div class="widget-body">
+					<div class="widget-main">
+						<div class="">
+							<!-- #section:elements.accordion -->
+							<div id="accordion" class="accordion-style1 panel-group">
+								<div class="panel panel-default">
+									<div class="panel-heading">
+										<h4 class="panel-title">
+											<a class="accordion-toggle" data-toggle="collapse" data-parent="#accordion" href="#collapseOne">
+												<i class="ace-icon fa fa-angle-down bigger-110" data-icon-hide="ace-icon fa fa-angle-down" data-icon-show="ace-icon fa fa-angle-right"></i>
+												&nbsp;正常上下班打卡
+											</a>
+										</h4>
+									</div>
+
+									<div class="panel-collapse collapse in" id="collapseOne">
+										<div class="panel-body">
+											<button class="btn btn-success">
+												<i class="ace-icon fa fa-sun-o align-top bigger-125"></i>
+												上班
+											</button>
+											<button class="btn disabled">
+												<i class="ace-icon fa fa-moon-o align-top bigger-125"></i>
+												下班
+											</button>
+										</div>
+									</div>
+								</div>
+
+								<div class="panel panel-default">
+									<div class="panel-heading">
+										<h4 class="panel-title">
+											<a class="accordion-toggle collapsed" data-toggle="collapse" data-parent="#accordion" href="#collapseTwo">
+												<i class="ace-icon fa fa-angle-right bigger-110" data-icon-hide="ace-icon fa fa-angle-down" data-icon-show="ace-icon fa fa-angle-right"></i>
+												&nbsp;加班打卡
+											</a>
+										</h4>
+									</div>
+
+									<div class="panel-collapse collapse" id="collapseTwo">
+										<div class="panel-body">
+											<button class="btn btn-primary">
+												<i class="ace-icon fa fa-clock-o align-top bigger-125"></i>
+												开始加班
+											</button>
+											<button class="btn disabled">
+												<i class="ace-icon fa fa-hand-peace-o align-top bigger-125"></i>
+												结束加班
+											</button>
+										</div>
+									</div>
+								</div>
+
+								<div class="panel panel-default">
+									<div class="panel-heading">
+										<h4 class="panel-title">
+											<a class="accordion-toggle collapsed" data-toggle="collapse" data-parent="#accordion" href="#collapseThree">
+												<i class="ace-icon fa fa-angle-right bigger-110" data-icon-hide="ace-icon fa fa-angle-down" data-icon-show="ace-icon fa fa-angle-right"></i>
+												&nbsp;外勤打卡
+											</a>
+										</h4>
+									</div>
+
+									<div class="panel-collapse collapse" id="collapseThree">
+										<div class="panel-body">
+											<button class="btn btn-purple">
+												<i class="ace-icon fa fa-sign-out align-top bigger-125"></i>
+												开始外勤
+											</button>
+											<button class="btn disabled">
+												<i class="ace-icon fa fa-circle-o-notch align-top bigger-125"></i>
+												结束外勤
+											</button>
+										</div>
+									</div>
+								</div>
+							</div>
+
+						</div>
+						<div class="">
+							<label>
+								<input name="monitor" class="ace ace-switch ace-switch-4 btn-rotate" type="checkbox" />
+								<span class="lbl"><span style="display: inline-block;line-height: 24px;font-size: 18px;">&nbsp;<i class="ace-icon fa fa-video-camera"></i>&nbsp;是否查监控拍照</span></span>
+
+							</label>
+							<div class="hr hr-dotted"></div>
+							<div class="input-group hide">
+								
+								<input id="date-monitor" type="text" value="2017-08-15 21:05:00" class="form-control" />
+								<span class="input-group-addon">
+									<i class="fa fa-clock-o bigger-110"></i>
+								</span>
+							</div>
+							<div class="hr hr-dotted"></div>
+						</div>
+						<div class="tabbable">
+							<ul class="nav nav-tabs padding-12 tab-color-blue background-blue" id="checkin-way">
+								<li class="active">
+									<a data-toggle="tab" href="#home4">定位打卡</a>
+								</li>
+
+								<li>
+									<a data-toggle="tab" href="#profile4">拍照打卡</a>
+								</li>
+							</ul>
+
+							<div class="tab-content">
+								<div id="home4" class="tab-pane in active">
+									<div class="profile-user-info profile-user-info-striped">
+										<div class="profile-info-row">
+											<div class="profile-info-name"> 位置坐标 </div>
+
+											<div class="profile-info-value">
+												<span class="editable" id="username">23.18877-103.55455</span>
+											</div>
+										</div>
+										<div class="profile-info-row">
+											<div class="profile-info-name"> 定位地址： </div>
+
+											<div class="profile-info-value">
+												<span class="editable" id="username">广东省</span>
+											</div>
+										</div>
+									</div>
+
+								</div>
+
+								<div id="profile4" class="tab-pane">
+									<button class="btn btn-pink"><i class="ace-icon fa fa-camera align-top bigger-125"> 拍照上传</i></button>
+								</div>
+							</div>
+						</div>
+						<button class="btn btn-primary btn-block"><i class="ace-icon fa fa-hand-o-up align-top bigger-125"> 提交记录</i></button>
+					</div>
+				</div>
+			</div>
+   			
+   		</div>
+    </div>
+   		
+   	<script src="__PUBLIC__/components/jquery/dist/jquery.js"></script>	 
+	<script src="__PUBLIC__/components/bootstrap/dist/js/bootstrap.js"></script>			
+	<script src="__PUBLIC__/components/moment/moment.js"></script>
+	<script src="__PUBLIC__/components/eonasdan-bootstrap-datetimepicker/src/js/bootstrap-datetimepicker.js"></script>
+	<script src="__PUBLIC__/assets/js/src/ace.js"></script>
+	<script src="__PUBLIC__/assets/js/src/ace.basics.js"></script>
+
+
+
+	<script type="text/javascript">
+		jQuery(function($) {
+			set_monitor_date()
+			$("input[name='monitor']").on("click",function(){
+				set_monitor_date()
+			})
+			/*选择时间*/
+			$('#date-monitor').datetimepicker({
+				format: 'YYYY-MM-DD H:mm:ss',//use this option to display seconds
+				icons: {
+					time: 'fa fa-clock-o',
+					date: 'fa fa-calendar',
+					up: 'fa fa-chevron-up',
+					down: 'fa fa-chevron-down',
+					previous: 'fa fa-chevron-left',
+					next: 'fa fa-chevron-right',
+					today: 'fa fa-arrows ',
+					clear: 'fa fa-trash',
+					close: 'fa fa-times'
+				}
+			}).next().on(ace.click_event, function(){
+				$(this).prev().focus();
+			});
+		})
+		
+		function set_monitor_date(){
+			if($("input[name='monitor']").is(":checked")){
+				$("#date-monitor").parent().removeClass("hide")
+			}else{
+				$("#date-monitor").parent().addClass("hide")
+			}
+		}
+	</script>
+    </body>
+</html>

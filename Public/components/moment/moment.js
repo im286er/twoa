@@ -658,13 +658,13 @@
     // LOCALES
 
     var MONTHS_IN_FORMAT = /D[oD]?(\[[^\[\]]*\]|\s+)+MMMM?/;
-    var defaultLocaleMonths = 'January_February_March_April_May_June_July_August_September_October_November_December'.split('_');
+    var defaultLocaleMonths = '1月_2月_3月_4月_5月_6月_7月_8月_9月_10月_11月_12月'.split('_');
     function localeMonths (m, format) {
         return isArray(this._months) ? this._months[m.month()] :
             this._months[MONTHS_IN_FORMAT.test(format) ? 'format' : 'standalone'][m.month()];
     }
 
-    var defaultLocaleMonthsShort = 'Jan_Feb_Mar_Apr_May_Jun_Jul_Aug_Sep_Oct_Nov_Dec'.split('_');
+    var defaultLocaleMonthsShort = '1月_2月_3月_4月_5月_6月_7月_8月_9月_10月_11月_12月'.split('_');
     function localeMonthsShort (m, format) {
         return isArray(this._monthsShort) ? this._monthsShort[m.month()] :
             this._monthsShort[MONTHS_IN_FORMAT.test(format) ? 'format' : 'standalone'][m.month()];
@@ -2565,12 +2565,12 @@
             this._weekdays[this._weekdays.isFormat.test(format) ? 'format' : 'standalone'][m.day()];
     }
 
-    var defaultLocaleWeekdaysShort = 'Sun_Mon_Tue_Wed_Thu_Fri_Sat'.split('_');
+    var defaultLocaleWeekdaysShort = '星期日_星期一_星期二_星期三_星期四_星期五_星期六'.split('_');
     function localeWeekdaysShort (m) {
         return this._weekdaysShort[m.day()];
     }
 
-    var defaultLocaleWeekdaysMin = 'Su_Mo_Tu_We_Th_Fr_Sa'.split('_');
+    var defaultLocaleWeekdaysMin = '周日_周一_周二_周三_周四_周五_周六'.split('_');
     function localeWeekdaysMin (m) {
         return this._weekdaysMin[m.day()];
     }

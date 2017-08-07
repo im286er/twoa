@@ -58,3 +58,4 @@
 		fclose($resource); 
 		return $dir."/".$name;
 	}
+	

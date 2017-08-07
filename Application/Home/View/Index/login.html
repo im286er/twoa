@@ -101,18 +101,14 @@
 											</form>
 
 											<div class="social-or-login center">
-												<span class="bigger-110">或者使用下列账户登录（未开通）</span>
+												<span class="bigger-110">或者使用企业微信APP扫描登录</span>
 											</div>
 
 											<div class="space-6"></div>
 
 											<div class="social-login center">
 												<a class="btn btn-success">
-													<i class="ace-icon fa fa-weixin"></i>
-												</a>
-
-												<a class="btn btn-danger">
-													<i class="ace-icon fa fa-qq"></i>
+													<img src="__PUBLIC__/images/qywx.png" id="qywxlogin" data-toggle="modal" data-target="#qywxModal" />
 												</a>
 											</div>
 										</div><!-- /.widget-main -->
@@ -241,12 +237,26 @@
 				</div><!-- /.row -->
 			</div><!-- /.main-content -->
 		</div><!-- /.main-container -->
-
+		<div id="qywxModal" class="modal fade" tabindex="-1" style="text-align: center;">
+			<div class="modal-dialog" role="archiveModal">
+				<div class="modal-content" >
+					<div class="modal-body">
+						<div id="qywx-script"></div>
+						<div id="qywx-div"></div>	
+					</div>
+				</div><!-- /.modal-content -->
+			</div><!-- /.modal-dialog -->
+		</div>
 		<!-- basic scripts -->
 
 		<!--[if !IE]> -->
 		<script src="__PUBLIC__/components/jquery/dist/jquery.js"></script>
+		<script src="__PUBLIC__/components/bootstrap/dist/js/bootstrap.js"></script>
+		<script src="http://rescdn.qqmail.com/node/ww/wwopenmng/js/sso/wwLogin-1.0.0.js"></script>
 
+		<script>
+			 window.onload=function(){window.WwLogin({"id":"qywx-div","appid" : "wx650b23fa694c8ff7","agentid" : "1","redirect_uri" :"http%3a%2f%2foa.twoway.com.cn%3a8088%2ftwoa",});} 
+		</script>
 		<!-- <![endif]-->
 
 		<!--[if IE]>
@@ -324,6 +334,8 @@
 					$(this).val(code.substring(0,10))
 				}
 			})
+
+
 			//获取高级的注册信息
 			function getreg(){
 				$.ajax({
