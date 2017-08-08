@@ -3,14 +3,14 @@
  * @Author: vition
  * @Date:   2017-08-02 09:45:11
  * @Last Modified by:   vition
- * @Last Modified time: 2017-08-07 23:31:01
+ * @Last Modified time: 2017-08-08 09:24:52
  */
 
 class JSSDK extends Urllib {
     private $appId;
     private $appSecret;
     private $access_token;
-    private $jsapiFile="../accesstoken/jsapi_ticket.php";
+    private $jsapiFile="accesstoken/jsapi_ticket.php";
     private $jsapi_ticket;
 
     public function __construct($appId, $appSecret,$accesstoken) {
@@ -66,8 +66,8 @@ class JSSDK extends Urllib {
                 $this->jsapi_ticket= $jsapiData->jsapi_ticket;
             }
         }else{
-            if(!is_dir("/accesstoken/")){
-                mkdir("/accesstoken/");
+            if(!is_dir("accesstoken/")){
+                mkdir("accesstoken/");
             }
             $this->jsapi_ticket=$this->createJsApiTicket();
         }
@@ -82,13 +82,13 @@ class JSSDK extends Urllib {
      */
      private function createJsApiTicket(){
         $jsapiJson=$this->get("https://qyapi.weixin.qq.com/cgi-bin/get_jsapi_ticket?access_token=".$this->access_token);
-        $JTObject=json_decode($jsapiJson);
 
-        if ($JTObject->jsapi_ticket) {
-            $jsapiFile = fopen($this->jsapiFile, "w");
-            fwrite($jsapiFile, "<?php exit();?>" . json_encode(array("expire_time"=>time() + 7000,"jsapi_ticket"=>$JTObject->jsapi_ticket)));
+        $JTObject=json_decode($jsapiJson);
+        if ($JTObject->ticket) {
+            $jsapiFile = fopen($this->jsapiFile, "w+");
+            fwrite($jsapiFile, "<?php exit();?>" . json_encode(array("expire_time"=>time() + 7000,"jsapi_ticket"=>$JTObject->ticket)));
             fclose($jsapiFile);
-            return $JTObject->jsapi_ticket;
+            return $JTObject->ticket;
         }
         return false;
      }

@@ -60,6 +60,6 @@
 	}
 	
 	function getWeixinConf(){
-		$WxConf = fopen("WxConf.ini", 'w+');
+		$WxConf = fopen("WxConf.ini", 'r');
 		return json_decode(fread($WxConf, filesize("WxConf.ini")),true);
 	}

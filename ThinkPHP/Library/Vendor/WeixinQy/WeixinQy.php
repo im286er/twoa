@@ -2,8 +2,8 @@
 /**
  * @Author: vition
  * @Date:   2017-08-02 09:45:11
- * @Last Modified by:   369709991@qq.com
- * @Last Modified time: 2017-08-08 00:02:25
+ * @Last Modified by:   vition
+ * @Last Modified time: 2017-08-08 09:23:09
  */
 
 include_once "lib/Urllib.php";
@@ -24,9 +24,10 @@ class WeixinQy extends Urllib{
 	 * @param [type] $corpsecret [应用或者管理员secret]
 	 */
 	function __construct($corpid,$corpsecret){
+
 		$this->corpid=$corpid;
 		$this->corpsecret=$corpsecret;
-		$this->aTFile="/accesstoken/".$this->corpsecret.".php";
+		$this->aTFile="accesstoken/".$this->corpsecret.".php";
 		$this->getToken();
 	}
 	
@@ -40,7 +41,7 @@ class WeixinQy extends Urllib{
 	 */
 	function secret($corpsecret){
 		$this->corpsecret=$corpsecret;
-		$this->aTFile="/accesstoken/".$this->corpsecret.".php";
+		$this->aTFile="accesstoken/".$this->corpsecret.".php";
 		$this->getToken();
 		return $this;
 	}
@@ -57,8 +58,8 @@ class WeixinQy extends Urllib{
 				$this->accessToken= $tokenData->access_token;
 			}
 		}else{
-			if(!is_dir("/accesstoken/")){
-				mkdir("/accesstoken/");
+			if(!is_dir("accesstoken/")){
+				mkdir("accesstoken/");
 			}
 			$this->accessToken=$this->createToken();
 		}
