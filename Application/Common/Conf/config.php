@@ -6,5 +6,5 @@ return array(
     'DB_NAME'=>'twoasystem',          // 数据库名
     'DB_USER'=>'root',      // 用户名
     'DB_PWD'=>'root',          // 密码
-	SHOW_PAGE_TRACE=>true,
+	// SHOW_PAGE_TRACE=>true,
 );

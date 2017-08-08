@@ -167,11 +167,11 @@
 							</div>
 						</div>
 
-						<input type="hidden" class="checkin-info" name="acheckin_code" value="{$user_code}"/>
-						<input type="hidden" class="checkin-info" name="acheckin_checkinway" value="0" />
-						<input type="hidden" class="checkin-info" name="acheckin_type" value="0"/>
-						<input type="hidden" class="checkin-info" name="acheckin_timetype" value="0"/>
-						<input type="hidden" class="checkin-info" name="acheckin_picture" value="0"/>
+						<input type="hidden" class="checkin-info" data-title="人员编码" name="acheckin_code" value="{$user_code}"/>
+						<input type="hidden" class="checkin-info" data-title="打卡方式" name="acheckin_checkinway" value="0" />
+						<input type="hidden" class="checkin-info" data-title="打卡类型" name="acheckin_type" value="0"/>
+						<input type="hidden" class="checkin-info" data-title="开始结束" name="acheckin_timetype" value="0"/>
+						<input type="hidden" class="checkin-info" data-title="图片" name="acheckin_picture" value="0"/>
 
 						<button class="btn btn-primary btn-block" id="submit-checkin"><i class="ace-icon fa fa-hand-o-up align-top bigger-125">&nbsp;提交记录&nbsp;</i></button>
 					</div>
@@ -280,7 +280,10 @@
 					        success: function (res) {
 
 					        	/*生成图片预览按钮*/
-					        	$(".chooseImage").after('&nbsp;&nbsp;<button class="btn btn-warning previewImage" ><i class="ace-icon fa fa-image align-top bigger-125"> 预览照片</i></button>')
+					        	if(!$(".chooseImage").prev("previewImage")){
+					        		$(".chooseImage").after('&nbsp;&nbsp;<button class="btn btn-warning previewImage" ><i class="ace-icon fa fa-image align-top bigger-125"> 预览照片</i></button>')
+					        	}
+					        	
 					            images.localId = res.localIds;
 					            
 
@@ -308,31 +311,46 @@
 		    });
 		    /*更改打卡类型，定位还是拍照*/
 		    $("#accordion").on("click","button",function(){
-		    	if(!$(this).hasClass("disabled")){
-		    		 
+		    	if(!$(this).hasClass("active")){
 		    		$("input[name='acheckin_type']").val($(this).data("type"))
 		    		$("input[name='acheckin_timetype']").val($(this).data("timetype"))
-
+		    	}else{
+		    		$("input[name='acheckin_type']").val("0")
+		    		$("input[name='acheckin_timetype']").val("0")
 		    	}
 		    	
 		    })
 		    /*提交打卡*/
 		    $("#submit-checkin").on("click",function(){
+		    	var datas={}
+		    	datas["data"]={}
 		    	$(".checkin-info").each(function(){
-		    		//data-type='{$type}' date-timetype='1'
-		    		// alert($("input[name='acheckin_timetype']").val());
-		    		// console.log($(this).attr("name")+$(this).val())
-		    	})
-		    	$.ajax({
-		    		url:"{:U('submit_checkin')}",
-		    		type:"post",
-		    		data:{picture:$("input[name='acheckin_timetype']").val()},
-		    		success:function(data){
-		    			alert(data)
+		    		var name=$(this).attr("name")
+		    		var val=$(this).val()
+		    		datas["data"][name]=val
+		    		if(name!="acheckin_picture"){
+		    			if(val==0){
+		    				alert($(this).data("title")+"没选择")
+		    				return false
+		    			}
 		    		}
 		    	})
+		    	if(datas["data"]["acheckin_checkinway"]==2 && datas["data"]["acheckin_picture"]==0){
+		    		alert("请拍照")
+		    		return false
+		    	}
+		    	console.log(datas)
+		    	// $.ajax({
+		    	// 	url:"{:U('submit_checkin')}",
+		    	// 	type:"post",
+		    	// 	data:{picture:$("input[name='acheckin_timetype']").val()},
+		    	// 	success:function(data){
+		    	// 		alert(data)
+		    	// 	}
+		    	// })
 		    })
 
+		    /*改变打卡方式，定位1，拍照2*/
 		    $('.checkinway').on("click",function() {
 				$("input[name='acheckin_checkinway']").val($(this).data("checkinway"))
 			})
@@ -349,7 +367,7 @@
 			var hours=date.getHours();
 			var minutes=date.getMinutes();
 			var seconds=date.getSeconds();
-			console.log(year+"-"+month+"-"+day+" "+hours+":"+minutes+":"+seconds)
+			// console.log(year+"-"+month+"-"+day+" "+hours+":"+minutes+":"+seconds)
 			$('#date-monitor').val(year+"-"+month+"-"+day+" "+hours+":"+minutes+":"+seconds)
 			if($("input[name='monitor']").is(":checked")){
 				$("#date-monitor").parent().removeClass("hide")
