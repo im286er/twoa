@@ -15,7 +15,9 @@ class AmongController extends Controller {
         $this->user=D("User");
 		$oa_login=session("oa_islogin");
         vendor('WeixinQy.WeixinQy');//引入Sms
-        $this->Wxqy = new \WeixinQy("wx650b23fa694c8ff7","ppkZedcpTOs_XMJEfccFBNQwPUBTTloqjidc8hoetnU");
+
+        $WxConf=getWeixinConf();
+        $this->Wxqy = new \WeixinQy($WxConf["corpid"],$WxConf["corpsecret"]);
 
 		if(empty($oa_login)){
 			//防止死循环跳转

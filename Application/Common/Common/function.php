@@ -59,3 +59,7 @@
 		return $dir."/".$name;
 	}
 	
+	function getWeixinConf(){
+		$WxConf = fopen("WxConf.ini", 'w+');
+		return json_decode(fread($WxConf, filesize("WxConf.ini")),true);
+	}
