@@ -25,6 +25,16 @@
     <body>
     <div class="page-content">
     	<div class="row">
+    		<div class="row" style="text-align: center;">
+    			<div class="width-50 label label-info label-xlg arrowed-in arrowed-in-right">
+					<div class="inline position-relative">
+						<i class="ace-icon fa fa-user light-green"></i>
+						&nbsp;
+						<span class="white">{$user_name}</span>
+					</div>
+				</div>
+    		</div>
+    		
     		<div class="widget-box" id="widget-box-1">
 
 				<div class="widget-body">
@@ -37,21 +47,14 @@
 										<h4 class="panel-title">
 											<a class="accordion-toggle" data-toggle="collapse" data-parent="#accordion" href="#collapseOne">
 												<i class="ace-icon fa fa-angle-down bigger-110" data-icon-hide="ace-icon fa fa-angle-down" data-icon-show="ace-icon fa fa-angle-right"></i>
-												&nbsp;正常上下班打卡 {$usercode}
+												&nbsp;正常上下班打卡
 											</a>
 										</h4>
 									</div>
 
-									<div class="panel-collapse collapse in" id="collapseOne">
+									<div class="panel-collapse collapse in checkinType" id="collapseOne" name="normalCheckin">
 										<div class="panel-body">
-											<button class="btn btn-success">
-												<i class="ace-icon fa fa-sun-o align-top bigger-125"></i>
-												上班
-											</button>
-											<button class="btn disabled">
-												<i class="ace-icon fa fa-moon-o align-top bigger-125"></i>
-												下班
-											</button>
+											{$normalCheckin}
 										</div>
 									</div>
 								</div>
@@ -66,16 +69,17 @@
 										</h4>
 									</div>
 
-									<div class="panel-collapse collapse" id="collapseTwo">
+									<div class="panel-collapse collapse checkinType" id="collapseTwo" name="overtimeCheckin">
 										<div class="panel-body">
-											<button class="btn btn-primary">
+											<!-- <button class="btn btn-primary">
 												<i class="ace-icon fa fa-clock-o align-top bigger-125"></i>
 												开始加班
 											</button>
 											<button class="btn disabled">
 												<i class="ace-icon fa fa-hand-peace-o align-top bigger-125"></i>
 												结束加班
-											</button>
+											</button> -->
+											{$overtimeCheckin}
 										</div>
 									</div>
 								</div>
@@ -90,16 +94,17 @@
 										</h4>
 									</div>
 
-									<div class="panel-collapse collapse" id="collapseThree">
+									<div class="panel-collapse collapse checkinType" id="collapseThree" name="outCheckin">
 										<div class="panel-body">
-											<button class="btn btn-purple">
+											<!-- <button class="btn btn-purple">
 												<i class="ace-icon fa fa-sign-out align-top bigger-125"></i>
 												开始外勤
 											</button>
 											<button class="btn disabled">
 												<i class="ace-icon fa fa-circle-o-notch align-top bigger-125"></i>
 												结束外勤
-											</button>
+											</button> -->
+											{$outCheckin}
 										</div>
 									</div>
 								</div>
@@ -125,11 +130,11 @@
 						<div class="tabbable">
 							<ul class="nav nav-tabs padding-12 tab-color-blue background-blue" id="checkin-way">
 								<li class="active">
-									<a data-toggle="tab" href="#home4">定位打卡</a>
+									<a data-toggle="tab" class="checkinway" data-checkinway='1' href="#home4">定位打卡</a>
 								</li>
 
 								<li>
-									<a data-toggle="tab" href="#profile4">拍照打卡</a>
+									<a data-toggle="tab" class="checkinway" data-checkinway='2' href="#profile4">拍照打卡</a>
 								</li>
 							</ul>
 
@@ -161,10 +166,16 @@
 								</div>
 							</div>
 						</div>
-						<button class="btn btn-primary btn-block"><i class="ace-icon fa fa-hand-o-up align-top bigger-125"> 提交记录</i></button>
+
+						<input type="hidden" class="checkin-info" name="acheckin_code" value="{$user_code}"/>
+						<input type="hidden" class="checkin-info" name="acheckin_checkinway" value="0" />
+						<input type="hidden" class="checkin-info" name="acheckin_type" value="0"/>
+						<input type="hidden" class="checkin-info" name="acheckin_timetype" value="0"/>
+
+						<button class="btn btn-primary btn-block" id="submit-checkin"><i class="ace-icon fa fa-hand-o-up align-top bigger-125">&nbsp;提交记录&nbsp;</i></button>
 					</div>
 				</div>
-			</div>
+			</div> 
    			
    		</div>
     </div>
@@ -201,9 +212,13 @@
 					clear: 'fa fa-trash',
 					close: 'fa fa-times'
 				}
-			}).next().on(ace.click_event, function(){
+			})
+			.on("dp.change",function(){
+				get_attend_type($(this).val())
+			})
+			.next().on(ace.click_event, function(){
 				$(this).prev().focus();
-			});
+			})
 			//微信js
 		    wx.config({
 		        debug: false, // 开启调试模式,调用的所有api的返回值会在客户端alert出来，若要查看传入的参数，可以在pc端打开，参数信息会通过log打出，仅在pc端时才会打印。
@@ -276,22 +291,80 @@
 					        }
 					    });
 		    	    })
-			        
 
-
-				    
 		    });
+		    $("#accordion").on("click","button",function(){
+		    	if(!$(this).hasClass("disabled")){
+		    		 
+		    		$("input[name='acheckin_type']").val($(this).data("type"))
+		    		$("input[name='acheckin_timetype']").val($(this).data("timetype"))
+
+		    	}
+		    	
+		    })
+		    /*提交打卡*/
+		    $("#submit-checkin").on("click",function(){
+		    	$(".checkin-info").each(function(){
+		    		//data-type='{$type}' date-timetype='1'
+		    		console.log($(this).attr("name")+$(this).val())
+		    	})
+		    })
+
+		    $('.checkinway').on("click",function() {
+				$("input[name='acheckin_checkinway']").val($(this).data("checkinway"))
+			})
 		})
 		
 		/**
 		 * [set_monitor_date 设置监控时间显示]
 		 */
 		function set_monitor_date(){
+			var date =new Date();
+			var year=date.getFullYear()
+			var month=date.getMonth()+1
+			var day=date.getDate();
+			var hours=date.getHours();
+			var minutes=date.getMinutes();
+			var seconds=date.getSeconds();
+			console.log(year+"-"+month+"-"+day+" "+hours+":"+minutes+":"+seconds)
+			$('#date-monitor').val(year+"-"+month+"-"+day+" "+hours+":"+minutes+":"+seconds)
 			if($("input[name='monitor']").is(":checked")){
 				$("#date-monitor").parent().removeClass("hide")
+
+				$(".checkinway").eq(0).parent().addClass("hide")
+				$($(".checkinway").eq(0).attr("href")).addClass("hide")
+				$(".checkinway").eq(1).parent().addClass("active")
+				$($(".checkinway").eq(1).attr("href")).addClass("active")
+				$("input[name='acheckin_checkinway']").val(2)
 			}else{
+				$(".checkinway").eq(0).parent().removeClass("hide")
+				$($(".checkinway").eq(0).attr("href")).removeClass("hide")
+
+				$(".checkinway").eq(1).parent().removeClass("active")
+				$($(".checkinway").eq(1).attr("href")).removeClass("active")
+
+				$(".checkinway").eq(0).parent().addClass("active")
+				$($(".checkinway").eq(0).attr("href")).addClass("active")
+
 				$("#date-monitor").parent().addClass("hide")
+				$("input[name='acheckin_checkinway']").val(1)
+				get_attend_type($('#date-monitor').val())
 			}
+		}
+
+		function get_attend_type(thisDate){
+			$.ajax({
+				url:"{:U('checkin')}",
+				data:{thisDay:thisDate},
+				type:"post",
+				dataType:"json",
+				success:function(data){
+					// console.log(data)
+					for(checkinType in data){
+						$(".checkinType[name='"+checkinType+"']").find(".panel-body").html(data[checkinType])
+					}
+				}
+			})
 		}
 	</script>
     </body>
