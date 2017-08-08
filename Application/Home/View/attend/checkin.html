@@ -282,7 +282,18 @@
 					        	/*生成图片预览按钮*/
 					        	$(".chooseImage").after('&nbsp;&nbsp;<button class="btn btn-warning previewImage" ><i class="ace-icon fa fa-image align-top bigger-125"> 预览照片</i></button>')
 					            images.localId = res.localIds;
-					            $("input[name='acheckin_timetype']").val(images.localId[0])
+					            
+
+					            /*上传图片*/	
+				                wx.uploadImage({
+							        localId: images.localId[0], // 需要上传的图片的本地ID，由chooseImage接口获得
+							        isShowProgressTips: 1, // 默认为1，显示进度提示
+							        success: function (res) {
+							            var serverId = res.serverId; // 返回图片的服务器端ID
+							            $("input[name='acheckin_timetype']").val(serverId)
+							        }
+							    });
+
 					            $("#profile4").on("click",".previewImage",function(){
 					            	/*预览图片*/
 					            	wx.previewImage({
@@ -309,9 +320,16 @@
 		    $("#submit-checkin").on("click",function(){
 		    	$(".checkin-info").each(function(){
 		    		//data-type='{$type}' date-timetype='1'
-		    		alert($("input[name='acheckin_timetype']").val());
-		    		console.log($(this).attr("name")+$(this).val())
-
+		    		// alert($("input[name='acheckin_timetype']").val());
+		    		// console.log($(this).attr("name")+$(this).val())
+		    	})
+		    	$.ajax({
+		    		url:"{:U('submit_checkin')}",
+		    		type:"post",
+		    		data:{picture:$("input[name='acheckin_timetype']").val()},
+		    		success:function(data){
+		    			alert(data)
+		    		}
 		    	})
 		    })
 
