@@ -171,6 +171,7 @@
 						<input type="hidden" class="checkin-info" name="acheckin_checkinway" value="0" />
 						<input type="hidden" class="checkin-info" name="acheckin_type" value="0"/>
 						<input type="hidden" class="checkin-info" name="acheckin_timetype" value="0"/>
+						<input type="hidden" class="checkin-info" name="acheckin_picture" value="0"/>
 
 						<button class="btn btn-primary btn-block" id="submit-checkin"><i class="ace-icon fa fa-hand-o-up align-top bigger-125">&nbsp;提交记录&nbsp;</i></button>
 					</div>
@@ -281,6 +282,7 @@
 					        	/*生成图片预览按钮*/
 					        	$(".chooseImage").after('&nbsp;&nbsp;<button class="btn btn-warning previewImage" ><i class="ace-icon fa fa-image align-top bigger-125"> 预览照片</i></button>')
 					            images.localId = res.localIds;
+					            $("input[name='acheckin_timetype']").val(images.localId[0])
 					            $("#profile4").on("click",".previewImage",function(){
 					            	/*预览图片*/
 					            	wx.previewImage({
@@ -293,6 +295,7 @@
 		    	    })
 
 		    });
+		    /*更改打卡类型，定位还是拍照*/
 		    $("#accordion").on("click","button",function(){
 		    	if(!$(this).hasClass("disabled")){
 		    		 
@@ -306,7 +309,9 @@
 		    $("#submit-checkin").on("click",function(){
 		    	$(".checkin-info").each(function(){
 		    		//data-type='{$type}' date-timetype='1'
+		    		alert($("input[name='acheckin_timetype']").val());
 		    		console.log($(this).attr("name")+$(this).val())
+
 		    	})
 		    })
 
@@ -351,7 +356,7 @@
 				get_attend_type($('#date-monitor').val())
 			}
 		}
-
+		/*获取考勤类型状态*/
 		function get_attend_type(thisDate){
 			$.ajax({
 				url:"{:U('checkin')}",
