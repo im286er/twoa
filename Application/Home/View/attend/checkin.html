@@ -9,6 +9,7 @@
 		<link rel="stylesheet" href="__PUBLIC__/assets/css/bootstrap.css" />
 		<link rel="stylesheet" href="__PUBLIC__/components/font-awesome/css/font-awesome.css" />
 		<link rel="stylesheet" href="__PUBLIC__/components/eonasdan-bootstrap-datetimepicker/build/css/bootstrap-datetimepicker.css" />
+		<link rel="stylesheet" href="__PUBLIC__/components/jquery.gritter/css/jquery.gritter.css" />
 
 		<!-- <link rel="stylesheet" href="__PUBLIC__/components/_mod/jquery-ui.custom/jquery-ui.custom.css" /> -->
 
@@ -186,16 +187,19 @@
    		
    	<script src="__PUBLIC__/components/jquery/dist/jquery.js"></script>	 
 	<script src="__PUBLIC__/components/bootstrap/dist/js/bootstrap.js"></script>			
+	<script src="__PUBLIC__/components/jquery.gritter/js/jquery.gritter.js"></script>
 	<script src="__PUBLIC__/components/moment/moment.js"></script>
 	<script src="__PUBLIC__/components/eonasdan-bootstrap-datetimepicker/src/js/bootstrap-datetimepicker.js"></script>
 	<script src="__PUBLIC__/assets/js/src/ace.js"></script>
 	<script src="__PUBLIC__/assets/js/src/ace.basics.js"></script>
 	<script src="http://res.wx.qq.com/open/js/jweixin-1.2.0.js"></script>
+	
 
 
 
 	<script type="text/javascript">
 		jQuery(function($) {
+
 			if($("input[name='acheckin_code']").val()==""){
 				location.reload()
 			}
@@ -353,9 +357,10 @@
 			    		data:datas,
 			    		success:function(data){
 			    			if(data.success>0){
-			    				location.reload()
+			    				alert_msg("信息正确","打卡记录id："+data.msg,'gritter-success')
+			    				setTimeout(function(){location.reload(); }, 3000);
 			    			}else{
-			    				alert(data.msg)
+			    				alert_msg("信息出错",data.msg,'gritter-error')
 			    			}
 			    			// location.reload()
 			    		}
@@ -429,7 +434,7 @@
 	    		var val=$(this).val()
 
     			if(val==0){
-    				alert($(this).data("title")+"没选择")
+    				alert_msg("信息出错",$(this).data("title")+'没选择','gritter-error')
     				data=false
     				return false
     			}
@@ -437,6 +442,15 @@
 
 	    	})
 	    	return data
+		}
+
+		/*提示函数*/
+		function alert_msg(title,text,class_name){
+			$.gritter.add({
+				title: title,
+				text: text,
+				class_name: class_name+' gritter-center'
+			});
 		}
 	</script>
     </body>
