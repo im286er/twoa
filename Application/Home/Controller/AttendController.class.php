@@ -4,7 +4,7 @@
  * @Email:369709991@qq.com
  * @Date:   2017-08-03 16:43:53
  * @Last Modified by:   vition
- * @Last Modified time: 2017-08-08 23:38:39
+ * @Last Modified time: 2017-08-09 11:17:16
  */
 
 /*{"control":"Attend","name":"考勤管理","icon":"fa fa-calendar","menus":[{"name":"考勤配置","icon":"fa fa-gear","menus":"config"},{"name":"考勤申请","icon":"fa fa-list-alt","menus":"userlist"},{"name":"申请管理","icon":"fa fa-pencil-square","menus":"archives"},{"name":"打卡","icon":"fa fa-square","menus":"arch"}]}*/
@@ -83,27 +83,64 @@ class AttendController extends AmongController {
 	 * [getLocation 根据经纬度获取地址]
 	 * @param  [type] $latitude  [latitude]
 	 * @param  [type] $longitude [longitude]
+	 * @param  [type] $range 	 [默认不做范围限制]
 	 * @return [type]            [description]
 	 */
-	public function getPosition($latitude=0,$longitude=0){
-
+	public function getPosition($latitude=0,$longitude=0,$range=false){
+		$positions=array(array("minLat"=>23.1313,"maxLat"=>23.1319,"minLong"=>113.274,"maxLong"=>113.2755));
 		if($latitude==0 || $longitude==0){
 			$latitude=I("latitude");
 			$longitude=I("longitude");
 		}
 
-		$xmlstr=file_get_contents("http://apis.map.qq.com/ws/geocoder/v1/?location={$latitude},{$longitude}&key=V6EBZ-4EN35-7OHIH-QDJTA-KNYBO-IHFFN");
-		$objPosition=json_decode($xmlstr);
-		$Position=$objPosition->result->address;
-		echo $Position;
+		$getLocation=true;
+		if($range==true){
+			$getLocation=false;
+			foreach ($position as $position) {
+				if($latitude>$position["minLat"] && $latitude< $position["maxLat"] && $longitude >$position["minLong"] && $longitude < $position["maxLong"]){
+					$getLocation=true;
+					break;
+				}
+			}
+		}
+		
+		if($getLocation==true){
+			$xmlstr=file_get_contents("http://apis.map.qq.com/ws/geocoder/v1/?location={$latitude},{$longitude}&key=V6EBZ-4EN35-7OHIH-QDJTA-KNYBO-IHFFN");
+			$objPosition=json_decode($xmlstr);
+			$Position=$objPosition->result->address;
+			echo json_encode(array("success"=>"1","msg"=>$Position));
+		}else{
+			echo json_encode(array("success"=>"0","msg"=>"抱歉！坐标不在公司范围，请使用拍照"));
+		}
+		
 	}
+
 
 	function submit_checkin(){
 		if(IS_AJAX){
-			$result=$this->Wxqy->download($_POST["picture"]);
-			$picture=fopen("test.".$result["type"], "w+");
-			$result= fwrite($picture, $result["content"]);
-			fclose($picture);
+			$_POST["data"]["acheckin_addtime"]=date("Y-m-d H:i:s",time());
+			switch ($_POST["data"]["acheckin_checkinway"]) {
+				case "1":
+					# code...
+					$this->acheckin->add($_POST["data"]);
+					break;
+				case "2":
+					$result=$this->Wxqy->download($_POST["data"]["acheckin_picture"]);
+					if($result!=false){
+						$picture=fopen("Public/images/upload/checkin/".$_POST["data"]["acheckin_code"]."-".$_POST["data"]["acheckin_addtime"].".".$result["type"], "w+");
+						$result= fwrite($picture, $result["content"]);
+						fclose($picture);
+					}else{
+						$result="无法下载图片";
+					}
+					# code...
+					break;
+				default:
+					# code...
+					break;
+			}
+			
+			
 			$this->ajaxReturn($result);
 		}
 	}

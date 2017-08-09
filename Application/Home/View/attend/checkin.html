@@ -120,7 +120,7 @@
 							<div class="hr hr-dotted"></div>
 							<div class="input-group hide">
 								
-								<input id="date-monitor" type="text" value="2017-08-15 21:05:00" class="form-control" />
+								<input id="date-monitor" type="text" value="2017-08-15 21:05:00" name="acheckin_checkintime" class="form-control checkin-info photo-info" />
 								<span class="input-group-addon">
 									<i class="fa fa-clock-o bigger-110"></i>
 								</span>
@@ -167,11 +167,13 @@
 							</div>
 						</div>
 
-						<input type="hidden" class="checkin-info" data-title="人员编码" name="acheckin_code" value="{$user_code}"/>
-						<input type="hidden" class="checkin-info" data-title="打卡方式" name="acheckin_checkinway" value="0" />
-						<input type="hidden" class="checkin-info" data-title="打卡类型" name="acheckin_type" value="0"/>
-						<input type="hidden" class="checkin-info" data-title="开始结束" name="acheckin_timetype" value="0"/>
-						<input type="hidden" class="checkin-info" data-title="图片" name="acheckin_picture" value="0"/>
+						<input type="hidden" class="checkin-info photo-info" data-title="人员编码" name="acheckin_code" value="{$user_code}"/>
+						<input type="hidden" class="checkin-info photo-info" data-title="打卡方式" name="acheckin_checkinway" value="0" />
+						<input type="hidden" class="checkin-info photo-info" data-title="打卡类型" name="acheckin_type" value="0"/>
+						<input type="hidden" class="checkin-info photo-info" data-title="开始结束" name="acheckin_timetype" value="0"/>
+						<input type="hidden" class="photo-info" data-title="图片" name="acheckin_picture" value="0"/>
+						<input type="hidden" class="checkin-info photo-info" data-title="坐标" name="acheckin_longlat" value="0"/>
+						<input type="hidden" class="checkin-info " data-title="地址" name="acheckin_location" value="0"/>
 
 						<button class="btn btn-primary btn-block" id="submit-checkin"><i class="ace-icon fa fa-hand-o-up align-top bigger-125">&nbsp;提交记录&nbsp;</i></button>
 					</div>
@@ -249,16 +251,23 @@
 				            $.ajax({
 				            	url:"{:U('getPosition')}",
 				            	type:"POST",
-				            	dataType:"html",
+				            	dataType:"json",
 				            	data:{latitude:latitude,longitude:longitude},
 				            	success:function(data){
-				            		$("#position").text(data)
+				            		if(data.success==1){
+				            			$("input[name='acheckin_longlat']").val(latitude+"-"+longitude)
+				            			$("input[name='acheckin_location']").val(data.msg)
+				            		}else{
+				            			$("input[name='acheckin_longlat']").val("0")
+				            			$("input[name='acheckin_location']").val("0")
+				            		}
+				            		$("#position").text(data.msg)
 				            		$(".fa-map-marker").on("click",function(){
 				            			wx.openLocation({
 									        latitude: latitude, // 纬度，浮点数，范围为90 ~ -90
 									        longitude: longitude, // 经度，浮点数，范围为180 ~ -180。
 									        name: '当前位置', // 位置名
-									        address: 'data', // 地址详情说明
+									        address: data.msg, // 地址详情说明
 									        scale: 28, // 地图缩放级别,整形值,范围从1~28。默认为16
 									    });
 				            		})
@@ -327,30 +336,26 @@
 		    $("#submit-checkin").on("click",function(){
 		    	var datas={}
 		    	datas["data"]={}
-		    	$(".checkin-info").each(function(){
-		    		var name=$(this).attr("name")
-		    		var val=$(this).val()
-		    		datas["data"][name]=val
-		    		if(name!="acheckin_picture"){
-		    			if(val==0){
-		    				alert($(this).data("title")+"没选择")
-		    				return false
-		    			}
-		    		}
-		    	})
-		    	if(datas["data"]["acheckin_checkinway"]==2 && datas["data"]["acheckin_picture"]==0){
-		    		alert("请拍照")
-		    		return false
+
+		    	var checkinway=$("input[name='acheckin_checkinway']").val()
+
+		    	if(checkinway==1){
+		    		datas["data"]=get_checkin_data("checkin-info")
+		    	}else if(checkinway==2){
+		    		datas["data"]=get_checkin_data("photo-info")
 		    	}
-		    	console.log(datas)
-		    	// $.ajax({
-		    	// 	url:"{:U('submit_checkin')}",
-		    	// 	type:"post",
-		    	// 	data:{picture:$("input[name='acheckin_timetype']").val()},
-		    	// 	success:function(data){
-		    	// 		alert(data)
-		    	// 	}
-		    	// })
+		    	console.log(datas["data"]);
+		    	if(datas["data"]!=false){
+		    		$.ajax({
+			    		url:"{:U('submit_checkin')}",
+			    		type:"post",
+			    		data:{picture:$("input[name='acheckin_timetype']").val()},
+			    		success:function(data){
+			    			alert(data)
+			    		}
+			    	})
+		    	}
+		    	
 		    })
 
 		    /*改变打卡方式，定位1，拍照2*/
@@ -409,6 +414,23 @@
 					}
 				}
 			})
+		}
+		/*获取打卡信息*/
+		function get_checkin_data(className){
+			var data={}
+			$("."+className).each(function(){
+	    		var name=$(this).attr("name")
+	    		var val=$(this).val()
+
+    			if(val==0){
+    				alert($(this).data("title")+"没选择")
+    				data=false
+    				return false
+    			}
+    			data[name]=val
+
+	    	})
+	    	return data
 		}
 	</script>
     </body>

@@ -3,7 +3,7 @@
  * @Author: vition
  * @Date:   2017-08-02 09:45:11
  * @Last Modified by:   vition
- * @Last Modified time: 2017-08-09 09:22:38
+ * @Last Modified time: 2017-08-09 10:31:53
  */
 
 include_once "lib/Urllib.php";
@@ -157,10 +157,13 @@ class WeixinQy extends Urllib{
 	function download($media_id){
 		$url="https://qyapi.weixin.qq.com/cgi-bin/media/get?access_token={$this->accessToken}&media_id={$media_id}";
 		$header=get_headers($url);
-		if(!strstr($header[2], "json")){
+		print_r($header);
+		if(!strstr($header[4], "json")){
 			$resultData=$this->get($url);
 			$suf=split("/", split(":", $header[2])[1]);
 			return array("type"=>$suf[1],"content"=>$resultData);
+		}else{
+			return false;
 		}
 	}
 
