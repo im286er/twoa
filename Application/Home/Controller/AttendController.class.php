@@ -4,7 +4,7 @@
  * @Email:369709991@qq.com
  * @Date:   2017-08-03 16:43:53
  * @Last Modified by:   vition
- * @Last Modified time: 2017-08-09 13:01:52
+ * @Last Modified time: 2017-08-09 14:58:20
  */
 
 /*{"control":"Attend","name":"考勤管理","icon":"fa fa-calendar","menus":[{"name":"考勤配置","icon":"fa fa-gear","menus":"config"},{"name":"考勤申请","icon":"fa fa-list-alt","menus":"userlist"},{"name":"申请管理","icon":"fa fa-pencil-square","menus":"archives"},{"name":"打卡","icon":"fa fa-square","menus":"arch"}]}*/
@@ -139,12 +139,12 @@ class AttendController extends AmongController {
 							mkdir("Public/images/upload/checkin/");
 						}
 
-					$result=$this->Wxqy->download($checkinData["acheckin_picture"]);
+					$downloadResult=$this->Wxqy->download($checkinData["acheckin_picture"]);
 					$return=array("success"=>"0","msg"=>"打卡失败，请联系管理员");
-					if($result!=false){
-						$pictureName=$checkinData["acheckin_code"]."-".date("Y-m-d[His]",time()).".".$result["type"];
+					if($downloadResult!=false){
+						$pictureName=$checkinData["acheckin_code"]."-".date("Y-m-d[His]",time()).".".$downloadResult["type"];
 						$picture=fopen("Public/images/upload/checkin/".$pictureName, "w+");
-						$result= fwrite($picture, $result["content"]);
+						$result= fwrite($picture, $downloadResult["content"]);
 						fclose($picture);
 						if($result>0){
 							$checkinData["acheckin_picture"]=$pictureName;
@@ -154,7 +154,7 @@ class AttendController extends AmongController {
 							}
 						}
 					}
-					$this->ajaxReturn(array("success"=>"0","msg"=>"打卡失败，请联系管理员"));
+					$this->ajaxReturn($return);
 					# code...
 					break;
 				default:

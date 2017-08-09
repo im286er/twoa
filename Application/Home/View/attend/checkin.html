@@ -121,7 +121,7 @@
 							<div class="hr hr-dotted"></div>
 							<div class="input-group hide">
 								
-								<input id="date-monitor" type="text" value="2017-08-15 21:05:00" name="acheckin_checkintime" class="form-control checkin-info photo-info" />
+								<input id="date-monitor" type="text" value="2017-08-15 21:05:00" name="acheckin_checkintime" class="form-control checkin-info photo-info" readonly/>
 								<span class="input-group-addon">
 									<i class="fa fa-clock-o bigger-110"></i>
 								</span>
@@ -221,7 +221,8 @@
 					today: 'fa fa-arrows ',
 					clear: 'fa fa-trash',
 					close: 'fa fa-times'
-				}
+				},
+				ignoreReadonly:true
 			})
 			.on("dp.change",function(){
 				get_attend_type($(this).val())
@@ -358,7 +359,7 @@
 			    		success:function(data){
 			    			if(data.success>0){
 			    				alert_msg("信息正确","打卡记录id："+data.msg,'gritter-success')
-			    				setTimeout(function(){location.reload(); }, 3000);
+			    				setTimeout(function(){location.reload(); }, 4000);
 			    			}else{
 			    				alert_msg("信息出错",data.msg,'gritter-error')
 			    			}
