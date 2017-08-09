@@ -4,7 +4,7 @@
  * @Email:369709991@qq.com
  * @Date:   2017-08-03 16:43:53
  * @Last Modified by:   vition
- * @Last Modified time: 2017-08-09 11:17:16
+ * @Last Modified time: 2017-08-09 11:27:27
  */
 
 /*{"control":"Attend","name":"考勤管理","icon":"fa fa-calendar","menus":[{"name":"考勤配置","icon":"fa fa-gear","menus":"config"},{"name":"考勤申请","icon":"fa fa-list-alt","menus":"userlist"},{"name":"申请管理","icon":"fa fa-pencil-square","menus":"archives"},{"name":"打卡","icon":"fa fa-square","menus":"arch"}]}*/
@@ -127,6 +127,9 @@ class AttendController extends AmongController {
 				case "2":
 					$result=$this->Wxqy->download($_POST["data"]["acheckin_picture"]);
 					if($result!=false){
+						if(!is_dir("Public/images/upload/checkin/")){
+							mkdir("Public/images/upload/checkin/");
+						}
 						$picture=fopen("Public/images/upload/checkin/".$_POST["data"]["acheckin_code"]."-".$_POST["data"]["acheckin_addtime"].".".$result["type"], "w+");
 						$result= fwrite($picture, $result["content"]);
 						fclose($picture);
