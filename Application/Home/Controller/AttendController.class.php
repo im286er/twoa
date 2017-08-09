@@ -4,7 +4,7 @@
  * @Email:369709991@qq.com
  * @Date:   2017-08-03 16:43:53
  * @Last Modified by:   vition
- * @Last Modified time: 2017-08-09 11:27:27
+ * @Last Modified time: 2017-08-09 13:01:52
  */
 
 /*{"control":"Attend","name":"考勤管理","icon":"fa fa-calendar","menus":[{"name":"考勤配置","icon":"fa fa-gear","menus":"config"},{"name":"考勤申请","icon":"fa fa-list-alt","menus":"userlist"},{"name":"申请管理","icon":"fa fa-pencil-square","menus":"archives"},{"name":"打卡","icon":"fa fa-square","menus":"arch"}]}*/
@@ -118,33 +118,49 @@ class AttendController extends AmongController {
 
 	function submit_checkin(){
 		if(IS_AJAX){
-			$_POST["data"]["acheckin_addtime"]=date("Y-m-d H:i:s",time());
+		// print_r($_POST);
+			$checkinData=$_POST["data"];
+			$checkinData["acheckin_addtime"]=date("Y-m-d H:i:s",time());
 			switch ($_POST["data"]["acheckin_checkinway"]) {
 				case "1":
 					# code...
-					$this->acheckin->add($_POST["data"]);
+					$checkinData["acheckin_checkintime"]=date("Y-m-d H:i:s",time());
+					$result=$this->acheckin->add($checkinData);
+					if($result>0){
+						$this->ajaxReturn(array("success"=>"1","msg"=>$result));
+					}else{
+						$this->ajaxReturn(array("success"=>"0","msg"=>"打卡失败，请联系管理员"));
+					}
+					
 					break;
 				case "2":
-					$result=$this->Wxqy->download($_POST["data"]["acheckin_picture"]);
-					if($result!=false){
-						if(!is_dir("Public/images/upload/checkin/")){
+					// print_r($checkinData);
+					if(!is_dir("Public/images/upload/checkin/")){
 							mkdir("Public/images/upload/checkin/");
 						}
-						$picture=fopen("Public/images/upload/checkin/".$_POST["data"]["acheckin_code"]."-".$_POST["data"]["acheckin_addtime"].".".$result["type"], "w+");
+
+					$result=$this->Wxqy->download($checkinData["acheckin_picture"]);
+					$return=array("success"=>"0","msg"=>"打卡失败，请联系管理员");
+					if($result!=false){
+						$pictureName=$checkinData["acheckin_code"]."-".date("Y-m-d[His]",time()).".".$result["type"];
+						$picture=fopen("Public/images/upload/checkin/".$pictureName, "w+");
 						$result= fwrite($picture, $result["content"]);
 						fclose($picture);
-					}else{
-						$result="无法下载图片";
+						if($result>0){
+							$checkinData["acheckin_picture"]=$pictureName;
+							$result=$this->acheckin->add($checkinData);
+							if($result>0){
+								$return= array("success"=>"1","msg"=>$result);
+							}
+						}
 					}
+					$this->ajaxReturn(array("success"=>"0","msg"=>"打卡失败，请联系管理员"));
 					# code...
 					break;
 				default:
 					# code...
 					break;
 			}
-			
-			
-			$this->ajaxReturn($result);
 		}
 	}
 	

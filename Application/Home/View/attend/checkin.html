@@ -344,14 +344,20 @@
 		    	}else if(checkinway==2){
 		    		datas["data"]=get_checkin_data("photo-info")
 		    	}
-		    	console.log(datas["data"]);
+		    	// console.log(datas["data"]);
 		    	if(datas["data"]!=false){
 		    		$.ajax({
 			    		url:"{:U('submit_checkin')}",
 			    		type:"post",
-			    		data:{picture:$("input[name='acheckin_timetype']").val()},
+			    		dataType:"json",
+			    		data:datas,
 			    		success:function(data){
-			    			alert(data)
+			    			if(data.success>0){
+			    				location.reload()
+			    			}else{
+			    				alert(data.msg)
+			    			}
+			    			// location.reload()
 			    		}
 			    	})
 		    	}

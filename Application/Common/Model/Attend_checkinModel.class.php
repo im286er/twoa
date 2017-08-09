@@ -4,13 +4,13 @@
  * @Email:369709991@qq.com
  * @Date:   2017-08-07 18:39:02
  * @Last Modified by:   vition
- * @Last Modified time: 2017-08-08 11:18:59
+ * @Last Modified time: 2017-08-09 13:04:34
  */
 namespace Common\Model;
 use Common\Model\AmongModel;
 class Attend_checkinModel extends AmongModel{
 	protected $trueTableName = 'oa_attend_checkin'; 
-	protected $fields = array('acheckin_id', 'acheckin_code','acheckin_checkinway','acheckin_type','acheckin_timetype','acheckin_checkintime','acheckin_location','acheckin_longlat','acheckin_picture');
+	protected $fields = array('acheckin_id', 'acheckin_code','acheckin_checkinway','acheckin_type','acheckin_timetype','acheckin_addtime','acheckin_checkintime','acheckin_location','acheckin_longlat','acheckin_picture');
 
 	function search_checkin($acheckin_code,$acheckin_id=null,$condition=array()){
 		
