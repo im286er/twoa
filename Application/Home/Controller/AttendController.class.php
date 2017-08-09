@@ -4,7 +4,7 @@
  * @Email:369709991@qq.com
  * @Date:   2017-08-03 16:43:53
  * @Last Modified by:   vition
- * @Last Modified time: 2017-08-09 18:59:44
+ * @Last Modified time: 2017-08-09 22:20:55
  */
 
 /*{"control":"Attend","name":"考勤管理","icon":"fa fa-calendar","menus":[{"name":"考勤配置","icon":"fa fa-gear","menus":"config"},{"name":"考勤申请","icon":"fa fa-list-alt","menus":"userlist"},{"name":"申请管理","icon":"fa fa-pencil-square","menus":"archives"},{"name":"打卡","icon":"fa fa-square","menus":"checkin"}]}*/
@@ -28,12 +28,10 @@ class AttendController extends AmongController {
 	 */
 	public function checkin(){
 		$date=date("Y-m-d",time());
-		$thisDay=$this->arecord->isWeekday("2017","08","09");
-		var_dump($thisDay);
 		if(IS_AJAX){
 			$date=date("Y-m-d",strtotime(I("thisDay")));
 		}
-
+		
 
 		$normalCheckin=$this->checkinType(session("oa_user_code"),1,$date);
 		$outCheckin=$this->checkinType(session("oa_user_code"),2,$date);
@@ -64,6 +62,8 @@ class AttendController extends AmongController {
 
 		$butInfo=array("<button class='btn disabled' data-type='{$type}' data-timetype='1'><i class='ace-icon fa {$info[$type][2]} align-top bigger-125'></i>{$info[$type][0]} </button><button  class='btn disabled' data-type='{$type}' data-timetype='2'><i class='ace-icon fa {$info[$type][3]} align-top bigger-125'></i>{$info[$type][1]}</button>","<button class='btn disabled' data-type='{$type}' data-timetype='1'><i class='ace-icon fa {$info[$type][2]} align-top bigger-125'></i>{$info[$type][0]}</button><button data-toggle='button' class='btn btn-success' data-type='{$type}' data-timetype='2'><i class='ace-icon fa {$info[$type][3]} align-top bigger-125'></i>{$info[$type][1]}</button>","<button data-toggle='button' class='btn btn-success' data-type='{$type}' data-timetype='1'><i class='ace-icon fa {$info[$type][2]} align-top bigger-125'></i>{$info[$type][0]}</button><button class='btn disabled' data-type='{$type}' data-timetype='2'><i class='ace-icon fa {$info[$type][3]} align-top bigger-125'></i>{$info[$type][1]}</button>");
 
+		
+
 		if($type>=2){
 			$aapplyTable=M("oa_attend_apply");
 
@@ -82,7 +82,14 @@ class AttendController extends AmongController {
 				return $butInfo[1];
 			}
 		}else{
-			return $butInfo[2];
+			$dates=split("-", $date);
+			$thisDay=$this->arecord->isWeekday($dates[0],$dates[1],$dates[2]);
+			if($thisDay==false){
+				return $butInfo[0];
+			}else{
+				return $butInfo[2];
+			}
+			
 		}
 
 	}
