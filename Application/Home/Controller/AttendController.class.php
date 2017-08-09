@@ -4,7 +4,7 @@
  * @Email:369709991@qq.com
  * @Date:   2017-08-03 16:43:53
  * @Last Modified by:   vition
- * @Last Modified time: 2017-08-09 22:20:55
+ * @Last Modified time: 2017-08-10 00:04:20
  */
 
 /*{"control":"Attend","name":"考勤管理","icon":"fa fa-calendar","menus":[{"name":"考勤配置","icon":"fa fa-gear","menus":"config"},{"name":"考勤申请","icon":"fa fa-list-alt","menus":"userlist"},{"name":"申请管理","icon":"fa fa-pencil-square","menus":"archives"},{"name":"打卡","icon":"fa fa-square","menus":"checkin"}]}*/
@@ -27,15 +27,18 @@ class AttendController extends AmongController {
 	 * @return [type] [description]
 	 */
 	public function checkin(){
+		print_r($this->acheckin->hasCheckin($this->selfUser["user_code"],1,1,1,"2017-08-08"));
+		return false;
 		$date=date("Y-m-d",time());
 		if(IS_AJAX){
 			$date=date("Y-m-d",strtotime(I("thisDay")));
 		}
-		
+		$dates=split("-", $date);
+		$this->MonthRec=$this->arecord->getMonthRec($this->selfUser["user_code"],$dates[0],$dates[1]);
 
-		$normalCheckin=$this->checkinType(session("oa_user_code"),1,$date);
-		$outCheckin=$this->checkinType(session("oa_user_code"),2,$date);
-		$overtimeCheckin=$this->checkinType(session("oa_user_code"),3,$date);
+		$normalCheckin=$this->checkinType($this->selfUser["user_code"],1,$date);
+		$outCheckin=$this->checkinType($this->selfUser["user_code"],2,$date);
+		$overtimeCheckin=$this->checkinType($this->selfUser["user_code"],3,$date);
 		if(IS_AJAX){
 			/*获取不同按钮状态*/
 			$this->ajaxReturn(array("normalCheckin"=>$normalCheckin,"outCheckin"=>$outCheckin,"overtimeCheckin"=>$overtimeCheckin));
@@ -65,8 +68,7 @@ class AttendController extends AmongController {
 		
 
 		if($type>=2){
-			$aapplyTable=M("oa_attend_apply");
-
+			/*状态是外勤或者加班*/
 			$aapplyData=$this->aapply->seekApply($user_code,$type,$date);	
 
 			if(!$aapplyData["aapply_id"]){
@@ -84,6 +86,7 @@ class AttendController extends AmongController {
 		}else{
 			$dates=split("-", $date);
 			$thisDay=$this->arecord->isWeekday($dates[0],$dates[1],$dates[2]);
+			/*判断是否工作日*/
 			if($thisDay==false){
 				return $butInfo[0];
 			}else{
@@ -103,9 +106,10 @@ class AttendController extends AmongController {
 	 */
 	public function getPosition($latitude=0,$longitude=0,$range=false){
 		$positions=array(array("minLat"=>23.1313,"maxLat"=>23.1319,"minLong"=>113.274,"maxLong"=>113.2755));
-		if($latitude==0 || $longitude==0){
+		if($latitude==0 && $longitude==0){
 			$latitude=I("latitude");
 			$longitude=I("longitude");
+			$range=I("range");
 		}
 
 		$getLocation=true;

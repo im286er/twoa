@@ -70,4 +70,5 @@
 * 修改InfoModel.class
 * 修改微信接口
 * 修改gethtml和权限功能
+* ALTER TABLE `oa_attend_record` CHANGE `arecord_json` `arecord_json` TEXT CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '数据json格式';
 
