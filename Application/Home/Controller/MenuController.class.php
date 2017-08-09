@@ -7,7 +7,7 @@ use Common\Controller\AmongController;
 class MenuController extends AmongController {
 	//menu
 	public function menu(){
-		$authoMenu=$this->get_auth(array("Menu"));
+		$authoMenu=$this->get_auth(array("Menu",array("Attend"=>array("checkin"))));
 		$this->assign("authoMenu",$authoMenu);
 		$this->display("menu");
 	}

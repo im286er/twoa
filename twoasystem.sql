@@ -3,7 +3,7 @@
 -- http://www.phpmyadmin.net
 --
 -- Host: 127.0.0.1
--- Generation Time: 2017-08-07 12:47:26
+-- Generation Time: 2017-08-09 13:00:10
 -- 服务器版本： 5.6.17
 -- PHP Version: 5.5.12
 
@@ -73,6 +73,7 @@ CREATE TABLE IF NOT EXISTS `oa_attend_apply` (
   `aapply_type` int(3) DEFAULT '0' COMMENT '申请类型，加班、外请等',
   `aapply_inday` int(3) DEFAULT NULL COMMENT '一天内全天，上午，下午',
   `aapply_addtime` datetime DEFAULT NULL COMMENT '申请时间',
+  `aapply_schedule` date DEFAULT NULL COMMENT '计划时间',
   `aapply_days` int(3) DEFAULT NULL COMMENT '天数',
   `aapply_hours` float(4,2) DEFAULT NULL COMMENT '小时',
   `aapply_reason` varchar(200) DEFAULT NULL COMMENT '理由',
@@ -82,7 +83,14 @@ CREATE TABLE IF NOT EXISTS `oa_attend_apply` (
   `aapply_remark` varchar(100) DEFAULT NULL COMMENT '备注',
   PRIMARY KEY (`aapply_id`),
   UNIQUE KEY `aapply_code` (`aapply_code`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=2 ;
+
+--
+-- 转存表中的数据 `oa_attend_apply`
+--
+
+INSERT INTO `oa_attend_apply` (`aapply_id`, `aapply_code`, `aapply_type`, `aapply_inday`, `aapply_addtime`, `aapply_schedule`, `aapply_days`, `aapply_hours`, `aapply_reason`, `aapply_approve`, `aapply_state`, `aapply_operation`, `aapply_remark`) VALUES
+(1, 1000000107, 2, 0, '2017-08-07 12:00:00', '2017-08-08', 0, 3.00, '外出啊', '1111111', 0, '', '');
 
 -- --------------------------------------------------------
 
@@ -96,12 +104,24 @@ CREATE TABLE IF NOT EXISTS `oa_attend_checkin` (
   `acheckin_checkinway` int(3) DEFAULT '0' COMMENT '打卡的方法，1定位，2拍照',
   `acheckin_type` int(3) DEFAULT '0' COMMENT '打卡的类型，1正常上下班，2外勤，3加班',
   `acheckin_timetype` int(3) DEFAULT '0' COMMENT '打卡时间类型，1开始，2结束',
+  `acheckin_addtime` datetime DEFAULT NULL,
   `acheckin_checkintime` datetime DEFAULT NULL COMMENT '打开产生的时间',
   `acheckin_location` varchar(300) DEFAULT '' COMMENT '位置文本',
   `acheckin_longlat` varchar(50) DEFAULT '' COMMENT '位置经纬度',
   `acheckin_picture` varchar(300) DEFAULT '' COMMENT '拍照的图片路径',
   PRIMARY KEY (`acheckin_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=6 ;
+
+--
+-- 转存表中的数据 `oa_attend_checkin`
+--
+
+INSERT INTO `oa_attend_checkin` (`acheckin_id`, `acheckin_code`, `acheckin_checkinway`, `acheckin_type`, `acheckin_timetype`, `acheckin_addtime`, `acheckin_checkintime`, `acheckin_location`, `acheckin_longlat`, `acheckin_picture`) VALUES
+(1, 1000000107, 1, 1, 1, NULL, '2017-08-07 09:30:23', '13422154', '12333', '1111'),
+(2, 1000000107, 1, 1, 1, NULL, '2017-08-06 09:32:55', '13422154', '12333', '1111'),
+(3, 1000000107, 1, 1, 1, NULL, '2017-08-05 09:36:55', '13422154', '12333', '1111'),
+(4, 1000000107, 1, 1, 1, NULL, '2017-08-07 19:36:55', '13422154', '12333', '1111'),
+(5, 1000000107, 1, 1, 1, NULL, '2017-08-08 09:36:55', '13422154', '12333', '1111');
 
 -- --------------------------------------------------------
 
@@ -111,15 +131,21 @@ CREATE TABLE IF NOT EXISTS `oa_attend_checkin` (
 
 CREATE TABLE IF NOT EXISTS `oa_attend_record` (
   `arecord_id` bigint(20) NOT NULL AUTO_INCREMENT COMMENT '打卡记录id',
-  `arecord_code` bigint(10) NOT NULL COMMENT '对应的用户code',
+  `arecord_code` bigint(10) NOT NULL DEFAULT '0' COMMENT '对应的用户code',
   `arecord_year` int(4) NOT NULL COMMENT '年',
   `arecord_month` int(2) NOT NULL COMMENT '月',
   `arecord_json` varchar(500) DEFAULT '' COMMENT '数据json格式',
-  `arecord_count` float(10,2) NOT NULL COMMENT '本月统计',
+  `arecord_count` float(10,2) DEFAULT '0.00' COMMENT '本月统计',
   `arecord_remedy` int(2) DEFAULT '0' COMMENT '后补次数',
-  PRIMARY KEY (`arecord_id`),
-  UNIQUE KEY `arecord_code` (`arecord_code`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
+  PRIMARY KEY (`arecord_id`)
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=2 ;
+
+--
+-- 转存表中的数据 `oa_attend_record`
+--
+
+INSERT INTO `oa_attend_record` (`arecord_id`, `arecord_code`, `arecord_year`, `arecord_month`, `arecord_json`, `arecord_count`, `arecord_remedy`) VALUES
+(1, 0, 2017, 8, '1, 2, 3, 4, 7, 8, 9, 10, 11, 14, 15, 16, 17, 18, 21, 22, 23, 24, 25, 28, 29, 30, 31', 0.00, 0);
 
 -- --------------------------------------------------------
 
@@ -130,6 +156,7 @@ CREATE TABLE IF NOT EXISTS `oa_attend_record` (
 CREATE TABLE IF NOT EXISTS `oa_attend_user` (
   `auser_id` bigint(20) NOT NULL AUTO_INCREMENT COMMENT '人员记录id',
   `auser_code` bigint(10) NOT NULL COMMENT '对应的用户code',
+  `auser_eachday` int(2) DEFAULT '0' COMMENT '每天工时',
   `auser_worktime` float(10,2) DEFAULT NULL COMMENT '动作时长',
   `auser_annual` int(3) DEFAULT '0' COMMENT '年假',
   PRIMARY KEY (`auser_id`),
@@ -166,12 +193,12 @@ INSERT INTO `oa_company` (`company_id`, `company_name`) VALUES
 
 CREATE TABLE IF NOT EXISTS `oa_config` (
   `config_id` int(10) NOT NULL AUTO_INCREMENT,
-  `config_class` varchar(10) NOT NULL,
+  `config_class` varchar(100) NOT NULL,
   `config_key` varchar(20) NOT NULL,
   `config_value` varchar(500) NOT NULL,
   `config_upper` int(10) NOT NULL,
   PRIMARY KEY (`config_id`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=7 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=14 ;
 
 --
 -- 转存表中的数据 `oa_config`
@@ -183,7 +210,14 @@ INSERT INTO `oa_config` (`config_id`, `config_class`, `config_key`, `config_valu
 (3, 'option', '1', 'TWOWAY', 0),
 (4, 'company', '3', 'DPOWER', 0),
 (5, 'company', '4', '睿色', 0),
-(6, 'company', '5', '睿诚', 0);
+(6, 'company', '5', '睿诚', 0),
+(7, 'acheckin_checkinway', '1', '定位', 0),
+(8, 'acheckin_checkinway', '2', '拍照', 0),
+(9, 'acheckin_type', '1', '上下班', 0),
+(10, 'acheckin_type', '2', '外勤', 0),
+(11, 'acheckin_type', '3', '加班', 0),
+(12, 'acheckin_timetype', '1', '开始', 0),
+(13, 'acheckin_timetype', '2', '结束', 0);
 
 -- --------------------------------------------------------
 
@@ -306,7 +340,7 @@ CREATE TABLE IF NOT EXISTS `oa_rauth` (
 --
 
 INSERT INTO `oa_rauth` (`rauth_id`, `rauth_role`, `rauth_auth`, `rauth_table`) VALUES
-(1, 2, '{"Admin":{"Auth":{"name":"权限管理","menus":[{"name":"页面权限","menus":"authlist","icon":"fa fa-eye"},{"name":"数据表权限","menus":"authtable","icon":"fa fa-database"}],"icon":"glyphicon glyphicon-user"}},"Home":{"Attend":{"name":"考勤管理","menus":[{"name":"考勤配置","menus":"config","icon":"fa fa-gear"},{"name":"考勤申请","menus":"userlist","icon":"fa fa-list-alt"},{"name":"申请管理","menus":"archives","icon":"fa fa-pencil-square"},{"name":"打卡","menus":"arch","icon":"fa fa-square"}],"icon":"fa fa-calendar"},"Menu":{"name":"主菜单","menus":[{"name":"企业信息","menus":"company","icon":"fa fa-tachometer"},{"name":"个人信息","menus":"profile","icon":"fa fa-user"}],"icon":"fa fa-tachometer"},"User":{"name":"人事管理","menus":[{"name":"新建用户","menus":"create","icon":"glyphicon glyphicon-user"},{"name":"用户列表","menus":"userlist","icon":"fa fa-users"},{"name":"档案管理","menus":"archives","icon":"fa fa-file-archive-o"},{"name":"基础信息","menus":"ubase","icon":"glyphicon glyphicon-send"},{"name":"图表统计","menus":"charts","icon":"fa fa-bar-chart-o"}],"icon":"fa fa-users"}}}', '{"oa_archives":["select","update"],"oa_company":["select","insert","update","delete"],"oa_department":["select","insert","update","delete"],"oa_group":["select","insert","update","delete"],"oa_place":["select","insert","update","delete"],"oa_rauth":["select","insert","update","delete"],"oa_role":["select","insert","update","delete"],"oa_user":["select","insert","update","delete"]}'),
+(1, 2, '{"Admin":{"Auth":{"name":"权限管理","menus":[{"name":"页面权限","menus":"authlist","icon":"fa fa-eye"},{"name":"数据表权限","menus":"authtable","icon":"fa fa-database"}],"icon":"glyphicon glyphicon-user"}},"Home":{"Attend":{"name":"考勤管理","menus":[{"name":"考勤配置","menus":"config","icon":"fa fa-gear"},{"name":"考勤申请","menus":"userlist","icon":"fa fa-list-alt"},{"name":"申请管理","menus":"archives","icon":"fa fa-pencil-square"},{"name":"打卡","menus":"checkin","icon":"fa fa-square"}],"icon":"fa fa-calendar"},"Menu":{"name":"主菜单","menus":[{"name":"企业信息","menus":"company","icon":"fa fa-tachometer"},{"name":"个人信息","menus":"profile","icon":"fa fa-user"}],"icon":"fa fa-tachometer"},"User":{"name":"人事管理","menus":[{"name":"新建用户","menus":"create","icon":"glyphicon glyphicon-user"},{"name":"用户列表","menus":"userlist","icon":"fa fa-users"},{"name":"档案管理","menus":"archives","icon":"fa fa-file-archive-o"},{"name":"基础信息","menus":"ubase","icon":"glyphicon glyphicon-send"},{"name":"图表统计","menus":"charts","icon":"fa fa-bar-chart-o"}],"icon":"fa fa-users"}}}', '{"oa_archives":["select","insert","update","delete"],"oa_attend_apply":["select","insert","update","delete"],"oa_attend_checkin":["select","insert","update","delete"],"oa_attend_record":["select","insert","update","delete"],"oa_auser":["select","insert","update","delete"],"oa_company":["select","insert","update","delete"],"oa_config":["select","insert","update","delete"],"oa_department":["select","insert","update","delete"],"oa_group":["select","insert","update","delete"],"oa_place":["select","insert","update","delete"],"oa_rauth":["select","insert","update","delete"],"oa_role":["select","insert","update","delete"],"oa_user":["select","insert","update","delete"]}'),
 (10, 31, '{"Admin":{"Auth":{"name":"权限管理","menus":[],"icon":"glyphicon glyphicon-user"}},"Home":{"Menu":{"name":"主菜单","menus":[{"name":"企业信息","menus":"company","icon":"fa fa-tachometer"},{"name":"个人信息","menus":"profile","icon":"fa fa-user"}],"icon":"fa fa-tachometer"},"User":{"name":"用户功能","menus":[{"name":"用户列表","menus":"userlist","icon":"fa fa-users"}],"icon":"fa fa-users"}}}', ''),
 (11, 1, '{"Admin":{"Auth":{"name":"权限管理","menus":[{"name":"权限列表","menus":"authlist","icon":"fa fa-lock"}],"icon":"glyphicon glyphicon-user"}},"Home":{"Menu":{"name":"主菜单","menus":[{"name":"企业信息","menus":"company","icon":"fa fa-tachometer"},{"name":"个人信息","menus":"profile","icon":"fa fa-user"}],"icon":"fa fa-tachometer"},"User":{"name":"用户功能","menus":[{"name":"用户列表","menus":"userlist","icon":"fa fa-users"},{"name":"新建用户","menus":"create","icon":"glyphicon glyphicon-user"},{"name":"基础信息","menus":"ubase","icon":"glyphicon glyphicon-send"}],"icon":"fa fa-users"}}}', '{"oa_company":["select","insert","update","delete"],"oa_department":["select","insert","update","delete"],"oa_group":["select","insert","update","delete"],"oa_place":["select","insert","update","delete"],"oa_rauth":["select","insert","update","delete"],"oa_role":["select","insert","update","delete"],"oa_user":["select","insert","update","delete"]}'),
 (12, 4, '{"Admin":{"Auth":{"name":"权限管理","menus":[],"icon":"glyphicon glyphicon-user"}},"Home":{"Menu":{"name":"主菜单","menus":[{"name":"企业信息","menus":"company","icon":"fa fa-tachometer"},{"name":"个人信息","menus":"profile","icon":"fa fa-user"}],"icon":"fa fa-tachometer"},"User":{"name":"用户功能","menus":[{"name":"用户列表","menus":"userlist","icon":"fa fa-users"},{"name":"新建用户","menus":"create","icon":"glyphicon glyphicon-user"},{"name":"基础信息","menus":"ubase","icon":"glyphicon glyphicon-send"}],"icon":"fa fa-users"}}}', '{"oa_company":["select","insert"],"oa_department":["select","insert"],"oa_group":["select","insert"],"oa_place":["select","insert"],"oa_rauth":["select","insert"],"oa_role":["select","insert"],"oa_user":["select","insert"]}'),

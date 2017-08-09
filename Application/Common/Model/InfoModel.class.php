@@ -4,7 +4,7 @@
  * @Email:369709991@qq.com
  * @Date:   2017-07-11 16:04:09
  * @Last Modified by:   vition
- * @Last Modified time: 2017-07-13 12:07:27
+ * @Last Modified time: 2017-08-09 15:57:43
  */
 namespace Common\Model;
 use Think\Model;
@@ -13,14 +13,22 @@ use Think\Model;
  */
 class InfoModel extends Model{
 	protected $trueTableName = 'oa_config';
+	public $company;
+	public $department;
+	public $group;
+	public $place;
+	public $role;
+	public $user;
 	// protected $fields = array('config_id');	
 	/**
 	 * [company 公司管理模型]
 	 * @return [object] [返回CompanyModel对象]
 	 */
 	function company(){
-		$company=D("Company");
-		return $company;
+		if(!is_object($this->company)){
+			$this->company=D("Company");
+		}
+		return $this->company;	
 	}
 
 	/**
@@ -28,7 +36,10 @@ class InfoModel extends Model{
 	 * @return [object] [返回DepartmentModel]
 	 */
 	function department(){
-		return D("Department");
+		if(!is_object($this->department)){
+			$this->department=D("Department");
+		}
+		return $this->department;
 	}
 
 	/**
@@ -36,7 +47,10 @@ class InfoModel extends Model{
 	 * @return [object] [返回GroupModel]
 	 */
 	function group(){
-		return D("Group");
+		if(!is_object($this->group)){
+			$this->group=D("Group");
+		}
+		return $this->group;
 	}
 
 	/**
@@ -44,7 +58,10 @@ class InfoModel extends Model{
 	 * @return [object] [返回PlaceModel]
 	 */
 	function place(){
-		return D("Place");
+		if(!is_object($this->place)){
+			$this->place=D("Place");
+		}
+		return $this->place;
 	}
 
 	/**
@@ -52,7 +69,10 @@ class InfoModel extends Model{
 	 * @return [object] [返回RoleModel]
 	 */
 	function role(){
-		return D("Role");
+		if(!is_object($this->role)){
+			$this->role=D("Role");
+		}
+		return $this->role;
 	}
 
 	/**
@@ -60,7 +80,10 @@ class InfoModel extends Model{
 	 * @return [type] [返回UserModel]
 	 */
 	function user(){
-		return D("User");
+		if(!is_object($this->user)){
+			$this->user=D("User");
+		}
+		return $this->user;
 	}
 
 

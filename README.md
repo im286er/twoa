@@ -65,3 +65,9 @@
 * 编写打卡功能
 * 修改oa_rauth rauth_auth和rauth_table 字段数据类型为text
 
+#### 2017-8-9
+* 完善打卡页面
+* 修改InfoModel.class
+* 修改微信接口
+* 修改gethtml和权限功能
+

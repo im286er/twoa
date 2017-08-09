@@ -4,10 +4,10 @@
  * @Email:369709991@qq.com
  * @Date:   2017-08-03 16:43:53
  * @Last Modified by:   vition
- * @Last Modified time: 2017-08-09 14:58:20
+ * @Last Modified time: 2017-08-09 18:59:44
  */
 
-/*{"control":"Attend","name":"考勤管理","icon":"fa fa-calendar","menus":[{"name":"考勤配置","icon":"fa fa-gear","menus":"config"},{"name":"考勤申请","icon":"fa fa-list-alt","menus":"userlist"},{"name":"申请管理","icon":"fa fa-pencil-square","menus":"archives"},{"name":"打卡","icon":"fa fa-square","menus":"arch"}]}*/
+/*{"control":"Attend","name":"考勤管理","icon":"fa fa-calendar","menus":[{"name":"考勤配置","icon":"fa fa-gear","menus":"config"},{"name":"考勤申请","icon":"fa fa-list-alt","menus":"userlist"},{"name":"申请管理","icon":"fa fa-pencil-square","menus":"archives"},{"name":"打卡","icon":"fa fa-square","menus":"checkin"}]}*/
 namespace Home\Controller;
 use Common\Controller\AmongController;
 class AttendController extends AmongController {
@@ -17,6 +17,8 @@ class AttendController extends AmongController {
 		$this->baseInfo=D("Info");
 		$this->user=D("User");
 		$this->acheckin=D("Attend_checkin");
+		$this->aapply=D("Attend_apply");
+		$this->arecord=D("Attend_record");
 		$this->config=D("Config");
 		// parent::_initialize();
 	}
@@ -26,15 +28,18 @@ class AttendController extends AmongController {
 	 */
 	public function checkin(){
 		$date=date("Y-m-d",time());
+		$thisDay=$this->arecord->isWeekday("2017","08","09");
+		var_dump($thisDay);
 		if(IS_AJAX){
 			$date=date("Y-m-d",strtotime(I("thisDay")));
 		}
+
 
 		$normalCheckin=$this->checkinType(session("oa_user_code"),1,$date);
 		$outCheckin=$this->checkinType(session("oa_user_code"),2,$date);
 		$overtimeCheckin=$this->checkinType(session("oa_user_code"),3,$date);
 		if(IS_AJAX){
-			// echo $this->acheckin->getLastSql();
+			/*获取不同按钮状态*/
 			$this->ajaxReturn(array("normalCheckin"=>$normalCheckin,"outCheckin"=>$outCheckin,"overtimeCheckin"=>$overtimeCheckin));
 		}
 		
@@ -44,7 +49,8 @@ class AttendController extends AmongController {
 		$this->assign("user_code",$this->selfUser["user_code"]);
 		$this->assign("user_name",$this->selfUser["user_name"]);
 		$this->assign("SignPackage",$this->Wxqy->jssdk()->GetSignPackage());
-		$this->display("checkin");
+		$this->gethtml("checkin");
+
 	}
 
 	/**
@@ -60,13 +66,15 @@ class AttendController extends AmongController {
 
 		if($type>=2){
 			$aapplyTable=M("oa_attend_apply");
-			$aapplyData=$aapplyTable->where("aapply_code='{$user_code}' AND aapply_type='{$type}' AND aapply_schedule='{$date}'")->find();
+
+			$aapplyData=$this->aapply->seekApply($user_code,$type,$date);	
+
 			if(!$aapplyData["aapply_id"]){
 				return $butInfo[0]; 
 			}
 		}
 		
-		$checkinData=$this->acheckin->field("acheckin_checkinway,acheckin_type,acheckin_timetype")->where("date_format(acheckin_checkintime,'%Y-%m-%d')='{$date}' AND acheckin_code='{$user_code}' AND acheckin_type='{$type}'")->select();
+		$checkinData=$this->acheckin->seekCheckin($user_code,$type,$date);
 		if(count($checkinData)>0){
 			if(count($checkinData)>1){
 				return $butInfo[0];
@@ -115,13 +123,20 @@ class AttendController extends AmongController {
 		
 	}
 
-
+	/**
+	 * [submit_checkin 提交打打卡信息]
+	 * @return [type] [description]
+	 */
 	function submit_checkin(){
 		if(IS_AJAX){
 		// print_r($_POST);
 			$checkinData=$_POST["data"];
 			$checkinData["acheckin_addtime"]=date("Y-m-d H:i:s",time());
+			/**
+			 * 1,定位打卡，2拍照打卡
+			 */
 			switch ($_POST["data"]["acheckin_checkinway"]) {
+
 				case "1":
 					# code...
 					$checkinData["acheckin_checkintime"]=date("Y-m-d H:i:s",time());
@@ -134,11 +149,12 @@ class AttendController extends AmongController {
 					
 					break;
 				case "2":
-					// print_r($checkinData);
 					if(!is_dir("Public/images/upload/checkin/")){
 							mkdir("Public/images/upload/checkin/");
 						}
-
+					/**
+					 * [download 通过微信接口下载临时图片]
+					 */
 					$downloadResult=$this->Wxqy->download($checkinData["acheckin_picture"]);
 					$return=array("success"=>"0","msg"=>"打卡失败，请联系管理员");
 					if($downloadResult!=false){

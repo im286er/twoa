@@ -68,32 +68,39 @@ class AmongController extends Controller {
 					$url=U("Home/Menu/menu");//防止普通员工进入admin
 					echo "<script>top.location.href='$url'</script>";exit;
 				}else{
-					// if($this->authority()){
 					$this->selfUser["user_age"]=get_age($this->selfUser["user_born"]);
 					$this->selfUser["user_joinDay"]=get_day($this->selfUser["user_entry"]);
 					$this->user=$this->selfUser;
 					$this->assign("user",$this->selfUser);
 					$this->assign("rand",lcg_value());
-					// }else{
-					// 	// echo "对不起，您没有权限！";
-					// }
-					
 				}
 				
 			}
 			
 		}
 	}
-	//获取html页面
-	public function gethtml(){
-		if(IS_POST){
-			if($this->authority()){
-				$this->display(I("html"));
-				return true;
-			}
-		}
-		$this->show("<h1>对不起！您木有权限</h1>");
-		return false;
+	/**
+     * [gethtml 获取模板]
+     * @param  boolean $html [模板名字，默认false，则调用I函数]
+     * @return [type]        [description]
+     */
+	public function gethtml($html=false){
+        if($html!=false){
+            if($this->authority($html)){
+                $this->display($html);
+                return true;
+            }
+        }else{
+            if(IS_POST){
+                if($this->authority()){
+                    $this->display(I("html"));
+                    return true;
+                }
+            }
+        }
+		
+		// $this->show("<h1>对不起！您木有权限</h1>");
+		// return false;
 	}
 	//默认所有控制器index就是登录的页面，存在就跳转，不存在就登录
 	public function index(){
@@ -139,43 +146,26 @@ class AmongController extends Controller {
     		echo "logout";
 		}
 	}
-    //权限控制
-    public function authority(){
-
+    /**
+     * [authority 获取权限]
+     * @param  string $html [模板名称，默认空，则调用I函数html的值]
+     * @return [type]       [boolean]
+     */
+    public function authority($html=""){
+        if($html==""){
+            $html=I("html");
+        }
     	$authority=$this->get_auth();
-
+        
     		if(isset($authority[CONTROLLER_NAME])){
 	    		foreach ($authority[CONTROLLER_NAME]["menus"] as $names => $menus) {
-	    			if($this->menu_list($menus,I("html"))){
+	    			if($this->menu_list($menus,$html)){
 	    				return true;
 	    			}
 	    		}
 	    		return false;
 	    	}
     	
-    	
-    	// foreach ($authority as $key => $value) {
-    	// 	$html=explode(",", $value);
-    	// }
-    	// $authority=explode(",", $this->get_auth());
-    	// $user=M("oa_user");
-    	// $userData=$user->field("user_role")->where("user_username='".session("oa_user_code")."'")->find();
-    	// if($userData["user_role"]==2){
-    	// 	return true;
-    	// }
-    	// if(ACTION_NAME=="gethtml"){//通过gethtml方法获取页面的权限名为：控制器+"-"+参数html
-    	// 	$powerName=CONTROLLER_NAME."-".I("html");
-    	// }else{//其他权限名为：控制器+"-"+方法名
-    	// 	$powerName=CONTROLLER_NAME."-".ACTION_NAME;
-    	// }
-    	// echo $powerName;
-    	// echo $authority;
-    	// if(in_array($powerName, $authority)){
-    	// 	return true;
-    	// }else{
-    	// 	return false;
-    	// }
-        //就是汇总每周的数据，然后以周一作为显示字段？ 
     }
 
     /**
@@ -186,8 +176,6 @@ class AmongController extends Controller {
      * @return [type]             [description]
      */
     public function get_auth($elimArray="",$module=true,$user_role=0){
-
-   	
     	$rauth=M("oa_rauth a");
     	if($user_role>0){
     		$rauthData=json_decode($rauth->field("rauth_auth")->where("a.rauth_role='{$user_role}'")->find()["rauth_auth"],true);
@@ -203,9 +191,22 @@ class AmongController extends Controller {
     		$rAtuhArray=$rauthData[MODULE_NAME];
     		if(!empty($elimArray)){
 	    		foreach ($elimArray as $elim) {
-	    			if(isset($rAtuhArray[$elim])){
-	    				unset($rAtuhArray[$elim]);
-	    			}
+                    if(is_array($elim)){
+                        foreach ($elim as $key => $func) {
+                            foreach ($func as $value) {
+                               foreach ($rAtuhArray[$key]["menus"] as $index => $menu) {
+                                    if($value==$menu["menus"]){
+                                        unset($rAtuhArray[$key]["menus"][$index]);
+                                    }
+                                }
+                            }
+                        }
+                    }else{
+                        if(isset($rAtuhArray[$elim])){
+                            unset($rAtuhArray[$elim]);
+                        }
+                    }
+	    			
 	    		}
 	    	}
     	}else{
