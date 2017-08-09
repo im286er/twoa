@@ -194,6 +194,9 @@
 
 	<script type="text/javascript">
 		jQuery(function($) {
+			if($("input[name='acheckin_code']").val()==""){
+				location.reload()
+			}
 			var images = {localId: [],serverId: []};
 			set_monitor_date()
 			$("input[name='monitor']").on("click",function(){
@@ -308,7 +311,7 @@
 					    });
 		    	    })
 
-		    });
+		    }); 
 		    /*更改打卡类型，定位还是拍照*/
 		    $("#accordion").on("click","button",function(){
 		    	if(!$(this).hasClass("active")){
