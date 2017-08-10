@@ -4,7 +4,7 @@
  * @Email:369709991@qq.com
  * @Date:   2017-08-07 18:39:02
  * @Last Modified by:   vition
- * @Last Modified time: 2017-08-10 00:17:06
+ * @Last Modified time: 2017-08-10 09:39:18
  */
 namespace Common\Model;
 use Common\Model\AmongModel;
@@ -36,19 +36,33 @@ class Attend_checkinModel extends AmongModel{
 	 */
 	function seekCheckin($user_code,$type,$date){
 		if(!$this->has_auth("select")) return false;
-		return $this->where("date_format(acheckin_checkintime,'%Y-%m-%d')='{$date}' AND acheckin_code='{$user_code}' AND acheckin_type='{$type}'")->select()[];
+		return $this->where("date_format(acheckin_checkintime,'%Y-%m-%d')='{$date}' AND acheckin_code='{$user_code}' AND acheckin_type='{$type}'")->select();
 	}
 
-
-	function hasCheckin($acheckin_code,$acheckin_checkinway,$acheckin_type,$acheckin_timetype,$date){
+	/**
+	 * [hasCheckin 判断指定打卡记录是否存在]
+	 * @param  [type]  $acheckin_code     [人员code]
+	 * @param  [type]  $acheckin_type     [打卡类型，1正常上班，2外勤，3加班]
+	 * @param  [type]  $acheckin_timetype [打卡时间类型，1开始，2结束]
+	 * @param  [type]  $date              [打卡发生时间，格式：2017-08-10]
+	 * @return boolean                    [description]
+	 */
+	function hasCheckin($acheckin_code,$acheckin_type,$acheckin_timetype,$date){
 		if(!$this->has_auth("select")) return false;
-		return $this->filed("acheckin_id")->where(array("acheckin_code"=>$acheckin_code,"acheckin_checkinway"=>$acheckin_checkinway,"acheckin_type"=>$acheckin_type,"acheckin_timetype"=>$acheckin_timetype))->where("date_format(acheckin_checkintime,'%Y-%m-%d')='{$date}'")->find()["acheckin_id"];
+		return $this->field("acheckin_id")->where(array("acheckin_code"=>$acheckin_code,"acheckin_type"=>$acheckin_type,"acheckin_timetype"=>$acheckin_timetype))->where("date_format(acheckin_checkintime,'%Y-%m-%d')='{$date}'")->find()["acheckin_id"];
 	}
+
+	/**
+	 * [checkin 打卡方法]
+	 * @param  [type] $dataArray [打卡数据]
+	 * @return [type]            [description]
+	 */
 	function checkin($dataArray){
 		if(!$this->has_auth("insert")) return false;
-		if($this->hasCheckin($dataArray["acheckin_code"],$dataArray["acheckin_checkinway"],$dataArray["acheckin_type"],$dataArray["acheckin_timetype"],date("Y-m-d",strtotime($dataArray["acheckin_checkintime"])))==null){
-			$this->add($dataArray);
+		if($this->hasCheckin($dataArray["acheckin_code"],$dataArray["acheckin_type"],$dataArray["acheckin_timetype"],date("Y-m-d",strtotime($dataArray["acheckin_checkintime"])))==null){
+			return $this->add($dataArray);
 		}
+		return false;
 		
 	}
 

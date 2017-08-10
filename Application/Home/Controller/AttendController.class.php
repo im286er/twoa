@@ -4,7 +4,7 @@
  * @Email:369709991@qq.com
  * @Date:   2017-08-03 16:43:53
  * @Last Modified by:   vition
- * @Last Modified time: 2017-08-10 00:04:20
+ * @Last Modified time: 2017-08-10 09:36:15
  */
 
 /*{"control":"Attend","name":"考勤管理","icon":"fa fa-calendar","menus":[{"name":"考勤配置","icon":"fa fa-gear","menus":"config"},{"name":"考勤申请","icon":"fa fa-list-alt","menus":"userlist"},{"name":"申请管理","icon":"fa fa-pencil-square","menus":"archives"},{"name":"打卡","icon":"fa fa-square","menus":"checkin"}]}*/
@@ -27,8 +27,6 @@ class AttendController extends AmongController {
 	 * @return [type] [description]
 	 */
 	public function checkin(){
-		print_r($this->acheckin->hasCheckin($this->selfUser["user_code"],1,1,1,"2017-08-08"));
-		return false;
 		$date=date("Y-m-d",time());
 		if(IS_AJAX){
 			$date=date("Y-m-d",strtotime(I("thisDay")));
@@ -151,7 +149,8 @@ class AttendController extends AmongController {
 				case "1":
 					# code...
 					$checkinData["acheckin_checkintime"]=date("Y-m-d H:i:s",time());
-					$result=$this->acheckin->add($checkinData);
+
+					$result=$this->acheckin->checkin($checkinData);
 					if($result>0){
 						$this->ajaxReturn(array("success"=>"1","msg"=>$result));
 					}else{

@@ -146,8 +146,9 @@
 </div><!-- /.span -->
 <script>
 	$(function(){
-		$("#database-widget input[class='table-select'] ").prop("checked",true)
+		// $("#database-widget input[class='table-select'] ").prop("checked",true)
 
+		/*选中按钮事件*/
 		$(".select-all").on("click",function(){
 			if($(this).data("type")==undefined){
 				$("#database-widget input[type='checkbox']").prop("checked",true)
@@ -161,6 +162,7 @@
 			}
 		})
 
+		/*取消按钮事件*/
 		$(".cancel-select").on("click",function(){
 			if($(this).data("type")==undefined){
 				$("#database-widget input[type='checkbox']").prop("checked",false)
@@ -174,6 +176,7 @@
 			}
 		})
 
+		/*反选按钮事件*/
 		$(".select-invert").on("click",function(){
 			if($(this).data("type")==undefined){
 
@@ -188,6 +191,19 @@
 			}
 		})
 
+		/*查找按钮取消事件，增改删是建立在查的基础上，所以查找取消，其他也取消*/
+		$(".table-select").on("click",function(){
+			if(!$(this).prop("checked")){
+				$(this).parents(".datatables-auth").find("input").prop("checked",false)
+			}
+		})
+		/*删除按钮点击事件，删除权限最大，所以，选中代表前面的所有允许*/
+		$(".table-delete").on("click",function(){
+			if($(this).prop("checked")){
+				$(this).parents(".datatables-auth").find("input").prop("checked",true)
+			}
+		})
+		/*角色分组改变事件*/
 		$("select[name='roles']").on("change",function(){
 			$("#database-widget input[type='checkbox']").prop("checked",false)
 			var rolesId=$(this).val();
@@ -220,24 +236,13 @@
 				dataType:"json",
 				data:{"role_id":roleId},
 				success:function(data){
-					set_table(data)
-					
-					// data.each(function(){
-					// 	console.log(this)
-					// })
-					// for (module in data) {
-					// 	for (control in data[module]) {
-					// 		set_auths(module,control,data[module][control]["menus"])
-					// 	}
-					// }					
+					set_table(data)				
 				}
 
 			})
 		})
 
-		/*
-		
-		 */
+		/*保存按钮事件*/
 		$(".save-btn").on("click",function(){
 			var tableN="";
 			var tlenth=$(".datatables-auth").length
@@ -283,7 +288,7 @@
 			})
 
 		})
-
+		/*根据权限设置显示*/
 		function set_table(jsonData){
 			jQuery.each(jsonData,function(i,val){
 				jQuery.each(val,function(ii,sval){

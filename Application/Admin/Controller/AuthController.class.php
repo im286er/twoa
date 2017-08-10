@@ -29,7 +29,23 @@ class AuthController extends AmongController {
 			case 'authtable':
 				$rolesDataArray=$this->baseInfo->role()->search_role();
 				$this->assign("rolesDataArray",$rolesDataArray);
+
 				$dataTablesArray=$this->showModel();
+				$adminTableAuth=$this->rauth->find_table("2");
+
+				$tableAuth=array();
+				$adminNewAuth=array();
+				foreach ($dataTablesArray as $tableName) {
+					if($adminTableAuth[$tableName]==null){
+						$tableAuth[$tableName]=array("select");
+						$adminNewAuth[$tableName]=array("select","insert","update","delete");
+					}
+				}
+				if(!empty($tableAuth)){
+					$this->appTableAuth($tableAuth);
+					$this->appTableAuth($adminNewAuth,"2");
+				}
+				// print_r($adminTableAuth);
 				$this->assign("dataTablesArray",$dataTablesArray);
 			default:
 				# code...
@@ -110,25 +126,18 @@ class AuthController extends AmongController {
 					// print_r($cMatch[1]);
 					// echo $cMatch[1];
 					if(count($cMatch)>1){
-						
 						array_push($tempModel,json_decode($cMatch[1],true));
-						// print_r($tempModel);
 					}
-					// $conNameArray=array();
-					// if(count($cMatch)>1){
-					// 	// echo $cMatch[0];
-					// 	$controll=explode(",", $cMatch[2]);
-					// 	for($c=0;$c<count($controll);$c++){
-					// 		array_push($conNameArray, explode("|", $controll[$c]));
-					// 	}
-					// 	array_push($tempModel, array("name"=>array("cn"=>$cMatch[1],"en"=>$conMatch[1],"icon"=>$cMatch[3]),"controller"=>$conNameArray));
-					// }
 				}
 			}
 			$authArray[$model]=$tempModel;
 		}
 		return $authArray;//返回三维数组信息
-	}  
+	}
+	/**
+	 * [showModel 取数据表]
+	 * @return [type] [返回数据表名数组]
+	 */
 	private function showModel(){
 		$url=APP_PATH."/Common/Model";
 		$elimArray=array("InfoModel.class.php","AmongModel.class.php");
@@ -145,6 +154,33 @@ class AuthController extends AmongController {
 			
 		}
 		return $dataTables;
+	}
+	/**
+	 * [appTableAuth 追加表管理权]
+	 * @param  [type]  $tableArr [二维数据，array("表名"=>array("select",[,"insert","update","delete"]))]
+	 * @param  integer $role_id  [指定role id,默认0则追加全部没有这个表权限的角色]
+	 * @return [type]            [description]
+	 */
+	function appTableAuth($tableArr,$role_id=0){
+		$roleTableAuth=array();
+		if($role_id==0){
+			$roleTableAuth=$this->rauth->field("rauth_role,rauth_table")->where("rauth_role<>'2'")->search_auth();
+
+		}else{
+			$roleTableAuth=$this->rauth->field("rauth_role,rauth_table")->where("rauth_role={$role_id}")->search_auth();
+		}
+		foreach ($roleTableAuth as $roleAuthInfo) {
+			$tempAuth=json_decode($roleAuthInfo["rauth_table"],true);
+			foreach ($tableArr as $tableName=> $tableAtuh) {
+				if($tempAuth[$tableName]==null){
+					$tempAuth[$tableName]=$tableAtuh;
+				}
+			}
+			$this->rauth->set_table($roleAuthInfo["rauth_role"],json_encode($tempAuth));
+		}
+		
+
+		
 	}
 }
 

@@ -4,7 +4,7 @@
  * @Email:369709991@qq.com
  * @Date:   2017-07-06 13:52:07
  * @Last Modified by:   vition
- * @Last Modified time: 2017-07-28 15:40:53
+ * @Last Modified time: 2017-08-10 09:56:45
  */
 namespace Common\Model;
 use Common\Model\AmongModel;
@@ -169,5 +169,4 @@ class UserModel extends AmongModel{
 			return $this->field("user_name,user_username")->where(array("user_code"=>$value))->find();
 		}
 	}
-
 }
