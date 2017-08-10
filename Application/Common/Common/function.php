@@ -63,3 +63,7 @@
 		$WxConf = fopen("WxConf.ini", 'r');
 		return json_decode(fread($WxConf, filesize("WxConf.ini")),true);
 	}
+
+	function time_reduce($tdatetime1,$datetime2){
+		return round((strtotime($datetime2)-strtotime($tdatetime1))/3600,2);
+	}

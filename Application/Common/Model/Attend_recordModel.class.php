@@ -4,7 +4,7 @@
  * @Email:369709991@qq.com
  * @Date:   2017-08-09 18:31:13
  * @Last Modified by:   vition
- * @Last Modified time: 2017-08-10 09:38:54
+ * @Last Modified time: 2017-08-10 16:37:17
  */
 namespace Common\Model;
 use Common\Model\AmongModel;
@@ -81,8 +81,41 @@ class Attend_recordModel extends AmongModel{
 		for ($day=1; $day <= $dayNum ; $day++) { 
 			$monthRec[$day]=array("forenoon"=>array("type"=>"","worktime"=>""),"afternoon"=>array("type"=>"","worktime"=>""));
 		}
-		$this->add(array("arecord_code"=>$arecord_code,"arecord_year"=>$arecord_year,"arecord_month"=>$arecord_month,"arecord_json"=>json_encode($monthRec)));
+		$this->add(array("arecord_code"=>$arecord_code,"arecord_year"=>$arecord_year,"arecord_month"=>$arecord_month,"arecord_json"=>json_encode($monthRec),"arecord_remedy"=>"3"));
 		return $this->getMonthRec($arecord_code,$arecord_year,$arecord_month);
+	}
+
+	function setMonthRec($arecord_code,$arecord_year,$arecord_month,$json,$count){
+		if(!$this->has_auth("insert")) return false;
+		$allCount=$this->findCount($arecord_code,$arecord_year,$arecord_month);
+		$this->save()
+	}
+
+	/**
+	 * [findCount 查询当月工时统计]
+	 * @param  [type] $arecord_code  [description]
+	 * @param  [type]         $arecord_code  [人员编码]
+	 * @param  [type]         $arecord_year  [年]
+	 * @param  [type]         $arecord_month [月]
+	 * @return [type]         [description]
+	 */
+	function findCount($arecord_code,$arecord_year,$arecord_month){
+		if(!$this->has_auth("select")) return false;
+		return $this->filed("arecord_count")->where(array("arecord_code"=>$arecord_code,"arecord_year"=>$arecord_year,"arecord_month"=>$arecord_month))->find()["arecord_count"];
+	}
+
+	/**
+	 * [findCount 查询当月后补次数]
+	 * @param  [type] $arecord_code  [description]
+	 * @param  [type]         $arecord_code  [人员编码]
+	 * @param  [type]         $arecord_year  [年]
+	 * @param  [type]         $arecord_month [月]
+	 * @return [type]         [description]
+	 */
+	function findRemedy($arecord_code,$arecord_year,$arecord_month){
+		if(!$this->has_auth("select")) return false;
+		return $this->filed("arecord_remedy")->where(array("arecord_code"=>$arecord_code,"arecord_year"=>$arecord_year,"arecord_month"=>$arecord_month))->find()["arecord_remedy"];
+
 	}
 
 }

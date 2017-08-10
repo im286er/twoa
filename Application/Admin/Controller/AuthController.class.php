@@ -76,11 +76,17 @@ class AuthController extends AmongController {
 		}
 	}
 
+	/**
+	 * [show_rauth 显示权限]
+	 * @return [type] [description]
+	 */
 	function show_rauth(){
 		$rauth=$this->rauth->find_auth("",false,$_POST["role_id"]);
 		echo json_encode($rauth);
 	}
-
+	/**
+	 * [set_rauth 设置权限]
+	 */
 	function set_rauth(){
 		if(IS_POST){
 			if($_POST["rauth_role"]<=0){
@@ -92,11 +98,18 @@ class AuthController extends AmongController {
 		}
 	}
 
+	/**
+	 * [show_autable 显示数据表]
+	 * @return [type] [description]
+	 */
 	function show_autable(){
 		$table=$this->rauth->find_table($_POST["role_id"]);
 		echo json_encode($table);
 	}
 
+	/**
+	 * [set_autable 设置数据表权限]
+	 */
 	function set_autable(){
 		if(IS_POST){
 			if($_POST["rauth_role"]<0){
@@ -107,8 +120,11 @@ class AuthController extends AmongController {
 			
 		}
 	}
-	//取控制器信息了
 
+	/**
+	 * [showCon 取控制器，即显示权限]
+	 * @return [type] [description]
+	 */
 	private function showCon(){
 		$authArray=array();
 		$models=array("Admin","Home");//根据不同的模块

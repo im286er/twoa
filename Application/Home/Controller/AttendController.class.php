@@ -4,23 +4,36 @@
  * @Email:369709991@qq.com
  * @Date:   2017-08-03 16:43:53
  * @Last Modified by:   vition
- * @Last Modified time: 2017-08-10 09:36:15
+ * @Last Modified time: 2017-08-10 15:01:00
  */
 
 /*{"control":"Attend","name":"考勤管理","icon":"fa fa-calendar","menus":[{"name":"考勤配置","icon":"fa fa-gear","menus":"config"},{"name":"考勤申请","icon":"fa fa-list-alt","menus":"userlist"},{"name":"申请管理","icon":"fa fa-pencil-square","menus":"archives"},{"name":"打卡","icon":"fa fa-square","menus":"checkin"}]}*/
 namespace Home\Controller;
 use Common\Controller\AmongController;
 class AttendController extends AmongController {
+	public $MonthRec;
+	public $timeNode;
 	//重组gethtml方法
 	function __construct(){
 		parent::__construct();
 		$this->baseInfo=D("Info");
 		$this->user=D("User");
+		$this->auser=D("Attend_user");
 		$this->acheckin=D("Attend_checkin");
 		$this->aapply=D("Attend_apply");
 		$this->arecord=D("Attend_record");
 		$this->config=D("Config");
-		// parent::_initialize();
+		$this->attendUser=$this->auser->find_auser($this->selfUser["user_code"]);
+		
+		$this->timeNode=array("MO"=>"09:00:00","MF"=>"12:00:00","AO"=>"13:00:00","AF"=>"18:00:00");
+
+		if($this->attendUser["auser_eachday"]>7.5){
+			$this->timeNode["AF"]="18:30:00";
+		}
+		/*每天的时间节点*/
+		
+		$this->MonthRec=$this->arecord->getMonthRec($this->selfUser["user_code"],date("Y"),date("m"));
+		
 	}
 	/**
 	 * [checkin 打卡页面]
@@ -31,8 +44,10 @@ class AttendController extends AmongController {
 		if(IS_AJAX){
 			$date=date("Y-m-d",strtotime(I("thisDay")));
 		}
-		$dates=split("-", $date);
-		$this->MonthRec=$this->arecord->getMonthRec($this->selfUser["user_code"],$dates[0],$dates[1]);
+
+		
+
+		$this->settleCheckin($this->selfUser["user_code"],1,date("Y-m-d",strtotime("2017-8-7")));
 
 		$normalCheckin=$this->checkinType($this->selfUser["user_code"],1,$date);
 		$outCheckin=$this->checkinType($this->selfUser["user_code"],2,$date);
@@ -187,6 +202,33 @@ class AttendController extends AmongController {
 					# code...
 					break;
 			}
+		}
+	}
+
+	function settleCheckin($user_code,$type,$date){
+		
+		// $checkinData=$this->acheckin->seekCheckin($user_code,$type,$date);
+		$dates=split("-", $date);
+		switch ($type) {
+			case '1':
+				$checkinData=$this->acheckin->seekCheckin($user_code,$type,$date);
+				if(count($checkinData)==2 && $checkinData[0]["acheckin_timetype"]==1 && $checkinData[1]["acheckin_timetype"]==2){
+					$forenoon=time_reduce($checkinData[0]["acheckin_checkintime"],$date." ".$this->timeNode["MF"]);
+					$afternoon=time_reduce($date." ".$this->timeNode["AO"],$checkinData[1]["acheckin_checkintime"]);
+					if(($forenoon+$afternoon)>($this->attendUser["auser_eachday"]+0.5)){
+						$afternoon=($this->attendUser["auser_eachday"]+0.5)-$forenoon;
+					}
+					$this->MonthRec[(int)$dates[2]]=array("forenoon"=>array("type"=>$type,"worktime"=>$forenoon),"forenoon"=>array("type"=>$type,"worktime"=>$afternoon));
+	
+					print_r($this->MonthRec[(int)$dates[2]]);
+					// print_r($this->MonthRec[(int)$dates[2]]);
+				}
+
+				break;
+			
+			default:
+				# code...
+				break;
 		}
 	}
 	

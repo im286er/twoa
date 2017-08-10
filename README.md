@@ -72,3 +72,6 @@
 * 修改gethtml和权限功能
 * ALTER TABLE `oa_attend_record` CHANGE `arecord_json` `arecord_json` TEXT CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '数据json格式';
 
+#### 2017-8-10
+* admin后台新建初始化设置新表的权限为select，超级管理员默认所有权限
+

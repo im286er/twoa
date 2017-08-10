@@ -4,7 +4,7 @@
  * @Email:369709991@qq.com
  * @Date:   2017-08-07 18:39:02
  * @Last Modified by:   vition
- * @Last Modified time: 2017-08-10 09:39:18
+ * @Last Modified time: 2017-08-10 12:07:15
  */
 namespace Common\Model;
 use Common\Model\AmongModel;
@@ -36,7 +36,7 @@ class Attend_checkinModel extends AmongModel{
 	 */
 	function seekCheckin($user_code,$type,$date){
 		if(!$this->has_auth("select")) return false;
-		return $this->where("date_format(acheckin_checkintime,'%Y-%m-%d')='{$date}' AND acheckin_code='{$user_code}' AND acheckin_type='{$type}'")->select();
+		return $this->where("date_format(acheckin_checkintime,'%Y-%m-%d')='{$date}' AND acheckin_code='{$user_code}' AND acheckin_type='{$type}'")->order("acheckin_checkintime")->select();
 	}
 
 	/**
