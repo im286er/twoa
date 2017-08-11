@@ -97,9 +97,8 @@ class Attend_recordModel extends AmongModel{
 	function setMonthRec($arecord_code,$arecord_year,$arecord_month,$json,$count){
 		if(!$this->has_auth("insert")) return false;
 		$allCount=$this->findCount($arecord_code,$arecord_year,$arecord_month)+$count;
-		$this->startTrans();
-		$this->table("oa_attend_checkin")->save();
-		$this->save(array("arecord_code"=>$arecord_code,"arecord_year"=>$arecord_year,"arecord_month"=>$arecord_month,"arecord_json"=>$json,$allCount));
+		return $this->where(array("arecord_code"=>$arecord_code,"arecord_year"=>$arecord_year,"arecord_month"=>$arecord_month))->save(array("arecord_json"=>$json,"arecord_count"=>$allCount));
+		// return $this->where(array("arecord_code"=>$arecord_code,"arecord_year"=>$arecord_year,"arecord_month"=>$arecord_month"))->save(array("arecord_json"=>$json,"arecord_count"=>$allCount));
 	}
 
 	/**
@@ -112,7 +111,8 @@ class Attend_recordModel extends AmongModel{
 	 */
 	function findCount($arecord_code,$arecord_year,$arecord_month){
 		if(!$this->has_auth("select")) return false;
-		return $this->filed("arecord_count")->where(array("arecord_code"=>$arecord_code,"arecord_year"=>$arecord_year,"arecord_month"=>$arecord_month))->find()["arecord_count"];
+
+		return $this->field("arecord_count")->where(array("arecord_code"=>$arecord_code,"arecord_year"=>$arecord_year,"arecord_month"=>$arecord_month))->find()["arecord_count"];
 	}
 
 	/**

@@ -74,7 +74,7 @@ class Attend_checkinModel extends AmongModel{
 	 * @return void
 	 */
 	function setCheckin($acheckin_id,$dataArray){
-		$this->where(array("acheckin_id"=>$acheckin_id))->save($dataArray);
+		return $this->where(array("acheckin_id"=>$acheckin_id))->save($dataArray);
 	}
 
 }

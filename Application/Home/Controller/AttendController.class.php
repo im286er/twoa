@@ -222,16 +222,24 @@ class AttendController extends AmongController {
 				if(count($checkinData)==2 && $checkinData[0]["acheckin_timetype"]==1 && $checkinData[1]["acheckin_timetype"]==2){
 					$forenoon=time_reduce($checkinData[0]["acheckin_checkintime"],$date." ".$this->timeNode["MF"]);
 					$afternoon=time_reduce($date." ".$this->timeNode["AO"],$checkinData[1]["acheckin_checkintime"]);
+
 					if(($forenoon+$afternoon)>($this->attendUser["auser_eachday"]+0.5)){
 						$afternoon=($this->attendUser["auser_eachday"]+0.5)-$forenoon;
 					}
-					$this->MonthRec[(int)$dates[2]]=array("forenoon"=>array("type"=>$type,"worktime"=>$forenoon),"forenoon"=>array("type"=>$type,"worktime"=>$afternoon));
-					print_r($checkinData);
+					$dayTime=$forenoon+$afternoon;
+					$this->MonthRec[(int)$dates[2]]=array("forenoon"=>array("type"=>$type,"worktime"=>$forenoon),"afternoon"=>array("type"=>$type,"worktime"=>$afternoon));
+					/*启动事物*/
+					$this->acheckin->startTrans();
 					foreach ($checkinData as $checkins) {
-						$this->acheckin->setCheckin($checkins["$checkins"],array("acheckin_state"=>"1"));
+						$this->acheckin->setCheckin($checkins["acheckin_id"],array("acheckin_state"=>"1"));
 					}
-					// print_r($this->MonthRec);
-					// print_r($this->MonthRec[(int)$dates[2]]);
+					// $this->arecord->startTrans();
+					$setMonthResult=$this->arecord->setMonthRec($user_code,$dates[0],$dates[1],json_encode($this->MonthRec),$dayTime);
+					if($setMonthResult>0){
+						$this->acheckin->commit();
+					}else{
+						$this->acheckin->rollback();
+					}
 				}
 				break;
 			
