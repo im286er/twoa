@@ -26,17 +26,16 @@ class CompanyModel extends AmongModel {
 	 * @return [type]        [上述两个参数都为空的时候，默认查询所有；$start存在而$limit为空的时候，查询条数；两个参数都存在则查询指定起始和限制条数]
 	 */
 	function search_company($start="",$limit=""){
-		if($this->has_auth("select")){
+		if(!$this->has_auth("select")) return false;
+		if($start=="" && $limit==""){
+			return $companyData=$this->select();
+		}else if($start!="" && $limit==""){
+			return $companyData=$this->limit("{$start}")->select();
+		}else{
+			return $companyData=$this->limit("{$start},{$limit}")->select();
+		}
+		return $this->getLastSql();	
 
-			if($start=="" && $limit==""){
-				return $companyData=$this->select();
-			}else if($start!="" && $limit==""){
-				return $companyData=$this->limit("{$start}")->select();
-			}else{
-				return $companyData=$this->limit("{$start},{$limit}")->select();
-			}
-			return $this->getLastSql();	
-		}	
 		
 	}
 	/**
@@ -46,9 +45,8 @@ class CompanyModel extends AmongModel {
 	 * @return [type]               [只返回一条记录]
 	 */
 	function find_company($company_id,$company_name=""){
-		if(!$this->has_auth("select")){
-			return false;
-		}
+		if(!$this->has_auth("select")) return false;
+
 		if($company_name!=""){
 			$condition['company_name']=$company_name;
 			return $this->where($condition)->find();
@@ -64,9 +62,8 @@ class CompanyModel extends AmongModel {
 	 * @param [type] $company_name [修改后的公司名]
 	 */
 	function set_company($company_id,$company_name){
-		if(!$this->has_auth("update")){
-			return false;
-		}
+		if(!$this->has_auth("update")) return false;
+
 		if($this->find_company(0,$company_name)==""){
 			return $this->where(array("company_id"=>$company_id))->save(array("company_name"=>$company_name));
 		}else{
@@ -79,9 +76,8 @@ class CompanyModel extends AmongModel {
 	 * @param [type] $company_name 新增的名字
 	 */
 	function add_company($company_name){
-		if(!$this->has_auth("insert")){
-			return false;
-		}
+		if(!$this->has_auth("insert")) return false;
+
 		if($this->find_company(0,$company_name)==""){
 			return $this->add(array("company_name"=>$company_name));
 		}else{
@@ -95,9 +91,8 @@ class CompanyModel extends AmongModel {
 	 * @return [type]             
 	 */
 	function del_company($company_id){
-		if(!$this->has_auth("delete")){
-			return false;
-		}
+		if(!$this->has_auth("delete")) return false;
+
 		return $this->where(array("company_id"=>$company_id))->delete();
 	}
 }

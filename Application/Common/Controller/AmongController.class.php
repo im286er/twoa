@@ -2,13 +2,16 @@
 /*作为中间层的类*/
 namespace Common\Controller;
 use Think\Controller;
+
 class AmongController extends Controller {
     protected $selfUser;
     protected $baseInfo;//定义基本信息
     protected $user;//用户模型
     protected $Wxqy;//用户模型
 
-	//初始化，类似构造方法，判断是否登录
+	/**
+     * 初始化
+     */
 	public function __construct(){
         parent::__construct();
         $this->baseInfo=D("Info");
@@ -31,7 +34,6 @@ class AmongController extends Controller {
                     session("oa_user_code",$userInfo->userid);
                 }
             }
-
 			if (strtoupper(CONTROLLER_NAME)!="INDEX" && session("oa_user_code")==null) {
 				$url=U("index/index");
 				echo "<script>top.location.href='$url'</script>";exit;

@@ -10,7 +10,7 @@ namespace Common\Model;
 use Common\Model\AmongModel;
 class Attend_checkinModel extends AmongModel{
 	protected $trueTableName = 'oa_attend_checkin'; 
-	protected $fields = array('acheckin_id', 'acheckin_code','acheckin_checkinway','acheckin_type','acheckin_timetype','acheckin_addtime','acheckin_checkintime','acheckin_location','acheckin_longlat','acheckin_picture');
+	protected $fields = array('acheckin_id', 'acheckin_code','acheckin_checkinway','acheckin_type','acheckin_timetype','acheckin_addtime','acheckin_checkintime','acheckin_location','acheckin_longlat','acheckin_picture',"acheckin_state");
 
 	function search_checkin($acheckin_code,$acheckin_id=null,$condition=array()){
 		if(!$this->has_auth("select")) return false;

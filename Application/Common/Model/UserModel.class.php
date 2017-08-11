@@ -24,9 +24,8 @@ class UserModel extends AmongModel{
 	 * @return [type]            [description]
 	 */
 	function search_all($start,$limit,$dataArray=array()){
-		if(!$this->has_auth("select")){
-			return false;
-		}
+		if(!$this->has_auth("select")) return false;
+
 		$tableObject=$this->table($this->tableNameAs)->field($this->fieldStr)->join($this->joins)->limit($start.','.$limit);
 		if (empty($dataArray)){
 			return $tableObject->select();
@@ -46,9 +45,7 @@ class UserModel extends AmongModel{
 	 * @return [type]           [description]
 	 */
 	function find_user($user_id,$show=false){
-		if(!$this->has_auth("select")){
-			return false;
-		}
+		if(!$this->has_auth("select")) return false;
 		if($show==false){
 			return $this->table($this->tableNameAs)->where(array("u.user_id"=>$user_id))->find();
 			 // echo $this->getLastSql();
@@ -62,9 +59,8 @@ class UserModel extends AmongModel{
 	 * @return [type] [description]
 	 */
 	function get_new_code(){
-		if(!$this->has_auth("select")){
-			return false;
-		}
+		if(!$this->has_auth("select")) return false;
+
 		$userData=$this->table($this->tableNameAs)->field("u.user_code")->order("u.user_code DESC")->find();
 		return $userData["user_code"]+1;
 	}
@@ -76,9 +72,8 @@ class UserModel extends AmongModel{
 	 * @return [type]              [description]
 	 */
 	function get_manager($dapartment=0,$group=0){
-		if(!$this->has_auth("select")){
-			return false;
-		}
+		if(!$this->has_auth("select")) return false;
+
 		$resultUser=$this->table($this->tableNameAs)->field("u.user_name")->join("left join oa_place p on user_place=p.place_id where p.place_department={$dapartment} and p.place_group={$group} and p.place_manager=1")->find();
 		if(isset($resultUser["user_name"])){
 			return $resultUser["user_name"];
@@ -93,9 +88,8 @@ class UserModel extends AmongModel{
 	 * @return [type]                    [description]
 	 */
 	function show_director($place_department=0,$place_group=true){
-		if(!$this->has_auth("select")){
-			return false;
-		}
+		if(!$this->has_auth("select")) return false;
+
 		if($place_group==true){
 			return $this->query("select user_name,user_code from oa_user where user_place in (select place_id from oa_place where (find_in_set({$place_department},place_extent)) or (place_manager=1 and place_department={$place_department} and place_group=0))");
 		}else{
@@ -110,9 +104,8 @@ class UserModel extends AmongModel{
 	 * @param [type] $dataArray [更新的数据]
 	 */
 	function set_user($user_id,$dataArray){
-		if(!$this->has_auth("update")){
-			return false;
-		}
+		if(!$this->has_auth("update")) return false;
+
 		return $this->where(array("user_id"=>$user_id))->data($dataArray)->save();
 	}
 
@@ -122,9 +115,8 @@ class UserModel extends AmongModel{
 	 * @param [type] $user_state [description]
 	 */
 	function set_state($user_id,$user_state=1){
-		if(!$this->has_auth("update")){
-			return false;
-		}
+		if(!$this->has_auth("update")) return false;
+
 		$dataArray=array("user_state"=>$user_state);
 		if($user_state==1){
 			$dataArray["user_entry"]=date("Y-m-d");
@@ -144,9 +136,8 @@ class UserModel extends AmongModel{
 	 * @return boolean                [description]
 	 */
 	function has_username($user_username){
-		if(!$this->has_auth("select")){
-			return false;
-		}
+		if(!$this->has_auth("select")) return false;
+
 		return $this->field("user_id")->where(array("user_username"=>$user_username))->find()["user_id"];
 
 	}
@@ -158,9 +149,8 @@ class UserModel extends AmongModel{
 	 * @return [type]         [description]
 	 */
 	function nameTrans($value,$type=1){
-		if(!$this->has_auth("select")){
-			return false;
-		}
+		if(!$this->has_auth("select")) return false;
+
 		if($type==1){
 			return $this->field("user_name,user_code")->where(array("user_username"=>$value))->find();
 		}else if($type==2){

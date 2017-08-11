@@ -22,9 +22,8 @@ class PlaceModel extends AmongModel{
 	 * @return [type]        [上述两个参数都为空的时候，默认查询所有；$start存在而$limit为空的时候，查询条数；两个参数都存在则查询指定起始和限制条数]
 	 */
 	function search_place($place_department,$place_group=0,$start="",$limit=""){
-		if(!$this->has_auth("select")){
-			return false;
-		}
+		if(!$this->has_auth("select")) return false;
+
 		$place=$this->where(array("place_department"=>$place_department,"place_group"=>$place_group));
 		if($start=="" && $limit==""){
 			return $placeData=$place->select();
@@ -41,9 +40,8 @@ class PlaceModel extends AmongModel{
 	 * @return [type]           []
 	 */
 	function find_place($place_id){
-		if(!$this->has_auth("select")){
-			return false;
-		}
+		if(!$this->has_auth("select")) return false;
+
 		return $this->where(array("place_id"=>$place_id))->find();
 	}
 
@@ -56,9 +54,8 @@ class PlaceModel extends AmongModel{
 	 * @return boolean                   [description]
 	 */
 	function is_place($place_department,$place_name,$place_manager,$place_group=0){
-		if(!$this->has_auth("select")){
-			return false;
-		}
+		if(!$this->has_auth("select")) return false;
+
 		return $this->where(array("place_department"=>$place_department,"place_name"=>$place_name,"place_group"=>$place_group,"place_manager"=>$place_manager))->find();
 	}
 
@@ -72,9 +69,8 @@ class PlaceModel extends AmongModel{
 	 * @param integer $place_group      [职位分组]
 	 */
 	function set_place($place_id,$place_department,$place_name,$place_manager,$place_group=0){
-		if(!$this->has_auth("update")){
-			return false;
-		}
+		if(!$this->has_auth("update")) return false;
+
 		$isResult=$this->is_place($place_department,$place_name,$place_manager,$place_group);
 		if($isResult==""){
 			return $this->where(array("place_id"=>$place_id))->save(array("place_name"=>$place_name,"place_department"=>$place_department,"place_group"=>$place_group,"place_manager"=>$place_manager));
@@ -92,9 +88,8 @@ class PlaceModel extends AmongModel{
 	 * @param integer $place_group      [职位分组]
 	 */
 	function add_place($place_department,$place_name,$place_manager,$place_group=0){
-		if(!$this->has_auth("insert")){
-			return false;
-		}
+		if(!$this->has_auth("insert")) return false;
+
 		if($this->is_place($place_department,$place_name,$place_manager,$place_group)==""){
 			return $this->add(array("place_name"=>$place_name,"place_department"=>$place_department,"place_group"=>$place_group,"place_manager"=>$place_manager));
 		}else{
@@ -108,9 +103,8 @@ class PlaceModel extends AmongModel{
 	 * @return [type]           [description]
 	 */
 	function del_place($place_id){
-		if(!$this->has_auth("delete")){
-			return false;
-		}
+		if(!$this->has_auth("delete")) return false;
+
 		return $this->where(array("place_id"=>$place_id))->delete();
 	}
 	/**
@@ -118,9 +112,8 @@ class PlaceModel extends AmongModel{
 	 * @return [type] [description]
 	 */
 	function get_leader(){
-		if(!$this->has_auth("select")){
-			return false;
-		}
+		if(!$this->has_auth("select")) return false;
+
 		return $this->join("left join oa_department d on d.department_id=place_department")->where("d.department_leader>0 and place_manager>0")->select();
 	}
 
@@ -130,9 +123,8 @@ class PlaceModel extends AmongModel{
 	 * @param [type] $eplace_extent [需要新增的extent]
 	 */
 	function add_extent($place_id,$eplace_extent){
-		if(!$this->has_auth("update")){
-			return false;
-		}
+		if(!$this->has_auth("update")) return false;
+
 		$map['place_extent'] = array("exp","concat ('{$eplace_extent}',place_extent)");
 		$this->where(array("place_id"=>$place_id))->save($map);
 	}
@@ -144,9 +136,8 @@ class PlaceModel extends AmongModel{
 	 * @return [type]               [none]
 	 */
 	function reduce_extent($place_id,$place_extent){
-		if(!$this->has_auth("update")){
-			return false;
-		}
+		if(!$this->has_auth("update")) return false;
+
 		$this->where(array("place_id"=>$place_id))->save(array("place_extent"=>$place_extent));
 	}
 
@@ -156,9 +147,8 @@ class PlaceModel extends AmongModel{
 	 * @param [type] $place_role [修改的role id]
 	 */
 	function set_place_role($place_id,$place_role){
-		if(!$this->has_auth("update")){
-			return false;
-		}
+		if(!$this->has_auth("update")) return false;
+
 		$this->where(array("place_id"=>$place_id))->save(array("place_role"=>$place_role));
 	}
 }

@@ -20,6 +20,7 @@ class Attend_applyModel extends AmongModel{
 	 * @return [type]            [description]
 	 */
 	function seekApply($user_code,$type,$date){
+		if(!$this->has_auth("select")) return false;
 		return $this->where("aapply_code='{$user_code}' AND aapply_type='{$type}' AND aapply_schedule='{$date}'")->find();
 	}
 }

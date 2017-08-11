@@ -14,6 +14,7 @@ class ConfigModel extends Model{
 	protected $fields=array('config_id', 'config_class','config_key','config_value','config_upper');
 
 	function search_all($condition=array()){
+		if(!$this->has_auth("select")) return false;
 		if (empty($condition)){
 			return $this->select();
 		}else{

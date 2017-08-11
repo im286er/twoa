@@ -25,9 +25,7 @@ class RoleModel extends AmongModel{
 	 * @return [type]        [上述两个参数都为空的时候，默认查询所有；$start存在而$limit为空的时候，查询条数；两个参数都存在则查询指定起始和限制条数]
 	 */
 	function search_role($role_upper=0,$all_upper=false,$start="",$limit=""){
-		if(!$this->has_auth("select")){
-			return false;
-		}
+		if(!$this->has_auth("select")) return false;
 		if($all_upper==true){
 			$role=$this;
 		}else{
@@ -49,9 +47,7 @@ class RoleModel extends AmongModel{
 	 * @return [type]           []
 	 */
 	function find_role($role_id){
-		if(!$this->has_auth("select")){
-			return false;
-		}
+		if(!$this->has_auth("select")) return false;
 		return $this->where(array("role_id"=>$role_id))->find();
 	}
 
@@ -62,9 +58,7 @@ class RoleModel extends AmongModel{
 	 * @return boolean             []
 	 */
 	function is_role($role_name,$role_upper=0){
-		if(!$this->has_auth("select")){
-			return false;
-		}
+		if(!$this->has_auth("select")) return false;
 		return $this->where(array("role_name"=>$role_name,"role_upper"=>$role_upper))->find();
 	}
 
@@ -75,9 +69,8 @@ class RoleModel extends AmongModel{
 	 * @param integer $role_upper [角色分组]
 	 */
 	function set_role($role_id,$role_name,$role_upper=0){
-		if(!$this->has_auth("update")){
-			return false;
-		}
+		if(!$this->has_auth("update")) return false;
+
 		$resultData=$this->is_role($role_name,$role_upper);
 		if($resultData==""){
 			return $this->where(array('role_id' =>$role_id ))->save(array("role_name"=>$role_name,"role_upper"=>$role_upper));
@@ -92,9 +85,8 @@ class RoleModel extends AmongModel{
 	 * @param integer $role_upper [角色分组id]
 	 */
 	function add_role($role_name,$role_upper=0){
-		if(!$this->has_auth("insert")){
-			return false;
-		}
+		if(!$this->has_auth("insert")) return false;
+
 		if($this->is_role($role_name,$role_upper)==""){
 			return $this->add(array("role_name"=>$role_name,"role_upper"=>$role_upper));
 		}else{
@@ -108,9 +100,8 @@ class RoleModel extends AmongModel{
 	 * @return [type]           [description]
 	 */
 	function del_role($role_id){
-		if(!$this->has_auth("delete")){
-			return false;
-		}
+		if(!$this->has_auth("delete")) return false;
+
 		return $this->where(array("role_id"=>$role_id))->delete();
 	}
 }

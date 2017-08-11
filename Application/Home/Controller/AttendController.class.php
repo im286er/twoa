@@ -204,7 +204,14 @@ class AttendController extends AmongController {
 			}
 		}
 	}
-
+	/**
+	 * settleCheckin 计算考勤
+	 *
+	 * @param [type] $user_code
+	 * @param [type] $type
+	 * @param [type] $date
+	 * @return void
+	 */
 	function settleCheckin($user_code,$type,$date){
 		
 		// $checkinData=$this->acheckin->seekCheckin($user_code,$type,$date);
@@ -220,10 +227,9 @@ class AttendController extends AmongController {
 					}
 					$this->MonthRec[(int)$dates[2]]=array("forenoon"=>array("type"=>$type,"worktime"=>$forenoon),"forenoon"=>array("type"=>$type,"worktime"=>$afternoon));
 	
-					print_r($this->MonthRec[(int)$dates[2]]);
+					print_r($this->MonthRec);
 					// print_r($this->MonthRec[(int)$dates[2]]);
 				}
-
 				break;
 			
 			default:

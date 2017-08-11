@@ -4,7 +4,7 @@
  * @Email:369709991@qq.com
  * @Date:   2017-08-09 18:31:13
  * @Last Modified by:   vition
- * @Last Modified time: 2017-08-10 16:37:17
+ * @Last Modified time: 2017-08-11 09:41:27
  */
 namespace Common\Model;
 use Common\Model\AmongModel;
@@ -84,11 +84,20 @@ class Attend_recordModel extends AmongModel{
 		$this->add(array("arecord_code"=>$arecord_code,"arecord_year"=>$arecord_year,"arecord_month"=>$arecord_month,"arecord_json"=>json_encode($monthRec),"arecord_remedy"=>"3"));
 		return $this->getMonthRec($arecord_code,$arecord_year,$arecord_month);
 	}
-
+	/**
+	 * setMonthRec 计算考勤时间
+	 *
+	 * @param [type] $arecord_code
+	 * @param [type] $arecord_year
+	 * @param [type] $arecord_month
+	 * @param [type] $json
+	 * @param [type] $count
+	 * @return void
+	 */
 	function setMonthRec($arecord_code,$arecord_year,$arecord_month,$json,$count){
 		if(!$this->has_auth("insert")) return false;
-		$allCount=$this->findCount($arecord_code,$arecord_year,$arecord_month);
-		$this->save()
+		$allCount=$this->findCount($arecord_code,$arecord_year,$arecord_month)+$count;
+		$this->save(array("arecord_code"=>$arecord_code,"arecord_year"=>$arecord_year,"arecord_month"=>$arecord_month,"arecord_json"=>$json,$allCount));
 	}
 
 	/**

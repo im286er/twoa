@@ -19,9 +19,8 @@ class GroupModel extends AmongModel{
 	 * @return [type]        [上述两个参数都为空的时候，默认查询所有；$start存在而$limit为空的时候，查询条数；两个参数都存在则查询指定起始和限制条数]
 	 */
 	function search_group($group_department=0,$start="",$limit=""){
-		if(!$this->has_auth("select")){
-			return false;
-		}
+		if(!$this->has_auth("select")) return false;
+
 		$group=$this->where(array("group_department"=>$group_department));
 		if($start=="" && $limit==""){
 			return $groupData=$group->select();
@@ -38,9 +37,8 @@ class GroupModel extends AmongModel{
 	 * @return [type]           [description]
 	 */
 	function find_group($group_id){
-		if(!$this->has_auth("select")){
-			return false;
-		}
+		if(!$this->has_auth("select")) return false;
+
 		return $this->where(array("group_id"=>$group_id))->find();
 	}
 
@@ -51,9 +49,8 @@ class GroupModel extends AmongModel{
 	 * @return boolean                   [description]
 	 */
 	function is_group($group_department,$group_name){
-		if(!$this->has_auth("select")){
-			return false;
-		}
+		if(!$this->has_auth("select")) return false;
+
 		return $this->where(array("group_name"=>$group_name,"group_department"=>$group_department))->find();
 	}
 	/**
@@ -63,9 +60,8 @@ class GroupModel extends AmongModel{
 	 * @param [type] $group_department [分组的指定部门]
 	 */
 	function set_group($group_id,$group_name,$group_department){
-		if(!$this->has_auth("update")){
-			return false;
-		}
+		if(!$this->has_auth("update")) return false;
+
 		$groupInfo=$this->is_group($group_department,$group_name);
 		if($groupInfo==""){
 			return $this->where(array("group_id"=>$group_id))->save(array("group_name"=>$group_name,"group_department"=>$group_department));
@@ -79,9 +75,8 @@ class GroupModel extends AmongModel{
 	 * @param [type] $group_name       [分组的名称]
 	 */
 	function add_group($group_department,$group_name){
-		if(!$this->has_auth("insert")){
-			return false;
-		}
+		if(!$this->has_auth("insert")) return false;
+
 		if($this->is_group($group_department,$group_name)==""){
 			return $this->add(array("group_name"=>$group_name,"group_department"=>$group_department));
 		}else{
@@ -95,9 +90,8 @@ class GroupModel extends AmongModel{
 	 * @return [type]           [description]
 	 */
 	function del_group($group_id){
-		if(!$this->has_auth("delete")){
-			return false;
-		}
+		if(!$this->has_auth("delete")) return false;
+
 		return $this->where(array("group_id"=>$group_id))->delete();
 	}
 }
