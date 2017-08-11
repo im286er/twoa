@@ -34,9 +34,9 @@ class Attend_checkinModel extends AmongModel{
 	 * @param  [type] $date      [日期，格式如：2017-08-09]
 	 * @return [type]            [description]
 	 */
-	function seekCheckin($user_code,$type,$date){
+	function seekCheckin($user_code,$type,$date,$state=0){
 		if(!$this->has_auth("select")) return false;
-		return $this->where("date_format(acheckin_checkintime,'%Y-%m-%d')='{$date}' AND acheckin_code='{$user_code}' AND acheckin_type='{$type}'")->order("acheckin_checkintime")->select();
+		return $this->where("date_format(acheckin_checkintime,'%Y-%m-%d')='{$date}' AND acheckin_code='{$user_code}' AND acheckin_type='{$type}' AND acheckin_state ='{$state}'")->order("acheckin_checkintime")->select();
 	}
 
 	/**
@@ -64,6 +64,17 @@ class Attend_checkinModel extends AmongModel{
 		}
 		return false;
 		
+	}
+
+	/**
+	 * setCheckin function
+	 *
+	 * @param [type] $acheckin_id
+	 * @param [type] $dataArray 
+	 * @return void
+	 */
+	function setCheckin($acheckin_id,$dataArray){
+		$this->where(array("acheckin_id"=>$acheckin_id))->save($dataArray);
 	}
 
 }

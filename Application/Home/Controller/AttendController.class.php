@@ -218,7 +218,7 @@ class AttendController extends AmongController {
 		$dates=split("-", $date);
 		switch ($type) {
 			case '1':
-				$checkinData=$this->acheckin->seekCheckin($user_code,$type,$date);
+				$checkinData=$this->acheckin->seekCheckin($user_code,$type,$date,0);
 				if(count($checkinData)==2 && $checkinData[0]["acheckin_timetype"]==1 && $checkinData[1]["acheckin_timetype"]==2){
 					$forenoon=time_reduce($checkinData[0]["acheckin_checkintime"],$date." ".$this->timeNode["MF"]);
 					$afternoon=time_reduce($date." ".$this->timeNode["AO"],$checkinData[1]["acheckin_checkintime"]);
@@ -226,8 +226,11 @@ class AttendController extends AmongController {
 						$afternoon=($this->attendUser["auser_eachday"]+0.5)-$forenoon;
 					}
 					$this->MonthRec[(int)$dates[2]]=array("forenoon"=>array("type"=>$type,"worktime"=>$forenoon),"forenoon"=>array("type"=>$type,"worktime"=>$afternoon));
-	
-					print_r($this->MonthRec);
+					print_r($checkinData);
+					foreach ($checkinData as $checkins) {
+						$this->acheckin->setCheckin($checkins["$checkins"],array("acheckin_state"=>"1"));
+					}
+					// print_r($this->MonthRec);
 					// print_r($this->MonthRec[(int)$dates[2]]);
 				}
 				break;

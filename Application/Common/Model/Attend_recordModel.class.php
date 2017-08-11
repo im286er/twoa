@@ -97,6 +97,8 @@ class Attend_recordModel extends AmongModel{
 	function setMonthRec($arecord_code,$arecord_year,$arecord_month,$json,$count){
 		if(!$this->has_auth("insert")) return false;
 		$allCount=$this->findCount($arecord_code,$arecord_year,$arecord_month)+$count;
+		$this->startTrans();
+		$this->table("oa_attend_checkin")->save();
 		$this->save(array("arecord_code"=>$arecord_code,"arecord_year"=>$arecord_year,"arecord_month"=>$arecord_month,"arecord_json"=>$json,$allCount));
 	}
 
