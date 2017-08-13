@@ -47,7 +47,7 @@ class AttendController extends AmongController {
 
 		
 
-		$this->settleCheckin($this->selfUser["user_code"],1,date("Y-m-d",strtotime("2017-8-7")));
+		$this->settleCheckin($this->selfUser["user_code"],2,date("Y-m-d",strtotime("2017-8-11")));
 
 		$normalCheckin=$this->checkinType($this->selfUser["user_code"],1,$date);
 		$outCheckin=$this->checkinType($this->selfUser["user_code"],2,$date);
@@ -215,37 +215,64 @@ class AttendController extends AmongController {
 	function settleCheckin($user_code,$type,$date){
 		
 		// $checkinData=$this->acheckin->seekCheckin($user_code,$type,$date);
-		$dates=split("-", $date);
-		switch ($type) {
-			case '1':
-				$checkinData=$this->acheckin->seekCheckin($user_code,$type,$date,0);
-				if(count($checkinData)==2 && $checkinData[0]["acheckin_timetype"]==1 && $checkinData[1]["acheckin_timetype"]==2){
-					$forenoon=time_reduce($checkinData[0]["acheckin_checkintime"],$date." ".$this->timeNode["MF"]);
-					$afternoon=time_reduce($date." ".$this->timeNode["AO"],$checkinData[1]["acheckin_checkintime"]);
+		$dates=split("-", $date);/*分解成年月日*/
+		$checkinData=$this->acheckin->seekCheckin($user_code,$type,$date,0);
+		
+		if(count($checkinData)==2 && $checkinData[0]["acheckin_timetype"]==1 && $checkinData[1]["acheckin_timetype"]==2){
+			/**
+			 * 当打卡记录=2，第一条记录是开始，第二条记录是结束的时候执行下列结算，不同打卡类型计算不同
+			 */
+			switch ($type) {
+				/**
+				 * 正常加班
+				 */
+				case '1':
+						$forenoon=time_reduce($checkinData[0]["acheckin_checkintime"],$date." ".$this->timeNode["MF"]);
+						$afternoon=time_reduce($date." ".$this->timeNode["AO"],$checkinData[1]["acheckin_checkintime"]);
 
-					if(($forenoon+$afternoon)>($this->attendUser["auser_eachday"]+0.5)){
-						$afternoon=($this->attendUser["auser_eachday"]+0.5)-$forenoon;
-					}
-					$dayTime=$forenoon+$afternoon;
-					$this->MonthRec[(int)$dates[2]]=array("forenoon"=>array("type"=>$type,"worktime"=>$forenoon),"afternoon"=>array("type"=>$type,"worktime"=>$afternoon));
-					/*启动事物*/
-					$this->acheckin->startTrans();
-					foreach ($checkinData as $checkins) {
-						$this->acheckin->setCheckin($checkins["acheckin_id"],array("acheckin_state"=>"1"));
-					}
-					// $this->arecord->startTrans();
-					$setMonthResult=$this->arecord->setMonthRec($user_code,$dates[0],$dates[1],json_encode($this->MonthRec),$dayTime);
-					if($setMonthResult>0){
-						$this->acheckin->commit();
+						if(($forenoon+$afternoon)>($this->attendUser["auser_eachday"]+0.5)){
+							$afternoon=($this->attendUser["auser_eachday"]+0.5)-$forenoon;
+						}
+						$dayTime=$forenoon+$afternoon;
+						$this->MonthRec[(int)$dates[2]]=array("forenoon"=>array("type"=>$type,"worktime"=>$forenoon),"afternoon"=>array("type"=>$type,"worktime"=>$afternoon));
+						/*启动事物*/
+						$this->acheckin->startTrans();
+						foreach ($checkinData as $checkins) {
+							$this->acheckin->setCheckin($checkins["acheckin_id"],array("acheckin_state"=>"1"));
+						}
+						// $this->arecord->startTrans();
+						$setMonthResult=$this->arecord->setMonthRec($user_code,$dates[0],$dates[1],json_encode($this->MonthRec),$dayTime);
+						if($setMonthResult>0){
+							$this->acheckin->commit();
+						}else{
+							$this->acheckin->rollback();
+						}
+				
+					break;
+				case "2":
+					$startTime= $checkinData[0]["acheckin_checkintime"];
+					$endTime= $checkinData[1]["acheckin_checkintime"];
+					if ($startTime>$date." ".$this->timeNode["MO"]) {
+						print_r($startTime);
 					}else{
-						$this->acheckin->rollback();
+						print_r($date." ".$this->timeNode["MO"]);
+						
 					}
-				}
-				break;
-			
-			default:
-				# code...
-				break;
+				/**
+				 * 外勤
+				 */
+
+					break;
+				case "3":
+				/**
+				 * 加班
+				 */
+
+					break;
+				default :
+					# code...
+					break;
+			}
 		}
 	}
 	
