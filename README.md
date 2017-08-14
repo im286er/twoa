@@ -76,3 +76,5 @@
 * admin后台新建初始化设置新表的权限为select，超级管理员默认所有权限
 * alter table oa_attend_checkin add acheckin_state int(2) default 0;
 
+#### 2017-8-14
+* alter table oa_attend_checkin add acheckin_temptime float(4,2) default 0.00;

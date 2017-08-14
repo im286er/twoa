@@ -13,6 +13,7 @@ use Common\Controller\AmongController;
 class AttendController extends AmongController {
 	public $MonthRec;
 	public $timeNode;
+	public $attendUser;
 	//重组gethtml方法
 	function __construct(){
 		parent::__construct();
@@ -47,7 +48,7 @@ class AttendController extends AmongController {
 
 		
 
-		$this->settleCheckin($this->selfUser["user_code"],2,date("Y-m-d",strtotime("2017-8-11")));
+		$this->settleCheckin($this->selfUser["user_code"],2,date("Y-m-d",strtotime("2017-8-14")));
 
 		$normalCheckin=$this->checkinType($this->selfUser["user_code"],1,$date);
 		$outCheckin=$this->checkinType($this->selfUser["user_code"],2,$date);
@@ -249,19 +250,23 @@ class AttendController extends AmongController {
 						}
 				
 					break;
+					/*外勤*/
 				case "2":
 					$startTime= $checkinData[0]["acheckin_checkintime"];
 					$endTime= $checkinData[1]["acheckin_checkintime"];
-					if ($startTime>$date." ".$this->timeNode["MO"]) {
-						print_r($startTime);
-					}else{
-						print_r($date." ".$this->timeNode["MO"]);
-						
-					}
-				/**
-				 * 外勤
-				 */
+					if($startTime<$date." ".$this->timeNode["AO"] && $endTime<$date." ".$this->timeNode["AO"]){
+						// echo "这是早上的外勤";
+						echo time_reduce($this->morningTime($startTime),$endTime);
 
+					}else if($startTime>$date." ".$this->timeNode["MF"] && $endTime>$date." ".$this->timeNode["MF"]){
+						echo time_reduce($startTime,$endTime);
+						// echo "这是下午的外勤";
+					}else{
+						echo time_reduce($this->morningTime($startTime),$date." ".$this->timeNode["MF"]);
+						echo "\n";
+						echo time_reduce($date." ".$this->timeNode["AO"],$endTime);
+						// echo "涉及一整天的外勤";
+					}
 					break;
 				case "3":
 				/**
@@ -274,6 +279,26 @@ class AttendController extends AmongController {
 					break;
 			}
 		}
+	}
+
+	/**
+	 * 对早上时间进行判断 function
+	 *
+	 * @param [type] $startTime
+	 * @return void
+	 */
+	function morningTime($startTime){
+		$date=split(" ",$startTime);
+		$MO=$date[0]." ".$this->timeNode["MO"];
+		/*这里需要增加一个判断是否加早班*/
+		if($startTime<$MO){
+			return $MO;
+		}else{
+			return $startTime;
+		}
+		// print_r($this->attendUser["auser_eachday"]);
+
+
 	}
 	
 
