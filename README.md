@@ -78,3 +78,6 @@
 
 #### 2017-8-14
 * alter table oa_attend_checkin add acheckin_temptime float(4,2) default 0.00;
+
+#### 2017-8-15
+* 修改外勤计算功能

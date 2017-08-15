@@ -48,7 +48,7 @@ class AttendController extends AmongController {
 
 		
 
-		$this->settleCheckin($this->selfUser["user_code"],2,date("Y-m-d",strtotime("2017-8-14")));
+		$this->settleCheckin($this->selfUser["user_code"],1,date("Y-m-d",strtotime("2017-8-14")));
 
 		$normalCheckin=$this->checkinType($this->selfUser["user_code"],1,$date);
 		$outCheckin=$this->checkinType($this->selfUser["user_code"],2,$date);
@@ -78,7 +78,7 @@ class AttendController extends AmongController {
 		$info=array(array(),array("上班","下班","fa-sun-o","fa-moon-o"),array("开始外勤","结束外勤","fa-sign-out","fa-circle-o-notch"),array("开始加班","结束加班","fa-clock-o","fa-hand-peace-o"));
 
 		$butInfo=array("<button class='btn disabled' data-type='{$type}' data-timetype='1'><i class='ace-icon fa {$info[$type][2]} align-top bigger-125'></i>{$info[$type][0]} </button><button  class='btn disabled' data-type='{$type}' data-timetype='2'><i class='ace-icon fa {$info[$type][3]} align-top bigger-125'></i>{$info[$type][1]}</button>","<button class='btn disabled' data-type='{$type}' data-timetype='1'><i class='ace-icon fa {$info[$type][2]} align-top bigger-125'></i>{$info[$type][0]}</button><button data-toggle='button' class='btn btn-success' data-type='{$type}' data-timetype='2'><i class='ace-icon fa {$info[$type][3]} align-top bigger-125'></i>{$info[$type][1]}</button>","<button data-toggle='button' class='btn btn-success' data-type='{$type}' data-timetype='1'><i class='ace-icon fa {$info[$type][2]} align-top bigger-125'></i>{$info[$type][0]}</button><button class='btn disabled' data-type='{$type}' data-timetype='2'><i class='ace-icon fa {$info[$type][3]} align-top bigger-125'></i>{$info[$type][1]}</button>");
-
+		/*这里加上判断外勤是否属于全天，如果是，正常上下班按钮禁止*/
 		
 
 		if($type>=2){
@@ -228,44 +228,59 @@ class AttendController extends AmongController {
 				 * 正常加班
 				 */
 				case '1':
-						$forenoon=time_reduce($checkinData[0]["acheckin_checkintime"],$date." ".$this->timeNode["MF"]);
+						$forenoon=time_reduce($this->morningTime($checkinData[0]["acheckin_checkintime"]),$date." ".$this->timeNode["MF"]);
 						$afternoon=time_reduce($date." ".$this->timeNode["AO"],$checkinData[1]["acheckin_checkintime"]);
 
+						print_r($this->MonthRec[(int)$dates[2]]);
+
+						return;
+						/*需要加一个对外勤进行判断，直接获取现有的时间，判断，
+							如果上午：外勤时间>=2，那么上午直接为3
+									 else 外勤时间外勤时间+正常时间>=3，那么上午直接3
+									 else 上午时间  外勤时间+正常时间
+							如果下午：外勤时间>=4，那么下午直接为5
+									 else 外勤时间+正常时间>5,那么下午直接5
+									 else 下午时间 外勤时间+正常时间
+						*/
 						if(($forenoon+$afternoon)>($this->attendUser["auser_eachday"]+0.5)){
 							$afternoon=($this->attendUser["auser_eachday"]+0.5)-$forenoon;
 						}
+
 						$dayTime=$forenoon+$afternoon;
+						/*开始修改json数据*/
 						$this->MonthRec[(int)$dates[2]]=array("forenoon"=>array("type"=>$type,"worktime"=>$forenoon),"afternoon"=>array("type"=>$type,"worktime"=>$afternoon));
-						/*启动事物*/
-						$this->acheckin->startTrans();
-						foreach ($checkinData as $checkins) {
-							$this->acheckin->setCheckin($checkins["acheckin_id"],array("acheckin_state"=>"1"));
-						}
-						// $this->arecord->startTrans();
-						$setMonthResult=$this->arecord->setMonthRec($user_code,$dates[0],$dates[1],json_encode($this->MonthRec),$dayTime);
-						if($setMonthResult>0){
-							$this->acheckin->commit();
-						}else{
-							$this->acheckin->rollback();
-						}
-				
+						$this->updateMonthRec($user_code,$dates,$type,$dataArray,$checkinData,$dayTime);
+									
 					break;
 					/*外勤*/
 				case "2":
 					$startTime= $checkinData[0]["acheckin_checkintime"];
 					$endTime= $checkinData[1]["acheckin_checkintime"];
+					/*外勤开始时间小于13:00 且 外勤结束时间小于13:00 ，表示上午外勤*/
 					if($startTime<$date." ".$this->timeNode["AO"] && $endTime<$date." ".$this->timeNode["AO"]){
-						// echo "这是早上的外勤";
-						echo time_reduce($this->morningTime($startTime),$endTime);
 
+
+						$forenoon=time_reduce($this->morningTime($startTime),$endTime);
+						$this->MonthRec[(int)$dates[2]]["forenoon"]["type"]=$type;
+						$this->MonthRec[(int)$dates[2]]["forenoon"]["worktime"]=$forenoon;
+						// print_r($this->MonthRec[(int)$dates[2]]);
+						$this->updateMonthRec($user_code,$dates,$type,$checkinData,$forenoon);
+
+					/*外勤开始时间大于12:00 且 外勤结束时间大于12:00 ，表示下午外勤*/
 					}else if($startTime>$date." ".$this->timeNode["MF"] && $endTime>$date." ".$this->timeNode["MF"]){
-						echo time_reduce($startTime,$endTime);
-						// echo "这是下午的外勤";
+
+						$afternoon=time_reduce($startTime,$endTime);;
+						$this->MonthRec[(int)$dates[2]]["afternoon"]["type"]=$type;
+						$this->MonthRec[(int)$dates[2]]["afternoon"]["worktime"]=$afternoon;
+						$this->updateMonthRec($user_code,$dates,$type,$checkinData,$afternoon);
+
+					/*剩下的表示全天外勤了*/
 					}else{
-						echo time_reduce($this->morningTime($startTime),$date." ".$this->timeNode["MF"]);
-						echo "\n";
-						echo time_reduce($date." ".$this->timeNode["AO"],$endTime);
-						// echo "涉及一整天的外勤";
+						$forenoon=time_reduce($this->morningTime($startTime),$date." ".$this->timeNode["MF"]);
+						$afternoon=time_reduce($date." ".$this->timeNode["AO"],$endTime);
+						$this->MonthRec[(int)$dates[2]]=array("forenoon"=>array("type"=>$type,"worktime"=>$forenoon),"afternoon"=>array("type"=>$type,"worktime"=>$afternoon));
+						$dayTime=$forenoon+$afternoon;
+						$this->updateMonthRec($user_code,$dates,$type,$checkinData,$dayTime);
 					}
 					break;
 				case "3":
@@ -287,7 +302,7 @@ class AttendController extends AmongController {
 	 * @param [type] $startTime
 	 * @return void
 	 */
-	function morningTime($startTime){
+	private function morningTime($startTime){
 		$date=split(" ",$startTime);
 		$MO=$date[0]." ".$this->timeNode["MO"];
 		/*这里需要增加一个判断是否加早班*/
@@ -296,9 +311,33 @@ class AttendController extends AmongController {
 		}else{
 			return $startTime;
 		}
-		// print_r($this->attendUser["auser_eachday"]);
-
-
+	}
+	/**
+	 * updateMonthRec function
+	 *
+	 * @param [str] $dates 日期   	  '2017-08-15'
+	 * @param [int] $type 更新的类型，   1正常上下班，2外勤，3加班
+	 * @param [array] $checkinData		打卡记录两条的数据
+	 * @param [float] $dayTime			累积的时间
+	 * @return void
+	 */
+	private function updateMonthRec($user_code,$dates,$type,$checkinData,$dayTime){
+		
+		/*启动事物*/
+		$this->acheckin->startTrans();
+		/*修改打卡记录的状态，防止打卡记录重复使用*/
+		foreach ($checkinData as $checkins) {
+			$this->acheckin->setCheckin($checkins["acheckin_id"],array("acheckin_state"=>"1"));
+		}
+		// $this->arecord->startTrans();
+		/*开始修改月数据*/
+		$setMonthResult=$this->arecord->setMonthRec($user_code,$dates[0],$dates[1],json_encode($this->MonthRec),$dayTime);
+		/*判断是否执行成功，是，提交事务，否回滚*/
+		if($setMonthResult>0){
+			$this->acheckin->commit();
+		}else{
+			$this->acheckin->rollback();
+		}
 	}
 	
 
