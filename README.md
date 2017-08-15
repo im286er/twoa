@@ -81,3 +81,5 @@
 
 #### 2017-8-15
 * 修改外勤计算功能
+* ALTER TABLE `oa_attend_checkin` CHANGE `acheckin_temptime` `acheckin_tempstorage` FLOAT(4,2) NULL DEFAULT '0.00';
+* ALTER TABLE `oa_attend_checkin` CHANGE `acheckin_tempstorage` `acheckin_tempstorage` VARCHAR(200) NULL DEFAULT '';

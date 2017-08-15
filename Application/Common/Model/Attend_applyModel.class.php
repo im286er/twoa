@@ -23,4 +23,21 @@ class Attend_applyModel extends AmongModel{
 		if(!$this->has_auth("select")) return false;
 		return $this->where("aapply_code='{$user_code}' AND aapply_type='{$type}' AND aapply_schedule='{$date}'")->find();
 	}
+	
+	/**
+	 * isApply 判断申请记录是否审批
+	 *
+	 * @param [type] $user_code
+	 * @param [type] $type
+	 * @param [type] $date
+	 * @return boolean
+	 */
+	function isApply($user_code,$type,$date){
+		if(!$this->has_auth("select")) return false;
+		$result=$this->where(array("aapply_code="=>$user_code,"aapply_schedule"=>$date,"aapply_type"=>$type,"aapply_state"=>"1",))->find();
+		if($result===null){
+			return false;
+		}
+		return true;
+	}
 }
