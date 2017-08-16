@@ -54,13 +54,18 @@ class Attend_recordModel extends AmongModel{
 	 * @param    [type]      $arecord_month [月]
 	 * @return   [type]                     [description]
 	 */
-	function getMonthRec($arecord_code,$arecord_year,$arecord_month){
+	function getMonthRec($arecord_code,$arecord_year,$arecord_month,$day=0){
 		if(!$this->has_auth("select")) return false;
 		$arecord_json=$this->field("arecord_json")->where(array("arecord_code"=>$arecord_code,"arecord_year"=>$arecord_year,"arecord_month"=>$arecord_month))->find()["arecord_json"];
 		if($arecord_json==null){
-			return $this->createMonthRec($arecord_code,$arecord_year,$arecord_month);
+			$monthRec= $this->createMonthRec($arecord_code,$arecord_year,$arecord_month);
 		}else{
-			return json_decode($arecord_json,true);
+			$monthRec= json_decode($arecord_json,true);
+		}
+		if($day>0){
+			return $monthRec[(int)$day];
+		}else{
+			return $monthRec;
 		}
 	}
 
@@ -94,13 +99,19 @@ class Attend_recordModel extends AmongModel{
 	 * @param [type] $count
 	 * @return void
 	 */
-	function setMonthRec($arecord_code,$arecord_year,$arecord_month,$json,$count){
-		if(!$this->has_auth("insert")) return false;
-		$allCount=$this->findCount($arecord_code,$arecord_year,$arecord_month)+$count;
-		return $this->where(array("arecord_code"=>$arecord_code,"arecord_year"=>$arecord_year,"arecord_month"=>$arecord_month))->save(array("arecord_json"=>$json,"arecord_count"=>$allCount));
-		// return $this->where(array("arecord_code"=>$arecord_code,"arecord_year"=>$arecord_year,"arecord_month"=>$arecord_month"))->save(array("arecord_json"=>$json,"arecord_count"=>$allCount));
-	}
+	function setMonthRec($arecord_code,$arecord_year,$arecord_month,$json,$count,$operation=1){
+		if(!$this->has_auth("update")) return false;
+		if($operation==1){
+			$allCount=$this->findCount($arecord_code,$arecord_year,$arecord_month)+$count;
+		}else{
+			$allCount=$this->findCount($arecord_code,$arecord_year,$arecord_month)-$count;
+		}
 
+		return $this->where(array("arecord_code"=>$arecord_code,"arecord_year"=>$arecord_year,"arecord_month"=>(int)$arecord_month))->save(array("arecord_json"=>$json,"arecord_count"=>$allCount));
+
+
+
+	}
 	/**
 	 * [findCount 查询当月工时统计]
 	 * @param  [type] $arecord_code  [description]
