@@ -59,11 +59,41 @@
 		return $dir."/".$name;
 	}
 	
+	/**
+	 * 获取微信配置 function
+	 *
+	 * @return void
+	 */
 	function getWeixinConf(){
 		$WxConf = fopen("WxConf.ini", 'r');
 		return json_decode(fread($WxConf, filesize("WxConf.ini")),true);
 	}
 
+	/**
+	 * time_reduce function 计算时间相减 $datetime2-$datetime1
+	 *
+	 * @param [type] $tdatetime1
+	 * @param [type] $datetime2
+	 * @return void
+	 */
 	function time_reduce($tdatetime1,$datetime2){
 		return round((strtotime($datetime2)-strtotime($tdatetime1))/3600,2);
+	}
+
+	/**
+	 * count_days function 计算两个时间之间的时间差天数，大减小
+	 *
+	 * @param [type] $datetime1
+	 * @param [type] $datetime2
+	 * @return void
+	 */
+	function count_days($datetime1,$datetime2){
+		$stramp1=strtotime(split(" ",$datetime1)[0]);
+		$stramp2=strtotime(split(" ",$datetime2)[0]);
+		if($stramp1>$stramp2){
+			$interval=$stramp1-$stramp2;
+		}else{
+			$interval=$stramp2-$stramp1;
+		}
+		return $interval/86400;
 	}
