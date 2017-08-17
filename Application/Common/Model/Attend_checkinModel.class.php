@@ -34,13 +34,19 @@ class Attend_checkinModel extends AmongModel{
 	 * @param  [type] $date      [日期，格式如：2017-08-09]
 	 * @return [type]            [description]
 	 */
-	function seekCheckin($user_code,$type,$date,$state=null){
+	function seekCheckin($user_code,$type,$date=null,$state=null){
 		if(!$this->has_auth("select")) return false;
-		if($state===null){
-			return $this->where("date_format(acheckin_checkintime,'%Y-%m-%d')='{$date}' AND acheckin_code='{$user_code}' AND acheckin_type='{$type}'")->order("acheckin_checkintime")->select();
+		if($date===null){
+			$dateSql="";
 		}else{
-			return $this->where("date_format(acheckin_checkintime,'%Y-%m-%d')='{$date}' AND acheckin_code='{$user_code}' AND acheckin_type='{$type}' AND acheckin_state ='{$state}'")->order("acheckin_checkintime")->select();
+			$dateSql=" AND date_format(acheckin_checkintime,'%Y-%m-%d')='{$date}'";
 		}
+		if($state===null){
+			$stateSql="";
+		}else{
+			$stateSql=" AND acheckin_state ='{$state}'";
+		}
+		return $this->where("acheckin_code='{$user_code}' AND acheckin_type='{$type}'".$dateSql.$stateSql)->order("acheckin_checkintime")->select();
 		
 	}
 

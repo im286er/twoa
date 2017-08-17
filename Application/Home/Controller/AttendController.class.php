@@ -26,7 +26,7 @@ class AttendController extends AmongController {
 		$this->config=D("Config");
 		$this->attendUser=$this->auser->find_auser($this->selfUser["user_code"]);
 		
-		$this->timeNode=array("MO"=>"09:00:00","MF"=>"12:00:00","AO"=>"13:00:00","AF"=>"18:00:00");
+		$this->timeNode=array("MO"=>"09:00:00","MF"=>"12:00:00","AO"=>"13:00:00","STA"=>"00:00:00","AF"=>"18:00:00","END"=>"23:59:59");
 
 		if($this->attendUser["auser_eachday"]>7.5){
 			$this->timeNode["AF"]="18:30:00";
@@ -48,7 +48,9 @@ class AttendController extends AmongController {
 
 		
 		/*测试各种考勤审计*/
-		$this->settleCheckin($this->selfUser["user_code"],3,date("Y-m-d",strtotime("2017-8-14")));
+		
+		// echo date("Y-m-d",strtotime("2017-8-14 +1 day"));
+		$this->settleCheckin($this->selfUser["user_code"],3,date("Y-m-d",strtotime("2017-8-17")));
 
 		$normalCheckin=$this->checkinType($this->selfUser["user_code"],1,$date);
 		$outCheckin=$this->checkinType($this->selfUser["user_code"],2,$date);
@@ -214,23 +216,52 @@ class AttendController extends AmongController {
 	 * @return void
 	 */
 	function settleCheckin($user_code,$type,$date){
+
 		$forenoonOld=0;
 		$afternoonOld=0;
 		// $checkinData=$this->acheckin->seekCheckin($user_code,$type,$date);
 		$dates=split("-", $date);/*分解成年月日*/
-		$checkinData=$this->acheckin->seekCheckin($user_code,$type,$date,0);
+		$this->MonthRec=$this->arecord->getMonthRec($this->selfUser["user_code"],$dates[0],$dates[0]);
+		/*判断哪些类型不需要涉及日期*/
+		if(in_array($type,array("3"))){
+			$checkinData=$this->acheckin->seekCheckin($user_code,$type,null,0);
+		}else{
+			$checkinData=$this->acheckin->seekCheckin($user_code,$type,$date,0);
+		}
 		
 		if(count($checkinData)==2 && $checkinData[0]["acheckin_timetype"]==1 && $checkinData[1]["acheckin_timetype"]==2){
 			/**
 			 * 当打卡记录=2，第一条记录是开始，第二条记录是结束的时候执行下列结算，不同打卡类型计算不同
 			 */
+			$startTime= $this->loadStartTime($checkinData[0]["acheckin_checkintime"]);
+			$endTime= $this->loadEndTime($checkinData[1]["acheckin_checkintime"]);
+			if($startTime<$date." ".$this->timeNode["AO"] && $endTime<$date." ".$this->timeNode["AO"]){
+				echo $startTime,"A",$endTime;
+				$forenoon=time_reduce($startTime,$endTime);
+			}elseif ($startTime>$date." ".$this->timeNode["MF"] && $endTime>$date." ".$this->timeNode["MF"]) {
+				echo "B";
+				$afternoon=time_reduce($startTime,$endTime);
+				# code...
+			}else {
+				echo "C";
+				$forenoon=time_reduce($startTime,$date." ".$this->timeNode["MF"]);
+				$afternoon=time_reduce($date." ".$this->timeNode["AO"],$endTime);
+			}
 			switch ($type) {
 				/**
 				 * 正常上班班
 				 */
 				case '1':
-						$forenoon=time_reduce($this->morningTime($checkinData[0]["acheckin_checkintime"]),$date." ".$this->timeNode["MF"]);
-						$afternoon=time_reduce($date." ".$this->timeNode["AO"],$checkinData[1]["acheckin_checkintime"]);
+						if($startTime<$date." ".$this->timeNode["AO"] && $endTime<$date." ".$this->timeNode["AO"]){
+							$forenoon=time_reduce($startTime,$endTime);
+						}elseif ($startTime>$date." ".$this->timeNode["MF"] && $endTime>$date." ".$this->timeNode["MF"]) {
+							$afternoon=time_reduce($startTime,$endTime);
+							# code...
+						}else {
+							$forenoon=time_reduce($startTime,$date." ".$this->timeNode["MF"]);
+							$afternoon=time_reduce($date." ".$this->timeNode["AO"],$endTime);
+						}
+						
 						if(($forenoon+$afternoon)>($this->attendUser["auser_eachday"])){
 							$afternoon=($this->attendUser["auser_eachday"])-$forenoon;
 						}
@@ -247,6 +278,7 @@ class AttendController extends AmongController {
 						$outIsApply=$this->aapply->isApply($user_code,2,$date);//外勤申请
 						/*判断外勤申请是否存在，是否审批*/
 						if($outIsApply){
+							$type=2;
 							$outCheckinData=$this->acheckin->seekCheckin($user_code,2,$date,1);//取外勤打卡记录
 							if($outCheckinData[1]["acheckin_tempstorage"]!=""){
 								/*打卡的计时必须存在*/
@@ -274,17 +306,27 @@ class AttendController extends AmongController {
 									}
 								}
 						}
+
 						/*存在加班start*/
 						$overIsApply=$this->aapply->isApply($user_code,3,$date);//加班申请
 						if($overIsApply){
 							$overCheckinData=$this->acheckin->seekCheckin($user_code,3,$date,1);//取外勤打卡记录
 							if($overCheckinData[1]["acheckin_tempstorage"]!=""){
+								$type=3;
+								$tempstorage=json_decode($overCheckinData[1]["acheckin_tempstorage"],true);
+								foreach ($tempstorage as $day => $value) {
+									if((int)$day==(int)$dates[2]){
+										$forenoon=$value["forenoon"]["worktime"];
+										$afternoon=$value["afternoon"]["worktime"];
+									}else{
 
-							}else{
-								
+									}
+								}
+
 							}
 						}
 						/*存在加班end*/
+
 						$dayTime=$forenoon+$afternoon;
 						/*开始修改json数据*/
 						$this->MonthRec[(int)$dates[2]]=array("forenoon"=>array("type"=>$type,"worktime"=>$forenoon),"afternoon"=>array("type"=>$type,"worktime"=>$afternoon));
@@ -294,14 +336,13 @@ class AttendController extends AmongController {
 					break;
 					/*外勤*/
 				case "2":
-					$startTime= $checkinData[0]["acheckin_checkintime"];
-					$endTime= $checkinData[1]["acheckin_checkintime"];
+					
 					$isApply=$this->aapply->isApply($user_code,$type,$date);
 
 					/*外勤开始时间小于13:00 且 外勤结束时间小于13:00 ，表示上午外勤*/
 					if($startTime<$date." ".$this->timeNode["AO"] && $endTime<$date." ".$this->timeNode["AO"]){
 
-						$forenoon=time_reduce($this->morningTime($startTime),$endTime);
+						$forenoon=time_reduce($startTime,$endTime);
 						$this->MonthRec[(int)$dates[2]]["forenoon"]["type"]=$type;
 						$this->MonthRec[(int)$dates[2]]["forenoon"]["worktime"]=$forenoon;
 						// print_r($this->MonthRec[(int)$dates[2]]);
@@ -310,17 +351,17 @@ class AttendController extends AmongController {
 					/*外勤开始时间大于12:00 且 外勤结束时间大于12:00 ，表示下午外勤*/
 					}else if($startTime>$date." ".$this->timeNode["MF"] && $endTime>$date." ".$this->timeNode["MF"]){
 
-						$afternoon=time_reduce($startTime,$endTime);;
+						$afternoon=time_reduce($startTime,$endTime);
 						$this->MonthRec[(int)$dates[2]]["afternoon"]["type"]=$type;
 						$this->MonthRec[(int)$dates[2]]["afternoon"]["worktime"]=$afternoon;
 						$dayTime=$afternoon;
 
 					/*剩下的表示全天外勤了*/
 					}else{
-						$forenoon=time_reduce($this->morningTime($startTime),$date." ".$this->timeNode["MF"]);
+						$forenoon=time_reduce($startTime,$date." ".$this->timeNode["MF"]);
 						$afternoon=time_reduce($date." ".$this->timeNode["AO"],$endTime);
 						$this->MonthRec[(int)$dates[2]]=array("forenoon"=>array("type"=>$type,"worktime"=>$forenoon),"afternoon"=>array("type"=>$type,"worktime"=>$afternoon));
-						$dayTime=$forenoon+$afternoon;			
+						$dayTime=$forenoon+$afternoon;
 					}
 					/*统一数据更新*/
 					$this->tempStorage($checkinData,$this->MonthRec[(int)$dates[2]]);
@@ -347,20 +388,52 @@ class AttendController extends AmongController {
 					}
 					break;
 				case "3":
-					$startTime= $checkinData[0]["acheckin_checkintime"];
-					$endTime= $checkinData[1]["acheckin_checkintime"];
+					echo "上午".$forenoon;
+					echo "下午".$afternoon;
 					$isApply=$this->aapply->isApply($user_code,$type,$date);
-
 					$interval=count_days($startTime,$endTime);
+
+					$startDate=split("-",split(" ",$startTime)[0]);
+					$endDate=split("-",split(" ",$endTime)[0]);
+					// $thisDay=$this->arecord->isWeekday($dates[0],$dates[1],$dates[2]);
+					
+					// return ;
 					if($interval>0){
 						/*超过当天*/
+						echo "跨天的了";
+						extract($this->getForeAfter($startTime,split(" ",$startTime)[0]." ".$this->timeNode["END"],split(" ",$startTime)[0]));
+						
+						$this->MonthRec[(int)$startDate[2]]["forenoon"]["worktime"]+= $forenoon;
+						$this->MonthRec[(int)$startDate[2]]["afternoon"]["worktime"]+= $afternoon;
+						$this->MonthRec[(int)$startDate[2]]["forenoon"]["type"]= $type;
+						$this->MonthRec[(int)$startDate[2]]["afternoon"]["type"]= $type;
+						
+						extract($this->getForeAfter(split(" ",$endTime)[0]." ".$this->timeNode["STA"],$endTime,split(" ",$endTime)[0]));
+
+						$this->MonthRec[(int)$endDate[2]]["forenoon"]["worktime"]+= $forenoon;
+						$this->MonthRec[(int)$endDate[2]]["afternoon"]["worktime"]+= $afternoon;
+						$this->MonthRec[(int)$endDate[2]]["forenoon"]["type"]= $type;
+						$this->MonthRec[(int)$endDate[2]]["afternoon"]["type"]= $type;
+						$dayTime=$afternoon;
+						$tempRec=array();
+						$tempRec[(int)$dates[0]][(int)$dates[1]][(int)$dates[2]]=$this->MonthRec[(int)$dates[2]];
+
+						if($interval>1){
+
+						}else{
+							
+
+						}
+
 					}else{
+						if($startTime<=$this)
 						$afternoon=time_reduce($startTime,$endTime);
+
 						$this->MonthRec[(int)$dates[2]]["afternoon"]["worktime"]+= $afternoon;
 						$this->MonthRec[(int)$dates[2]]["afternoon"]["type"]= $type;
 						$dayTime=$afternoon;
 						$tempRec=array();
-						$tempRec[(int)$dates[2]]=$this->MonthRec[(int)$dates[2]];
+						$tempRec[(int)$dates[0]][(int)$dates[1]][(int)$dates[2]]=$this->MonthRec[(int)$dates[2]];
 						$this->tempStorage($checkinData,$tempRec);
 						
 						if($isApply){
@@ -372,10 +445,8 @@ class AttendController extends AmongController {
 	
 								$dayTime=$dayRec["forenoon"]["worktime"]+$dayRec["afternoon"]["worktime"];
 
-								echo $dayTime;
-								echo "zhidao";
 								if($this-> updateMonthRec($user_code,$dates,1,$baseCheckinData,$dayTime,0)){
-									$this->settleCheckin($user_code,3,$date);
+									$this->settleCheckin($user_code,1,$date);
 								}
 							}else{
 								$this->updateMonthRec($user_code,$dates,$type,$checkinData,$dayTime);
@@ -406,16 +477,30 @@ class AttendController extends AmongController {
 	 * @param [type] $startTime
 	 * @return void
 	 */
-	private function morningTime($startTime){
+	private function loadStartTime($startTime){
 		$date=split(" ",$startTime);
 		$MO=$date[0]." ".$this->timeNode["MO"];
+		$MF=$date[0]." ".$this->timeNode["MF"];
+		$AO=$date[0]." ".$this->timeNode["AO"];
+		$AF=$date[0]." ".$this->timeNode["AF"];
 		/*这里需要增加一个判断是否加早班*/
 		if($startTime<$MO){
 			return $MO;
 		}else{
-			return $startTime;
+			if($startTime>$MF && $startTime<$AO){
+				return $AO;
+			}
 		}
+		return $startTime;
 	}
+	
+	private function loadEndTime($endTime){
+		if($endTime>$MF && $endTime<$AO){
+			return $MF;
+		}
+		return $endTime;
+	}
+
 	/**
 	 * updateMonthRec function
 	 *
@@ -425,7 +510,7 @@ class AttendController extends AmongController {
 	 * @param [float] $dayTime			累积的时间
 	 * @return void
 	 */
-	private function updateMonthRec($user_code,$dates,$type,$checkinData,$dayTime,$acheckin_state=1){
+	private function updateMonthRec($user_code,$dates,$type,$checkinData,$dayTime,$acheckin_state=1,$customData=array()){
 		/*启动事物*/
 		$this->acheckin->startTrans();
 		/*修改打卡记录的状态，防止打卡记录重复使用*/
@@ -434,7 +519,49 @@ class AttendController extends AmongController {
 		}
 		// $this->arecord->startTrans();
 		/*开始修改月数据*/
-		$setMonthResult=$this->arecord->setMonthRec($user_code,$dates[0],$dates[1],json_encode($this->MonthRec),$dayTime,$acheckin_state);
+		if(empty($customData)){
+			$setMonthResult=$this->arecord->setMonthRec($user_code,$dates[0],$dates[1],json_encode($this->MonthRec),$dayTime,$acheckin_state);
+		}else{
+			if(count($customData)>1){
+				/*表示跨年*/
+				foreach ($customData as $year=>$yearData) {
+					$month=key($yearData);
+
+					$tempMonthRec=$this->$this->arecord->getMonthRec($this->selfUser["user_code"],$year,$month);
+					foreach ($yearData[$month] as $day => $dayData) {
+						$tempMonthRec[$day]=$dayData;
+					}
+					
+					$setMonthResult=$this->arecord->setMonthRec($user_code,$year,$month,json_encode($tempMonthRec),$dayTime,$acheckin_state);
+				}
+			}else{
+				/*当年*/
+				$year=key($customData);
+				if(count($customData[$year])>1){
+					/*跨月*/
+					foreach ($customData[$year] as $month => $monthData) {
+						$day=key($monthData[$day]);
+						$tempMonthRec=$this->$this->arecord->getMonthRec($this->selfUser["user_code"],$year,$month);
+
+						foreach ($monthData as $day => $dayData) {
+							$tempMonthRec[$day]=$dayData;
+						}
+
+						$setMonthResult=$this->arecord->setMonthRec($user_code,$year,$month,json_encode($tempMonthRec),$dayTime,$acheckin_state);
+					}
+				}else{
+					/*当月*/
+					$year=key($customData);
+					$month=key($customData[$year]);
+					$tempMonthRec=$this->$this->arecord->getMonthRec($this->selfUser["user_code"],$year,$month);
+					foreach ($customData[$year][$month] as $day => $dayData){
+						$tempMonthRec[$day]=$dayData;
+					}
+					$setMonthResult=$this->arecord->setMonthRec($user_code,$year,$month,json_encode($tempMonthRec),$dayTime,$acheckin_state);
+				}
+			}
+		}
+		
 
 		/*判断是否执行成功，是，提交事务，否回滚*/
 		if($setMonthResult>0){
@@ -457,5 +584,26 @@ class AttendController extends AmongController {
 		foreach ($checkinData as $checkins) {
 			$this->acheckin->setCheckin($checkins["acheckin_id"],array("acheckin_state"=>"1","acheckin_tempstorage"=>json_encode($storageArray)));
 		}
+	}
+	
+	private function getForeAfter($startTime,$endTime,$date){
+		// var_dump($startTime);
+		// var_dump($endTime);
+		// var_dump($date);
+		// $forenoon=0;
+		// $afternoon=0;
+		if($startTime<$date." ".$this->timeNode["AO"] && $endTime<$date." ".$this->timeNode["AO"]){
+			// echo "A";
+			$forenoon=time_reduce($startTime,$endTime);
+		}elseif ($startTime>$date." ".$this->timeNode["MF"] && $endTime>$date." ".$this->timeNode["MF"]) {
+			// echo "B";
+			$afternoon=time_reduce($startTime,$endTime);
+			# code...
+		}else {
+			// echo "C";
+			$forenoon=time_reduce($startTime,$date." ".$this->timeNode["MF"]);
+			$afternoon=time_reduce($date." ".$this->timeNode["AO"],$endTime);
+		}
+		return array('forenoon' =>$forenoon , 'afternoon'=>$afternoon);
 	}
 }
