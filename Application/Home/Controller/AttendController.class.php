@@ -276,12 +276,13 @@ class AttendController extends AmongController {
 						}
 						/*存在加班start*/
 						$overIsApply=$this->aapply->isApply($user_code,3,$date);//加班申请
+						/*判断加班*/
 						if($overIsApply){
 							$overCheckinData=$this->acheckin->seekCheckin($user_code,3,$date,1);//取外勤打卡记录
 							if($overCheckinData[1]["acheckin_tempstorage"]!=""){
-
+								$tempstorage=json_decode($outCheckinData[1]["acheckin_tempstorage"],true);
 							}else{
-								
+
 							}
 						}
 						/*存在加班end*/
