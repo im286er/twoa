@@ -89,3 +89,5 @@ class Attend_checkinModel extends AmongModel{
 	}
 
 }
+
+

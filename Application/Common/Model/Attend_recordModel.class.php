@@ -20,7 +20,7 @@ class Attend_recordModel extends AmongModel{
 	 */
 	function getWeekday($arecord_year,$arecord_month){
 		if(!$this->has_auth("select")) return false;
-		$result=$this->field("arecord_json")->where(array("arecord_code"=>"0","arecord_year"=>$arecord_year,"arecord_month"=>$arecord_month))->find()["arecord_json"];
+		$result=$this->field("arecord_json")->where(array("arecord_code"=>"0","arecord_year"=>$arecord_year,"arecord_month"=>(int)$arecord_month))->find()["arecord_json"];
 		return split(",", $result);
 
 	}
@@ -37,7 +37,7 @@ class Attend_recordModel extends AmongModel{
 	function isWeekday($arecord_year,$arecord_month,$day){
 		if(!$this->has_auth("select")) return false;
 		$month=$this->getWeekday($arecord_year,$arecord_month);
-		if(array_search($day, $month)!==false){
+		if(array_search((int)$day, $month)!==false){
 			return true;
 		}else{
 			return false;
@@ -56,7 +56,7 @@ class Attend_recordModel extends AmongModel{
 	 */
 	function getMonthRec($arecord_code,$arecord_year,$arecord_month,$day=0){
 		if(!$this->has_auth("select")) return false;
-		$arecord_json=$this->field("arecord_json")->where(array("arecord_code"=>$arecord_code,"arecord_year"=>$arecord_year,"arecord_month"=>$arecord_month))->find()["arecord_json"];
+		$arecord_json=$this->field("arecord_json")->where(array("arecord_code"=>$arecord_code,"arecord_year"=>$arecord_year,"arecord_month"=>(int)$arecord_month))->find()["arecord_json"];
 		if($arecord_json==null){
 			$monthRec= $this->createMonthRec($arecord_code,$arecord_year,$arecord_month);
 		}else{
@@ -84,9 +84,9 @@ class Attend_recordModel extends AmongModel{
 		$dayNum=cal_days_in_month(CAL_GREGORIAN, $arecord_month, $arecord_year);
 		$monthRec=array();
 		for ($day=1; $day <= $dayNum ; $day++) { 
-			$monthRec[$day]=array("forenoon"=>array("type"=>"","worktime"=>""),"afternoon"=>array("type"=>"","worktime"=>""));
+			$monthRec[(int)$day]=array("forenoon"=>array("type"=>"","worktime"=>""),"afternoon"=>array("type"=>"","worktime"=>""));
 		}
-		$this->add(array("arecord_code"=>$arecord_code,"arecord_year"=>$arecord_year,"arecord_month"=>$arecord_month,"arecord_json"=>json_encode($monthRec),"arecord_remedy"=>"3"));
+		$this->add(array("arecord_code"=>$arecord_code,"arecord_year"=>$arecord_year,"arecord_month"=>(int)$arecord_month,"arecord_json"=>json_encode($monthRec),"arecord_remedy"=>"3"));
 		return $this->getMonthRec($arecord_code,$arecord_year,$arecord_month);
 	}
 	/**
@@ -123,7 +123,7 @@ class Attend_recordModel extends AmongModel{
 	function findCount($arecord_code,$arecord_year,$arecord_month){
 		if(!$this->has_auth("select")) return false;
 
-		return $this->field("arecord_count")->where(array("arecord_code"=>$arecord_code,"arecord_year"=>$arecord_year,"arecord_month"=>$arecord_month))->find()["arecord_count"];
+		return $this->field("arecord_count")->where(array("arecord_code"=>$arecord_code,"arecord_year"=>$arecord_year,"arecord_month"=>(int)$arecord_month))->find()["arecord_count"];
 	}
 
 	/**
@@ -136,7 +136,7 @@ class Attend_recordModel extends AmongModel{
 	 */
 	function findRemedy($arecord_code,$arecord_year,$arecord_month){
 		if(!$this->has_auth("select")) return false;
-		return $this->filed("arecord_remedy")->where(array("arecord_code"=>$arecord_code,"arecord_year"=>$arecord_year,"arecord_month"=>$arecord_month))->find()["arecord_remedy"];
+		return $this->filed("arecord_remedy")->where(array("arecord_code"=>$arecord_code,"arecord_year"=>$arecord_year,"arecord_month"=>(int)$arecord_month))->find()["arecord_remedy"];
 
 	}
 
