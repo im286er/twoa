@@ -109,8 +109,6 @@ class Attend_recordModel extends AmongModel{
 
 		return $this->where(array("arecord_code"=>$arecord_code,"arecord_year"=>$arecord_year,"arecord_month"=>(int)$arecord_month))->save(array("arecord_json"=>$json,"arecord_count"=>$allCount));
 
-
-
 	}
 	/**
 	 * [findCount 查询当月工时统计]
@@ -124,6 +122,11 @@ class Attend_recordModel extends AmongModel{
 		if(!$this->has_auth("select")) return false;
 
 		return $this->field("arecord_count")->where(array("arecord_code"=>$arecord_code,"arecord_year"=>$arecord_year,"arecord_month"=>(int)$arecord_month))->find()["arecord_count"];
+	}
+
+	function reduceCount($arecord_code,$arecord_year,$arecord_month,$reduce){
+		if(!$this->has_auth("update")) return false;
+		return $this->field("arecord_count")->where(array("arecord_code"=>$arecord_code,"arecord_year"=>$arecord_year,"arecord_month"=>(int)$arecord_month))->setDec("arecord_count",$reduce);
 	}
 
 	/**

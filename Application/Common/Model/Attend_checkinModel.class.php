@@ -10,7 +10,7 @@ namespace Common\Model;
 use Common\Model\AmongModel;
 class Attend_checkinModel extends AmongModel{
 	protected $trueTableName = 'oa_attend_checkin'; 
-	protected $fields = array('acheckin_id', 'acheckin_code','acheckin_checkinway','acheckin_type','acheckin_timetype','acheckin_addtime','acheckin_checkintime','acheckin_location','acheckin_longlat','acheckin_picture',"acheckin_state","acheckin_tempstorage");
+	protected $fields = array('acheckin_id', 'acheckin_code','acheckin_checkinway','acheckin_type','acheckin_timetype','acheckin_addtime','acheckin_checkintime','acheckin_location','acheckin_longlat','acheckin_picture',"acheckin_state","acheckin_tempstorage","acheckin_applyid");
 
 	function search_checkin($acheckin_code,$acheckin_id=null,$condition=array()){
 		if(!$this->has_auth("select")) return false;
@@ -41,6 +41,7 @@ class Attend_checkinModel extends AmongModel{
 		}else{
 			$dateSql=" AND date_format(acheckin_checkintime,'%Y-%m-%d')='{$date}'";
 		}
+		// echo $dateSql;
 		if($state===null){
 			$stateSql="";
 		}else{
@@ -48,6 +49,11 @@ class Attend_checkinModel extends AmongModel{
 		}
 		return $this->where("acheckin_code='{$user_code}' AND acheckin_type='{$type}'".$dateSql.$stateSql)->order("acheckin_checkintime")->select();
 		
+	}
+
+	function applySeekCheckin($apply_id){
+		if(!$this->has_auth("select")) return false;
+		return $this->where(array("acheckin_applyid"=>$apply_id))->select();
 	}
 
 	/**
@@ -85,9 +91,48 @@ class Attend_checkinModel extends AmongModel{
 	 * @return void
 	 */
 	function setCheckin($acheckin_id,$dataArray){
+		if(!$this->has_auth("update")) return false;
 		return $this->where(array("acheckin_id"=>$acheckin_id))->save($dataArray);
 	}
+	/**
+	 * isOverTime function 判断加班申请
+	 *
+	 * @param [type] $user_code
+	 * @param [type] $date
+	 * @return 不存在返回false，存在放回对应的申请id 已审核
+	 */
+	function isOverTime($user_code,$date){
+		if(!$this->has_auth("select")) return false;
+		$checkinResult=$this->table("(select acheckin_id,acheckin_timetype,acheckin_applyid from oa_attend_checkin where acheckin_type=3 and date_format(acheckin_checkintime,'%Y-%m-%d')='{$date}') a")->union("select * from (select acheckin_id,acheckin_timetype,acheckin_applyid from oa_attend_checkin where acheckin_type=3 and date_format(acheckin_checkintime,'%Y-%m-%d')<'{$date}' order by acheckin_id desc limit 0,1) b")->union(" select * from (select acheckin_id,acheckin_timetype,acheckin_applyid from oa_attend_checkin where acheckin_type=3 and date_format(acheckin_checkintime,'%Y-%m-%d')>'{$date}'  order by acheckin_id asc limit 0,1) c order by acheckin_id")->select();
 
+
+		if($checkinResult[0]["acheckin_timetype"]==2){
+			array_shift($checkinResult);
+		}
+		if(count($checkinResult)>=2){
+			$applyid=array();
+			
+			foreach ($checkinResult as $key => $value) {
+				if(($key%2)==1){
+					if($first==1 && $value["acheckin_timetype"]==2){
+						$applyResult=$this->table("oa_attend_apply")->field("aapply_state")->where(array("aapply_id"=>$value["acheckin_applyid"]))->find();
+						if($applyResult["aapply_state"]>0){
+							array_push($applyid,$value["acheckin_applyid"]);
+						}
+					}
+				}else{
+					$first=$value["acheckin_timetype"];
+				}
+			}
+			if(empty($applyid)!==null){
+				return $applyid;
+			}
+		}
+		return false;
+	}
 }
 
 
+//select * from oa_attend_checkin where acheckin_type=3 and date_format(acheckin_checkintime,'%Y-%m-%d')<='2017-08-15' order by acheckin_id asc limit 0,1;
+
+// select * from (select acheckin_id,acheckin_timetype,acheckin_applyid from oa_attend_checkin where acheckin_type=3 and date_format(acheckin_checkintime,'%Y-%m-%d')='2017-08-14') a union select * from (select acheckin_id,acheckin_timetype,acheckin_applyid from oa_attend_checkin where acheckin_type=3 and date_format(acheckin_checkintime,'%Y-%m-%d')<'2017-08-14' order by acheckin_id desc limit 0,1) b union select * from (select acheckin_id,acheckin_timetype,acheckin_applyid from oa_attend_checkin where acheckin_type=3 and date_format(acheckin_checkintime,'%Y-%m-%d')>'2017-08-14'  order by acheckin_id asc limit 0,1) c order by acheckin_id ;
