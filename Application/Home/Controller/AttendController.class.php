@@ -7,7 +7,7 @@
  * @Last Modified time: 2017-08-10 15:01:00
  */
 
-/*{"control":"Attend","name":"考勤管理","icon":"fa fa-calendar","menus":[{"name":"考勤配置","icon":"fa fa-gear","menus":"config"},{"name":"考勤申请","icon":"fa fa-list-alt","menus":"userlist"},{"name":"申请管理","icon":"fa fa-pencil-square","menus":"archives"},{"name":"打卡","icon":"fa fa-square","menus":"checkin"}]}*/
+/*{"control":"Attend","name":"考勤管理","icon":"fa fa-calendar","menus":[{"name":"考勤配置","icon":"fa fa-gear","menus":"config"},{"name":"考勤申请","icon":"fa fa-list-alt","menus":"apply"},{"name":"申请管理","icon":"fa fa-pencil-square","menus":"archives"},{"name":"打卡","icon":"fa fa-square","menus":"checkin"}]}*/
 namespace Home\Controller;
 use Common\Controller\AmongController;
 class AttendController extends AmongController {
@@ -624,5 +624,11 @@ class AttendController extends AmongController {
 		return $MonthRec;
 	}
 
+	function getApplyHtml(){
+		if(IS_AJAX){
+			echo $this->gethtml($_POST["html"]);
+			// $this->ajaxReturn($_POST);
+		}
+	}
 
 }
