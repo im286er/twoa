@@ -83,3 +83,6 @@
 * 修改外勤计算功能
 * ALTER TABLE `oa_attend_checkin` CHANGE `acheckin_temptime` `acheckin_tempstorage` FLOAT(4,2) NULL DEFAULT '0.00';
 * ALTER TABLE `oa_attend_checkin` CHANGE `acheckin_tempstorage` `acheckin_tempstorage` VARCHAR(200) NULL DEFAULT '';
+
+#### 2017-8-21
+* alter table oa_attend_checkin add acheckin_applyid bigint(20) default 0;

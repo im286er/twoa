@@ -77,7 +77,11 @@
 	 * @return void
 	 */
 	function time_reduce($tdatetime1,$datetime2){
-		return round((strtotime($datetime2)-strtotime($tdatetime1))/3600,2);
+		if($datetime2>$tdatetime1){
+			return round((strtotime($datetime2)-strtotime($tdatetime1))/3600,2);
+		}
+		return 0;
+		
 	}
 
 	/**
