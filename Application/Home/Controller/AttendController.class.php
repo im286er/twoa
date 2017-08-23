@@ -626,7 +626,10 @@ class AttendController extends AmongController {
 
 	function getApplyHtml(){
 		if(IS_AJAX){
-			echo $this->gethtml($_POST["html"]);
+			$managerArray=$this->baseInfo->user()->searchManager();
+			$this->assign("managerArray",$managerArray);
+
+			$this->ajaxReturn(array("html"=>$this->fetch("attend/apply/".I("html"))));
 			// $this->ajaxReturn($_POST);
 		}
 	}

@@ -12,7 +12,7 @@
 		<!-- bootstrap & fontawesome -->
 		<link rel="stylesheet" href="__PUBLIC__/assets/css/bootstrap.css?{$rand}" />
 		<link rel="stylesheet" href="__PUBLIC__/components/font-awesome/css/font-awesome.css?{$rand}" />
-	
+		<link rel="stylesheet" href="__PUBLIC__/components/chosen/chosen.css" />
 		<!-- page specific plugin styles -->
 
 		<!-- text fonts -->
@@ -421,7 +421,7 @@
 				</div><!-- /.sidebar-shortcuts -->
 
 				<ul class="nav nav-list">
-					<li class="main-menu" data-module="Menu">
+					<li class="main-menu active" data-module="Menu">
 						<a id="menu-company" href="javascript:void(0);" class="ajax-html" data-con="gethtml" data-html="company" >
 							<i class="menu-icon fa fa-tachometer"></i>
 							<span class="menu-text"> 企业首页 </span>
@@ -642,13 +642,58 @@
 			if('ontouchstart' in document.documentElement) document.write("<script src='__PUBLIC__/components/_mod/jquery.mobile.custom/jquery.mobile.custom.js'>"+"<"+"/script>");
 			$(function(){
 				//ajax-html执行获取页面
-				get_html($("#menu-company").data("con"),$("#menu-company").data("html"));
+				var url=$("#menu-company").data("con");
+				var html=$("#menu-company").data("html")
+				
+				/*判断路径html参数是否存在，根据参数显示对应的功能*/
+				if("{$html}"!=""){
+					$(".ajax-html").each(function(){
+						if($(this).data("html")=="{$html}"){
+							$("#menu-company").parents("li").removeClass("active");
+							$("#menu-company").parents("ul").removeClass("nav-show");
+
+							$(this).parents("ul").addClass("nav-show");
+							$(this).parents("ul").parents("li").addClass("open");
+							$(this).parents("li").addClass("active");
+							url="{:U('"+$(this).parents(".main-menu").data("module")+"/"+$(this).data("con")+"')}";
+							html=$(this).data("html")
+							
+							return false;
+						}
+					})
+				}
+				get_html(url,html);
+				
+				
+				
 				//get_html({"html":$("#menu-company").data("html")});
 				$(".ajax-html").on("click",function(){
-					//var data={"html":$(this).data("html")};
+					$(".ajax-html").each(function(){
+						$(this).parents("li").removeClass("active");
+					})
+					$(this).parents("li").addClass("active");
+
 					var url="{:U('"+$(this).parents(".main-menu").data("module")+"/"+$(this).data("con")+"')}";
 					get_html(url,$(this).data("html"));
 				})
+				$(".main-menu").on("click",function(){
+					$(".main-menu").each(function(){
+						$(this).removeClass("active");
+					})
+					$(this).addClass("active");
+				})
+				
+				// $(".main-menu").on('shown.bs.dropdown', function () {
+				// 	console.log("show")
+				// // do something…
+				// })
+				// $(".main-menu").on("click",function(){
+					// $(".main-menu").dropdown('toggle')
+					// $(".main-menu").each(function(){
+					// 	$(this).removeClass("open");
+					// 	$(this).find("ul").removeClass("nav-show");
+					// })
+				// })
 				//gethtml页面
 				function get_html(url,hdata){
 					$.ajax({

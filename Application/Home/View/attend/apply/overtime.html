@@ -1,12 +1,121 @@
 <div class="widget-box">
     <div class="widget-header">
-        <h5 class="widget-title smaller"><i class="ace-icon fa fa-user bigger-110"></i>加班申请</h5>
+        <h5 class="widget-title smaller"><i class="ace-icon fa fa-clock-o bigger-110"></i>加班申请</h5>
         <div class="widget-toolbar"></div>
     </div>
     <div class="widget-body">
-        <div class="widget-main">
-            <form class="form-horizontal" id="">
-            </form>
+        <div class="widget-main" style="text-align:left;">
+            <label>加班类型</label>
+            <div class="row">
+                <div class="col-xs-12 col-sm-12">
+                    <select class="form-control apply-info" name="aapply_type">
+                        <option value=3>普通加班</option>
+                        <option value=5>早上加班</option>
+                        <option value=6>在家加班</option>
+                    </select>
+                </div>
+            </div>
+            <div class="space space-8"></div>
+            <label>涉及其他部门/小组</label>
+            <div class="row">
+                <div class="col-xs-12 col-sm-12">
+                    <!-- <input class="form-control" placeholder="@其他主管/组长"> -->
+                    <select class="chosen-select form-control apply-info" multiple id="" name="aapply_approve" data-placeholder="@其他主管/组长">
+                            <option value=""></option>
+                            <volist name="managerArray" id="manager">
+                                    <option value="{$manager.user_code}">{$manager.user_name}</option>
+                            </volist>
+                        </select>
+                </div>
+            </div>
+            <div class="space space-8"></div>
+            <label>开始日期</label>
+            <div class="row">
+                <div class="col-xs-12 col-sm-12">
+
+                    <div class="input-group col-xs-8 col-sm-9" style="float:left;">
+                            <input class="form-control date-picker user-finfo" data-label="开始时间" name="user_entry" id="date-schedule" data-date-format="yyyy-mm-dd" type="text" value="2017-08-23">
+                            <span class="input-group-addon">
+                                <i class="fa fa-calendar bigger-110"></i>
+                            </span>
+                    </div>
+                    <div class="col-xs-4 col-sm-3" style="float:left;line-height:34px;">
+                        <label class="middle">
+                            <input class="ace" id="arecord-remedy" type="checkbox">
+                            <span class="lbl">&nbsp;&nbsp;后补</span>
+                        </label>
+                    </div>
+                    
+                </div>
+            </div>
+            <div class="home-time hide">
+                <div class="space space-8"></div>
+                <label>在家加班时长，不能超4小时</label>
+                <div class="row">
+                    <div class="col-xs-12 col-sm-12">
+                        <input type="text" id="home-time" />
+                        <!-- <div class="space-6"></div>
+                        <input class="form-control" placeholder="在家加班时长"> -->
+                    </div>
+                </div>
+            </div>
+            
+            <div class="space space-8"></div>
+            <label>理由</label>
+            <div class="row">
+                <div class="col-xs-12 col-sm-12">
+                    <textarea class="form-control" id="" placeholder="请认真填写申请理由"></textarea>
+                </div>
+            </div>
+
         </div>
     </div>
 </div>
+<script>
+    $(function(){
+        /*下拉选框的js*/
+        if(!ace.vars['touch']) {
+            $('.chosen-select').chosen({allow_single_deselect:true,search_contains:true}); 
+            $(window)
+            .off('resize.chosen')
+            .on('resize.chosen', function() {
+                $('.chosen-select').each(function() {
+                        var $this = $(this);
+                        $this.next().css({'width': $this.parent().width()});
+                })
+            }).trigger('resize.chosen');
+            //resize chosen on sidebar collapse/expand
+            $(document).on('settings.ace.chosen', function(e, event_name, event_val) {
+                if(event_name != 'sidebar_collapsed') return;
+                $('.chosen-select').each(function() {
+                        var $this = $(this);
+                        $this.next().css({'width': $this.parent().width()});
+                })
+            });
+    
+    
+            $('#chosen-multiple-style .btn').on('click', function(e){
+                var target = $(this).find('input[type=radio]');
+                var which = parseInt(target.val());
+                if(which == 2) $('#form-field-select-4').addClass('tag-input-style');
+                    else $('#form-field-select-4').removeClass('tag-input-style');
+            });
+        }
+        //初始化后日期选择器
+        $('#date-schedule').datepicker({autoclose: true,todayHighlight: true,startDate:nowDate()})
+        
+        //初始化后日期选择器
+        $('#home-time').ace_spinner({value:0,min:0,max:4,step:0.5, on_sides: true, icon_up:'ace-icon fa fa-plus bigger-110', icon_down:'ace-icon fa fa-minus bigger-110', btn_up_class:'btn-info' , btn_down_class:'btn-info'});
+        //类型改变
+        $("select[name='aapply_type']").on("change",function(){
+            if($(this).val()==6){
+                $(".home-time").removeClass("hide")
+            }else{
+                if(!$(".home-time").hasClass("hide")){
+                    $(".home-time").addClass("hide")
+                }
+            }
+        })
+        //
+    })
+</script>

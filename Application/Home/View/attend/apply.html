@@ -1,3 +1,5 @@
+<link rel="stylesheet" href="__PUBLIC__/components/bootstrap-datepicker/dist/css/bootstrap-datepicker3.css">
+
 <div class="page-header">
 	<h1>
 		考勤管理
@@ -52,26 +54,55 @@
             </div>
 
             <div class="modal-footer">
-                <button class="btn btn-sm btn-danger pull-right" data-dismiss="modal">
+                <button type="button" class="btn btn-sm btn-success pull-right">
+                    提交申请
+                    <i class="ace-icon fa fa-arrow-right icon-on-right bigger-110"></i>
+                </button>
+                <button class="btn btn-sm btn-danger pull-left" data-dismiss="modal">
                     <i class="ace-icon fa fa-times"></i>
-                    Close
+                    关闭
                 </button>
             </div>
         </div><!-- /.modal-content -->
     </div><!-- /.modal-dialog -->
 </div>
+
+
+<script src="__PUBLIC__/components/fuelux/js/spinbox.js"></script>
+<script src="__PUBLIC__/components/bootstrap-datepicker/dist/js/bootstrap-datepicker.js"></script>
+<script src="__PUBLIC__/assets/js/src/elements.spinner.js"></script>
+<script src="__PUBLIC__/components/chosen/chosen.jquery.js"></script>
 <script>
     $(function(){
+       
+
         $(".btn-app").on("click",function(){
             $.ajax({
                 url:"{:U('getApplyHtml')}",
                 data:{html:$(this).data("html")},
                 type:"post",
-                dataType:"html",
+                dataType:"json",
                 success:function(data){
-                    console.log(data)
+                    $("#applyModal .modal-body").html(data.html)
                 }
             })
         })
+        $("#applyModal").on("change","#date-schedule",function(){
+            console.log(nowDate());
+        })
+        $("#applyModal").on("click","#arecord-remedy",function(){
+
+            if($(this).prop("checked")==true){
+                $('#date-schedule').datepicker("setStartDate","2017-01-01")
+            }else{
+                $('#date-schedule').datepicker("setStartDate",nowDate())
+                $('#date-schedule').datepicker("update",nowDate())
+            }
+        })
     })
+
+    function nowDate(){
+        var myDate=new Date();
+        return myDate.getFullYear()+"-"+(myDate.getMonth()+1)+"-"+myDate.getDate();
+    }
 </script>
