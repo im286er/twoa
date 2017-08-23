@@ -81,6 +81,10 @@ class UserModel extends AmongModel{
 			return "";
 		}
 	}
+	function searchManager(){
+		if(!$this->has_auth("select")) return false;
+		return $this->field("user_code,user_name")->join("oa_place on place_id=oa_user.user_place")->where("oa_place.place_manager=1")->select();
+	}
 	/**
 	 * [show_director 显示主要的上级人员]
 	 * @param  [type]  $place_department [相关的部门id]

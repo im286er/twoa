@@ -8,6 +8,9 @@ class MenuController extends AmongController {
 	//menu
 	public function menu(){
 		$authoMenu=$this->get_auth(array("Menu",array("Attend"=>array("checkin"))));
+		if(I("html")!==null){
+			$this->assign("html",I("html"));
+		}
 		$this->assign("authoMenu",$authoMenu);
 		$this->display("menu");
 	}

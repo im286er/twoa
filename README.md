@@ -86,3 +86,8 @@
 
 #### 2017-8-21
 * alter table oa_attend_checkin add acheckin_applyid bigint(20) default 0;
+
+#### 2017-8-23
+* 考勤申请页面
+* 修改menu侧栏样式
+* 新增url路径参数支持直接显示功能
