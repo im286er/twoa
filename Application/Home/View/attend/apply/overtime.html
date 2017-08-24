@@ -4,7 +4,9 @@
         <div class="widget-toolbar"></div>
     </div>
     <div class="widget-body">
+            
         <div class="widget-main" style="text-align:left;">
+            <div class="alert alert-info"><i class="ace-icon fa fa-bullhorn bigger-140">&nbsp;&nbsp;</i><strong class="smaller-90">普通加班都是以打卡为主，记得打卡</strong></div>
             <label>加班类型</label>
             <div class="row">
                 <div class="col-xs-12 col-sm-12">
@@ -33,27 +35,28 @@
             <div class="row">
                 <div class="col-xs-12 col-sm-12">
 
-                    <div class="input-group col-xs-8 col-sm-9" style="float:left;">
-                            <input class="form-control date-picker user-finfo" data-label="开始时间" name="user_entry" id="date-schedule" data-date-format="yyyy-mm-dd" type="text" value="2017-08-23">
+                    <div class="input-group col-xs-7 col-sm-9" style="float:left;">
+                            <input class="form-control date-picker apply-info" data-label="开始时间" name="aapply_schedule" id="date-schedule" data-date-format="yyyy-mm-dd" type="text" value="{$nowtime}" readonly>
                             <span class="input-group-addon">
                                 <i class="fa fa-calendar bigger-110"></i>
                             </span>
                     </div>
-                    <div class="col-xs-4 col-sm-3" style="float:left;line-height:34px;">
+                    <div class="col-xs-5 col-sm-3" style="float:left;line-height:34px;">
                         <label class="middle">
                             <input class="ace" id="arecord-remedy" type="checkbox">
-                            <span class="lbl">&nbsp;&nbsp;后补</span>
+                            <span class="lbl">&nbsp;后补&nbsp;</span>
+                            <span class="badge badge-purple" title="你可后补的次数">3</span>
                         </label>
                     </div>
                     
                 </div>
             </div>
-            <div class="home-time hide">
+            <div class="margin-box home-time hide">
                 <div class="space space-8"></div>
                 <label>在家加班时长，不能超4小时</label>
                 <div class="row">
                     <div class="col-xs-12 col-sm-12">
-                        <input type="text" id="home-time" />
+                        <input type="text" id="home-time" name="aapply_hours" class="apply-info"/>
                         <!-- <div class="space-6"></div>
                         <input class="form-control" placeholder="在家加班时长"> -->
                     </div>
@@ -64,7 +67,7 @@
             <label>理由</label>
             <div class="row">
                 <div class="col-xs-12 col-sm-12">
-                    <textarea class="form-control" id="" placeholder="请认真填写申请理由"></textarea>
+                    <textarea class="form-control apply-info" name="aapply_reason" id="" placeholder="请认真填写申请理由"></textarea>
                 </div>
             </div>
 
@@ -101,18 +104,21 @@
                     else $('#form-field-select-4').removeClass('tag-input-style');
             });
         }
-        //初始化后日期选择器
-        $('#date-schedule').datepicker({autoclose: true,todayHighlight: true,startDate:nowDate()})
-        
-        //初始化后日期选择器
+        //初始化加班小时选择器
         $('#home-time').ace_spinner({value:0,min:0,max:4,step:0.5, on_sides: true, icon_up:'ace-icon fa fa-plus bigger-110', icon_down:'ace-icon fa fa-minus bigger-110', btn_up_class:'btn-info' , btn_down_class:'btn-info'});
         //类型改变
         $("select[name='aapply_type']").on("change",function(){
             if($(this).val()==6){
+                $(".alert-info strong").text("在家加班时间不能超过4小时")
                 $(".home-time").removeClass("hide")
             }else{
                 if(!$(".home-time").hasClass("hide")){
                     $(".home-time").addClass("hide")
+                }
+                if($(this).val()==3){
+                    $(".alert-info strong").text("普通加班都是以打卡为主，记得打卡")
+                }else{
+                    $(".alert-info strong").text("申请后上班时间就按实际打卡计算")
                 }
             }
         })
