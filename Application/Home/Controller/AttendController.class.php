@@ -53,8 +53,8 @@ class AttendController extends AmongController {
 		// return;
 		// echo date("Y-m-d",strtotime("2017-8-14 +1 day"));
 		
-		$this->settleCheckin($this->selfUser["user_code"],3,date("Y-m-d",strtotime("2017-8-21")));
-		return ;
+		// $this->settleCheckin($this->selfUser["user_code"],3,date("Y-m-d",strtotime("2017-8-21")));
+		// return ;
 		$normalCheckin=$this->checkinType($this->selfUser["user_code"],1,$date);
 		$outCheckin=$this->checkinType($this->selfUser["user_code"],2,$date);
 		$overtimeCheckin=$this->checkinType($this->selfUser["user_code"],3,$date);
@@ -624,14 +624,65 @@ class AttendController extends AmongController {
 		return $MonthRec;
 	}
 
+	/**
+	 * 根据不同的申请类型返回对应的html页面 function
+	 *
+	 * @return void
+	 */
 	function getApplyHtml(){
+		$this->assign("nowtime",$this->getNowTime(1));
 		if(IS_AJAX){
 			$managerArray=$this->baseInfo->user()->searchManager();
 			$this->assign("managerArray",$managerArray);
-
 			$this->ajaxReturn(array("html"=>$this->fetch("attend/apply/".I("html"))));
-			// $this->ajaxReturn($_POST);
+		}
+	}
+	
+	/**
+	 * 提交申请 submitApply
+	 *
+	 * @return void
+	 */
+	function submitApply(){
+		if(IS_AJAX){
+			$applyArray=I("data");
+			$applyArray["aapply_code"]=$this->selfUser["user_code"];
+			$applyArray["aapply_addtime"]=$this->getNowTime(3);
+			if($applyArray["aapply_approve"]==null){
+				$applyArray["aapply_approve"]=$this->selfUser["user_director"];
+			}
+			print_r($applyArray);
 		}
 	}
 
+	/**
+	 * 获取当前时间,可以给前端调用，防止前端修改时间
+	 *
+	 * @param integer $type 1,2017-08-24 2,14:22:12 3,2017-08-24 14:22:12
+	 * @return void
+	 */
+	function getNowTime($type=0){
+
+		if($type==0){
+			$types=I("timetype");
+		}
+		
+		switch ($types) {
+			case 1: default:
+				$nowTime= date("Y-m-d",time());
+				break;
+			case 2:
+				$nowTime= date("H:i:s",time());
+				break;
+			case 3:
+				$nowTime= date("Y-m-d H:i:s",time());
+				break;
+		}
+
+		if($type==0){
+			echo $nowTime;
+		}else{
+			return $nowTime;
+		}
+	}
 }

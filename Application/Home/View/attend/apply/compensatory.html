@@ -1,0 +1,77 @@
+<div class="widget-box">
+    <div class="widget-header">
+        <h5 class="widget-title smaller"><i class="ace-icon fa fa-clock-o bigger-110"></i>补休申请</h5>
+        <div class="widget-toolbar"></div>
+    </div>
+    <div class="widget-body">
+        <div class="widget-main" style="text-align:left;">
+            <div class="alert alert-info smaller-90">上下午补休：按打卡时间计算<br>全天补休：一周内不能超过3天</div>
+            <label>时间段选择</label>
+            <div class="row">
+                <div class="col-xs-12 col-sm-12">
+                    <select class="form-control apply-info" name="aapply_inday">
+                        <option value=2>上午</option>
+                        <option value=3>下午</option>
+                        <option value=1>全天</option>
+                    </select>
+                </div>
+            </div>
+            <div class="space space-8"></div>
+            <label>开始日期</label>
+            <div class="row">
+                <div class="col-xs-12 col-sm-12">
+
+                    <div class="input-group col-xs-7 col-sm-9" style="float:left;">
+                            <input class="form-control date-picker apply-info" data-label="开始时间" name="aapply_schedule" id="date-schedule" data-date-format="yyyy-mm-dd" type="text" value="2017-08-23" readonly>
+                            <span class="input-group-addon">
+                                <i class="fa fa-calendar bigger-110"></i>
+                            </span>
+                    </div>
+                    <div class="col-xs-5 col-sm-3" style="float:left;line-height:34px;">
+                        <label class="middle">
+                            <input class="ace" id="arecord-remedy" type="checkbox">
+                            <span class="lbl">&nbsp;后补&nbsp;</span>
+                            <span class="badge badge-purple" title="你可后补的次数">3</span>
+                        </label>
+                    </div>
+                    
+                </div>
+            </div>
+            <div class="margin-box days-time hide">
+                <div class="space space-8"></div>
+                <label>天数</label>
+                <div class="row">
+                    <div class="col-xs-12 col-sm-12">
+                        <input type="text" id="aapply_days" name="aapply_hours" class="apply-info"/>
+                        <!-- <div class="space-6"></div>
+                        <input class="form-control" placeholder="在家加班时长"> -->
+                    </div>
+                </div>
+            </div>
+
+            
+            <div class="space space-8"></div>
+            <label>理由</label>
+            <div class="row">
+                <div class="col-xs-12 col-sm-12">
+                    <textarea class="form-control apply-info" name="aapply_reason" id="" placeholder="请认真填写申请理由"></textarea>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</div>
+<script>
+    $(function(){
+        $("select[name='aapply_inday']").on("change",function(){
+            console.log($(this).val());
+            if($(this).val()==1){
+                $(".days-time").removeClass("hide")
+            }else{
+                if(!$(".days-time").hasClass("hide")){
+                    $(".days-time").addClass("hide")
+               }
+            }
+        })
+    })
+</script>

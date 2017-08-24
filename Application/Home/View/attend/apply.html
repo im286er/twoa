@@ -1,5 +1,6 @@
 <link rel="stylesheet" href="__PUBLIC__/components/bootstrap-datepicker/dist/css/bootstrap-datepicker3.css">
 
+
 <div class="page-header">
 	<h1>
 		考勤管理
@@ -16,11 +17,11 @@
             <i class="ace-icon fa fa-clock-o bigger-200"></i>
                 加班
         </button>
-        <button class="btn btn-app btn-warning btn-xs" data-toggle="modal" data-target="#applyModal">
+        <button class="btn btn-app btn-warning btn-xs" data-html="compensatory" data-toggle="modal" data-target="#applyModal">
             <i class="ace-icon fa fa-coffee bigger-200"></i>
                 补休
         </button>
-        <button class="btn btn-app btn-info btn-xs" data-toggle="modal" data-target="#applyModal">
+        <button class="btn btn-app btn-info btn-xs" data-html="outwork" data-toggle="modal" data-target="#applyModal">
             <i class="ace-icon fa fa-map-signs bigger-200"></i>
                 外勤
         </button>
@@ -54,7 +55,7 @@
             </div>
 
             <div class="modal-footer">
-                <button type="button" class="btn btn-sm btn-success pull-right">
+                <button type="button" id="submit-apply" class="btn btn-sm btn-success pull-right">
                     提交申请
                     <i class="ace-icon fa fa-arrow-right icon-on-right bigger-110"></i>
                 </button>
@@ -72,24 +73,37 @@
 <script src="__PUBLIC__/components/bootstrap-datepicker/dist/js/bootstrap-datepicker.js"></script>
 <script src="__PUBLIC__/assets/js/src/elements.spinner.js"></script>
 <script src="__PUBLIC__/components/chosen/chosen.jquery.js"></script>
+<script src="__PUBLIC__/components/jquery.gritter/js/jquery.gritter.js"></script>
 <script>
     $(function(){
        
-
+        /*根据不同申请类型调用弹窗*/
         $(".btn-app").on("click",function(){
+            
+           
             $.ajax({
                 url:"{:U('getApplyHtml')}",
                 data:{html:$(this).data("html")},
                 type:"post",
                 dataType:"json",
                 success:function(data){
+                    
                     $("#applyModal .modal-body").html(data.html)
+                    //初始化后日期选择器
+                    $('#date-schedule').datepicker({autoclose: true,todayHighlight: true,startDate:nowDate(),ignoreReadonly:true})
+                    
+                    //初始化加班小时选择器
+                    $('#aapply_days').ace_spinner({value:1,min:1,max:3,step:1, on_sides: true, icon_up:'ace-icon fa fa-plus bigger-110', icon_down:'ace-icon fa fa-minus bigger-110', btn_up_class:'btn-info' , btn_down_class:'btn-info'});
+    
                 }
             })
         })
-        $("#applyModal").on("change","#date-schedule",function(){
-            console.log(nowDate());
-        })
+
+        // $("#applyModal").on("change","#date-schedule",function(){
+        //     // console.log(nowDate());
+        // })
+
+        /*后补选择*/
         $("#applyModal").on("click","#arecord-remedy",function(){
 
             if($(this).prop("checked")==true){
@@ -99,10 +113,48 @@
                 $('#date-schedule').datepicker("update",nowDate())
             }
         })
+
+        /*提交申请*/
+        $("#submit-apply").on("click",function(){
+            var datas={}
+            datas["data"]={}
+            $(".apply-info").each(function(){
+            
+                if(!$(this).parents(".margin-box").hasClass("hide")){
+                    datas["data"][$(this).prop("name")]=$(this).val()
+                }
+            })
+            var aapplyReason=datas["data"]["aapply_reason"]
+            if(aapplyReason.length<5){
+               alert("请认真填写理由");
+                return;
+            }
+            $.ajax({
+                url:"{:U('submitApply')}",
+                data:datas,
+                type:"post",
+                dataType:"html",
+                success:function(data){
+                    console.log(data);
+                }
+            })
+        })
+
     })
 
-    function nowDate(){
-        var myDate=new Date();
-        return myDate.getFullYear()+"-"+(myDate.getMonth()+1)+"-"+myDate.getDate();
+    function nowDate(){ 
+        var tempNTime;
+        $.ajax({
+            url:"{:U('getNowTime')}",
+            data:{timetype:1},
+            type:"post",
+            dataType:"html",
+            async:false,
+            success:function(data){
+                tempNTime=data;
+            }
+        })
+        return tempNTime;
     }
+
 </script>
