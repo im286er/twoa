@@ -625,14 +625,22 @@ class AttendController extends AmongController {
 	}
 
 	/**
+	 * 以下是申请功能
+	 */
+
+	/**
 	 * 根据不同的申请类型返回对应的html页面 function
 	 *
 	 * @return void
 	 */
 	function getApplyHtml(){
-		$this->assign("nowtime",$this->getNowTime(1));
+		$nowDate=$this->getNowTime(1);
+		$nowDates=split("-",$nowDate);
 		if(IS_AJAX){
+			$this->assign("nowtime",$nowDate);
 			$managerArray=$this->baseInfo->user()->searchManager();
+			
+			$this->assign("remedy",$this->arecord->findRemedy($this->selfUser["user_code"],$nowDates[0],$nowDates[1]));
 			$this->assign("managerArray",$managerArray);
 			$this->ajaxReturn(array("html"=>$this->fetch("attend/apply/".I("html"))));
 		}
@@ -651,7 +659,38 @@ class AttendController extends AmongController {
 			if($applyArray["aapply_approve"]==null){
 				$applyArray["aapply_approve"]=$this->selfUser["user_director"];
 			}
-			print_r($applyArray);
+
+			switch (I("type")) {
+				case 3: case 5: case 6:/*加班*/
+
+					$this->aapply->addApply($applyArray);
+					break;
+				case 7:/*补休*/
+					$this->aapply->addApply($applyArray);
+				break;
+				case 2:/*外勤*/
+					$this->aapply->addApply($applyArray);
+				break;
+				case 8:/*事假*/
+					$this->aapply->addApply($applyArray);
+				break;
+				case 9:/*病假*/
+					$this->aapply->addApply($applyArray);
+				break;
+				case 10:/*出差*/
+					$this->aapply->addApply($applyArray);
+				break;
+				case 11:/*婚假*/
+					$this->aapply->addApply($applyArray);
+				break;
+				case 12:/*产假*/
+					$this->aapply->addApply($applyArray);
+				break;
+				default:
+					# code...
+					break;
+			}
+			
 		}
 	}
 
@@ -662,7 +701,7 @@ class AttendController extends AmongController {
 	 * @return void
 	 */
 	function getNowTime($type=0){
-
+		$types=$type;
 		if($type==0){
 			$types=I("timetype");
 		}

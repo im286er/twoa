@@ -1,19 +1,16 @@
 <div class="widget-box">
         <div class="widget-header">
-            <h5 class="widget-title smaller"><i class="ace-icon fa fa-clock-o bigger-110"></i>外勤申请</h5>
+            <h5 class="widget-title smaller"><i class="ace-icon fa fa-train bigger-110"></i>出差申请</h5>
             <div class="widget-toolbar"></div>
         </div>
         <div class="widget-body">
             <div class="widget-main" style="text-align:left;">
-                <div class="alert alert-info smaller-90">外勤：按打卡时间计算</div>
-                <label>时间段选择</label>
+                <div class="alert alert-info smaller-90">出差需要写明项目</div>
+                <input type="hidden" class="apply-info" name="aapply_type" value="10">
+                <label>项目名称</label>
                 <div class="row">
                     <div class="col-xs-12 col-sm-12">
-                        <select class="form-control apply-info" name="aapply_inday">
-                            <option value=2>上午</option>
-                            <option value=3>下午</option>
-                            <option value=1>全天</option>
-                        </select>
+                        <input class="form-control date-picker apply-info" placeholder="出差项目名称" name="aapply_schedule"/>
                     </div>
                 </div>
                 <div class="space space-8"></div>
@@ -35,7 +32,7 @@
                     <div class="col-xs-12 col-sm-12">
     
                         <div class="input-group col-xs-7 col-sm-9" style="float:left;">
-                                <input class="form-control date-picker apply-info" data-label="开始时间" name="aapply_schedule" id="date-schedule" data-date-format="yyyy-mm-dd" type="text" value="2017-08-23">
+                            <input class="form-control date-picker apply-info" data-label="开始时间" name="aapply_schedule" id="date-schedule" data-date-format="yyyy-mm-dd" type="text" value="{$nowtime}" readonly>
                                 <span class="input-group-addon">
                                     <i class="fa fa-calendar bigger-110"></i>
                                 </span>
@@ -44,15 +41,40 @@
                             <label class="middle">
                                 <input class="ace" id="arecord-remedy" type="checkbox">
                                 <span class="lbl">&nbsp;后补&nbsp;</span>
-                                <span class="badge badge-purple" title="你可后补的次数">3</span>
+                                <span class="badge badge-purple" title="你可后补的次数">{$remedy|default=0}</span>
                             </label>
                         </div>
                         
                     </div>
                 </div>
 
+                <div class="space space-8"></div>
+                <div class="">
+                    <div class="switch switch-large">
+                        <input name="daymnoth" type="checkbox" checked />
+                    </div>
+                </div>
     
-                
+                <div class="margin-box days-time">
+                    <div class="space space-8"></div>
+                    <label>天数</label>
+                    <div class="row">
+                        <div class="col-xs-12 col-sm-12">
+                            <input type="text" id="aapply_daysa" name="aapply_hours" class="apply-info"/>
+                            <!-- <div class="space-6"></div>
+                            <input class="form-control" placeholder="在家加班时长"> -->
+                        </div>
+                    </div>
+                </div>
+                <div class="margin-box month-time hide">
+                    <div class="space space-8"></div>
+                    <label>月数</label>
+                    <div class="row">
+                        <div class="col-xs-12 col-sm-12">
+                            <input type="text" id="aapply_months" name="aapply_months" class="apply-info"/>
+                        </div>
+                    </div>
+                </div>
                 <div class="space space-8"></div>
                 <label>理由</label>
                 <div class="row">
@@ -64,8 +86,28 @@
             </div>
         </div>
     </div>
+    
     <script>
         $(function(){
+            $("input[name='daymnoth']").bootstrapSwitch({
+            onText:"天数",  
+            offText:"月数",  
+            onColor:"primary",  
+            offColor:"danger",  
+            size:"small",  
+            onSwitchChange:function(event,state){  
+                if(state==true){  
+                    $(".month-time").addClass("hide") 
+                    $(".days-time").removeClass("hide") 
+                }else{  
+                    $(".month-time").removeClass("hide") 
+                    $(".days-time").addClass("hide")   
+                }  
+            }  
+        });
+        $('#aapply_daysa').ace_spinner({value:1,min:1,max:31,step:1, on_sides: true, icon_up:'ace-icon fa fa-plus bigger-110', icon_down:'ace-icon fa fa-minus bigger-110', btn_up_class:'btn-primary' , btn_down_class:'btn-primary'});
+
+        $('#aapply_months').ace_spinner({value:1,min:1,max:6,step:1, on_sides: true, icon_up:'ace-icon fa fa-plus bigger-110', icon_down:'ace-icon fa fa-minus bigger-110', btn_up_class:'btn-danger' , btn_down_class:'btn-danger'}); 
             /*下拉选框的js*/
             if(!ace.vars['touch']) {
                 $('.chosen-select').chosen({allow_single_deselect:true,search_contains:true}); 

@@ -1,4 +1,5 @@
 <link rel="stylesheet" href="__PUBLIC__/components/bootstrap-datepicker/dist/css/bootstrap-datepicker3.css">
+<link rel="stylesheet" href="__PUBLIC__/components/bootstrap-switch-master/dist/css/bootstrap-switch.css">
 
 
 <div class="page-header">
@@ -25,23 +26,23 @@
             <i class="ace-icon fa fa-map-signs bigger-200"></i>
                 外勤
         </button>
-        <button class="btn btn-app btn-purple btn-xs" data-toggle="modal" data-target="#applyModal">
+        <button class="btn btn-app btn-purple btn-xs" data-html="casualleave" data-toggle="modal" data-target="#applyModal">
             <i class="ace-icon fa fa-plug bigger-200"></i>
                 事假
         </button>
-        <button class="btn btn-app btn-inverse btn-xs" data-toggle="modal" data-target="#applyModal">
+        <button class="btn btn-app btn-inverse btn-xs" data-html="sickleave" data-toggle="modal" data-target="#applyModal">
             <i class="ace-icon fa fa-medkit bigger-200"></i>
                 病假
         </button>
-        <button class="btn btn-app btn-yellow btn-xs" data-toggle="modal" data-target="#applyModal">
+        <button class="btn btn-app btn-yellow btn-xs" data-html="trave" data-toggle="modal" data-target="#applyModal">
             <i class="ace-icon fa fa-train bigger-200"></i>
                 出差
         </button>
-        <button class="btn btn-app btn-danger btn-xs" data-toggle="modal" data-target="#applyModal">
+        <button class="btn btn-app btn-danger btn-xs" data-html="marriageleave" data-toggle="modal" data-target="#applyModal">
             <i class="ace-icon fa fa-heart bigger-200"></i>
                 婚假
         </button>
-        <button class="btn btn-app btn-pink btn-xs" data-toggle="modal" data-target="#applyModal">
+        <button class="btn btn-app btn-pink btn-xs" data-html="maternityleave" data-toggle="modal" data-target="#applyModal">
             <i class="ace-icon fa fa-child bigger-200"></i>
                 产假
         </button>
@@ -74,6 +75,7 @@
 <script src="__PUBLIC__/assets/js/src/elements.spinner.js"></script>
 <script src="__PUBLIC__/components/chosen/chosen.jquery.js"></script>
 <script src="__PUBLIC__/components/jquery.gritter/js/jquery.gritter.js"></script>
+<script src="__PUBLIC__/components/bootstrap-switch-master/dist/js/bootstrap-switch.js"></script>
 <script>
     $(function(){
        
@@ -117,18 +119,20 @@
         /*提交申请*/
         $("#submit-apply").on("click",function(){
             var datas={}
+
             datas["data"]={}
             $(".apply-info").each(function(){
-            
                 if(!$(this).parents(".margin-box").hasClass("hide")){
                     datas["data"][$(this).prop("name")]=$(this).val()
                 }
             })
+            
             var aapplyReason=datas["data"]["aapply_reason"]
             if(aapplyReason.length<5){
                alert("请认真填写理由");
                 return;
             }
+            datas["type"]=datas["data"]["aapply_type"]
             $.ajax({
                 url:"{:U('submitApply')}",
                 data:datas,
