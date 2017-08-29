@@ -67,7 +67,15 @@ class Attend_applyModel extends AmongModel{
 
 	}
 
-
+	/**
+	 * hasApply function 判断指定日期是否存在相同的申请
+	 *
+	 * @param [type] $user_code 人员编码
+	 * @param [type] $aapply_type 申请类型
+	 * @param [type] $aapply_inday 当天的时间类型，上午，下午，全天
+	 * @param [type] $aapply_schedule 预计时间
+	 * @return boolean
+	 */
 	function hasApply($user_code,$aapply_type,$aapply_inday,$aapply_schedule){
 		if(!$this->has_auth("select")) return true;
 		$apply=$this->seekApply($user_code,$aapply_type,$aapply_schedule,$aapply_inday);
@@ -84,5 +92,19 @@ class Attend_applyModel extends AmongModel{
 			}
 		}
 		return false;
+	}
+
+	/**
+	 * sameDate function 判断同一天内是否存在其他申请，避免冲突
+	 *
+	 * @param [type] $user_code
+	 * @param [type] $aapply_inday
+	 * @param [type] $aapply_schedule
+	 * @return void
+	 */
+	function sameDate($user_code,$aapply_schedule,$aapply_inday=0){
+		if(!$this->has_auth("select")) return true;
+		$resultArray=$this->where("aapply_code='{$user_code}' AND aapply_schedule='{$date}' AND aapply_inday='{$aapply_inday}'")->select();
+		
 	}
 }

@@ -659,16 +659,27 @@ class AttendController extends AmongController {
 			if($applyArray["aapply_approve"]==null){
 				$applyArray["aapply_approve"]=$this->selfUser["user_director"];
 			}
-
+			print_r($applyArray);
 			switch (I("type")) {
-				case 3: case 5: case 6:/*加班*/
-
+				case 3: case 5: case 6:/*3，普通加班，5，上午加班，6，在家加班*/
+				/*				 
+				 *上午加班不允许：上午补休，上午外勤，上午事假，上午病假，出差，婚假，产假
+				 *普通加班不允许：下午和全天补休，下午和全天补休，下午和全天事假，下午和全天病假，出差，婚假，产假
+				 *在家加班不允许：出差
+				*/
 					$this->aapply->addApply($applyArray);
 					break;
 				case 7:/*补休*/
 					$this->aapply->addApply($applyArray);
+				/**
+				 * 上午补休不允许：上午加班，上午外勤，上午事假，上午病假，出差，婚假，产假
+				 * 下午补休不允许：普通加班，下午外勤，下午事假，下午病假，出差，婚假，产假
+				 */
 				break;
 				case 2:/*外勤*/
+				/**
+				 * 同上
+				 */
 					$this->aapply->addApply($applyArray);
 				break;
 				case 8:/*事假*/
@@ -678,12 +689,21 @@ class AttendController extends AmongController {
 					$this->aapply->addApply($applyArray);
 				break;
 				case 10:/*出差*/
+				/**
+				 *出差不允许申请其他 
+				 */
 					$this->aapply->addApply($applyArray);
 				break;
 				case 11:/*婚假*/
+				/**
+				 *婚假不允许申请其他 
+				 */
 					$this->aapply->addApply($applyArray);
 				break;
 				case 12:/*产假*/
+				/**
+				 *产假不允许申请其他 
+				 */
 					$this->aapply->addApply($applyArray);
 				break;
 				default:
