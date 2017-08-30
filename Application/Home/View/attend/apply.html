@@ -133,6 +133,10 @@
                 if(!$(this).parents(".margin-box").hasClass("hide")){
                     datas["data"][$(this).prop("name")]=$(this).val()
                 }
+                if($(this).prop("name")=="aapply_project" && $(this).val()==""){
+                    alert("项目名称不能为空")
+                    throw "No project name";
+                }
             })
             
             var aapplyReason=datas["data"]["aapply_reason"]
@@ -140,6 +144,7 @@
                alert("请认真填写理由");
                 return;
             }
+
             datas["type"]=datas["data"]["aapply_type"]
             $.ajax({
                 url:"{:U('submitApply')}",
