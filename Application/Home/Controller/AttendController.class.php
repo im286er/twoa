@@ -660,13 +660,43 @@ class AttendController extends AmongController {
 				$applyArray["aapply_approve"]=$this->selfUser["user_director"];
 			}
 			print_r($applyArray);
+			$dates=split("-", $applyArray["aapply_schedule"]);
+			$this->MonthRec=$this->arecord->getMonthRec($this->selfUser["user_code"],$dates[0],$dates[1]);
 			switch (I("type")) {
-				case 3: case 5: case 6:/*3，普通加班，5，上午加班，6，在家加班*/
+				
+				case 3: case 4: case 5: case 6:/*3，工作日加班，4，节假日加班，5，上午加班，6，在家加班*/
 				/*				 
 				 *上午加班不允许：上午补休，上午外勤，上午事假，上午病假，出差，婚假，产假
 				 *普通加班不允许：下午和全天补休，下午和全天补休，下午和全天事假，下午和全天病假，出差，婚假，产假
 				 *在家加班不允许：出差
 				*/
+					
+					$isWeekday=$this->arecord->isWeekday($dates[0],$dates[1],$dates[2]);
+
+					if($isWeekday==true){
+
+						if(I("type")==4){
+							echo "非节假日不能申请";
+							return;
+						}
+					}else{
+						echo "节日";
+						if(I("type")==3){
+							echo "节假日不能申请";
+							return;
+						}
+					}
+					if(I("type")==3 && (time()> strtotime($applyArray["aapply_schedule"]." 18:00:00")) && I("remedy")==false){
+						echo "超时了";
+						return false;
+					}
+					
+					
+					if(I("type")==5 && (time()> strtotime($applyArray["aapply_schedule"]." 09:00:00")) && I("remedy")==false){
+						echo "超时了";
+						return false;
+					}
+					return;
 					$this->aapply->addApply($applyArray);
 					break;
 				case 7:/*补休*/

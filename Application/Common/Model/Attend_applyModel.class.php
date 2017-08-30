@@ -91,6 +91,10 @@ class Attend_applyModel extends AmongModel{
 				}
 			}
 		}
+		$sameApply=$this->sameDate($user_code,$aapply_schedule,$aapply_inday);
+		if($apply!=null){
+			return true;
+		}
 		return false;
 	}
 
@@ -104,7 +108,12 @@ class Attend_applyModel extends AmongModel{
 	 */
 	function sameDate($user_code,$aapply_schedule,$aapply_inday=0){
 		if(!$this->has_auth("select")) return true;
-		$resultArray=$this->where("aapply_code='{$user_code}' AND aapply_schedule='{$date}' AND aapply_inday='{$aapply_inday}'")->select();
+
+		$resultArray=$this->where("(aapply_schedule>='{$aapply_schedule}' AND '{$aapply_schedule}'<date_sub(aapply_schedule,interval -aapply_days day) and aapply_days>0) or (aapply_schedule='{$aapply_schedule}') AND aapply_inday='{$aapply_inday}'")->select();
+		if($resultArray!=null){
+			return true;
+		}
+		return false;
 		
 	}
 }

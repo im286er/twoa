@@ -11,12 +11,14 @@
             <div class="row">
                 <div class="col-xs-12 col-sm-12">
                     <select class="form-control apply-info" name="aapply_type">
-                        <option value=3>普通加班</option>
+                        <option value=3>工作日加班</option>
+                        <option value=4>节假日加班</option>
                         <option value=5>早上加班</option>
                         <option value=6>在家加班</option>
                     </select>
                 </div>
             </div>
+            <input type="hidden" class="apply-info" name="aapply_inday" value="3">
             <div class="space space-8"></div>
             <label>涉及其他部门/小组</label>
             <div class="row">
@@ -110,14 +112,21 @@
         $("select[name='aapply_type']").on("change",function(){
             if($(this).val()==6){
                 $(".alert-info strong").text("在家加班时间不能超过4小时")
+                $("input[name='aapply_inday']").val(0)
                 $(".home-time").removeClass("hide")
             }else{
                 if(!$(".home-time").hasClass("hide")){
                     $(".home-time").addClass("hide")
                 }
                 if($(this).val()==3){
+                    $("input[name='aapply_inday']").val(3)
                     $(".alert-info strong").text("普通加班都是以打卡为主，记得打卡")
                 }else{
+                    if($(this).val()==4){
+                        $("input[name='aapply_inday']").val(1)
+                    }else{
+                        $("input[name='aapply_inday']").val(2)
+                    }
                     $(".alert-info strong").text("申请后上班时间就按实际打卡计算")
                 }
             }
