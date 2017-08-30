@@ -139,7 +139,7 @@ class Attend_recordModel extends AmongModel{
 	 */
 	function findRemedy($arecord_code,$arecord_year,$arecord_month){
 		if(!$this->has_auth("select")) return false;
-		return $this->filed("arecord_remedy")->where(array("arecord_code"=>$arecord_code,"arecord_year"=>$arecord_year,"arecord_month"=>(int)$arecord_month))->find()["arecord_remedy"];
+		return $this->field("arecord_remedy")->where(array("arecord_code"=>$arecord_code,"arecord_year"=>$arecord_year,"arecord_month"=>(int)$arecord_month))->find()["arecord_remedy"];
 
 	}
 

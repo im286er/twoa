@@ -1,0 +1,117 @@
+
+<div class="widget-box">
+    <div class="widget-header">
+        <h5 class="widget-title smaller"><i class="ace-icon fa fa-heart bigger-110"></i>婚假申请</h5>
+        <div class="widget-toolbar"></div>
+    </div>
+    <div class="widget-body">
+        <div class="widget-main" style="text-align:left;">
+            <div class="alert alert-info"><i class="ace-icon fa fa-bullhorn bigger-140">&nbsp;&nbsp;</i><strong class="smaller-90"></strong></div>
+            <input type="hidden" class="apply-info" name="aapply_type" value="11">
+            <div class="space space-8"></div>
+            <label>开始日期</label>
+            <div class="row">
+                <div class="col-xs-12 col-sm-12">
+
+                    <div class="input-group col-xs-7 col-sm-9" style="float:left;">
+                        <input class="form-control date-picker apply-info" data-label="开始时间" name="aapply_schedule" id="date-schedule" data-date-format="yyyy-mm-dd" type="text" value="{$nowtime}" readonly>
+                            <span class="input-group-addon">
+                                <i class="fa fa-calendar bigger-110"></i>
+                            </span>
+                    </div>
+                    <div class="col-xs-5 col-sm-3" style="float:left;line-height:34px;">
+                        <label class="middle">
+                            <input class="ace" id="arecord-remedy" type="checkbox">
+                            <span class="lbl">&nbsp;后补&nbsp;</span>
+                            <span class="badge badge-purple" title="你可后补的次数">{$remedy|default=0}</span>
+                        </label>
+                    </div>
+                    
+                </div>
+            </div>
+
+            <div class="space space-8"></div>
+            <div class="">
+                <div class="switch switch-large">
+                    <input name="daymnoth" type="checkbox" checked />
+                </div>
+            </div>
+
+            <div class="space space-8"></div>
+            <div class="">
+                <input type="file" name="archives_cvp" class="input-files" />
+            </div>
+
+            <div class="margin-box days-time">
+                <div class="space space-8"></div>
+                <label>天数</label>
+                <div class="row">
+                    <div class="col-xs-12 col-sm-12">
+                        <input type="text" id="aapply_daysa" name="aapply_hours" class="apply-info"/>
+                        <!-- <div class="space-6"></div>
+                        <input class="form-control" placeholder="在家加班时长"> -->
+                    </div>
+                </div>
+            </div>
+            <div class="margin-box month-time hide">
+                <div class="space space-8"></div>
+                <label>月数</label>
+                <div class="row">
+                    <div class="col-xs-12 col-sm-12">
+                        <input type="text" id="aapply_months" name="aapply_months" class="apply-info"/>
+                    </div>
+                </div>
+            </div>
+            <div class="space space-8"></div>
+            <label>理由</label>
+            <div class="row">
+                <div class="col-xs-12 col-sm-12">
+                    <textarea class="form-control apply-info" name="aapply_reason" id="" placeholder="请认真填写申请理由"></textarea>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</div>
+<script src="__PUBLIC__/assets/js/src/elements.fileinput.js"></script>
+<script>
+    $(function(){
+        //初始化input file 样式
+        $('.input-files').ace_file_input({
+            no_file:'请上传pdf文件',
+            btn_choose:'选择文件',
+            btn_change:'修改文件',
+            droppable:true,
+            maxSize:2000000,
+            onchange:true,
+            thumbnail:true,
+            allowExt:  ['pdf']
+        }).on('file.error.ace', function(event, info) {
+            for(index in info.error_count){
+                if(info.error_count[index]==1){
+                    console.log(index+"错误")
+                }
+                
+            }
+        })
+        $("input[name='daymnoth']").bootstrapSwitch({
+            onText:"天数",  
+            offText:"月数",  
+            onColor:"primary",  
+            offColor:"danger",  
+            size:"small",  
+            onSwitchChange:function(event,state){  
+                if(state==true){  
+                    $(".month-time").addClass("hide") 
+                    $(".days-time").removeClass("hide") 
+                }else{  
+                    $(".month-time").removeClass("hide") 
+                    $(".days-time").addClass("hide")   
+                }  
+            }  
+        });
+        $('#aapply_daysa').ace_spinner({value:1,min:1,max:31,step:1, on_sides: true, icon_up:'ace-icon fa fa-plus bigger-110', icon_down:'ace-icon fa fa-minus bigger-110', btn_up_class:'btn-primary' , btn_down_class:'btn-primary'});
+
+        $('#aapply_months').ace_spinner({value:1,min:1,max:6,step:1, on_sides: true, icon_up:'ace-icon fa fa-plus bigger-110', icon_down:'ace-icon fa fa-minus bigger-110', btn_up_class:'btn-danger' , btn_down_class:'btn-danger'});  
+    })
+</script>

@@ -625,14 +625,22 @@ class AttendController extends AmongController {
 	}
 
 	/**
+	 * 以下是申请功能
+	 */
+
+	/**
 	 * 根据不同的申请类型返回对应的html页面 function
 	 *
 	 * @return void
 	 */
 	function getApplyHtml(){
-		$this->assign("nowtime",$this->getNowTime(1));
+		$nowDate=$this->getNowTime(1);
+		$nowDates=split("-",$nowDate);
 		if(IS_AJAX){
+			$this->assign("nowtime",$nowDate);
 			$managerArray=$this->baseInfo->user()->searchManager();
+			
+			$this->assign("remedy",$this->arecord->findRemedy($this->selfUser["user_code"],$nowDates[0],$nowDates[1]));
 			$this->assign("managerArray",$managerArray);
 			$this->ajaxReturn(array("html"=>$this->fetch("attend/apply/".I("html"))));
 		}
@@ -652,6 +660,95 @@ class AttendController extends AmongController {
 				$applyArray["aapply_approve"]=$this->selfUser["user_director"];
 			}
 			print_r($applyArray);
+			$dates=split("-", $applyArray["aapply_schedule"]);
+			$this->MonthRec=$this->arecord->getMonthRec($this->selfUser["user_code"],$dates[0],$dates[1]);
+			$isWeekday=$this->arecord->isWeekday($dates[0],$dates[1],$dates[2]);
+
+			if($isWeekday==true){
+				if(I("type")==4){
+					echo "非节假日不能申请";
+					return;
+				}
+			}else{
+				if(I("type")==3 || I("type")==7 || I("type")==8 || I("type")==9 || I("type")==10 || I("type")==11 || I("type")==12){
+					echo "节假日不能申请";
+					return;
+				}
+			}
+
+			if($applyArray["aapply_inday"]>0 && $applyArray["aapply_inday"]<3 && (time()> strtotime($applyArray["aapply_schedule"]." 09:00:00")) && I("remedy")=="false"){
+				echo "上午超时了";
+				return false;
+			}else if($applyArray["aapply_inday"]==3 && I("type")!=3 && time()> strtotime($applyArray["aapply_schedule"]." 13:30:00")){
+				echo "下午超时了";
+				return false;
+
+			}
+			return;
+			switch (I("type")) {
+				
+				case 3: case 4: case 5: case 6:/*3，工作日加班，4，节假日加班，5，上午加班，6，在家加班*/
+				/*				 
+				 *上午加班不允许：上午补休，上午外勤，上午事假，上午病假，出差，婚假，产假
+				 *普通加班不允许：下午和全天补休，下午和全天补休，下午和全天事假，下午和全天病假，出差，婚假，产假
+				 *在家加班不允许：出差
+				*/
+
+					if(I("type")==3 && (time()> strtotime($applyArray["aapply_schedule"]." 18:00:00")) && I("remedy")=="false"){
+						echo "超时了";
+						return false;
+					}
+					
+					
+					if(I("type")==5 && (time()> strtotime($applyArray["aapply_schedule"]." 09:00:00")) && I("remedy")=="false"){
+						echo "超时了";
+						return false;
+					}
+					return;
+					$this->aapply->addApply($applyArray);
+					break;
+				case 7:/*补休*/
+					$this->aapply->addApply($applyArray);
+				/**
+				 * 上午补休不允许：上午加班，上午外勤，上午事假，上午病假，出差，婚假，产假
+				 * 下午补休不允许：普通加班，下午外勤，下午事假，下午病假，出差，婚假，产假
+				 */
+				break;
+				case 2:/*外勤*/
+				/**
+				 * 同上
+				 */
+					$this->aapply->addApply($applyArray);
+				break;
+				case 8:/*事假*/
+					$this->aapply->addApply($applyArray);
+				break;
+				case 9:/*病假*/
+					$this->aapply->addApply($applyArray);
+				break;
+				case 10:/*出差*/
+				/**
+				 *出差不允许申请其他 
+				 */
+					$this->aapply->addApply($applyArray);
+				break;
+				case 11:/*婚假*/
+				/**
+				 *婚假不允许申请其他 
+				 */
+					$this->aapply->addApply($applyArray);
+				break;
+				case 12:/*产假*/
+				/**
+				 *产假不允许申请其他 
+				 */
+					$this->aapply->addApply($applyArray);
+				break;
+				default:
+					# code...
+					break;
+			}
+			
 		}
 	}
 
@@ -662,7 +759,7 @@ class AttendController extends AmongController {
 	 * @return void
 	 */
 	function getNowTime($type=0){
-
+		$types=$type;
 		if($type==0){
 			$types=I("timetype");
 		}

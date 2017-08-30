@@ -19,9 +19,14 @@ class Attend_applyModel extends AmongModel{
 	 * @param  [type] $date      [日期，格式如：2017-08-09]
 	 * @return [type]            [description]
 	 */
-	function seekApply($user_code,$type,$date){
+	function seekApply($user_code,$type,$date,$inday=0){
 		if(!$this->has_auth("select")) return false;
-		return $this->where("aapply_code='{$user_code}' AND aapply_type='{$type}' AND aapply_schedule='{$date}'")->find();
+		if($inday!=0){
+			$indaySql=" AND aapply_inday='{$inday}'";
+		}else{
+			$indaySql="";
+		}
+		return $this->where("aapply_code='{$user_code}' AND aapply_type='{$type}' AND aapply_schedule='{$date}'".$indaySql)->find();
 	}
 	
 	/**
@@ -39,5 +44,76 @@ class Attend_applyModel extends AmongModel{
 			return false;
 		}
 		return true;
+	}
+
+	/**
+	 * addApply 添加申请
+	 *
+	 * @param [type] $dataArray 数据 数组
+	 * @return void
+	 */
+	function addApply($dataArray){
+		if(!$this->has_auth("insert")) return false;
+		// $this->add($dataArray);
+		if(!$dataArray["aapply_inday"]){
+			$dataArray["aapply_inday"]=0;
+		}
+		$result=$this->hasApply($dataArray["aapply_code"],$dataArray["aapply_type"],$dataArray["aapply_inday"],$dataArray["aapply_schedule"]);
+		var_dump($result);
+		// print_r($dataArray);
+		if(!$result){
+			$this->add($dataArray);
+		}
+
+	}
+
+	/**
+	 * hasApply function 判断指定日期是否存在相同的申请
+	 *
+	 * @param [type] $user_code 人员编码
+	 * @param [type] $aapply_type 申请类型
+	 * @param [type] $aapply_inday 当天的时间类型，上午，下午，全天
+	 * @param [type] $aapply_schedule 预计时间
+	 * @return boolean
+	 */
+	function hasApply($user_code,$aapply_type,$aapply_inday,$aapply_schedule){
+		if(!$this->has_auth("select")) return true;
+		$apply=$this->seekApply($user_code,$aapply_type,$aapply_schedule,$aapply_inday);
+		if($apply!=null){
+			return true;
+		}else{
+			if($aapply_inday>0){
+				$applya=$this->seekApply($user_code,$aapply_type,$aapply_schedule);
+				if($applya!=null){
+					if($applya["aapply_inday"]==1 || $aapply_inday==1){
+						return true;
+					}
+				}
+			}
+		}
+		$sameApply=$this->sameDate($user_code,$aapply_schedule,$aapply_inday);
+		if($apply!=null){
+			return true;
+		}
+		return false;
+	}
+
+	/**
+	 * sameDate function 判断同一天内是否存在其他申请，避免冲突
+	 *
+	 * @param [type] $user_code
+	 * @param [type] $aapply_inday
+	 * @param [type] $aapply_schedule
+	 * @return void
+	 */
+	function sameDate($user_code,$aapply_schedule,$aapply_inday=0){
+		if(!$this->has_auth("select")) return true;
+
+		$resultArray=$this->where("(aapply_schedule>='{$aapply_schedule}' AND '{$aapply_schedule}'<date_sub(aapply_schedule,interval -aapply_days day) and aapply_days>0) or (aapply_schedule='{$aapply_schedule}') AND aapply_inday='{$aapply_inday}'")->select();
+		if($resultArray!=null){
+			return true;
+		}
+		return false;
+		
 	}
 }

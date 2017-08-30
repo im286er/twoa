@@ -1,4 +1,5 @@
 <link rel="stylesheet" href="__PUBLIC__/components/bootstrap-datepicker/dist/css/bootstrap-datepicker3.css">
+<link rel="stylesheet" href="__PUBLIC__/components/bootstrap-switch-master/dist/css/bootstrap-switch.css">
 
 
 <div class="page-header">
@@ -25,23 +26,23 @@
             <i class="ace-icon fa fa-map-signs bigger-200"></i>
                 外勤
         </button>
-        <button class="btn btn-app btn-purple btn-xs" data-toggle="modal" data-target="#applyModal">
+        <button class="btn btn-app btn-purple btn-xs" data-html="casualleave" data-toggle="modal" data-target="#applyModal">
             <i class="ace-icon fa fa-plug bigger-200"></i>
                 事假
         </button>
-        <button class="btn btn-app btn-inverse btn-xs" data-toggle="modal" data-target="#applyModal">
+        <button class="btn btn-app btn-inverse btn-xs" data-html="sickleave" data-toggle="modal" data-target="#applyModal">
             <i class="ace-icon fa fa-medkit bigger-200"></i>
                 病假
         </button>
-        <button class="btn btn-app btn-yellow btn-xs" data-toggle="modal" data-target="#applyModal">
+        <button class="btn btn-app btn-yellow btn-xs" data-html="trave" data-toggle="modal" data-target="#applyModal">
             <i class="ace-icon fa fa-train bigger-200"></i>
                 出差
         </button>
-        <button class="btn btn-app btn-danger btn-xs" data-toggle="modal" data-target="#applyModal">
+        <button class="btn btn-app btn-danger btn-xs" data-html="marriageleave" data-toggle="modal" data-target="#applyModal">
             <i class="ace-icon fa fa-heart bigger-200"></i>
                 婚假
         </button>
-        <button class="btn btn-app btn-pink btn-xs" data-toggle="modal" data-target="#applyModal">
+        <button class="btn btn-app btn-pink btn-xs" data-html="maternityleave" data-toggle="modal" data-target="#applyModal">
             <i class="ace-icon fa fa-child bigger-200"></i>
                 产假
         </button>
@@ -74,6 +75,7 @@
 <script src="__PUBLIC__/assets/js/src/elements.spinner.js"></script>
 <script src="__PUBLIC__/components/chosen/chosen.jquery.js"></script>
 <script src="__PUBLIC__/components/jquery.gritter/js/jquery.gritter.js"></script>
+<script src="__PUBLIC__/components/bootstrap-switch-master/dist/js/bootstrap-switch.js"></script>
 <script>
     $(function(){
        
@@ -90,7 +92,10 @@
                     
                     $("#applyModal .modal-body").html(data.html)
                     //初始化后日期选择器
-                    $('#date-schedule').datepicker({autoclose: true,todayHighlight: true,startDate:nowDate(),ignoreReadonly:true})
+                    var sDate=nowDate();
+                    var eDate=seDate(sDate,3,1);
+                    
+                    $('#date-schedule').datepicker({autoclose: true,todayHighlight: true,startDate:sDate,endDate:eDate,ignoreReadonly:true,language:"cn"})
                     
                     //初始化加班小时选择器
                     $('#aapply_days').ace_spinner({value:1,min:1,max:3,step:1, on_sides: true, icon_up:'ace-icon fa fa-plus bigger-110', icon_down:'ace-icon fa fa-minus bigger-110', btn_up_class:'btn-info' , btn_down_class:'btn-info'});
@@ -105,30 +110,42 @@
 
         /*后补选择*/
         $("#applyModal").on("click","#arecord-remedy",function(){
-
+            var nDate=nowDate();
+            var sDate=seDate(nDate,31,0);
+            var eDate=seDate(nDate,3,1);
+            var longDate=seDate(nDate,31,1);
             if($(this).prop("checked")==true){
-                $('#date-schedule').datepicker("setStartDate","2017-01-01")
+                $('#date-schedule').datepicker("setStartDate",sDate)
+                $('#date-schedule').datepicker("setEndDate",longDate)
             }else{
-                $('#date-schedule').datepicker("setStartDate",nowDate())
-                $('#date-schedule').datepicker("update",nowDate())
+                $('#date-schedule').datepicker("setStartDate",nDate)
+                $('#date-schedule').datepicker("setEndDate",eDate)
+                $('#date-schedule').datepicker("update",nDate)
             }
         })
 
         /*提交申请*/
         $("#submit-apply").on("click",function(){
             var datas={}
+            datas["remedy"]=$("#arecord-remedy").is(":checked");
             datas["data"]={}
             $(".apply-info").each(function(){
-            
                 if(!$(this).parents(".margin-box").hasClass("hide")){
                     datas["data"][$(this).prop("name")]=$(this).val()
                 }
+                if($(this).prop("name")=="aapply_project" && $(this).val()==""){
+                    alert("项目名称不能为空")
+                    throw "No project name";
+                }
             })
+            
             var aapplyReason=datas["data"]["aapply_reason"]
             if(aapplyReason.length<5){
                alert("请认真填写理由");
                 return;
             }
+
+            datas["type"]=datas["data"]["aapply_type"]
             $.ajax({
                 url:"{:U('submitApply')}",
                 data:datas,
@@ -142,6 +159,7 @@
 
     })
 
+    /*获取服务器现在时间*/
     function nowDate(){ 
         var tempNTime;
         $.ajax({
@@ -155,6 +173,28 @@
             }
         })
         return tempNTime;
+    }
+    /**
+     * 根据现在时间获取以前指定时间和以后指定时间
+    */
+    function seDate(date,days,type){ 
+        var d=new Date(date); 
+        if(type>0){
+            d.setDate(d.getDate()+days); 
+        }else{
+            d.setDate(d.getDate()-days); 
+        }
+        
+        var month=d.getMonth()+1; 
+        var day = d.getDate(); 
+        if(month<10){ 
+            month = "0"+month; 
+        } 
+        if(day<10){ 
+            day = "0"+day; 
+        } 
+        var val = d.getFullYear()+"-"+month+"-"+day; 
+        return val; 
     }
 
 </script>

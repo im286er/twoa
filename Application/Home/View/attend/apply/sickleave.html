@@ -1,12 +1,12 @@
 <div class="widget-box">
     <div class="widget-header">
-        <h5 class="widget-title smaller"><i class="ace-icon fa fa-coffee bigger-110"></i>补休申请</h5>
+        <h5 class="widget-title smaller"><i class="ace-icon fa fa-medkit bigger-110"></i>病假申请</h5>
         <div class="widget-toolbar"></div>
     </div>
     <div class="widget-body">
         <div class="widget-main" style="text-align:left;">
-            <div class="alert alert-info"><i class="ace-icon fa fa-bullhorn bigger-140">&nbsp;&nbsp;</i><strong class="smaller-90">上下午补休一律按打卡时间计算</strong></div>
-            <input type="hidden" class="apply-info" name="aapply_type" value="7">
+            <div class="alert alert-info"><i class="ace-icon fa fa-bullhorn bigger-140">&nbsp;&nbsp;</i><strong class="smaller-90">上下午病假一律按打卡时间计算</strong></div>
+            <input type="hidden" class="apply-info" name="aapply_type" value="9">
             <label>时间段选择</label>
             <div class="row">
                 <div class="col-xs-12 col-sm-12">
@@ -68,11 +68,11 @@
         $("select[name='aapply_inday']").on("change",function(){
             if($(this).val()==1){
                 $(".days-time").removeClass("hide")
-                $(".alert-info strong").text("全天补休一周内不能超过3天")
+                $(".alert-info strong").text("全天病假一周内不能超过3天")
             }else{
                 if(!$(".days-time").hasClass("hide")){
                     $(".days-time").addClass("hide")
-                    $(".alert-info strong").text("上下午补休一律按打卡时间计算")
+                    $(".alert-info strong").text("上下午病假一律按打卡时间计算")
                }
             }
         })
