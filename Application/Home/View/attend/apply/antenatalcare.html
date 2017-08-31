@@ -1,13 +1,23 @@
 
 <div class="widget-box">
     <div class="widget-header">
-        <h5 class="widget-title smaller"><i class="ace-icon fa fa-heart bigger-110"></i>婚假申请</h5>
+        <h5 class="widget-title smaller"><i class="ace-icon fa fa-stethoscope bigger-110"></i>产检申请</h5>
         <div class="widget-toolbar"></div>
     </div>
     <div class="widget-body">
         <div class="widget-main" style="text-align:left;">
             <div class="alert alert-info"><i class="ace-icon fa fa-bullhorn bigger-140">&nbsp;&nbsp;</i><strong class="smaller-90"></strong></div>
-            <input type="hidden" class="apply-info" name="aapply_type" value="11">
+            <input type="hidden" class="apply-info" name="aapply_type" value="13">
+            <label>时间段选择</label>
+            <div class="row">
+                <div class="col-xs-12 col-sm-12">
+                    <select class="form-control apply-info" name="aapply_inday">
+                        <option value=2>上午</option>
+                        <option value=3>下午</option>
+                        <option value=1>全天</option>
+                    </select>
+                </div>
+            </div>
             <div class="space space-8"></div>
             <label>开始日期</label>
             <div class="row">
@@ -31,37 +41,9 @@
             </div>
 
             <div class="space space-8"></div>
-            <div class="">
-                <div class="switch switch-large">
-                    <input name="daymnoth" type="checkbox" checked />
-                </div>
-            </div>
-
-            <div class="space space-8"></div>
             <label>上传证明文件 </label>
             <div class="">
                 <input type="file" name="aapply_proof" class="input-files apply-info" />
-            </div>
-
-            <div class="margin-box days-time">
-                <div class="space space-8"></div>
-                <label>天数</label>
-                <div class="row">
-                    <div class="col-xs-12 col-sm-12">
-                        <input type="text" id="aapply_daysa" name="aapply_hours" class="apply-info"/>
-                        <!-- <div class="space-6"></div>
-                        <input class="form-control" placeholder="在家加班时长"> -->
-                    </div>
-                </div>
-            </div>
-            <div class="margin-box month-time hide">
-                <div class="space space-8"></div>
-                <label>月数</label>
-                <div class="row">
-                    <div class="col-xs-12 col-sm-12">
-                        <input type="text" id="aapply_months" name="aapply_months" class="apply-info"/>
-                    </div>
-                </div>
             </div>
             <div class="space space-8"></div>
             <label>理由</label>
@@ -95,24 +77,5 @@
                 
             }
         })
-        $("input[name='daymnoth']").bootstrapSwitch({
-            onText:"天数",  
-            offText:"月数",  
-            onColor:"primary",  
-            offColor:"danger",  
-            size:"small",  
-            onSwitchChange:function(event,state){  
-                if(state==true){  
-                    $(".month-time").addClass("hide") 
-                    $(".days-time").removeClass("hide") 
-                }else{  
-                    $(".month-time").removeClass("hide") 
-                    $(".days-time").addClass("hide")   
-                }  
-            }  
-        });
-        $('#aapply_daysa').ace_spinner({value:1,min:1,max:31,step:1, on_sides: true, icon_up:'ace-icon fa fa-plus bigger-110', icon_down:'ace-icon fa fa-minus bigger-110', btn_up_class:'btn-primary' , btn_down_class:'btn-primary'});
-
-        $('#aapply_months').ace_spinner({value:1,min:1,max:6,step:1, on_sides: true, icon_up:'ace-icon fa fa-plus bigger-110', icon_down:'ace-icon fa fa-minus bigger-110', btn_up_class:'btn-danger' , btn_down_class:'btn-danger'});  
     })
 </script>

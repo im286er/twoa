@@ -38,13 +38,21 @@
             <i class="ace-icon fa fa-train bigger-200"></i>
                 出差
         </button>
-        <button class="btn btn-app btn-danger btn-xs" data-html="marriageleave" data-toggle="modal" data-target="#applyModal">
+        <!-- <button class="btn btn-app btn-danger btn-xs" data-html="marriageleave" data-toggle="modal" data-target="#applyModal">
             <i class="ace-icon fa fa-heart bigger-200"></i>
                 婚假
         </button>
         <button class="btn btn-app btn-pink btn-xs" data-html="maternityleave" data-toggle="modal" data-target="#applyModal">
             <i class="ace-icon fa fa-child bigger-200"></i>
                 产假
+        </button> -->
+        <button class="btn btn-app btn-pink btn-xs" data-html="antenatalcare" data-toggle="modal" data-target="#applyModal">
+            <i class="ace-icon fa fa-stethoscope bigger-200"></i>
+                产检
+        </button>
+        <button class="btn btn-app btn-grey btn-xs" data-html="exhibition" data-toggle="modal" data-target="#applyModal">
+            <i class="ace-icon fa fa-eercast  bigger-200"></i>
+                巡展
         </button>
     </div>
 </div>
@@ -93,12 +101,11 @@
                     $("#applyModal .modal-body").html(data.html)
                     //初始化后日期选择器
                     var sDate=nowDate();
-                    var eDate=seDate(sDate,3,1);
                     
-                    $('#date-schedule').datepicker({autoclose: true,todayHighlight: true,startDate:sDate,endDate:eDate,ignoreReadonly:true,language:"cn"})
+                    $('#date-schedule').datepicker({autoclose: true,todayHighlight: true,startDate:sDate,ignoreReadonly:true,language:"cn"})
                     
                     //初始化加班小时选择器
-                    $('#aapply_days').ace_spinner({value:1,min:1,max:3,step:1, on_sides: true, icon_up:'ace-icon fa fa-plus bigger-110', icon_down:'ace-icon fa fa-minus bigger-110', btn_up_class:'btn-info' , btn_down_class:'btn-info'});
+                    $('#aapply_days').ace_spinner({value:1,min:1,max:2,step:1, on_sides: true, icon_up:'ace-icon fa fa-plus bigger-110', icon_down:'ace-icon fa fa-minus bigger-110', btn_up_class:'btn-info' , btn_down_class:'btn-info'});
     
                 }
             })
@@ -112,14 +119,13 @@
         $("#applyModal").on("click","#arecord-remedy",function(){
             var nDate=nowDate();
             var sDate=seDate(nDate,31,0);
-            var eDate=seDate(nDate,3,1);
-            var longDate=seDate(nDate,31,1);
+
+
             if($(this).prop("checked")==true){
                 $('#date-schedule').datepicker("setStartDate",sDate)
-                $('#date-schedule').datepicker("setEndDate",longDate)
+
             }else{
                 $('#date-schedule').datepicker("setStartDate",nDate)
-                $('#date-schedule').datepicker("setEndDate",eDate)
                 $('#date-schedule').datepicker("update",nDate)
             }
         })
@@ -136,6 +142,17 @@
                 if($(this).prop("name")=="aapply_project" && $(this).val()==""){
                     alert("项目名称不能为空")
                     throw "No project name";
+                }
+
+                if($(this).prop("name")=="aapply_proof"){
+                    if($(this).val()=="" && $(this).parents(".margin-box").hasClass("hide")==false){
+                        alert("没有上传证明文件")
+                        throw "proof not found";
+                    }else if($(this).val()!="" && $(this).parents(".margin-box").hasClass("hide")==true){
+                        console.log(this.files)
+                        throw "aapply_proof";
+                    }
+                    
                 }
             })
             

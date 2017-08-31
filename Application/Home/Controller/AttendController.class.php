@@ -26,7 +26,7 @@ class AttendController extends AmongController {
 		$this->config=D("Config");
 		$this->attendUser=$this->auser->find_auser($this->selfUser["user_code"]);
 		
-		$this->timeNode=array("MO"=>"09:00:00","MF"=>"12:00:00","AO"=>"13:30:00","STA"=>"00:00:00","AF"=>"18:00:00","END"=>"23:59:59");
+		$this->timeNode=array("MO"=>"09:00:59","MF"=>"12:00:00","AO"=>"13:30:59","STA"=>"00:00:00","AF"=>"18:00:00","END"=>"23:59:59");
 
 		if($this->attendUser["auser_eachday"]>7.5){
 			$this->timeNode["AF"]="18:30:00";
