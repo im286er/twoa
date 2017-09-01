@@ -1,0 +1,135 @@
+<link rel="stylesheet" href="__PUBLIC__/components/bootstrap-datepicker/dist/css/bootstrap-datepicker3.css">
+<style>
+
+</style>
+<div class="widget-box">
+	<div class="widget-header">
+		<h5 class="widget-title smaller"><i class="ace-icon fa fa-linode bigger-110"></i>新建项目</h5>
+		<div class="widget-toolbar"></div>
+	</div>
+	<div class="widget-body">
+		<div class="widget-main">
+			<form class="form-horizontal" id="user-form">
+				<input  name="project_id" class="project-info" type="hidden" value="{$projectArray.project_id|default='0'}">
+			<div class="form-group">
+				<label class="col-sm-3 control-label no-padding-right" for="form-field-1"> 公司名称 </label>
+				<div class="col-sm-8">
+					<select class="chosen-select form-control project-info" data-label="所属公司"  name="project_company" data-placeholder="选择所属公司">
+						<volist name="companyArray" id="company">
+							<option value="{$company.company_id}">{$company.company_name}</option>
+						</volist>
+					</select>
+				</div>
+			</div>
+			<div class="form-group">
+				<label class="col-sm-3 control-label no-padding-right" for="form-field-1"> 项目名称 </label>
+				<div class="col-sm-9">
+					<input  placeholder="项目名称" name="project_name" class="col-xs-10 col-sm-10 project-info" type="text" value="{$projectArray.project_name|default=''}">
+				</div>
+			</div>
+			<div class="form-group">
+				<label class="col-sm-3 control-label no-padding-right" for="form-field-1"> 项目类型 </label>
+				<div class="col-sm-8">
+					<select class="chosen-select form-control project-info" data-label="学历"  name="project_type" data-placeholder="学历">
+						<option value='1'>试驾</option>
+					</select>
+					<!-- <input  placeholder="所属公司" class="col-xs-10 col-sm-10" type="text"> -->
+				</div>
+			</div>
+
+			<div class="form-group">
+				<label class="col-sm-3 control-label no-padding-right" for=""> 开始时间 </label>
+				<div class="col-sm-8">
+					<div class="input-group">
+						<input class="form-control date-picker project-info"  name="project_startdate" id="start-date" data-date-format="yyyy-mm-dd" type="text" value="{$projectArray.project_startdate|default=$nowtime}">
+						<span class="input-group-addon">
+							<i class="fa fa-calendar bigger-110"></i>
+						</span>
+					</div>
+				</div>
+            </div>
+            <div class="form-group">
+				<label class="col-sm-3 control-label no-padding-right" for=""> 结束时间 </label>
+				<div class="col-sm-8">
+					<div class="input-group">
+						<input class="form-control date-picker project-info"  name="project_enddate" id="end-date" data-date-format="yyyy-mm-dd" type="text" value="{$projectArray.project_enddate|default=$nowtime}">
+						<span class="input-group-addon">
+							<i class="fa fa-calendar bigger-110"></i>
+						</span>
+					</div>
+				</div>
+			</div>
+			</form>
+		</div>
+	</div>
+	<div class="widget-toolbox padding-8 clearfix">
+		<if condition="$add eq 'true'">
+			<button class="btn btn-xs btn-success pull-right con-project" id="insert-project">
+				<i class="ace-icon fa fa-check bigger-110"></i>
+				<span class="bigger-110">新增项目</span>
+			</button>
+		<else />
+			<button class="btn btn-xs btn-info pull-right con-project" id="edit-project">
+				<i class="ace-icon fa fa-check bigger-110"></i>
+				<span class="bigger-110">修改项目</span>
+			</button>
+		</if>
+		
+
+		<button class="btn btn-xs btn-danger pull-left"  class="close" data-dismiss="modal" aria-label="Close">
+			<i class="ace-icon fa fa-window-close bigger-110"></i>
+			<span class="bigger-110" aria-hidden="true">取消</span>
+		</button>
+	</div>
+</div>
+
+
+<script src="__PUBLIC__/components/bootstrap-datepicker/dist/js/bootstrap-datepicker.js"></script>
+
+<script>
+    $(function(){
+        /*时间初始*/
+        $('#start-date').datepicker({
+            autoclose: true,
+            todayHighlight: true,
+            language:"cn"
+        })
+        $('#end-date').datepicker({
+            autoclose: true,
+            todayHighlight: true,
+            language:"cn"
+        })
+        /*提交新增和修改*/
+        $(".con-project").on("click",function(){
+            var datas={}
+            datas["data"]={}
+
+            $(".project-info").each(function(){
+                if($(this).prop("name")=="project_id"){
+                    datas["project_id"]=$(this).val()
+                }else{
+                    datas["data"][$(this).prop("name")]=$(this).val()
+                }
+            
+            })
+            ajax_project(datas)
+        })
+    })
+    
+    /*ajax传输数据到后台*/
+    function ajax_project(datas){
+		$.ajax({
+			url:"{:U('conProject')}",
+			data:datas,
+			type:"post",
+			dataType:"html",
+			success:function(data){
+                console.log(data)
+				// if(data>0){
+				// 	$('#archiveModal').modal('toggle')
+				// 	search_archives()
+				// }
+			}
+		})
+	}
+</script>

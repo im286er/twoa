@@ -396,8 +396,8 @@ class UserController extends AmongController {
 		if($_POST["p"]>ceil($count/$_POST["limit"])){
 			$_POST["p"]=1;
 		}
+		
 		$Page=new \Think\Page($count,$_POST["limit"]);
-
 		$pageShow=$Page->show();
 
 		$userDataArray=$user->search_all($Page->firstRow,$Page->listRows,$condition);

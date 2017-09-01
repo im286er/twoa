@@ -91,3 +91,6 @@
 * 考勤申请页面
 * 修改menu侧栏样式
 * 新增url路径参数支持直接显示功能
+
+#### 2017-8-31
+* CREATE TABLE oa_project_list (project_id bigint(20) NOT NULL AUTO_INCREMENT PRIMARY KEY  COMMENT 'id',project_company int(9) NOT NULL COMMENT '公司名称', project_name varchar(200) NOT NULL COMMENT '项目名称',project_type int(9) default 0 COMMENT '项目类型',project_startdate date COMMENT '开始时间',project_enddate date COMMENT '结束时间',project_state int(1) COMMENT '状态');

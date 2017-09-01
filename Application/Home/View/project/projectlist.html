@@ -1,0 +1,28 @@
+<tr>
+	<td>
+		<label class="pos-rel"><input class="ace" type="checkbox"><span class="lbl"></span></label>
+	</td>
+	<!-- <td>{$projectData["project_id"]}</td> -->
+	<td>{$projectData["project_company"]}</td>
+	<td>{$projectData["project_name"]}</td>
+	<td>{$projectData["project_type"]}</td>
+	<td>{$projectData["project_startdate"]}</td>
+	<td>{$projectData["project_enddate"]}</td>
+	<td>{$projectData["project_state"]}</td>
+	<td>
+		<div class="hidden-sm hidden-xs btn-group user-control" data-userid="{$projectData["project_id"]}">
+			<button class="btn btn-xs btn-info user-edit" data-toggle="modal" data-target="#projectModal">
+				<i class="ace-icon fa fa-pencil bigger-120"></i>
+			</button>
+			<!-- <button class="btn btn-xs btn-success user-active" {$state[1]}>
+				<i class="ace-icon fa fa-check-circle bigger-120"></i>
+			</button>
+			<button class="btn btn-xs btn-warning user-inactive" {$state[0]}>
+				<i class="ace-icon fa fa-question-circle bigger-120"></i>
+			</button>
+			<button class="btn btn-xs btn-danger user-quit" {$state[2]}>
+				<i class="ace-icon fa fa-times-circle bigger-120"></i>
+			</button> -->
+		</div>
+	</td>
+</tr>
