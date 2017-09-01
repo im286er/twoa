@@ -751,35 +751,4 @@ class AttendController extends AmongController {
 			
 		}
 	}
-
-	/**
-	 * 获取当前时间,可以给前端调用，防止前端修改时间
-	 *
-	 * @param integer $type 1,2017-08-24 2,14:22:12 3,2017-08-24 14:22:12
-	 * @return void
-	 */
-	function getNowTime($type=0){
-		$types=$type;
-		if($type==0){
-			$types=I("timetype");
-		}
-		
-		switch ($types) {
-			case 1: default:
-				$nowTime= date("Y-m-d",time());
-				break;
-			case 2:
-				$nowTime= date("H:i:s",time());
-				break;
-			case 3:
-				$nowTime= date("Y-m-d H:i:s",time());
-				break;
-		}
-
-		if($type==0){
-			echo $nowTime;
-		}else{
-			return $nowTime;
-		}
-	}
 }
