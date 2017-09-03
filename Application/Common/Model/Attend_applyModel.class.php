@@ -3,14 +3,14 @@
  * @Author: vition
  * @Email:369709991@qq.com
  * @Date:   2017-08-07 18:24:40
- * @Last Modified by:   vition
- * @Last Modified time: 2017-08-09 15:46:41
+ * @Last Modified by:   369709991@qq.com
+ * @Last Modified time: 2017-09-02 16:15:02
  */
 namespace Common\Model;
 use Common\Model\AmongModel;
 class Attend_applyModel extends AmongModel{
 	protected $trueTableName = 'oa_attend_apply'; 
-	protected $fields = array("aapply_id","aapply_code","aapply_type","aapply_inday","aapply_addtime","aapply_schedule","aapply_days","aapply_hours","aapply_reason","aapply_approve","aapply_state","aapply_operation","aapply_remark");
+	protected $fields = array("aapply_id","aapply_code","aapply_type","aapply_inday","aapply_addtime","aapply_schedule","aapply_days","aapply_hours","aapply_reason",'aapply_project','aapply_proof',"aapply_approve","aapply_state","aapply_operation","aapply_remark");
 
 	/**
 	 * [seekApply 查找申请记录]

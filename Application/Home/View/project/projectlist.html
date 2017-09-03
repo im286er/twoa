@@ -6,12 +6,14 @@
 	<td>{$projectData["project_company"]}</td>
 	<td>{$projectData["project_name"]}</td>
 	<td>{$projectData["project_type"]}</td>
+	<td>{$projectData["project_caption"]}</td>
+	<td>{$projectData["project_region"]}</td>
 	<td>{$projectData["project_startdate"]}</td>
 	<td>{$projectData["project_enddate"]}</td>
 	<td>{$projectData["project_state"]}</td>
 	<td>
-		<div class="hidden-sm hidden-xs btn-group user-control" data-userid="{$projectData["project_id"]}">
-			<button class="btn btn-xs btn-info user-edit" data-toggle="modal" data-target="#projectModal">
+		<div class="hidden-sm hidden-xs btn-group project-control" data-pid="{$projectData["project_id"]}">
+			<button class="btn btn-xs btn-info project-edit" data-toggle="modal" data-target="#projectModal">
 				<i class="ace-icon fa fa-pencil bigger-120"></i>
 			</button>
 			<!-- <button class="btn btn-xs btn-success user-active" {$state[1]}>

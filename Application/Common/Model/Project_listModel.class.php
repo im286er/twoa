@@ -3,14 +3,14 @@
  * @Author: vition
  * @Email:369709991@qq.com
  * @Date:   2017-07-28 15:26:56
- * @Last Modified by:   vition
- * @Last Modified time: 2017-08-01 11:12:07
+ * @Last Modified by:   369709991@qq.com
+ * @Last Modified time: 2017-09-02 16:12:39
  */
 namespace Common\Model;
 use Common\Model\AmongModel;
 class Project_listModel extends AmongModel{
     protected $trueTableName = 'oa_project_list'; 
-    protected $fields = array('project_id', 'project_company','project_name','project_type','project_startdate','project_enddate','project_state');
+    protected $fields = array('project_id', 'project_company','project_name','project_type','project_startdate','project_enddate','project_captain','project_region','project_state');
     
     /**
      * 查询项目 function

@@ -3,8 +3,8 @@
  * @Author: vition
  * @Email:369709991@qq.com
  * @Date:   2017-05-18 15:57:50
- * @Last Modified by:   vition
- * @Last Modified time: 2017-08-04 15:46:22
+ * @Last Modified by:   369709991@qq.com
+ * @Last Modified time: 2017-09-02 21:30:58
  */
 //control要记得首字母大写。
 /*{"control":"Project","name":"项目管理","icon":"fa fa-linode","menus":[{"name":"项目列表","icon":"fa fa-linode","menus":"project"}]}*/
@@ -103,26 +103,25 @@ class ProjectController extends AmongController {
            
             if(I("project_id")>0){
                 /*修改*/
-                $this->projectList->set_project(I("project_id"),I("data"));
+                echo $this->projectList->set_project(I("project_id"),I("data"));
             }else{
                 /*新增*/
-                print_r(I("data"));
-                $this->projectList->add_project(I("data"));
-                echo $this->projectList->getLastSql();
+
+                echo $this->projectList->add_project(I("data"));
+                
             }
         }
     }
 
     function searchProjectName(){
-        echo "a";
-        if(IS_POST){
-            $condition=array("project_name"=>array("LIKE","%".I("key")."%"));
+
+            $condition=array("project_name"=>array("LIKE","%".I("key")."%"),"project_state"=>array("eq","0"));
             $result=$this->projectList->field("project_id,project_name")->search_all(0,10,$condition);
-            $projectHtml="";
-            foreach ($result as $value) {
-                $projectHtml.="<option value='".$value['project_id']."'>".$value["project_name"]."</option>";
-            }
-            echo $projectHtml;
-        }
+            // $projectHtml="";
+            // foreach ($result as $value) {
+            //     $projectHtml.="<option value='".$value['project_id']."'>".$value["project_name"]."</option>";
+            // }
+            return $result;
+
     }
 }

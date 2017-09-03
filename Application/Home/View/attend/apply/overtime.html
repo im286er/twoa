@@ -27,6 +27,9 @@
                     <!-- <input class="form-control" placeholder="@其他主管/组长"> -->
                     <select class="chosen-select form-control apply-info" multiple id="" name="aapply_project" data-placeholder="项目名称">
                             <option value=""></option>
+                            <volist name="projectArray" id="project">
+                                <option value="{$project.project_id}">{$project.project_name}</option>
+                            </volist>   
                         </select>
                 </div>
             </div>
@@ -143,24 +146,24 @@
                 }
             }
         })
-        $("select[name='aapply_project']").next().find(".default").on('input', function(evt, params) {
-            // do_something(evt, params);
-            var keyw=$(this).val()
-            var sel=$(this)
-            console.log(sel.val())
-            $.ajax({
-                url:"{:U('Project/searchProjectName')}",
-                type:"post",
-                dataType:"html",
-                data:{key:keyw},
-                success:function(data){
-                    $("select[name='aapply_project']").html(data);
-                    $("select[name='aapply_project']").trigger('chosen:updated');
-                }
-            })
-            console.log(sel.val())
-            sel.val(keyw);
-          });
+        // $("select[name='aapply_project']").next().find(".default").on('input', function(evt, params) {
+        //     // do_something(evt, params);
+        //     var keyw=$(this).val()
+        //     var sel=$(this)
+        //     console.log(sel.val())
+        //     $.ajax({
+        //         url:"{:U('Project/searchProjectName')}",
+        //         type:"post",
+        //         dataType:"html",
+        //         data:{key:keyw},
+        //         success:function(data){
+        //             $("select[name='aapply_project']").html(data);
+        //             $("select[name='aapply_project']").trigger('chosen:updated');
+        //         }
+        //     })
+        //     console.log(sel.val())
+        //     sel.val(keyw);
+        //   });
         //
     })
 </script>

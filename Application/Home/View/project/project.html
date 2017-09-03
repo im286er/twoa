@@ -91,13 +91,15 @@
 					<th class="center">公司名</th>
 					<th class="center">项目名</th>
 					<th class="center">项目类型</th>
+					<th class="center">担当</th>
+					<th class="center">地区</th>
 					<th class="center">开始时间</th>
 					<th class="center">结束时间</th>
 					<th class="center">状态</th>
 					<th class="center">操作</th>
 				</tr>
 			</thead>
-			<tbody id="ulist-t">
+			<tbody id="plist-t">
 
 			</tbody>
 		</table>
@@ -136,6 +138,24 @@
 				}
 			})
 		})
+
+		/*编辑按钮*/
+		$("#plist-t").on("click",".project-edit",function(){
+			var pId=$(".project-control").data("pid")
+			$.ajax({
+				url:"{:U('getCreateProject')}",
+				data:{project_id:pId},
+				type:"post",
+				dataType:"html",
+				success:function(data){
+					$("#projectModal .modal-body").html(data)
+				}
+			})
+		})
+		/*查询按钮事件*/
+		$(".search-btn").on("click",function(){
+			search_project()
+		})
 	})
 	/*
 	 * 查询用户的信息
@@ -156,7 +176,7 @@
 			data:datas,
 			success:function(data){
 				// console.log(data)
-				$("#ulist-t").html(data["projectlist"])
+				$("#plist-t").html(data["projectlist"])
 				$("#page-div").html(data["pagehtml"])
 			}
 		})	

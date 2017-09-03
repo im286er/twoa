@@ -3,8 +3,8 @@
  * @Author: vition
  * @Email:369709991@qq.com
  * @Date:   2017-08-03 16:43:53
- * @Last Modified by:   vition
- * @Last Modified time: 2017-08-10 15:01:00
+ * @Last Modified by:   369709991@qq.com
+ * @Last Modified time: 2017-09-02 15:41:09
  */
 
 /*{"control":"Attend","name":"考勤管理","icon":"fa fa-calendar","menus":[{"name":"考勤配置","icon":"fa fa-gear","menus":"config"},{"name":"考勤申请","icon":"fa fa-list-alt","menus":"apply"},{"name":"申请管理","icon":"fa fa-pencil-square","menus":"archives"},{"name":"打卡","icon":"fa fa-square","menus":"checkin"}]}*/
@@ -642,6 +642,9 @@ class AttendController extends AmongController {
 			
 			$this->assign("remedy",$this->arecord->findRemedy($this->selfUser["user_code"],$nowDates[0],$nowDates[1]));
 			$this->assign("managerArray",$managerArray);
+
+			$this->assign("projectArray",R("Project/searchProjectName"));
+
 			$this->ajaxReturn(array("html"=>$this->fetch("attend/apply/".I("html"))));
 		}
 	}
