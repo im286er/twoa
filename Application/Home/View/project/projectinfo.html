@@ -33,7 +33,34 @@
 					<select class="chosen-select form-control project-info" data-label="学历"  name="project_type" data-placeholder="学历">
 						<option value='1'>试驾</option>
 					</select>
-					<!-- <input  placeholder="所属公司" class="col-xs-10 col-sm-10" type="text"> -->
+				</div>
+			</div>
+
+			<div class="form-group">
+				<label class="col-sm-3 control-label no-padding-right" for="form-field-1"> 项目负责人 </label>
+				<div class="col-sm-8">
+					<select class="chosen-select form-control project-info" id="" name="project_captain" data-placeholder="项目负责人">
+						<option value=""></option>
+						<volist name="managerArray" id="manager">
+								<option value="{$manager.user_code}">{$manager.user_name}</option>
+						</volist>
+					</select>
+				</div>
+			</div>
+
+			<div class="form-group">
+				<label class="col-sm-3 control-label no-padding-right" for="form-field-1"> 地区 </label>
+				<div class="col-sm-8">
+					<select class="chosen-select form-control project-info" id="" name="project_region" data-placeholder="项目名称">
+						<option value=""></option>
+						<volist name="regionArray" id="region">
+							<optgroup label="{$region.name}">
+								<volist name="region['city']" id="city">
+									<option value="{$city.CityID}">{$city.name}</option>
+								</volist> 
+							</optgroup>
+						</volist>   
+					</select>
 				</div>
 			</div>
 
@@ -88,6 +115,34 @@
 
 <script>
     $(function(){
+		 /*下拉选框的js*/
+		 if(!ace.vars['touch']) {
+            $('.chosen-select').chosen({allow_single_deselect:true,search_contains:true,include_group_label_in_selected:true}); 
+            $(window)
+            .off('resize.chosen')
+            .on('resize.chosen', function() {
+                $('.chosen-select').each(function() {
+                        var $this = $(this);
+                        $this.next().css({'width': $this.parent().width()});
+                })
+            }).trigger('resize.chosen');
+            //resize chosen on sidebar collapse/expand
+            $(document).on('settings.ace.chosen', function(e, event_name, event_val) {
+                if(event_name != 'sidebar_collapsed') return;
+                $('.chosen-select').each(function() {
+                        var $this = $(this);
+                        $this.next().css({'width': $this.parent().width()});
+                })
+            });
+    
+    
+            $('#chosen-multiple-style .btn').on('click', function(e){
+                var target = $(this).find('input[type=radio]');
+                var which = parseInt(target.val());
+                if(which == 2) $('#form-field-select-4').addClass('tag-input-style');
+                    else $('#form-field-select-4').removeClass('tag-input-style');
+            });
+        }
         /*时间初始*/
         $('#start-date').datepicker({
             autoclose: true,

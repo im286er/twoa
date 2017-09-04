@@ -96,5 +96,5 @@
 * CREATE TABLE oa_project_list (project_id bigint(20) NOT NULL AUTO_INCREMENT PRIMARY KEY  COMMENT 'id',project_company int(9) NOT NULL COMMENT '公司名称', project_name varchar(200) NOT NULL COMMENT '项目名称',project_type int(9) default 0 COMMENT '项目类型',project_startdate date COMMENT '开始时间',project_enddate date COMMENT '结束时间',project_state int(1) COMMENT '状态');
 
 #### 2017-09-02
-* ALTER TABLE `oa_project_list` ADD `project_captain` BIGINT(10) NOT NULL DEFAULT '0' COMMENT '担当' AFTER `project_enddate`, ADD `project_region` INT(5) NOT NULL DEFAULT '0' COMMENT '地区' AFTER `captain`;
+* ALTER TABLE `oa_project_list` ADD `project_captain` BIGINT(10) NOT NULL DEFAULT '0' COMMENT '担当' AFTER `project_enddate`, ADD `project_region` INT(5) NOT NULL DEFAULT '0' COMMENT '地区' AFTER `project_captain`;
 * ALTER TABLE `oa_attend_apply` CHANGE `aapply_project` `aapply_project` BIGINT(20) NULL DEFAULT '0' COMMENT '涉及项目';

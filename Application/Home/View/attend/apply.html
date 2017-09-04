@@ -89,8 +89,6 @@
        
         /*根据不同申请类型调用弹窗*/
         $(".btn-app").on("click",function(){
-            
-           
             $.ajax({
                 url:"{:U('getApplyHtml')}",
                 data:{html:$(this).data("html")},
