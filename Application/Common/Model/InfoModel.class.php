@@ -19,6 +19,10 @@ class InfoModel extends Model{
 	public $place;
 	public $role;
 	public $user;
+
+	public $province;
+	public $city;
+	public $district;
 	// protected $fields = array('config_id');	
 	/**
 	 * [company 公司管理模型]
@@ -86,5 +90,61 @@ class InfoModel extends Model{
 		return $this->user;
 	}
 
+	/**
+	 * getProvince function
+	 * 默认情况下获取所有省份
+	 * @param integer $id 大于0则获取省份的id
+	 * @param boolean $multi true返回多，
+	 * @return void
+	 */
+	function getProvince($id=0,$multi=true){
+		if(!is_object($this->province)){
+			$this->province=M("oa_region_province");
+		}
+		$mysql=$this->province;
+		if($id>0){
+			$mysql=$this->province->where(array("province_id"=>$id));
+		}
+		if($multi){
+			return $mysql->select();
+		}
+		return $mysql->find();
+	}
+
+	/**
+	 * getCity function 获取城市
+	 *
+	 * @param [type] $id 
+	 * @param boolean $multi multi真的时候 id代表省份id，false的时候代表只获取城市的id
+	 * @return void
+	 */
+	function getCity($id,$multi=true){
+		if(!is_object($this->city)){
+			$this->city=M("oa_region_city");
+		}
+		if($multi==true){
+			return $this->city->where(array("city_proid"=>$id))->select();
+		}else{
+			return $this->city->where(array("city_id"=>$id))->find();
+		}
+	}
+	
+	/**
+	 * getDistrict function 获取区
+	 *
+	 * @param [type] $id 
+	 * @param boolean $multi multi真的时候 id代表城市id，false的时候代表只获取区的id
+	 * @return void
+	 */
+	function getDistrict($id,$multi=true){
+		if(!is_object($this->district)){
+			$this->district=M("oa_region_district");
+		}
+		if($multi==true){
+			return $this->district->where(array("district_cityid"=>$id))->select();
+		}else{
+			return $this->district->where(array("district_id"=>$id))->find();
+		}
+	}
 
 }

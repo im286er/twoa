@@ -22,7 +22,8 @@ class Project_listModel extends AmongModel{
      */
     function search_all($start,$limit,$dataArray=array()){
         if(!$this->has_auth("select")) return false;
-        $tableObject=$this->limit($start.','.$limit);
+
+        $tableObject=$this->table("oa_project_list p")->field(array_merge($this->fields,array("c.company_name project_companys","u.user_name project_captains","d.city_name project_regions")))->join("oa_company c on c.company_id=p.project_company")->join("left join oa_user u on p.project_captain=u.user_code")->join("left join oa_region_city d on d.city_id=p.project_region")->limit($start.','.$limit);
 		if (empty($dataArray)){
 			return $tableObject->select();
         }

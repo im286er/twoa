@@ -36,37 +36,25 @@ class ProjectController extends AmongController {
      */
     function getCreateProject(){
         if(IS_POST){
-            $config=D("Config");
-
             $region=array();
-
-            foreach($config->getProvince() as $province){
+            
+            foreach($this->baseInfo->getProvince() as $province){
                 $provinces=array();
-                $provinces["name"]=$province["name"];
+                $provinces["name"]=$province["province_name"];
 
                 $citys=array();
-                foreach($config->getCity($province["ProID"]) as $city){
+                foreach($this->baseInfo->getCity($province["province_id"]) as $city){
                     array_push($citys,$city);
-                    // foreach ($config->getDistrict($city["CityID"]) as $district) {
+                    // foreach ($this->baseInfo->getDistrict($city["city_id"]) as $district) {
                     //     array_push($citys,$district);
                     // }
                 }
                 $provinces["city"]=$citys;
                 array_push($region,$provinces);
             }
-
             $managerArray=$this->baseInfo->user()->searchManager();
             $this->assign("managerArray",$managerArray);
-            
             $this->assign("regionArray",$region);
-            // return ;
-            // $this->assign("provinceArray",$config->getProvince());
-            // $this->assign("cityArray",$config->getCity(1));
-            // $this->assign("districtArray",$config->getDistrict(1));
-
-
-            // print_r($config->getCity(19));
-            // return;
             if(I("project_id")!=null){
                 $add="false";
                 $project=$this->projectList->find_project(I("project_id"));
