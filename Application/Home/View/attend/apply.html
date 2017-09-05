@@ -137,11 +137,7 @@
                 if(!$(this).parents(".margin-box").hasClass("hide")){
                     datas["data"][$(this).prop("name")]=$(this).val()
                 }
-                if($(this).prop("name")=="aapply_project" && $(this).val()==""){
-                    alert("项目名称不能为空")
-                    throw "No project name";
-                }
-
+                
                 if($(this).prop("name")=="aapply_proof"){
                     if($(this).val()=="" && $(this).parents(".margin-box").hasClass("hide")==false){
                         alert("没有上传证明文件")
@@ -156,7 +152,11 @@
             
             var aapplyReason=datas["data"]["aapply_reason"]
             if(aapplyReason.length<5){
-               alert("请认真填写理由");
+                alert("请认真填写理由");
+                return;
+            }
+            if(datas["data"]["aapply_project"]<=0 && datas["data"]["aapply_approve"]===null){
+                alert("项目名称和主管/组长必须选择一个")
                 return;
             }
 

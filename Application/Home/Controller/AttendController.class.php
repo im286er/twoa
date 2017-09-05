@@ -659,10 +659,16 @@ class AttendController extends AmongController {
 			$applyArray=I("data");
 			$applyArray["aapply_code"]=$this->selfUser["user_code"];
 			$applyArray["aapply_addtime"]=$this->getNowTime(3);
-			if($applyArray["aapply_approve"]==null){
-				$applyArray["aapply_approve"]=$this->selfUser["user_director"];
+
+			$aapply_approve=array($this->selfUser["user_director"]);
+			if(is_array($applyArray["aapply_approve"])){
+				$applyArray["aapply_approve"]=json_encode(array_unique(array_merge($aapply_approve,$applyArray["aapply_approve"])));
+			}else{
+				$applyArray["aapply_approve"]=json_encode($aapply_approve);
 			}
-			print_r($applyArray);
+
+			// print_r($applyArray);
+			
 			$dates=split("-", $applyArray["aapply_schedule"]);
 			$this->MonthRec=$this->arecord->getMonthRec($this->selfUser["user_code"],$dates[0],$dates[1]);
 			$isWeekday=$this->arecord->isWeekday($dates[0],$dates[1],$dates[2]);
@@ -687,7 +693,7 @@ class AttendController extends AmongController {
 				return false;
 
 			}
-			return;
+			// return;
 			switch (I("type")) {
 				
 				case 3: case 4: case 5: case 6:/*3，工作日加班，4，节假日加班，5，上午加班，6，在家加班*/
@@ -699,6 +705,7 @@ class AttendController extends AmongController {
 
 					if(I("type")==3 && (time()> strtotime($applyArray["aapply_schedule"]." 18:00:00")) && I("remedy")=="false"){
 						echo "超时了";
+						//**再加一个判断上班时间是否打卡了
 						return false;
 					}
 					
@@ -707,7 +714,7 @@ class AttendController extends AmongController {
 						echo "超时了";
 						return false;
 					}
-					return;
+
 					$this->aapply->addApply($applyArray);
 					break;
 				case 7:/*补休*/
