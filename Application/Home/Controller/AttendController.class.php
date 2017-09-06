@@ -7,14 +7,14 @@
  * @Last Modified time: 2017-09-02 15:41:09
  */
 
-/*{"control":"Attend","name":"考勤管理","icon":"fa fa-calendar","menus":[{"name":"考勤配置","icon":"fa fa-gear","menus":"config"},{"name":"考勤申请","icon":"fa fa-list-alt","menus":"apply"},{"name":"申请管理","icon":"fa fa-pencil-square","menus":"archives"},{"name":"打卡","icon":"fa fa-square","menus":"checkin"}]}*/
+/*{"control":"Attend","name":"考勤管理","icon":"fa fa-calendar","menus":[{"name":"考勤配置","icon":"fa fa-gear","menus":"config"},{"name":"考勤申请","icon":"fa fa-list-alt","menus":"apply"},{"name":"申请管理","icon":"fa fa-pencil-square","menus":"applycontrol"},{"name":"打卡","icon":"fa fa-square","menus":"checkin"}]}*/
 namespace Home\Controller;
 use Common\Controller\AmongController;
 class AttendController extends AmongController {
 	public $MonthRec;
 	public $timeNode;
 	public $attendUser;
-	//重组gethtml方法
+	//
 	function __construct(){
 		parent::__construct();
 		$this->baseInfo=D("Info");
@@ -36,6 +36,111 @@ class AttendController extends AmongController {
 		$this->MonthRec=$this->arecord->getMonthRec($this->selfUser["user_code"],date("Y"),date("m"));
 		
 	}
+	/**
+	 * [gethtml 重写gethtml方法]
+	 * @return [type] []
+	 */
+	public function gethtml(){
+        switch (I("html")) {
+			case "applycontrol":
+				// echo $this->getCheckinList($this->selfUser["user_code"]);
+				// $checkinArray=$this->acheckin->search_checkin($this->selfUser["user_code"]);
+				// $this->assign("checkinArray",$checkinArray);
+                $this->assign("checkinListHtml",$this->getCheckinList($this->selfUser["user_code"]));
+				$this->assign("applyListHtml",$this->getApplyList($this->selfUser["user_code"]));
+				$this->assign("approveListHtml",$this->getApproveList($this->selfUser["user_code"]));
+                break;
+        }
+        parent::gethtml();
+	}
+	/*申请管理相关开始*/
+	/**
+	 * getCheckinList 获取打卡记录
+	 *
+	 * @param integer $usercode 
+	 * @param integer $p
+	 * @return void
+	 */
+	function getCheckinList($usercode=0,$p=1){
+		if($usercode==0){
+			$user_code=$this->selfUser["user_code"];
+			$p=$_POST["p"];
+		}else{
+			$user_code=$usercode;
+			$_POST["p"]=$p;
+		}
+		$limit=10;
+		$count=$this->acheckin->where(array("acheckin_code"=>$user_code))->count();
+		if($p>ceil($count/$limit)){
+			$_POST["p"]=1;
+		}
+
+		$Page=new \Think\Page($count,$limit);
+		$pageShow=$Page->show();
+
+		$checkinArray=$this->acheckin->search_checkin($this->selfUser["user_code"],array(),$Page->firstRow,$Page->listRows);
+		$this->assign("checkinArray",$checkinArray);
+		$return=array("html"=>$this->fetch("attend/applycontrol/checkin_list"),"pages"=>$pageShow);
+		if($usercode==0){
+			$this->ajaxReturn($return);
+		}
+		return $return;
+	}
+
+	function getApplyList($usercode=0,$p=1){
+		if($usercode==0){
+			$user_code=$this->selfUser["user_code"];
+			$p=$_POST["p"];
+		}else{
+			$user_code=$usercode;
+			$_POST["p"]=$p;
+		}
+		$limit=10;
+		$count=$this->aapply->where(array("aapply_code"=>$user_code))->count();
+		if($p>ceil($count/$limit)){
+			$_POST["p"]=1;
+		}
+
+		$Page=new \Think\Page($count,$limit);
+		$pageShow=$Page->show();
+
+		$aapplyArray=$this->aapply->searchApply($this->selfUser["user_code"],array(),$Page->firstRow,$Page->listRows);
+		$this->assign("aapplyArray",$aapplyArray);
+		$return=array("html"=>$this->fetch("attend/applycontrol/apply_list"),"pages"=>$pageShow);
+		if($usercode==0){
+			$this->ajaxReturn($return);
+		}
+		return $return;
+	}
+
+	function getApproveList($usercode=0,$p=1){
+		if($usercode==0){
+			$user_code=$this->selfUser["user_code"];
+			$p=$_POST["p"];
+		}else{
+			$user_code=$usercode;
+			$_POST["p"]=$p;
+		}
+		$limit=10;
+		$count=$this->aapply->where("aapply_approve LIKE '%".$user_code."%'")->count();
+		if($p>ceil($count/$limit)){
+			$_POST["p"]=1;
+		}
+
+		$Page=new \Think\Page($count,$limit);
+		$pageShow=$Page->show();
+
+		$approveArray=$this->aapply->searchApply($this->selfUser["user_code"],array(),$Page->firstRow,$Page->listRows,true);
+		$this->assign("approveArray",$approveArray);
+		$return=array("html"=>$this->fetch("attend/applycontrol/approve_list"),"pages"=>$pageShow);
+		if($usercode==0){
+			$this->ajaxReturn($return);
+		}
+		return $return;
+	}
+	/*申请管理相关结束*/
+
+
 	/**
 	 * [checkin 打卡页面]
 	 * @return [type] [description]

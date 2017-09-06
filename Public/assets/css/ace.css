@@ -13194,7 +13194,7 @@ tr.detail-row > td {
   word-break: break-all;
 }
 .itemdiv.memberdiv {
-  width: 175px;
+  width: 250px;
   padding: 2px;
   margin: 3px 0;
   float: left;
@@ -13215,11 +13215,13 @@ tr.detail-row > td {
 }
 .itemdiv.memberdiv > .body > .time {
   position: static;
+  font-size:13px;
 }
 .itemdiv.memberdiv > .body > .name {
   line-height: 18px;
   height: 18px;
   margin-bottom: 0;
+  font-size:14px;
 }
 .itemdiv.memberdiv > .body > .name > a {
   display: inline-block;

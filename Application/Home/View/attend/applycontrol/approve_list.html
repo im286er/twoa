@@ -1,0 +1,33 @@
+<volist name="approveArray" id="approve">
+    <div class="itemdiv memberdiv">
+        <div class="user">
+            <img alt="Bob Doe's avatar" src="__PUBLIC__/assets/avatars/user.jpg">
+        </div>
+
+        <div class="body">
+            <div class="name">
+                <a href="#">{$approve.aapply_username}</a>
+            </div>
+            <div >
+                <i class="ace-icon fa fa-plug "></i>
+                {$approve.aapply_types}<span class="green">&nbsp;{$approve.aapply_days}天&nbsp;{$approve.aapply_hours}/小时&nbsp;</span>
+            </div>
+            <div class="time">
+                <i class="ace-icon fa fa-clock-o"></i>
+                {$approve.aapply_schedule}&nbsp;
+            </div>
+            <div >
+                <i class="ace-icon fa fa-pencil-square-o"></i>
+                &nbsp;{$approve.aapply_reason}&nbsp;
+            </div>
+            <div>
+                <button class="btn btn-xs btn-danger">
+                    <i class="ace-icon fa fa-bolt bigger-110"></i>
+                    {$approve.aapply_state}
+                    <i class="ace-icon fa fa-hand-o-up icon-on-right"></i>
+                </button>
+            </div>
+        </div>
+        <div class="space-4"></div>
+    </div>
+</volist>

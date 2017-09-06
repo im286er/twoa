@@ -387,7 +387,6 @@ class UserController extends AmongController {
 				}else{
 					$condition[$value["name"]]=array("LIKE","%{$value["value"]}%");
 				}
-				
 			}
 		}
 		// print_r($condition);

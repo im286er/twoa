@@ -12,17 +12,20 @@ class Attend_checkinModel extends AmongModel{
 	protected $trueTableName = 'oa_attend_checkin'; 
 	protected $fields = array('acheckin_id', 'acheckin_code','acheckin_checkinway','acheckin_type','acheckin_timetype','acheckin_addtime','acheckin_checkintime','acheckin_location','acheckin_longlat','acheckin_picture',"acheckin_state","acheckin_tempstorage","acheckin_applyid");
 
-	function search_checkin($acheckin_code,$acheckin_id=null,$condition=array()){
+	function search_checkin($acheckin_code,$condition=array(),$start=0,$limit=0){
 		if(!$this->has_auth("select")) return false;
-		if($acheckin_id==null){
-			// $acheckin=$this->where(array("acheckin_code"=>$acheckin_code));
-		}else{
-			// $acheckin=$this->where(array("acheckin_id"=>$acheckin_id));
+		$this->table("oa_attend_checkin ch")->field(array_merge($this->fields,array("ct.config_value acheckin_types","ctt.config_value acheckin_timetypes")))->join("left join oa_config ct on ct.config_class='acheckin_type' AND ct.config_key=ch.acheckin_type")->join("left join oa_config ctt on ctt.config_class='acheckin_timetype' AND ctt.config_key=ch.acheckin_timetype")->order("acheckin_checkintime desc");
+		if($limit>0){
+			$this->limit($start.','.$limit);
+		}
+		if($acheckin_code>0){
+			$this->where(array("acheckin_code"=>$acheckin_code));
 		}
 		if(!empty($condition)){
 			// print_r($condition);
 			return $this->where($condition)->select();
 		}
+		return $this->select();
 
 		// return $acheckin->select();
 	}

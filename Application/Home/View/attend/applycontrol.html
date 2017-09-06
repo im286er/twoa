@@ -1,0 +1,154 @@
+<link rel="stylesheet" href="__PUBLIC__/components/bootstrap-datepicker/dist/css/bootstrap-datepicker3.css">
+<link rel="stylesheet" href="__PUBLIC__/components/bootstrap-switch-master/dist/css/bootstrap-switch.css">
+
+
+<div class="page-header">
+	<h1>
+		考勤管理
+		<small>
+			<i class="ace-icon fa fa-angle-double-right"></i>
+			申请管理
+		</small>
+	</h1>
+</div><!-- /.page-header -->
+
+<div class="row">
+    <div class="tabbable">
+        <ul class="nav nav-tabs padding-12 tab-color-blue background-blue">
+            <li class="active">
+                <a data-toggle="tab" class="checkinway" data-checkinway='1' href="#check-list">打卡记录</a>
+            </li>
+
+            <li>
+                <a data-toggle="tab" class="checkinway" data-checkinway='2' href="#apply-list">申请记录</a>
+            </li>
+            <li>
+                <a data-toggle="tab" class="checkinway" data-checkinway='3' href="#approve-list">审批记录</a>
+            </li>
+        </ul>
+
+        <div class="tab-content">
+            <div id="check-list" class="tab-pane in active">
+                <table class="table table-striped table-bordered table-hover">
+                    <thead class="thin-border-bottom">
+                        <tr>
+                            <th>
+                                <i class="ace-icon fa fa-calendar-check-o"></i>
+                                打卡类型
+                            </th>
+                            <th>
+                                <i class="ace-icon fa fa-clock-o"></i>
+                                打卡时间
+                            </th>
+                            <th class="hidden-480">
+                                <i class="ace-icon fa fa-map-marker"></i>
+                                打卡位置
+                            </th>
+                        </tr>
+                    </thead>
+
+                    <tbody id="checkin-html-div">
+                        {$checkinListHtml.html}
+                    </tbody>
+                </table>
+                <div id="checkin-page-div" class="pages-list" data-con="getCheckinList" data-html="#checkin-html-div" data-page="#checkin-page-div">{$checkinListHtml.pages}</div>
+            </div>
+            <div id="apply-list" class="tab-pane">
+                <table class="table table-striped table-bordered table-hover">
+                    <thead class="thin-border-bottom">
+                        <tr>
+                            <th>
+                                <i class="ace-icon fa fa-calendar-check-o"></i>
+                                申请类型
+                            </th>
+                            <th>
+                                <i class="ace-icon fa fa-clock-o"></i>
+                                提交时间
+                            </th>
+                            <th>
+                                <i class="ace-icon fa fa-clock-o"></i>
+                                计划日期
+                            </th>
+                            <th class="hidden-480">
+                                <i class="ace-icon fa fa-map-marker"></i>
+                                天数/小时
+                            </th>
+                            <th class="hidden-480">
+                                <i class="ace-icon fa fa-map-marker"></i>
+                                申请理由
+                            </th>
+                            <th class="hidden-480">
+                                <i class="ace-icon fa fa-map-marker"></i>
+                                审批状态
+                            </th>
+                        </tr>
+                    </thead>
+
+                    <tbody id="apply-html-div">
+                        {$applyListHtml.html}
+                    </tbody>
+                </table>
+                <div id="apply-page-div" class="pages-list" data-con="getApplyList" data-html="#apply-html-div" data-page="#apply-page-div">{$applyListHtml.pages}</div>
+            </div>
+            <div id="approve-list" class="tab-pane">
+                    <div id="member-tab" class="tab-pane active">
+                            <!-- #section:pages/dashboard.members -->
+                            <div class="clearfix" id="approve-html-div">
+                                {$approveListHtml.html}
+                            </div>
+                            <div class="space-4"></div>
+                        </div>
+           
+                        <div id="approve-page-div" class="pages-list" data-con="getApproveList" data-html="#approve-html-div" data-page="#approve-page-div">{$approveListHtml.pages}</div>    
+            </div>
+        </div>
+    </div>
+</div>
+<div id="applyModal" class="modal fade" tabindex="-1" style="text-align: center;">
+    <div class="modal-dialog" role="archiveModal">
+        <div class="modal-content" >
+
+            <div class="modal-body">
+            </div>
+
+            <div class="modal-footer">
+                <button type="button" id="submit-apply" class="btn btn-sm btn-success pull-right">
+                    提交申请
+                    <i class="ace-icon fa fa-arrow-right icon-on-right bigger-110"></i>
+                </button>
+                <button class="btn btn-sm btn-danger pull-left" data-dismiss="modal">
+                    <i class="ace-icon fa fa-times"></i>
+                    关闭
+                </button>
+            </div>
+        </div><!-- /.modal-content -->
+    </div><!-- /.modal-dialog -->
+</div>
+
+
+<!-- <script src="__PUBLIC__/components/fuelux/js/spinbox.js"></script>
+<script src="__PUBLIC__/components/bootstrap-datepicker/dist/js/bootstrap-datepicker.js"></script>
+<script src="__PUBLIC__/assets/js/src/elements.spinner.js"></script>
+<script src="__PUBLIC__/components/chosen/chosen.jquery.js"></script>
+<script src="__PUBLIC__/components/jquery.gritter/js/jquery.gritter.js"></script>
+<script src="__PUBLIC__/components/bootstrap-switch-master/dist/js/bootstrap-switch.js"></script> -->
+<script>
+    $(function(){
+       $(".pages-list").on("click","a",function(){
+           var page= $(this).data("page")
+           var html=$(this).parents(".pages-list").data("html")
+           var pages=$(this).parents(".pages-list").data("page")
+           var con=$(this).parents(".pages-list").data("con")
+           $.ajax({
+               url:"{:U('"+con+"')}",
+               type:"post",
+               dataType:"json",
+               data:{p:page},
+               success:function(data){
+                   $(html).html(data.html)
+                   $(pages).html(data.pages)
+               }
+           })
+       })
+    })
+</script>
