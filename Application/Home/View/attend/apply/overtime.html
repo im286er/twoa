@@ -40,11 +40,11 @@
                 <div class="col-xs-12 col-sm-12">
                     <!-- <input class="form-control" placeholder="@其他主管/组长"> -->
                     <select class="chosen-select form-control apply-info" multiple id="" name="aapply_approve" data-placeholder="@其他主管/组长">
-                            <option value=""></option>
-                            <volist name="managerArray" id="manager">
-                                    <option value="{$manager.user_code}">{$manager.user_name}</option>
-                            </volist>
-                        </select>
+                        <option value=""></option>
+                        <volist name="managerArray" id="manager">
+                                <option value="{$manager.user_code}">{$manager.user_name}</option>
+                        </volist>
+                    </select>
                 </div>
             </div>
             <div class="space space-8"></div>

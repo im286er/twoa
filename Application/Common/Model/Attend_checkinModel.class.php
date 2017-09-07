@@ -14,7 +14,7 @@ class Attend_checkinModel extends AmongModel{
 
 	function search_checkin($acheckin_code,$condition=array(),$start=0,$limit=0){
 		if(!$this->has_auth("select")) return false;
-		$this->table("oa_attend_checkin ch")->field(array_merge($this->fields,array("ct.config_value acheckin_types","ctt.config_value acheckin_timetypes")))->join("left join oa_config ct on ct.config_class='acheckin_type' AND ct.config_key=ch.acheckin_type")->join("left join oa_config ctt on ctt.config_class='acheckin_timetype' AND ctt.config_key=ch.acheckin_timetype")->order("acheckin_checkintime desc");
+		$this->table("oa_attend_checkin ch")->field(array_merge($this->fields,array("ct.config_value acheckin_types","ctt.config_value acheckin_timetypes")))->join("left join oa_config ct on ct.config_class='acheckin_type' AND ct.config_key=ch.acheckin_type")->join("left join oa_config ctt on ctt.config_class='acheckin_timetype' AND ctt.config_key=ch.acheckin_timetype")->order("acheckin_checkintime desc,acheckin_id desc");
 		if($limit>0){
 			$this->limit($start.','.$limit);
 		}

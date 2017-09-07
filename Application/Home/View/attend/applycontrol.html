@@ -16,19 +16,19 @@
     <div class="tabbable">
         <ul class="nav nav-tabs padding-12 tab-color-blue background-blue">
             <li class="active">
-                <a data-toggle="tab" class="checkinway" data-checkinway='1' href="#check-list">打卡记录</a>
+                <a data-toggle="tab" class="record-type" data-checkinway='1' href="#checkin-list">打卡记录</a>
             </li>
 
             <li>
-                <a data-toggle="tab" class="checkinway" data-checkinway='2' href="#apply-list">申请记录</a>
+                <a data-toggle="tab" class="record-type" data-checkinway='2' href="#apply-list">申请记录</a>
             </li>
             <li>
-                <a data-toggle="tab" class="checkinway" data-checkinway='3' href="#approve-list">审批记录</a>
+                <a data-toggle="tab" class="record-type" data-checkinway='3' href="#approve-list">审批记录</a>
             </li>
         </ul>
 
         <div class="tab-content">
-            <div id="check-list" class="tab-pane in active">
+            <div id="checkin-list" class="tab-pane in active">
                 <table class="table table-striped table-bordered table-hover">
                     <thead class="thin-border-bottom">
                         <tr>
@@ -61,15 +61,15 @@
                                 <i class="ace-icon fa fa-calendar-check-o"></i>
                                 申请类型
                             </th>
-                            <th>
+                            <th class="hidden-480">
                                 <i class="ace-icon fa fa-clock-o"></i>
                                 提交时间
                             </th>
-                            <th>
+                            <th >
                                 <i class="ace-icon fa fa-clock-o"></i>
                                 计划日期
                             </th>
-                            <th class="hidden-480">
+                            <th class="hidden-480" >
                                 <i class="ace-icon fa fa-map-marker"></i>
                                 天数/小时
                             </th>
@@ -77,7 +77,7 @@
                                 <i class="ace-icon fa fa-map-marker"></i>
                                 申请理由
                             </th>
-                            <th class="hidden-480">
+                            <th>
                                 <i class="ace-icon fa fa-map-marker"></i>
                                 审批状态
                             </th>
@@ -91,24 +91,92 @@
                 <div id="apply-page-div" class="pages-list" data-con="getApplyList" data-html="#apply-html-div" data-page="#apply-page-div">{$applyListHtml.pages}</div>
             </div>
             <div id="approve-list" class="tab-pane">
-                    <div id="member-tab" class="tab-pane active">
-                            <!-- #section:pages/dashboard.members -->
-                            <div class="clearfix" id="approve-html-div">
-                                {$approveListHtml.html}
-                            </div>
-                            <div class="space-4"></div>
-                        </div>
+                <div id="member-tab" class="tab-pane active">
+                    <!-- #section:pages/dashboard.members -->
+                    <div class="clearfix" id="approve-html-div">
+                        {$approveListHtml.html}
+                    </div>
+                    <div class="space-4"></div>
+                </div>
            
-                        <div id="approve-page-div" class="pages-list" data-con="getApproveList" data-html="#approve-html-div" data-page="#approve-page-div">{$approveListHtml.pages}</div>    
+                <div id="approve-page-div" class="pages-list" data-con="getApproveList" data-html="#approve-html-div" data-page="#approve-page-div">{$approveListHtml.pages}</div>    
+            </div>
+            <div id="right-menu" class="modal aside" data-body-scroll="true" data-offset="true" data-placement="right" data-fixed="true" data-backdrop="true" tabindex="-1">
+                <div class="modal-dialog">
+                    <div class="modal-content">
+                        <div class="modal-header no-padding">
+                            <div class="table-header">
+                                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">
+                                    <span class="white">&times;</span>
+                                </button>
+                                根据不同条件筛选
+                            </div>
+                        </div>
+            
+                        <div class="modal-body">
+                            <div class="search-condition cond-one hide">
+                                <div class="form-group">
+                                    <select class="chosen-select  apply-info" id="" name="aapply_project" data-placeholder="申请人">
+                                        <option value="">全部申请人</option>
+                                        <option value="1 DAY">审批</option>
+                                        <option value="+1 WEEK">未审批</option>
+                                        <option value="+1 MONTH">拒绝</option>  
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="search-condition cond-two">
+                                <div class="form-group">
+                                    <label for="form-field-select-1">日期</label>
+                                    <select class="form-control" id="form-field-select-1">
+                                        <option value="">全部日期</option>
+                                        <option value="1 DAY">当天</option>
+                                        <option value="+1 WEEK">一周</option>
+                                        <option value="+1 MONTH">一个月</option>
+                                    </select>
+                                </div>
+                                
+                            </div>
+                            <div class="search-condition cond-three hide">
+                                <div class="form-group">
+                                    <label for="form-field-select-1">类型</label>
+                                    <select class="form-control" id="form-field-select-1">
+                                        <option value="">全部类型</option>
+                                        <option value="1 DAY">加班</option>
+                                        <option value="+1 WEEK">补休</option>
+                                        <option value="+1 MONTH">一个月</option>
+                                    </select>
+                                </div>
+                                <div class="form-group">
+                                    <label for="form-field-select-1">状态</label>
+                                    <select class="form-control" id="form-field-select-1">
+                                        <option value="">全部状态</option>
+                                        <option value="1 DAY">审批</option>
+                                        <option value="+1 WEEK">未审批</option>
+                                        <option value="+1 MONTH">拒绝</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <button class="btn btn-info btn-block" id="search-btn">查询</button>
+                            </div>
+                        </div>
+                    </div><!-- /.modal-content -->
+            
+                    <button class="aside-trigger btn btn-info btn-app btn-xs ace-settings-btn" data-target="#right-menu" data-toggle="modal" type="button">
+                        <i data-icon1="fa-plus" data-icon2="fa-minus" class="ace-icon fa fa-search bigger-110 icon-only"></i>
+                    </button>
+                </div><!-- /.modal-dialog -->
             </div>
         </div>
     </div>
 </div>
+
 <div id="applyModal" class="modal fade" tabindex="-1" style="text-align: center;">
     <div class="modal-dialog" role="archiveModal">
         <div class="modal-content" >
 
             <div class="modal-body">
+                
             </div>
 
             <div class="modal-footer">
@@ -132,9 +200,59 @@
 <script src="__PUBLIC__/components/chosen/chosen.jquery.js"></script>
 <script src="__PUBLIC__/components/jquery.gritter/js/jquery.gritter.js"></script>
 <script src="__PUBLIC__/components/bootstrap-switch-master/dist/js/bootstrap-switch.js"></script> -->
+<script src="__PUBLIC__/assets/js/src/elements.aside.js"></script>
+<script src="__PUBLIC__/components/chosen/chosen.jquery.js"></script>
 <script>
     $(function(){
-       $(".pages-list").on("click","a",function(){
+        /*申请人下拉框*/
+        if(!ace.vars['touch']) {
+            $('.chosen-select').chosen({allow_single_deselect:true,search_contains:true}); 
+            $(window)
+            .off('resize.chosen')
+            .on('resize.chosen', function() {
+                $('.chosen-select').each(function() {
+                        var $this = $(this);
+                        $this.next().css({'width': $this.parent().width()});
+                })
+            }).trigger('resize.chosen');
+            //resize chosen on sidebar collapse/expand
+            $(document).on('settings.ace.chosen', function(e, event_name, event_val) {
+                if(event_name != 'sidebar_collapsed') return;
+                $('.chosen-select').each(function() {
+                        var $this = $(this);
+                        $this.next().css({'width': $this.parent().width()});
+                })
+            });
+    
+    
+            $('#chosen-multiple-style .btn').on('click', function(e){
+                var target = $(this).find('input[type=radio]');
+                var which = parseInt(target.val());
+                if(which == 2) $('#form-field-select-4').addClass('tag-input-style');
+                    else $('#form-field-select-4').removeClass('tag-input-style');
+            });
+        } 
+        /*右侧筛选框*/
+        $('.modal.aside').ace_aside();
+        /*查询按钮按下*/
+        $("#search-btn").on("click",function(){
+            $('.modal.aside').modal("hide");
+        })
+        /*不同类别选择*/
+        $(".tabbable").on("click",".record-type",function(){
+            var href=$(this).attr("href");
+            $(".search-condition").each(function(){
+                $(this).removeClass("hide");
+            })
+            if(href=="#checkin-list"){
+                $(".cond-two").addClass("hide");
+                $(".cond-three").addClass("hide");
+            }else if(href=="#apply-list"){
+                $(".cond-one").addClass("hide");
+            }
+        })
+        /*页数修改*/
+        $(".pages-list").on("click","a",function(){
            var page= $(this).data("page")
            var html=$(this).parents(".pages-list").data("html")
            var pages=$(this).parents(".pages-list").data("page")

@@ -14,7 +14,7 @@ class Attend_applyModel extends AmongModel{
 
 	function searchApply($aapply_code,$condition=array(),$start=0,$limit=0,$approve=false){
 		if(!$this->has_auth("select")) return false;
-		$this->table("oa_attend_apply ap")->field(array_merge($this->fields,array("ci.config_value aapply_indays","ct.config_value aapply_types","u.user_name aapply_username")))->join("left join oa_user u on u.user_code=ap.aapply_code")->join("left join oa_config ct on ct.config_class='aapply_type' AND ct.config_key=ap.aapply_type")->join("left join oa_config ci on ci.config_class='aapply_inday' AND ci.config_key=ap.aapply_inday");
+		$this->table("oa_attend_apply ap")->field(array_merge($this->fields,array("ci.config_value aapply_indays","ct.config_value aapply_types","u.user_name aapply_username")))->join("left join oa_user u on u.user_code=ap.aapply_code")->join("left join oa_config ct on ct.config_class='aapply_type' AND ct.config_key=ap.aapply_type")->join("left join oa_config ci on ci.config_class='aapply_inday' AND ci.config_key=ap.aapply_inday")->order("aapply_schedule DESC");
 		if($limit>0){
 			$this->limit($start.','.$limit);
 		}
