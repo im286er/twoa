@@ -94,33 +94,9 @@
 <script>
     $(function(){
         /*下拉选框的js*/
-        // if(!ace.vars['touch']) {
-            $('.chosen-select').chosen(); 
-            // $(window)
-            // .off('resize.chosen')
-            // .on('resize.chosen', function() {
-            //     $('.chosen-select').each(function() {
-            //             var $this = $(this);
-            //             $this.next().css({'width': $this.parent().width()});
-            //     })
-            // }).trigger('resize.chosen');
-            // //resize chosen on sidebar collapse/expand
-            // $(document).on('settings.ace.chosen', function(e, event_name, event_val) {
-            //     if(event_name != 'sidebar_collapsed') return;
-            //     $('.chosen-select').each(function() {
-            //             var $this = $(this);
-            //             $this.next().css({'width': $this.parent().width()});
-            //     })
-            // });
-    
-    
-            // $('#chosen-multiple-style .btn').on('click', function(e){
-            //     var target = $(this).find('input[type=radio]');
-            //     var which = parseInt(target.val());
-            //     if(which == 2) $('#form-field-select-4').addClass('tag-input-style');
-            //         else $('#form-field-select-4').removeClass('tag-input-style');
-            // });
-        // }
+
+        $('.chosen-select').chosen({allow_single_deselect:true,search_contains:true,width:"100%"}); 
+   
         //初始化加班小时选择器
         $('#home-time').ace_spinner({value:1,min:1,max:4,step:0.5, on_sides: true, icon_up:'ace-icon fa fa-plus bigger-110', icon_down:'ace-icon fa fa-minus bigger-110', btn_up_class:'btn-info' , btn_down_class:'btn-info'});
         //类型改变
