@@ -102,4 +102,5 @@
 #### 2017-09-08
 * 注销 chosen.jquery.js文件：if (/iP(od|hone)/i.test(window.navigator.userAgent) ……让其支持移动设备
 * 修改 elements.aside.js文件 content.css('max-height', content.find(".modal-body").height()+70+'px');让内容高度随着modal-body变化
+* 修改 elements.aside.js文件 $modal.appendTo(this.container || 'body'); //修改防止容器append到body中
 * 新增跳链接，复制url到浏览器，登录后会自动跳转到对应的链接

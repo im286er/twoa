@@ -223,7 +223,7 @@
 		this.initiate();
 		
 		if(this.container) this.container = $(this.container);
-		$modal.appendTo(this.container || 'body'); 
+		// $modal.appendTo(this.container || 'body'); //vition 修改防止容器append到body中
 	}
 
 

@@ -1,51 +1,77 @@
 <div class="row">
-    <div class="profile-user-info profile-user-info-striped">
+    <div class="profile-user-info">
         <div class="profile-info-row">
             <div class="profile-info-name"> 申请人 </div>
-    
+
             <div class="profile-info-value">
-                <span class="editable editable-click" id="username">{$applyInfo.aapply_code}</span>
+                <span>{$applyInfo.aapply_codes}</span>
             </div>
         </div>
-    
+
         <div class="profile-info-row">
             <div class="profile-info-name"> 申请类型 </div>
-    
+
             <div class="profile-info-value">
-                <i class="fa fa-map-marker light-orange bigger-110"></i>
-                <span class="editable editable-click" id="country">{$applyInfo.aapply_type}</span>
+                <span>{$applyInfo.aapply_types}</span>
             </div>
         </div>
-    
+
+        <div class="profile-info-row">
+            <div class="profile-info-name"> 时间类型 </div>
+
+            <div class="profile-info-value">
+                <span>{$applyInfo.aapply_indays}</span>
+            </div>
+        </div>
+
         <div class="profile-info-row">
             <div class="profile-info-name"> 提交时间 </div>
-    
+
             <div class="profile-info-value">
-                <span class="editable editable-click" id="age">{$applyInfo.aapply_addtime}</span>
+                <span>{$applyInfo.aapply_addtime}</span>
             </div>
         </div>
-    
+
         <div class="profile-info-row">
             <div class="profile-info-name"> 计划时间 </div>
-    
+
             <div class="profile-info-value">
-                <span class="editable editable-click" id="signup">{$applyInfo.aapply_schedule}</span>
+                <span>{$applyInfo.aapply_schedule}</span>
             </div>
         </div>
-    
         <div class="profile-info-row">
-            <div class="profile-info-name"> Last Online </div>
-    
+            <div class="profile-info-name"> 时间数 </div>
+
             <div class="profile-info-value">
-                <span class="editable editable-click" id="login">3 hours ago</span>
+                <span>{$applyInfo.aapply_days}</span>
             </div>
         </div>
-    
         <div class="profile-info-row">
-            <div class="profile-info-name"> About Me </div>
-    
+            <div class="profile-info-name"> 申请理由 </div>
+
             <div class="profile-info-value">
-                <span class="editable editable-click" id="about">Editable as WYSIWYG</span>
+                <span>{$applyInfo.aapply_reason}</span>
+            </div>
+        </div>
+        <div class="profile-info-row">
+            <div class="profile-info-name"> 涉及项目 </div>
+
+            <div class="profile-info-value">
+                <span>{$applyInfo.aapply_projcet}</span>
+            </div>
+        </div>
+        <div class="profile-info-row">
+            <div class="profile-info-name"> 证明文件 </div>
+
+            <div class="profile-info-value">
+                <span>{$applyInfo.aapply_proof}</span>
+            </div>
+        </div>
+        <div class="profile-info-row">
+            <div class="profile-info-name"> 审批状态 </div>
+
+            <div class="profile-info-value">
+                <span>{$applyInfo.aapply_state}</span>
             </div>
         </div>
     </div>
