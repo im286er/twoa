@@ -1,6 +1,8 @@
 <link rel="stylesheet" href="__PUBLIC__/components/bootstrap-datepicker/dist/css/bootstrap-datepicker3.css">
 <link rel="stylesheet" href="__PUBLIC__/components/bootstrap-switch-master/dist/css/bootstrap-switch.css">
-
+<style>
+    #apply-list .label{cursor:pointer;}
+</style>
 
 <div class="page-header">
 	<h1>
@@ -172,9 +174,11 @@
 </div>
 
 <div id="applyModal" class="modal fade" tabindex="-1" style="text-align: center;">
-    <div class="modal-dialog" role="archiveModal">
+    <div class="modal-dialog" >
         <div class="modal-content" >
-
+            <div class="modal-header">
+                <h4 class="modal-title"><i class="ace-icon fa fa-puzzle-piece"></i>&nbsp;申请详情</h4>
+            </div>
             <div class="modal-body">
                 
             </div>
@@ -205,9 +209,7 @@
 <script>
     $(function(){
         /*申请人下拉框*/
-
         $('.chosen-select').chosen({allow_single_deselect:true,search_contains:true,width:"100%"}); 
-
         /*右侧筛选框*/
         $('.modal.aside').ace_aside();
         /*查询按钮按下*/
@@ -230,7 +232,6 @@
             })
             var html="#"+$(".tab-content .active").find(".html-box").attr("id")
             var pages="#"+$(".tab-content .active").find(".pages-list").attr("id")
-            console.log(datas)
             $.ajax({
                url:"{:U('"+con+"')}",
                type:"post",
@@ -270,6 +271,19 @@
                success:function(data){
                    $(html).html(data.html)
                    $(pages).html(data.pages)
+               }
+           })
+       })
+       /*显示申请详情*/
+       $(".tab-content").on("click",".show-apply",function(){
+            var apply_id=$(this).parents(".apply-id").data("applyid")
+            $.ajax({
+               url:"{:U('getApplyInfo')}",
+               type:"post",
+               dataType:"json",
+               data:{applyid:apply_id},
+               success:function(data){
+                   $("#applyModal .modal-body").html(data.html)
                }
            })
        })

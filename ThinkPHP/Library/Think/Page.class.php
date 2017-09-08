@@ -25,13 +25,13 @@ class Page{
 
 	// 分页显示定制
     private $config  = array(
-        'header' =>'<div class="col-xs-6"><div class="dataTables_info" id="dynamic-table_info" role="status" aria-live="polite">共 %TOTAL_ROW% 条记录</div></div>',
+        'header' =>'<div class="col-xs-12 col-sm-6"><div class="dataTables_info" id="dynamic-table_info" role="status" aria-live="polite">共 %TOTAL_ROW% 条记录</div></div>',
         // 'header' => '<span class="rows">共 %TOTAL_ROW% 条记录</span>',
         'prev'   => '上页',
         'next'   => '下页',
         'first'  => '1...',
         'last'   => '...%TOTAL_PAGE%',
-        'divul' =>'<div class="col-xs-6"><div class="dataTables_paginate paging_simple_numbers" id="dynamic-table_paginate"><ul class="pagination">%FIRST% %UP_PAGE% %LINK_PAGE% %DOWN_PAGE% %END%</ul></div></div>',
+        'divul' =>'<div class="col-xs-12 col-sm-6"><div class="dataTables_paginate paging_simple_numbers" id="dynamic-table_paginate"><ul class="pagination">%FIRST% %UP_PAGE% %LINK_PAGE% %DOWN_PAGE% %END%</ul></div></div>',
         'theme'  => '%HEADER% %DIVUL%',
         // 'theme'  => '%HEADER% %DIVUL% %FIRST% %UP_PAGE% %LINK_PAGE% %DOWN_PAGE% %END%',
     );

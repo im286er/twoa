@@ -93,8 +93,16 @@ class AttendController extends AmongController {
 		return $return;
 	}
 
+	/**
+	 * getApplyList function 获取申请记录
+	 *
+	 * @param integer $usercode
+	 * @param integer $p
+	 * @return void
+	 */
 	function getApplyList($usercode=0,$p=1){
 		$condition=array();
+		$state=array('<span class="label label-inverse show-apply" data-toggle="modal" data-target="#applyModal">未审批</span>','<span class="label label-success arrowed show-apply" data-toggle="modal" data-target="#applyModal">已审批</span>','<span class="label label-danger arrowed-in show-apply" data-toggle="modal" data-target="#applyModal">拒绝</span>');
 		if($usercode==0){
 			$user_code=$this->selfUser["user_code"];
 			$p=$_POST["p"];
@@ -122,6 +130,7 @@ class AttendController extends AmongController {
 		$aapplyArray=$this->aapply->searchApply($this->selfUser["user_code"],$condition,$Page->firstRow,$Page->listRows);
 		// echo $this->aapply->getLastSql();
 		$this->assign("aapplyArray",$aapplyArray);
+		$this->assign("state",$state);
 		$return=array("html"=>$this->fetch("attend/applycontrol/apply_list"),"pages"=>$pageShow);
 		if($usercode==0){
 			$this->ajaxReturn($return);
@@ -129,8 +138,17 @@ class AttendController extends AmongController {
 		return $return;
 	}
 
+	/**
+	 * getApproveList function 获取审批记录
+	 *
+	 * @param integer $usercode
+	 * @param integer $p
+	 * @return void
+	 */
 	function getApproveList($usercode=0,$p=1){
 		$condition=array();
+		$state=array('<button class="btn btn-xs btn-inverse"><i class="ace-icon fa fa-square-o
+		bigger-110"></i>&nbsp;未审批&nbsp;<i class="ace-icon fa fa-hand-o-up icon-on-right"></i></button>','<button class="btn btn-xs btn-success"><i class="ace-icon fa fa-check-square bigger-110"></i>&nbsp;审批&nbsp;<i class="ace-icon fa fa-hand-o-up icon-on-right"></i></button>','<button class="btn btn-xs btn-danger"><i class="ace-icon fa fa-times-rectangle bigger-110"></i>&nbsp;拒绝&nbsp;<i class="ace-icon fa fa-hand-o-up icon-on-right"></i></button>');
 		if($usercode==0){
 			$user_code=$this->selfUser["user_code"];
 			$p=$_POST["p"];
@@ -162,7 +180,23 @@ class AttendController extends AmongController {
 		$approveArray=$this->aapply->searchApply($this->selfUser["user_code"],$condition,$Page->firstRow,$Page->listRows,true);
 		// echo $this->aapply->getLastSql();
 		$this->assign("approveArray",$approveArray);
+		$this->assign("state",$state);
 		$return=array("html"=>$this->fetch("attend/applycontrol/approve_list"),"pages"=>$pageShow);
+		if($usercode==0){
+			$this->ajaxReturn($return);
+		}
+		return $return;
+	}
+
+	function getApplyInfo($applyId=0){
+		if($applyId==0){
+			$aapply_id=I("applyid");
+		}else{
+			$aapply_id=$applyId;
+		}
+		$applyInfo=$this->aapply->getAppy($aapply_id);
+		$this->assign("applyInfo",$applyInfo);
+		$return=array("html"=>$this->fetch("attend/applycontrol/applyinfo"));
 		if($usercode==0){
 			$this->ajaxReturn($return);
 		}

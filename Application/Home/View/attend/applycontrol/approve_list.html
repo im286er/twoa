@@ -1,5 +1,5 @@
 <volist name="approveArray" id="approve">
-    <div class="itemdiv memberdiv">
+    <div class="itemdiv memberdiv apply-id" data-applyid="{$approve.aapply_id}">
         <div class="user">
             <img alt="Bob Doe's avatar" src="__PUBLIC__/assets/avatars/user.jpg">
         </div>
@@ -9,7 +9,7 @@
                 <a href="#">{$approve.aapply_username}</a>
             </div>
             <div >
-                <i class="ace-icon fa fa-plug "></i>
+                <i class="ace-icon fa fa-cogs "></i>
                 {$approve.aapply_types}<span class="green">&nbsp;{$approve.aapply_days}天&nbsp;/{$approve.aapply_hours}小时&nbsp;</span>
             </div>
             <div class="time">
@@ -21,11 +21,7 @@
                 &nbsp;{$approve.aapply_reason}&nbsp;
             </div>
             <div>
-                <button class="btn btn-xs btn-danger">
-                    <i class="ace-icon fa fa-bolt bigger-110"></i>
-                    {$approve.aapply_state}
-                    <i class="ace-icon fa fa-hand-o-up icon-on-right"></i>
-                </button>
+                {$state[$approve["aapply_state"]]}
             </div>
         </div>
         <div class="space-4"></div>

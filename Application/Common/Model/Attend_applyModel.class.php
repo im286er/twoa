@@ -50,6 +50,16 @@ class Attend_applyModel extends AmongModel{
 	}
 	
 	/**
+	 * getAppy function 根据id取申请信息
+	 *
+	 * @param [type] $aapply_id
+	 * @return void
+	 */
+	function getAppy($aapply_id){
+		if(!$this->has_auth("select")) return false;
+		return $this->where(array("aapply_id"=>$aapply_id))->find();
+	}
+	/**
 	 * isApply 判断申请记录是否审批
 	 *
 	 * @param [type] $user_code
