@@ -15,9 +15,19 @@ class AmongController extends Controller {
 	public function __construct(){
         parent::__construct();
         $this->baseInfo=D("Info");
-        $this->user=D("User");
+		$this->user=D("User");
+		if(!empty($_GET)){
+			// 获取当前url，做好准备跳转
+			if(session("prev_url")!="redirect"){
+				if($_SERVER["SERVER_PORT"]=="80"){
+					session("prev_url",$_SERVER["REQUEST_SCHEME"].'://'.$_SERVER['HTTP_HOST'].$_SERVER['REQUEST_URI']);
+				}else{
+					session("prev_url",$_SERVER["REQUEST_SCHEME"].'://'.$_SERVER['SERVER_NAME'].':'.$_SERVER["SERVER_PORT"].$_SERVER["REQUEST_URI"]);
+				}
+			}
+		}
 		$oa_login=session("oa_islogin");
-        vendor('WeixinQy.WeixinQy');//引入Sms
+        vendor('WeixinQy.WeixinQy');//引入WeiXin企业
 
         $WxConf=getWeixinConf();
         $this->Wxqy = new \WeixinQy($WxConf["1000006"]["corpid"],$WxConf["1000006"]["corpsecret"]);
@@ -145,7 +155,8 @@ class AmongController extends Controller {
 	public function logout(){
 		if(IS_POST){
 			session("oa_islogin",NULL);
-    		session("oa_user_code",NULL);
+			session("oa_user_code",NULL);
+			session("prev_url",NULL);
     		echo "logout";
 		}
 	}

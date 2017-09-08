@@ -49,6 +49,8 @@ class AttendController extends AmongController {
                 $this->assign("checkinListHtml",$this->getCheckinList($this->selfUser["user_code"]));
 				$this->assign("applyListHtml",$this->getApplyList($this->selfUser["user_code"]));
 				$this->assign("approveListHtml",$this->getApproveList($this->selfUser["user_code"]));
+				$this->assign("applicantArray",$this->aapply->getApplicant($this->selfUser["user_code"]));
+				$this->assign("attendtypeArray",$this->config->search_all(array("config_class"=>"aapply_type")));
                 break;
         }
         parent::gethtml();
@@ -62,15 +64,19 @@ class AttendController extends AmongController {
 	 * @return void
 	 */
 	function getCheckinList($usercode=0,$p=1){
+		$condition=array();
 		if($usercode==0){
 			$user_code=$this->selfUser["user_code"];
 			$p=$_POST["p"];
+			if(I("data")["time"]!=""){
+				$condition["acheckin_checkintime"]=array("EXP",">=date_sub(now(),interval ".I("data")["time"].")");
+			}
 		}else{
 			$user_code=$usercode;
 			$_POST["p"]=$p;
 		}
 		$limit=10;
-		$count=$this->acheckin->where(array("acheckin_code"=>$user_code))->count();
+		$count=$this->acheckin->where(array("acheckin_code"=>$user_code))->where($condition)->count();
 		if($p>ceil($count/$limit)){
 			$_POST["p"]=1;
 		}
@@ -78,7 +84,7 @@ class AttendController extends AmongController {
 		$Page=new \Think\Page($count,$limit);
 		$pageShow=$Page->show();
 
-		$checkinArray=$this->acheckin->search_checkin($this->selfUser["user_code"],array(),$Page->firstRow,$Page->listRows);
+		$checkinArray=$this->acheckin->search_checkin($this->selfUser["user_code"],$condition,$Page->firstRow,$Page->listRows);
 		$this->assign("checkinArray",$checkinArray);
 		$return=array("html"=>$this->fetch("attend/applycontrol/checkin_list"),"pages"=>$pageShow);
 		if($usercode==0){
@@ -88,15 +94,24 @@ class AttendController extends AmongController {
 	}
 
 	function getApplyList($usercode=0,$p=1){
+		$condition=array();
 		if($usercode==0){
 			$user_code=$this->selfUser["user_code"];
 			$p=$_POST["p"];
+			if(I("data")["time"]!=""){
+				$condition["aapply_schedule"]=array("EXP",">=date_sub(now(),interval ".I("data")["time"].")");
+			}
+			foreach (I("data") as $key => $value) {
+				if($key!="time"){
+					$condition[$key]=array("eq",$value);
+				}
+			}
 		}else{
 			$user_code=$usercode;
 			$_POST["p"]=$p;
 		}
 		$limit=10;
-		$count=$this->aapply->where(array("aapply_code"=>$user_code))->count();
+		$count=$this->aapply->where(array("aapply_code"=>$user_code))->where($condition)->count();
 		if($p>ceil($count/$limit)){
 			$_POST["p"]=1;
 		}
@@ -104,7 +119,8 @@ class AttendController extends AmongController {
 		$Page=new \Think\Page($count,$limit);
 		$pageShow=$Page->show();
 
-		$aapplyArray=$this->aapply->searchApply($this->selfUser["user_code"],array(),$Page->firstRow,$Page->listRows);
+		$aapplyArray=$this->aapply->searchApply($this->selfUser["user_code"],$condition,$Page->firstRow,$Page->listRows);
+		// echo $this->aapply->getLastSql();
 		$this->assign("aapplyArray",$aapplyArray);
 		$return=array("html"=>$this->fetch("attend/applycontrol/apply_list"),"pages"=>$pageShow);
 		if($usercode==0){
@@ -114,15 +130,28 @@ class AttendController extends AmongController {
 	}
 
 	function getApproveList($usercode=0,$p=1){
+		$condition=array();
 		if($usercode==0){
 			$user_code=$this->selfUser["user_code"];
 			$p=$_POST["p"];
+			if(I("data")["time"]!=""){
+				$condition["aapply_schedule"]=array("EXP",">=date_sub(now(),interval ".I("data")["time"].")");
+			}
+			foreach (I("data") as $key => $value) {
+				if($key!="time"){
+					if($key=="aapply_code"){
+						$condition[$key]=array("in",$value);
+					}else{
+						$condition[$key]=array("eq",$value);
+					}
+				}
+			}
 		}else{
 			$user_code=$usercode;
 			$_POST["p"]=$p;
 		}
 		$limit=10;
-		$count=$this->aapply->where("aapply_approve LIKE '%".$user_code."%'")->count();
+		$count=$this->aapply->where("aapply_approve LIKE '%".$user_code."%'")->where($condition)->count();
 		if($p>ceil($count/$limit)){
 			$_POST["p"]=1;
 		}
@@ -130,7 +159,8 @@ class AttendController extends AmongController {
 		$Page=new \Think\Page($count,$limit);
 		$pageShow=$Page->show();
 
-		$approveArray=$this->aapply->searchApply($this->selfUser["user_code"],array(),$Page->firstRow,$Page->listRows,true);
+		$approveArray=$this->aapply->searchApply($this->selfUser["user_code"],$condition,$Page->firstRow,$Page->listRows,true);
+		// echo $this->aapply->getLastSql();
 		$this->assign("approveArray",$approveArray);
 		$return=array("html"=>$this->fetch("attend/applycontrol/approve_list"),"pages"=>$pageShow);
 		if($usercode==0){

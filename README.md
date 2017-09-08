@@ -98,3 +98,8 @@
 #### 2017-09-02
 * ALTER TABLE `oa_project_list` ADD `project_captain` BIGINT(10) NOT NULL DEFAULT '0' COMMENT '担当' AFTER `project_enddate`, ADD `project_region` INT(5) NOT NULL DEFAULT '0' COMMENT '地区' AFTER `project_captain`;
 * ALTER TABLE `oa_attend_apply` CHANGE `aapply_project` `aapply_project` BIGINT(20) NULL DEFAULT '0' COMMENT '涉及项目';
+
+#### 2017-09-08
+* 注销 chosen.jquery.js文件：if (/iP(od|hone)/i.test(window.navigator.userAgent) ……让其支持移动设备
+* 修改 elements.aside.js文件 content.css('max-height', content.find(".modal-body").height()+70+'px');让内容高度随着modal-body变化
+* 新增跳链接，复制url到浏览器，登录后会自动跳转到对应的链接

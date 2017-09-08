@@ -134,6 +134,22 @@ class Attend_applyModel extends AmongModel{
 			return true;
 		}
 		return false;
-		
+	}
+
+	/**
+	 * getApplicant function 获取申请人
+	 *
+	 * @param [type] $user_code
+	 * @param [type] $condition
+	 * @return void
+	 */
+	function getApplicant($user_code,$condition=null){
+		if(!$this->has_auth("select")) return true;
+		$this->table($this->trueTableName." a")->field("aapply_code, u.user_name aapply_codes")->join("left join oa_user u on u.user_code=a.aapply_code")->group("aapply_code");
+		$this->where("aapply_approve LIKE '%".$user_code."%'");
+		if($condition!=null){
+			$this->where($condition);
+		}
+		return $this->select();
 	}
 }

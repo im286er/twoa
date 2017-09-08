@@ -158,9 +158,10 @@
 					.ace_scroll('enable')
 					.ace_scroll('reset');
 				}
-				else content.css('max-height', (!vertical ? dialog.height() : content.height())+'px');
+				else content.css('max-height', content.find(".modal-body").height()+70+'px');//vition 2017-09-08修改 让内容高度随着modal-body变化
+				// else content.css('max-height', (!vertical ? dialog.height() : content.height())+'px');
 			}).triggerHandler('resize.modal.aside');
-			
+				
 			
 			///////////////////////////////////////////////////////////////////////////
 			if(self.container && ace.vars['transition'] && !hasFade) {
