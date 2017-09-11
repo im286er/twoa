@@ -163,4 +163,16 @@ class Attend_applyModel extends AmongModel{
 		}
 		return $this->select();
 	}
+
+	/**
+	 * setApply function
+	 *
+	 * @param [type] $aapply_id 要修改的id
+	 * @param [type] $dataArray 更新的数据
+	 * @return void
+	 */
+	function setApply($aapply_id,$dataArray){
+		if(!$this->has_auth("update")) return true;
+		return $this->where(array("aapply_id"=>$aapply_id))->save($dataArray);
+	}
 }

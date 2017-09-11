@@ -102,7 +102,7 @@ class AttendController extends AmongController {
 	 */
 	function getApplyList($usercode=0,$p=1){
 		$condition=array();
-		$state=array('<span class="label label-inverse show-apply" data-toggle="modal" data-target="#applyModal">未审批</span>','<span class="label label-success arrowed show-apply" data-toggle="modal" data-target="#applyModal">已审批</span>','<span class="label label-danger arrowed-in show-apply" data-toggle="modal" data-target="#applyModal">拒绝</span>');
+		$state=array('<span class="label label-info show-apply" data-toggle="modal" data-target="#applyModal">未审批</span>','<span class="label label-success arrowed show-apply" data-toggle="modal" data-target="#applyModal">已审批</span>','<span class="label label-danger arrowed-in show-apply" data-toggle="modal" data-target="#applyModal">拒绝</span>','<span class="label label-warning arrowed-in arrowed-in-right show-apply" data-toggle="modal" data-target="#applyModal">审核中</span>','<span class="label label-inverse arrowed-in-right show-apply" data-toggle="modal" data-target="#applyModal">删除</span>');
 		if($usercode==0){
 			$user_code=$this->selfUser["user_code"];
 			$p=$_POST["p"];
@@ -147,8 +147,8 @@ class AttendController extends AmongController {
 	 */
 	function getApproveList($usercode=0,$p=1){
 		$condition=array();
-		$state=array('<button class="btn btn-xs btn-inverse"><i class="ace-icon fa fa-square-o
-		bigger-110"></i>&nbsp;未审批&nbsp;<i class="ace-icon fa fa-hand-o-up icon-on-right"></i></button>','<button class="btn btn-xs btn-success"><i class="ace-icon fa fa-check-square bigger-110"></i>&nbsp;审批&nbsp;<i class="ace-icon fa fa-hand-o-up icon-on-right"></i></button>','<button class="btn btn-xs btn-danger"><i class="ace-icon fa fa-times-rectangle bigger-110"></i>&nbsp;拒绝&nbsp;<i class="ace-icon fa fa-hand-o-up icon-on-right"></i></button>');
+		$state=array('<button class="btn btn-xs btn-inverse show-apply" data-toggle="modal" data-target="#applyModal"><i class="ace-icon fa fa-square-o
+		bigger-110"></i>&nbsp;未审批&nbsp;<i class="ace-icon fa fa-hand-o-up icon-on-right"></i></button>','<button class="btn btn-xs btn-success show-apply" data-toggle="modal" data-target="#applyModal"><i class="ace-icon fa fa-check-square bigger-110"></i>&nbsp;审批&nbsp;<i class="ace-icon fa fa-hand-o-up icon-on-right"></i></button>','<button class="btn btn-xs btn-danger show-apply" data-toggle="modal" data-target="#applyModal"><i class="ace-icon fa fa-times-rectangle bigger-110"></i>&nbsp;拒绝&nbsp;<i class="ace-icon fa fa-hand-o-up icon-on-right"></i></button>','<button class="btn btn-xs btn-warning show-apply" data-toggle="modal" data-target="#applyModal"><i class="ace-icon fa fa-hourglass-half bigger-110"></i>&nbsp;审批中&nbsp;<i class="ace-icon fa fa-hand-o-up icon-on-right"></i></button>','<button class="btn btn-xs btn-inverse show-apply" data-toggle="modal" data-target="#applyModal"><i class="ace-icon fa fa-window-close-o bigger-110"></i>&nbsp;删除&nbsp;<i class="ace-icon fa fa-hand-o-up icon-on-right"></i></button>');
 		if($usercode==0){
 			$user_code=$this->selfUser["user_code"];
 			$p=$_POST["p"];
@@ -188,19 +188,75 @@ class AttendController extends AmongController {
 		return $return;
 	}
 
+	/**
+	 * getApplyInfo function 获取申请信息
+	 *
+	 * @param integer $applyId
+	 * @return void
+	 */
 	function getApplyInfo($applyId=0){
+
+		$state=array('<span class="label label-inverse show-apply" >未审批</span>','<span class="label label-success arrowed show-apply" >已审批</span>','<span class="label label-danger arrowed-in show-apply" >拒绝</span>','<span class="label label-warning arrowed-in arrowed-in-right show-apply">审核中</span>','<span class="label label-inverse arrowed-in-right show-apply">删除</span>');
+		// echo I("active");
+		if(I("active")=="approve-html-div"){
+			$conHtml=array('<button class="btn btn-sm btn-success state-con" data-state="1"><i class="ace-icon fa fa-check-square"></i>通过</button><button class="btn btn-sm btn-danger state-con" data-state="2"><i class="ace-icon fa fa-times-rectangle"></i>拒绝</button>','','','');
+		}else{
+			$conHtml=array('<button class="btn btn-sm btn-danger state-con" data-state="4"><i class="ace-icon fa fa-times"></i>删除</button><button class="btn btn-sm btn-primary"><i class="ace-icon fa fa-pencil-square-o"></i>编辑</button>','','','<button class="btn btn-sm btn-danger state-con" data-state="4"><i class="ace-icon fa fa-times"></i>删除</button>');
+		}
+		
+
 		if($applyId==0){
 			$aapply_id=I("applyid");
 		}else{
 			$aapply_id=$applyId;
 		}
 		$applyInfo=$this->aapply->getAppy($aapply_id);
+		if(!array_key_exists($this->selfUser["user_code"],json_decode($applyInfo["aapply_operation"],true)) && $applyInfo["aapply_state"]==3){
+			$this->assign("conHtml",$conHtml[0]);
+		}else{
+			$this->assign("conHtml",$conHtml[$applyInfo["aapply_state"]]);
+		}
+		
 		$this->assign("applyInfo",$applyInfo);
+		$this->assign("applyState",$state[$applyInfo["aapply_state"]]);
 		$return=array("html"=>$this->fetch("attend/applycontrol/applyinfo"));
 		if($usercode==0){
 			$this->ajaxReturn($return);
 		}
 		return $return;
+	}
+
+	/**
+	 * setApplyState function 修改申请状态
+	 *
+	 * @param integer $id
+	 * @param integer $state
+	 * @return void
+	 */
+	function setApplyState($id=0,$state=0){
+		if($id==0){
+			$aapply_id=I("aapply_id");
+			$aapply_state=I("aapply_state");
+		}else{
+			$aapply_id=$id;
+			$aapply_state=$state;
+		}
+		$applyInfo=$this->aapply->field("aapply_operation,aapply_approve")->getAppy($aapply_id);
+		$aapply_operation=json_decode($applyInfo["aapply_operation"],true);
+		$aapply_approve=json_decode($applyInfo["aapply_approve"],true);
+
+		$data=array();
+		$data["aapply_state"]=$aapply_state;
+		if(count($aapply_approve)>1){
+			if($aapply_operation==null || (count($aapply_operation)+1)<count($aapply_approve)){
+				$data["aapply_state"]=3;
+			}
+		}
+		$aapply_operation[$this->selfUser["user_code"]]=array($data["aapply_state"],time());
+		$data["aapply_operation"]=json_encode($aapply_operation);
+		
+		$result=$this->aapply->setApply($aapply_id,$data);
+		dump($result) ;
 	}
 	/*申请管理相关结束*/
 

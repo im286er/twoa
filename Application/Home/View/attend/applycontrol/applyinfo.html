@@ -1,4 +1,8 @@
+<style>
+    .profile-info-value .btn{margin:0 2px;}
+</style>
 <div class="row">
+    <input type="hidden" id="apply-id" value="{$applyInfo.aapply_id}">
     <div class="profile-user-info">
         <div class="profile-info-row">
             <div class="profile-info-name"> 申请人 </div>
@@ -64,20 +68,61 @@
             <div class="profile-info-name"> 证明文件 </div>
 
             <div class="profile-info-value">
-                <span>{$applyInfo.aapply_proof}</span>
+                <input type="file" name="aapply_proof" class="input-files apply-info" />
             </div>
         </div>
         <div class="profile-info-row">
             <div class="profile-info-name"> 审批状态 </div>
 
             <div class="profile-info-value">
-                <span>{$applyInfo.aapply_state}</span>
+                <span>{$applyState}</span>
+            </div>
+        </div>
+
+        <div class="profile-info-row">
+            <div class="profile-info-name"> 操作 </div>
+            <div class="profile-info-value">
+                {$conHtml}
             </div>
         </div>
     </div>
 </div>
+<script src="__PUBLIC__/assets/js/src/elements.fileinput.js"></script>
 <script>
     $(function(){
+        //初始化input file 样式
+        $('.input-files').ace_file_input({
+            no_file:'请上传pdf文件',
+            btn_choose:'选择文件',
+            btn_change:'修改文件',
+            droppable:true,
+            maxSize:2000000,
+            onchange:true,
+            thumbnail:true,
+            allowExt:  ['pdf']
+        }).on('file.error.ace', function(event, info) {
+            for(index in info.error_count){
+                if(info.error_count[index]==1){
+                    console.log(index+"错误")
+                }
+                
+            }
+        })
+        /*修改申请状态*/
+        $(".state-con").on("click",function(){
+            var datas={}
+            datas["aapply_id"]=$("#apply-id").val();
+            datas["aapply_state"]=$(this).data("state")
+            $.ajax({
+                url:"{:U('setApplyState')}",
+                data:datas,
+                type:"post",
+                dataType:"json",
+                success:function(data){
+                    console.log(data)
+                }
+            })
+        })
             
     })
 </script>

@@ -9709,7 +9709,7 @@ input.ace + .lbl.padding-0::before {
   font-size: 13px;
   vertical-align: top;
   position: static;
-  padding-left: 30px;
+  padding-right: 30px;
 }
 .ace-file-input .ace-file-container .ace-file-name:after {
   display: inline-block;

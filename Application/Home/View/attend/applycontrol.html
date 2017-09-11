@@ -155,6 +155,8 @@
                                         <option value="0">未审批</option>
                                         <option value="1">审批</option>
                                         <option value="2">拒绝</option>
+                                        <option value="3">审核中</option>
+                                        <option value="4">删除</option>
                                     </select>
                                 </div>
                             </div>
@@ -184,13 +186,9 @@
             </div>
 
             <div class="modal-footer">
-                <button type="button" id="submit-apply" class="btn btn-sm btn-success pull-right">
-                    提交申请
-                    <i class="ace-icon fa fa-arrow-right icon-on-right bigger-110"></i>
-                </button>
-                <button class="btn btn-sm btn-danger pull-left" data-dismiss="modal">
-                    <i class="ace-icon fa fa-times"></i>
-                    关闭
+                <button class="btn btn-white btn-default btn-round" data-dismiss="modal">
+                    <i class="ace-icon fa fa-times red2"></i>
+                    Cancel
                 </button>
             </div>
         </div><!-- /.modal-content -->
@@ -276,12 +274,15 @@
        })
        /*显示申请详情*/
        $(".tab-content").on("click",".show-apply",function(){
-            var apply_id=$(this).parents(".apply-id").data("applyid")
+            $("#applyModal .modal-body").html("")
+            var datas={}
+            datas["applyid"]=$(this).parents(".apply-id").data("applyid")
+            datas["active"]=$(".tab-content .active").find(".html-box").attr("id")
             $.ajax({
                url:"{:U('getApplyInfo')}",
                type:"post",
                dataType:"json",
-               data:{applyid:apply_id},
+               data:datas,
                success:function(data){
                    $("#applyModal .modal-body").html(data.html)
                }
