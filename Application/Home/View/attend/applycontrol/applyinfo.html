@@ -78,7 +78,13 @@
                 <span>{$applyState}</span>
             </div>
         </div>
+        <div class="profile-info-row">
+            <div class="profile-info-name"> 审批备注 </div>
 
+            <div class="profile-info-value">
+                <textarea  class="form-control" {$readonly} placeholder="审批备注">{$applyInfo.aapply_remark}</textarea>
+            </div>
+        </div>
         <div class="profile-info-row">
             <div class="profile-info-name"> 操作 </div>
             <div class="profile-info-value">
@@ -109,7 +115,7 @@
             }
         })
         /*修改申请状态*/
-        $(".state-con").on("click",function(){
+        $('.state-con').on("click",function(){
             var datas={}
             datas["aapply_id"]=$("#apply-id").val();
             datas["aapply_state"]=$(this).data("state")
@@ -119,7 +125,11 @@
                 type:"post",
                 dataType:"json",
                 success:function(data){
-                    console.log(data)
+                    alert(data.msg)
+                    if(data.status>0){
+                        $('#applyModal').modal('toggle');
+                        $("#search-btn").click();
+                    }
                 }
             })
         })

@@ -200,8 +200,10 @@ class AttendController extends AmongController {
 		// echo I("active");
 		if(I("active")=="approve-html-div"){
 			$conHtml=array('<button class="btn btn-sm btn-success state-con" data-state="1"><i class="ace-icon fa fa-check-square"></i>通过</button><button class="btn btn-sm btn-danger state-con" data-state="2"><i class="ace-icon fa fa-times-rectangle"></i>拒绝</button>','','','');
+			$this->assign("readonly","");
 		}else{
 			$conHtml=array('<button class="btn btn-sm btn-danger state-con" data-state="4"><i class="ace-icon fa fa-times"></i>删除</button><button class="btn btn-sm btn-primary"><i class="ace-icon fa fa-pencil-square-o"></i>编辑</button>','','','<button class="btn btn-sm btn-danger state-con" data-state="4"><i class="ace-icon fa fa-times"></i>删除</button>');
+			$this->assign("readonly","readonly");
 		}
 		
 
@@ -216,7 +218,7 @@ class AttendController extends AmongController {
 		}else{
 			$this->assign("conHtml",$conHtml[$applyInfo["aapply_state"]]);
 		}
-		
+
 		$this->assign("applyInfo",$applyInfo);
 		$this->assign("applyState",$state[$applyInfo["aapply_state"]]);
 		$return=array("html"=>$this->fetch("attend/applycontrol/applyinfo"));
@@ -233,13 +235,15 @@ class AttendController extends AmongController {
 	 * @param integer $state
 	 * @return void
 	 */
-	function setApplyState($id=0,$state=0){
+	function setApplyState($id=0,$state=0,$remark=""){
 		if($id==0){
 			$aapply_id=I("aapply_id");
 			$aapply_state=I("aapply_state");
+			$aapply_remark=I("aapply_remark");
 		}else{
 			$aapply_id=$id;
 			$aapply_state=$state;
+			$aapply_remark=$remark;
 		}
 		$applyInfo=$this->aapply->field("aapply_operation,aapply_approve")->getAppy($aapply_id);
 		$aapply_operation=json_decode($applyInfo["aapply_operation"],true);
@@ -249,14 +253,43 @@ class AttendController extends AmongController {
 		$data["aapply_state"]=$aapply_state;
 		if(count($aapply_approve)>1){
 			if($aapply_operation==null || (count($aapply_operation)+1)<count($aapply_approve)){
-				$data["aapply_state"]=3;
+				if($aapply_state!=2){
+					$data["aapply_state"]=3;
+				}
+				
 			}
 		}
-		$aapply_operation[$this->selfUser["user_code"]]=array($data["aapply_state"],time());
+
+		$aapply_operation[$this->selfUser["user_code"]]=array($aapply_state,time());
 		$data["aapply_operation"]=json_encode($aapply_operation);
-		
+
+
 		$result=$this->aapply->setApply($aapply_id,$data);
-		dump($result) ;
+		$msg="审批失败";
+		if($result>0){
+			$msg="审批成功";
+			$this->Wxqy->secret($this->WxConf["assistant"]["corpsecret"]);//更改成企业小助手的secret
+			switch ($data["aapply_state"]) {
+				case 1:
+					$mesArray=array("touser"=>$applyInfo["aapply_code"],"msgtype"=>"text","agentid"=>"0","text"=>array("content"=>"你申请 {$applyInfo['aapply_schedule']} 的 {$applyInfo['aapply_types']} 已被 ".$this->selfUser['user_name']." 批准"));
+					break;
+				case 2:
+					$mesArray=array("touser"=>$applyInfo["aapply_code"],"msgtype"=>"text","agentid"=>"0","text"=>array("content"=>"很遗憾，你申请 {$applyInfo['aapply_schedule']} 的 {$applyInfo['aapply_types']} 已被 ".$this->selfUser['user_name']." 拒绝"));
+					break;
+				case 3:
+					$mesArray=array("touser"=>$applyInfo["aapply_code"],"msgtype"=>"text","agentid"=>"0","text"=>array("content"=>"你申请 {$applyInfo['aapply_schedule']} 的 {$applyInfo['aapply_types']} 已被 ".$this->selfUser['user_name']." 批准，请等待其他人审核"));
+					break;
+				default:
+					return;
+					break;
+			}
+			$this->Wxqy->message()->send($mesArray);
+		}
+
+		if($id==0){
+			$this->ajaxReturn(array("status"=>$result,"msg"=>$msg));
+		}
+		return json_encode(array("status"=>$result,"msg"=>$msg));
 	}
 	/*申请管理相关结束*/
 

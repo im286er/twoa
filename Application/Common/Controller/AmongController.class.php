@@ -7,7 +7,8 @@ class AmongController extends Controller {
     protected $selfUser;
     protected $baseInfo;//定义基本信息
     protected $user;//用户模型
-    protected $Wxqy;//用户模型
+	protected $Wxqy;//微信类
+	protected $WxConf;//微信配置
 
 	/**
      * 初始化
@@ -29,8 +30,8 @@ class AmongController extends Controller {
 		$oa_login=session("oa_islogin");
         vendor('WeixinQy.WeixinQy');//引入WeiXin企业
 
-        $WxConf=getWeixinConf();
-        $this->Wxqy = new \WeixinQy($WxConf["1000006"]["corpid"],$WxConf["1000006"]["corpsecret"]);
+        $this->WxConf=getWeixinConf();
+        $this->Wxqy = new \WeixinQy($this->WxConf["1000006"]["corpid"],$this->WxConf["1000006"]["corpsecret"]);
 
 		if(empty($oa_login)){
 			//防止死循环跳转
