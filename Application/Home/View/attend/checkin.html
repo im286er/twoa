@@ -200,9 +200,6 @@
 	<script type="text/javascript">
 		jQuery(function($) {
 			
-			if($("input[name='acheckin_code']").val()==""){
-				location.reload()
-			}
 			var images = {localId: [],serverId: []};
 			set_monitor_date()
 			$("input[name='monitor']").on("click",function(){
@@ -374,6 +371,9 @@
 		    $('.checkinway').on("click",function() {
 				$("input[name='acheckin_checkinway']").val($(this).data("checkinway"))
 			})
+			if($("input[name='acheckin_code']").val()==""){
+				location.reload()
+			}
 		})
 		
 		/**
@@ -443,6 +443,7 @@
 
 	    	})
 	    	return data
+
 		}
 
 		/*提示函数*/

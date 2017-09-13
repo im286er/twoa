@@ -104,3 +104,6 @@
 * 修改 elements.aside.js文件 content.css('max-height', content.find(".modal-body").height()+70+'px');让内容高度随着modal-body变化
 * 修改 elements.aside.js文件 $modal.appendTo(this.container || 'body'); //修改防止容器append到body中
 * 新增跳链接，复制url到浏览器，登录后会自动跳转到对应的链接
+
+#### 2017-09-13
+* ALTER TABLE `oa_attend_apply` ADD `aapply_tempstorage` VARCHAR(1000) NULL DEFAULT '' COMMENT '临时储存考勤计算' ;

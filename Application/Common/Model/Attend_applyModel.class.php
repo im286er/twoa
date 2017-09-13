@@ -18,17 +18,20 @@ class Attend_applyModel extends AmongModel{
 		if($limit>0){
 			$this->limit($start.','.$limit);
 		}
+		$where=array();
 		if($aapply_code>0){
 			if($approve==true){
-				$this->where("aapply_approve LIKE '%".$aapply_code."%'");
+				$where["aapply_approve"]=array("LIKE","%{$aapply_code}%");
+				// $this->where("aapply_approve LIKE '%".$aapply_code."%'");
 			}else{
-				$this->where(array("aapply_code"=>$aapply_code));
+				$where["aapply_code"]=array("EQ",$aapply_code);
+				// $this->where(array("aapply_code"=>$aapply_code));
 			}
 			
 		}
 		if(!empty($condition)){
 			// print_r($condition);
-			return $this->where($condition)->select();
+			return $this->where($where)->where($condition)->select();
 		}
 		return $this->select();
 	}
@@ -123,7 +126,7 @@ class Attend_applyModel extends AmongModel{
 			}
 		}
 		$sameApply=$this->sameDate($user_code,$aapply_schedule,$aapply_inday);
-		if($apply!=null){
+		if($sameApply!=null){
 			return true;
 		}
 		return false;
@@ -139,12 +142,7 @@ class Attend_applyModel extends AmongModel{
 	 */
 	function sameDate($user_code,$aapply_schedule,$aapply_inday=0){
 		if(!$this->has_auth("select")) return true;
-
-		$resultArray=$this->where("(aapply_schedule>='{$aapply_schedule}' AND '{$aapply_schedule}'<date_sub(aapply_schedule,interval -aapply_days day) and aapply_days>0) or (aapply_schedule='{$aapply_schedule}') AND aapply_inday='{$aapply_inday}'")->select();
-		if($resultArray!=null){
-			return true;
-		}
-		return false;
+		return $resultArray=$this->where("(aapply_schedule<='{$aapply_schedule}' AND '{$aapply_schedule}'<(date_sub(aapply_schedule,interval -aapply_days day)) AND aapply_days>0) or (aapply_schedule='{$aapply_schedule}') AND aapply_days='0'")->select();
 	}
 
 	/**

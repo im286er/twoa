@@ -17,7 +17,7 @@ class AmongController extends Controller {
         parent::__construct();
         $this->baseInfo=D("Info");
 		$this->user=D("User");
-		if(!empty($_GET)){
+		if(!empty($_GET["html"])){
 			// 获取当前url，做好准备跳转
 			if(session("prev_url")!="redirect"){
 				if($_SERVER["SERVER_PORT"]=="80"){
@@ -105,6 +105,7 @@ class AmongController extends Controller {
                 return true;
             }
         }else{
+			
             if(IS_POST){
                 if($this->authority()){
                     $this->display(I("html"));
@@ -170,7 +171,6 @@ class AmongController extends Controller {
         if($html==""){
             $html=I("html");
         }
-        
         $authority=$this->get_auth();
     		if(isset($authority[CONTROLLER_NAME])){
                 

@@ -40,8 +40,11 @@ class AttendController extends AmongController {
 	 * [gethtml 重写gethtml方法]
 	 * @return [type] []
 	 */
-	public function gethtml(){
-        switch (I("html")) {
+	public function gethtml($html=null){
+		if($html==null){
+			$html=I("html");
+		}
+        switch ($html) {
 			case "applycontrol":
 				// echo $this->getCheckinList($this->selfUser["user_code"]);
 				// $checkinArray=$this->acheckin->search_checkin($this->selfUser["user_code"]);
@@ -52,8 +55,8 @@ class AttendController extends AmongController {
 				$this->assign("applicantArray",$this->aapply->getApplicant($this->selfUser["user_code"]));
 				$this->assign("attendtypeArray",$this->config->search_all(array("config_class"=>"aapply_type")));
                 break;
-        }
-        parent::gethtml();
+		}
+        parent::gethtml($html);
 	}
 	/*申请管理相关开始*/
 	/**
@@ -283,7 +286,7 @@ class AttendController extends AmongController {
 					return;
 					break;
 			}
-			$this->Wxqy->message()->send($mesArray);
+			$this->Wxqy->message()->send($mesArray);//通过微信发送通知
 		}
 
 		if($id==0){
@@ -293,6 +296,83 @@ class AttendController extends AmongController {
 	}
 	/*申请管理相关结束*/
 
+	/**
+	 * settleAttend function 计算一天里的考勤
+	 *
+	 * @param [type] $user_code
+	 * @param [type] $date
+	 * @return void
+	 */
+	function settleAttend($user_code,$date){
+		//1，先获取指定日期的所有打卡记录
+		$allCheckin=$this->acheckin->seekCheckin($user_code,null,$date);
+		$checkins=array();
+		//1,重新编排记录，三维数组，第一维key为类型，第二维key为开始1或结束2
+		foreach ($allCheckin as $checkin){
+			$checkins[$checkin["acheckin_type"]][$checkin["acheckin_timetype"]]=$checkin;
+		}
+		//2，获取指定日期的所有申请
+		$allApply=$this->aapply->sameDate($user_code,$date);
+		$applys=array();
+		foreach ($allApply as $apply){
+			$applys[$apply["aapply_type"]]=$apply;
+		}
+		//3，开始计算所有可能的考勤
+		$forenoon=0;
+		$afternoon=0;
+		$dates=split("-", $date);/*分解成年月日*/
+
+		/*计算正常上班的时间，上午，下午*/
+		if(count($checkins[1])>1){
+			$startTime=$this->loadStartTime($checkins[1][1]["acheckin_checkintime"]);
+			$endTime=$this->loadEndTime($checkins[1][2]["acheckin_checkintime"]);
+			$foreAfter=$this->getForeAfter($startTime,$endTime,$date,1);
+			$tempRec[$dates[0]][$dates[1]][$dates[2]]=$foreAfter["rec"];
+			$forenoon=$foreAfter["forenoon"];
+			$afternoon=$foreAfter["afternoon"];
+			// print_r($applys);
+		}
+		echo $forenoon,"-",$afternoon;
+		echo "<br>";
+		/*计算外勤的时间*/
+		if(isset($applys[2])){
+			/*判断外勤申请是否批准*/
+			if($applys[2]["aapply_state"]>0 && $applys[2]["aapply_tempstorage"]!=""){
+				$tempAttend=json_decode($applys[2]["aapply_tempstorage"],true);
+				$foreTemp=$tempAttend[$dates[0]][$dates[1]][$dates[2]]["forenoon"]["worktime"];
+				$afterTemp=$tempAttend[$dates[0]][$dates[1]][$dates[2]]["afternoon"]["worktime"];
+
+				if($foreTemp>=2 || ($foreTemp+$forenoon)>=3){
+					$forenoon=3;
+				}else{
+					$forenoon+=$foreTemp;
+				}
+				if($afterTemp>=4 || ($afterTemp+$afternoon)>=5){
+					$afternoon=5;
+				}else{
+					$afternoon+=$afterTemp;
+				}
+			}
+		}
+		/*计算工作日加班（计算临时存储时跨天自动加天数） 做循环计算3、4、5、6*/
+		if(isset($applys[3])){
+			if($applys[3]["aapply_state"]>0 && $applys[3]["aapply_tempstorage"]!=""){
+				$tempAttend=json_decode($applys[3]["aapply_tempstorage"],true);
+				$foreTemp=$tempAttend[$dates[0]][$dates[1]][$dates[2]]["forenoon"]["worktime"];
+				$afterTemp=$tempAttend[$dates[0]][$dates[1]][$dates[2]]["afternoon"]["worktime"];
+
+				if($foreTemp>0){
+					$forenoon+=$foreTemp;
+				}
+				if($afterTemp>0){
+					$forenoon+=$afterTemp;
+				}
+			}
+		}
+		/*计算补休时间*/
+		echo $forenoon,"-",$afternoon;
+		echo "<br>";
+	}
 
 	/**
 	 * [checkin 打卡页面]
@@ -303,8 +383,9 @@ class AttendController extends AmongController {
 		if(IS_AJAX){
 			$date=date("Y-m-d",strtotime(I("thisDay")));
 		}
-
 		
+		$this->settleAttend($this->selfUser["user_code"],"2017-08-21");
+		// return;
 		/*测试各种考勤审计*/
 		// $test=$this->acheckin->isOverTime($this->selfUser["user_code"],"2017-08-18");
 		// print_r($test);
@@ -328,7 +409,6 @@ class AttendController extends AmongController {
 		$this->assign("user_name",$this->selfUser["user_name"]);
 		$this->assign("SignPackage",$this->Wxqy->jssdk()->GetSignPackage());
 		$this->gethtml("checkin");
-
 	}
 
 	/**
@@ -872,9 +952,9 @@ class AttendController extends AmongController {
 			$forenoon=time_reduce($startTime,$date." ".$this->timeNode["MF"]);
 			$afternoon=time_reduce($date." ".$this->timeNode["AO"],$endTime);
 		}
-		$MonthRec["rec"]=$this->arecord->getMonthRec($this->selfUser["user_code"],$dates[0],$dates[1])[$dates[2]];
-		$MonthRec["rec"]["forenoon"]["worktime"]+= $forenoon;
-		$MonthRec["rec"]["afternoon"]["worktime"]+= $afternoon;
+		// $MonthRec["rec"]=$this->arecord->getMonthRec($this->selfUser["user_code"],$dates[0],$dates[1])[$dates[2]];
+		$MonthRec["rec"]["forenoon"]["worktime"]= $forenoon;
+		$MonthRec["rec"]["afternoon"]["worktime"]= $afternoon;
 		$MonthRec["rec"]["forenoon"]["type"]= $type;
 		$MonthRec["rec"]["afternoon"]["type"]= $type;
 		$MonthRec["forenoon"]= $forenoon;
