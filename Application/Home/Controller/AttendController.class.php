@@ -332,8 +332,8 @@ class AttendController extends AmongController {
 			$afternoon=$foreAfter["afternoon"];
 			// print_r($applys);
 		}
-		echo $forenoon,"-",$afternoon;
-		echo "<br>";
+		// echo $forenoon,"-",$afternoon;
+		// echo "<br>";
 		/*计算外勤的时间*/
 		if(isset($applys[2])){
 			/*判断外勤申请是否批准*/
@@ -355,23 +355,66 @@ class AttendController extends AmongController {
 			}
 		}
 		/*计算工作日加班（计算临时存储时跨天自动加天数） 做循环计算3、4、5、6*/
-		if(isset($applys[3])){
-			if($applys[3]["aapply_state"]>0 && $applys[3]["aapply_tempstorage"]!=""){
-				$tempAttend=json_decode($applys[3]["aapply_tempstorage"],true);
-				$foreTemp=$tempAttend[$dates[0]][$dates[1]][$dates[2]]["forenoon"]["worktime"];
-				$afterTemp=$tempAttend[$dates[0]][$dates[1]][$dates[2]]["afternoon"]["worktime"];
-
-				if($foreTemp>0){
-					$forenoon+=$foreTemp;
-				}
-				if($afterTemp>0){
-					$forenoon+=$afterTemp;
+		for ($i=3; $i <7 ; $i++) { 
+			if(isset($applys[$i])){
+				if($applys[$i]["aapply_state"]>0 && $applys[$i]["aapply_tempstorage"]!=""){
+					$tempAttend=json_decode($applys[$i]["aapply_tempstorage"],true);
+					$foreTemp=$tempAttend[$dates[0]][$dates[1]][$dates[2]]["forenoon"]["worktime"];
+					$afterTemp=$tempAttend[$dates[0]][$dates[1]][$dates[2]]["afternoon"]["worktime"];
+	
+					if($foreTemp>0){
+						$forenoon+=$foreTemp;
+					}
+					if($afterTemp>0){
+						$afternoon+=$afterTemp;
+					}
 				}
 			}
 		}
-		/*计算补休时间*/
-		echo $forenoon,"-",$afternoon;
-		echo "<br>";
+		
+		/*计算补休、事假、病假时间*/
+		for ($i=7; $i <10 ; $i++) { 
+			if(isset($applys[$i])){
+				/*判断补休申请是否批准*/
+				if($applys[$i]["aapply_state"]>0 && $applys[$i]["aapply_tempstorage"]!=""){
+					$tempAttend=json_decode($applys[$i]["aapply_tempstorage"],true);
+					/*临时记录保存的是可以补休的小时，如果工时不够时间，那么保存的将是0*/
+					$foreTemp=$tempAttend[$dates[0]][$dates[1]][$dates[2]]["forenoon"]["worktime"];
+					$afterTemp=$tempAttend[$dates[0]][$dates[1]][$dates[2]]["afternoon"]["worktime"];
+					$forenoon+=$foreTemp;
+					$afternoon+=$afterTemp;
+				}
+			}
+		}
+		
+		/*计算出差、产假、婚假，巡展时间*/
+		for ($i=10; $i <14 ; $i++) { 
+			if(isset($applys[$i])){
+				$forenoon=3;
+				$afternoon=$this->attendUser["auser_eachday"]-$forenoon;
+			}
+		}
+
+		/*计算产检时间*/
+		if(isset($applys[14])){
+			if($applys[14]["aapply_state"]>0){
+				switch ($applys[14]["aapply_inday"]) {
+					case 1:
+						$forenoon=3;
+						$afternoon=$this->attendUser["auser_eachday"]-$forenoon;
+						break;
+					case 2:
+						$forenoon=3;
+						break;
+					case 3:
+						$afternoon=$this->attendUser["auser_eachday"]-3;
+						break;
+				}
+			}
+			
+		}
+		// echo $forenoon,"-",$afternoon;
+		// echo "<br>";
 	}
 
 	/**
@@ -384,7 +427,7 @@ class AttendController extends AmongController {
 			$date=date("Y-m-d",strtotime(I("thisDay")));
 		}
 		
-		$this->settleAttend($this->selfUser["user_code"],"2017-08-21");
+		$this->settleAttend($this->selfUser["user_code"],"2017-09-14");
 		// return;
 		/*测试各种考勤审计*/
 		// $test=$this->acheckin->isOverTime($this->selfUser["user_code"],"2017-08-18");

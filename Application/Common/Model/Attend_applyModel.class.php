@@ -33,7 +33,7 @@ class Attend_applyModel extends AmongModel{
 			// print_r($condition);
 			return $this->where($where)->where($condition)->select();
 		}
-		return $this->select();
+		return $this->where($where)->select();
 	}
 	/**
 	 * [seekApply 查找申请记录]
@@ -140,9 +140,16 @@ class Attend_applyModel extends AmongModel{
 	 * @param [type] $aapply_schedule
 	 * @return void
 	 */
-	function sameDate($user_code,$aapply_schedule,$aapply_inday=0){
+	function sameDate($user_code,$aapply_schedule,$aapply_inday=null){
 		if(!$this->has_auth("select")) return true;
-		return $resultArray=$this->where("(aapply_schedule<='{$aapply_schedule}' AND '{$aapply_schedule}'<(date_sub(aapply_schedule,interval -aapply_days day)) AND aapply_days>0) or (aapply_schedule='{$aapply_schedule}') AND aapply_days='0'")->select();
+		$where=array();
+		if($aapply_inday!==null){
+			$where["aapply_inday"]=array("EQ",$aapply_inday);
+		}
+		$where["_string"]="(aapply_schedule<='{$aapply_schedule}' AND '{$aapply_schedule}'<(date_sub(aapply_schedule,interval -aapply_days day)) AND aapply_days>0) OR (aapply_schedule='{$aapply_schedule}' AND aapply_days='0') OR (aapply_schedule<='{$aapply_schedule}' AND '{$aapply_schedule}'<= pl.project_enddate AND aapply_type=10)";
+		$resultArray=$this->table($this->trueTableName." ap")->join("oa_project_list pl on ap.aapply_project=pl.project_id")->where($where)->select();
+		// echo $this->getLastSql();
+		return $resultArray;
 	}
 
 	/**

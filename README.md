@@ -107,3 +107,6 @@
 
 #### 2017-09-13
 * ALTER TABLE `oa_attend_apply` ADD `aapply_tempstorage` VARCHAR(1000) NULL DEFAULT '' COMMENT '临时储存考勤计算' ;
+
+#### 2017-09-14
+* ALTER TABLE `oa_attend_apply` ADD `aapply_settle` INT(2) NOT NULL DEFAULT '0' COMMENT '申请是否结算' ;

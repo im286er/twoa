@@ -3,30 +3,30 @@
 		<label class="pos-rel"><input class="ace" type="checkbox"><span class="lbl"></span></label>
 	</td>
 	<td>{$archivesData["archives_name"]}</td>
-	<td>{$archivesData["archives_usercode"]}</td>
-	<td>{$archivesData["archives_degree"]}</td>
-	<td>{$archivesData["archives_idn"]}</td>
+	<td class="hidden-480">{$archivesData["archives_usercode"]}</td>
+	<td class="hidden-480">{$archivesData["archives_degree"]}</td>
+	<td class="hidden-480">{$archivesData["archives_idn"]}</td>
 	<td>{$archivesData["archives_idexp"]}</td>
-	<td>{$archivesData["archives_bank"]}</td>
+	<td class="hidden-480">{$archivesData["archives_bank"]}</td>
 	<if condition="$archivesData['archives_enformp'] eq ''">
-		<td></td>
+		<td class="hidden-480"></td>
 	<else />
-		<td><i class="fa fa-picture-o brown img-view" aria-hidden="true"  data-url='{$archivesData["archives_enformp"]}' data-toggle="modal" data-target="#imgModal"></i>
+		<td class="hidden-480"><i class="fa fa-picture-o brown img-view" aria-hidden="true"  data-url='{$archivesData["archives_enformp"]}' data-toggle="modal" data-target="#imgModal"></i>
 	</if>
 	<if condition="$archivesData['archives_cvp'] eq ''">
-		<td></td>
+		<td class="hidden-480"></td>
 	<else />
-		<td><i class="fa fa-picture-o purple img-view" aria-hidden="true" data-url='{$archivesData["archives_cvp"]}' data-toggle="modal" data-target="#imgModal"></i>
+		<td class="hidden-480"><i class="fa fa-picture-o purple img-view" aria-hidden="true" data-url='{$archivesData["archives_cvp"]}' data-toggle="modal" data-target="#imgModal"></i>
 	</if>
 	<if condition="$archivesData['archives_degreep'] eq ''">
-		<td></td>
+		<td class="hidden-480"></td>
 	<else />
-		<td><i class="fa fa-picture-o light-red img-view" aria-hidden="true" data-url='{$archivesData["archives_degreep"]}' data-toggle="modal" data-target="#imgModal"></i>
+		<td class="hidden-480"><i class="fa fa-picture-o light-red img-view" aria-hidden="true" data-url='{$archivesData["archives_degreep"]}' data-toggle="modal" data-target="#imgModal"></i>
 	</if>
 	<if condition="$archivesData['archives_horp'] eq ''">
-		<td></td>
+		<td class="hidden-480"></td>
 	<else />
-		<td><i class="fa fa-picture-o blue img-view" aria-hidden="true" data-url='{$archivesData["archives_horp"]}' data-toggle="modal" data-target="#imgModal"></i>
+		<td class="hidden-480"><i class="fa fa-picture-o blue img-view" aria-hidden="true" data-url='{$archivesData["archives_horp"]}' data-toggle="modal" data-target="#imgModal"></i>
 	</if>
 	<if condition="$archivesData['archives_receivep'] eq ''">
 		<td></td>
@@ -36,9 +36,9 @@
 	<td>{$archivesData["archives_status"]}</i>
 
 	<if condition="$archivesData['archives_quitp'] eq ''">
-		<td></td>
+		<td class="hidden-480"></td>
 	<else />
-		<td><i class="fa fa-picture-o orange img-view" aria-hidden="true" data-url='{$archivesData["archives_quitp"]}' data-toggle="modal" data-target="#imgModal"></i>
+		<td class="hidden-480"><i class="fa fa-picture-o orange img-view" aria-hidden="true" data-url='{$archivesData["archives_quitp"]}' data-toggle="modal" data-target="#imgModal"></i>
 	</if>
 
 <!-- 	
@@ -48,9 +48,8 @@
 	
 	 -->
 </td>
-
 	<td>
-		<div class="hidden-sm hidden-xs btn-group user-control" data-archiveid="{$archivesData['archives_id']}">
+		<div class="btn-group user-control" data-archiveid="{$archivesData['archives_id']}">
 			<button class="btn btn-xs btn-info archive-edit" data-toggle="modal" data-target="#archiveModal">
 				<i class="ace-icon fa fa-pencil bigger-120"></i>
 			</button>
