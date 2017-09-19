@@ -37,7 +37,7 @@ class Attend_checkinModel extends AmongModel{
 	 * @param  [type] $date      [日期，格式如：2017-08-09]
 	 * @return [type]            [description]
 	 */
-	function seekCheckin($user_code,$type=null,$date=null,$state=null){
+	function seekCheckin($user_code,$type=null,$date=null,$state=null,$applyid=null){
 		if(!$this->has_auth("select")) return false;
 		$where=array();
 		$where["acheckin_code"]=array("eq",$user_code);
@@ -50,6 +50,9 @@ class Attend_checkinModel extends AmongModel{
 		}
 		if($state!=null){
 			$where["acheckin_state"]=array("eq",$state);
+		}
+		if($applyid!=null){
+			$where["acheckin_applyid"]=array("eq",$applyid);
 		}
 		
 		return $this->where($where)->order("acheckin_checkintime")->select();
@@ -71,7 +74,7 @@ class Attend_checkinModel extends AmongModel{
 	 */
 	function hasCheckin($acheckin_code,$acheckin_type,$acheckin_timetype,$date){
 		if(!$this->has_auth("select")) return false;
-		return $this->field("acheckin_id")->where(array("acheckin_code"=>$acheckin_code,"acheckin_type"=>$acheckin_type,"acheckin_timetype"=>$acheckin_timetype))->where("date_format(acheckin_checkintime,'%Y-%m-%d')='{$date}'")->find()["acheckin_id"];
+		return $this->where(array("acheckin_code"=>$acheckin_code,"acheckin_type"=>$acheckin_type,"acheckin_timetype"=>$acheckin_timetype))->where("date_format(acheckin_checkintime,'%Y-%m-%d')='{$date}'")->find();
 	}
 
 	/**
@@ -81,7 +84,7 @@ class Attend_checkinModel extends AmongModel{
 	 */
 	function checkin($dataArray){
 		if(!$this->has_auth("insert")) return false;
-		if($this->hasCheckin($dataArray["acheckin_code"],$dataArray["acheckin_type"],$dataArray["acheckin_timetype"],date("Y-m-d",strtotime($dataArray["acheckin_checkintime"])))==null){
+		if($this->hasCheckin($dataArray["acheckin_code"],$dataArray["acheckin_type"],$dataArray["acheckin_timetype"],date("Y-m-d",strtotime($dataArray["acheckin_checkintime"])))["acheckin_id"]==null){
 			return $this->add($dataArray);
 		}
 		return false;
@@ -136,8 +139,3 @@ class Attend_checkinModel extends AmongModel{
 		return false;
 	}
 }
-
-
-//select * from oa_attend_checkin where acheckin_type=3 and date_format(acheckin_checkintime,'%Y-%m-%d')<='2017-08-15' order by acheckin_id asc limit 0,1;
-
-// select * from (select acheckin_id,acheckin_timetype,acheckin_applyid from oa_attend_checkin where acheckin_type=3 and date_format(acheckin_checkintime,'%Y-%m-%d')='2017-08-14') a union select * from (select acheckin_id,acheckin_timetype,acheckin_applyid from oa_attend_checkin where acheckin_type=3 and date_format(acheckin_checkintime,'%Y-%m-%d')<'2017-08-14' order by acheckin_id desc limit 0,1) b union select * from (select acheckin_id,acheckin_timetype,acheckin_applyid from oa_attend_checkin where acheckin_type=3 and date_format(acheckin_checkintime,'%Y-%m-%d')>'2017-08-14'  order by acheckin_id asc limit 0,1) c order by acheckin_id ;

@@ -42,14 +42,19 @@ class Attend_applyModel extends AmongModel{
 	 * @param  [type] $date      [日期，格式如：2017-08-09]
 	 * @return [type]            [description]
 	 */
-	function seekApply($user_code,$type,$date,$inday=0){
+	function seekApply($user_code,$type,$date=null,$inday=0){
 		if(!$this->has_auth("select")) return false;
-		if($inday!=0){
-			$indaySql=" AND aapply_inday='{$inday}'";
-		}else{
-			$indaySql="";
+		$where=array();
+		$where["aapply_code"]=$user_code;
+		$where["aapply_type"]=$type;
+		if($date!=null){
+			$where["aapply_schedule"]=$date;
 		}
-		return $this->where("aapply_code='{$user_code}' AND aapply_type='{$type}' AND aapply_schedule='{$date}'".$indaySql)->find();
+
+		if($inday!=0){
+			$where["aapply_inday"]=$inday;
+		}
+		return $this->where($where)->order("aapply_schedule DESC")->find();
 	}
 	
 	/**
@@ -72,7 +77,7 @@ class Attend_applyModel extends AmongModel{
 	 * @return boolean
 	 */
 	function isApply($user_code,$type,$date){
-		if(!$this->has_auth("select")) return false;
+		if(!$this->has_auth("select")) return true;
 		$result=$this->where(array("aapply_code="=>$user_code,"aapply_schedule"=>$date,"aapply_type"=>$type,"aapply_state"=>"1",))->find();
 		if($result===null){
 			return false;
@@ -93,11 +98,10 @@ class Attend_applyModel extends AmongModel{
 			$dataArray["aapply_inday"]=0;
 		}
 		$result=$this->hasApply($dataArray["aapply_code"],$dataArray["aapply_type"],$dataArray["aapply_inday"],$dataArray["aapply_schedule"]);
-		var_dump($result);
-		// print_r($dataArray);
 		if(!$result){
-			$this->add($dataArray);
+			return $this->add($dataArray);
 		}
+		return  "申请已存在！";
 
 	}
 
@@ -147,7 +151,7 @@ class Attend_applyModel extends AmongModel{
 			$where["aapply_inday"]=array("EQ",$aapply_inday);
 		}
 		$where["_string"]="(aapply_schedule<='{$aapply_schedule}' AND '{$aapply_schedule}'<(date_sub(aapply_schedule,interval -aapply_days day)) AND aapply_days>0) OR (aapply_schedule='{$aapply_schedule}' AND aapply_days='0') OR (aapply_schedule<='{$aapply_schedule}' AND '{$aapply_schedule}'<= pl.project_enddate AND aapply_type=10)";
-		$resultArray=$this->table($this->trueTableName." ap")->join("oa_project_list pl on ap.aapply_project=pl.project_id")->where($where)->select();
+		$resultArray=$this->table($this->trueTableName." ap")->join("oa_project_list pl on ap.aapply_project=pl.project_id AND project_trave=1")->where($where)->select();
 		// echo $this->getLastSql();
 		return $resultArray;
 	}

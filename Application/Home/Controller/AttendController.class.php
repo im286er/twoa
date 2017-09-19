@@ -26,11 +26,11 @@ class AttendController extends AmongController {
 		$this->config=D("Config");
 		$this->attendUser=$this->auser->find_auser($this->selfUser["user_code"]);
 		
-		$this->timeNode=array("MO"=>"09:00:59","MF"=>"12:00:00","AO"=>"13:30:59","STA"=>"00:00:00","AF"=>"18:00:00","END"=>"23:59:59");
+		$this->timeNode=array("MO"=>"09:00:59","MF"=>"12:00:00","AO"=>"13:30:59","STA"=>"00:00:00","AF"=>"18:30:00","END"=>"23:59:59");
 
-		if($this->attendUser["auser_eachday"]>7.5){
-			$this->timeNode["AF"]="18:30:00";
-		}
+		// if($this->attendUser["auser_eachday"]>7.5){
+		// 	$this->timeNode["AF"]="18:30:00";
+		// }
 		/*每天的时间节点*/
 		
 		$this->MonthRec=$this->arecord->getMonthRec($this->selfUser["user_code"],date("Y"),date("m"));
@@ -433,12 +433,13 @@ class AttendController extends AmongController {
 		// $test=$this->acheckin->isOverTime($this->selfUser["user_code"],"2017-08-18");
 		// print_r($test);
 		// return;
-		// echo date("Y-m-d",strtotime("2017-8-14 +1 day"));
+		// echo date("Y-m-d",strtotime("2017-8-14 +1 day"));// echo date("Y-m-d",strtotime("2017-8-14 +1 day"));
 		
 		// $this->settleCheckin($this->selfUser["user_code"],3,date("Y-m-d",strtotime("2017-8-21")));
 		// return ;
 		$normalCheckin=$this->checkinType($this->selfUser["user_code"],1,$date);
 		$outCheckin=$this->checkinType($this->selfUser["user_code"],2,$date);
+
 		$overtimeCheckin=$this->checkinType($this->selfUser["user_code"],3,$date);
 		if(IS_AJAX){
 			/*获取不同按钮状态*/
@@ -455,43 +456,73 @@ class AttendController extends AmongController {
 	}
 
 	/**
+	 * 返回按钮 function
+	 *
+	 * @param [type] $type
+	 * @param [type] $index
+	 * @return void
+	 */
+	private function getButton($type,$index){
+		$info=array(array(),array("上班","下班","fa-sun-o","fa-moon-o"),array("开始外勤","结束外勤","fa-sign-out","fa-circle-o-notch"),array("开始加班","结束加班","fa-clock-o","fa-hand-peace-o"));
+		
+		/*0:两个按钮都禁用,1:第一个按钮禁用，第二个按钮激活，2：第一个按钮激活，第二个按钮禁用*/
+		$butInfo=array("<button class='btn disabled' data-type='{$type}' data-timetype='1'><i class='ace-icon fa {$info[$type][2]} align-top bigger-125'></i>{$info[$type][0]} </button><button  class='btn disabled' data-type='{$type}' data-timetype='2'><i class='ace-icon fa {$info[$type][3]} align-top bigger-125'></i>{$info[$type][1]}</button>","<button class='btn disabled' data-type='{$type}' data-timetype='1'><i class='ace-icon fa {$info[$type][2]} align-top bigger-125'></i>{$info[$type][0]}</button><button data-toggle='button' class='btn btn-success' data-type='{$type}' data-timetype='2'><i class='ace-icon fa {$info[$type][3]} align-top bigger-125'></i>{$info[$type][1]}</button>","<button data-toggle='button' class='btn btn-success' data-type='{$type}' data-timetype='1'><i class='ace-icon fa {$info[$type][2]} align-top bigger-125'></i>{$info[$type][0]}</button><button class='btn disabled' data-type='{$type}' data-timetype='2'><i class='ace-icon fa {$info[$type][3]} align-top bigger-125'></i>{$info[$type][1]}</button>");
+
+		return $butInfo[$index];
+	}
+	/**
 	 * [checkinType 返回不同状态的按钮]
 	 * @param  [type] $user_code [用户code]
 	 * @param  [type] $type      [类型：1上下班，2外勤，3加班]
 	 * @return [type]            [description]
 	 */
 	private function checkinType($user_code,$type,$date){
-		
-		$info=array(array(),array("上班","下班","fa-sun-o","fa-moon-o"),array("开始外勤","结束外勤","fa-sign-out","fa-circle-o-notch"),array("开始加班","结束加班","fa-clock-o","fa-hand-peace-o"));
-
-		$butInfo=array("<button class='btn disabled' data-type='{$type}' data-timetype='1'><i class='ace-icon fa {$info[$type][2]} align-top bigger-125'></i>{$info[$type][0]} </button><button  class='btn disabled' data-type='{$type}' data-timetype='2'><i class='ace-icon fa {$info[$type][3]} align-top bigger-125'></i>{$info[$type][1]}</button>","<button class='btn disabled' data-type='{$type}' data-timetype='1'><i class='ace-icon fa {$info[$type][2]} align-top bigger-125'></i>{$info[$type][0]}</button><button data-toggle='button' class='btn btn-success' data-type='{$type}' data-timetype='2'><i class='ace-icon fa {$info[$type][3]} align-top bigger-125'></i>{$info[$type][1]}</button>","<button data-toggle='button' class='btn btn-success' data-type='{$type}' data-timetype='1'><i class='ace-icon fa {$info[$type][2]} align-top bigger-125'></i>{$info[$type][0]}</button><button class='btn disabled' data-type='{$type}' data-timetype='2'><i class='ace-icon fa {$info[$type][3]} align-top bigger-125'></i>{$info[$type][1]}</button>");
 		/*这里加上判断外勤是否属于全天，如果是，正常上下班按钮禁止*/
 		
-
-		if($type>=2){
-			/*状态是外勤或者加班*/
-			$aapplyData=$this->aapply->seekApply($user_code,$type,$date);	
-
-			if(!$aapplyData["aapply_id"]){
-				return $butInfo[0]; 
-			}
+		if($type==2){
+			/*状态是外勤*/
+			$aapplyData=$this->aapply->seekApply($user_code,$type,$date);
+			if($aapplyData==null){
+				return $this->getButton($type,0);
+			}	
 		}
-		
-		$checkinData=$this->acheckin->seekCheckin($user_code,$type,$date);
+		if($type>2){
+			/*状态是加班*/
+			$aapplyData=$this->aapply->seekApply($user_code,$type);	
+			
+			if($aapplyData==null){
+				
+				$aapplyData=$this->aapply->seekApply($user_code,4);
+				if($aapplyData4==null){
+					return $this->getButton($type,0);
+				}else{
+					$type=4;
+					if((time()-strtotime($aapplyData["aapply_schedule"]))>86400){
+						return $this->getButton($type,0);
+					}
+				}
+			}else if((time()-strtotime($aapplyData["aapply_schedule"]." 23:59:59"))>86400){
+				return $this->getButton($type,0);
+			}
+			$checkinData=$this->acheckin->seekCheckin($user_code,$type,null,null,$aapplyData["aapply_id"]);
+		}else{
+			$checkinData=$this->acheckin->seekCheckin($user_code,$type,$date);
+		}
+	
 		if(count($checkinData)>0){
 			if(count($checkinData)>1){
-				return $butInfo[0];
+				return $this->getButton($type,0);
 			}else{
-				return $butInfo[1];
+				return $this->getButton($type,1);
 			}
 		}else{
 			$dates=split("-", $date);
 			$thisDay=$this->arecord->isWeekday($dates[0],$dates[1],$dates[2]);
 			/*判断是否工作日*/
 			if($thisDay==false){
-				return $butInfo[0];
+				return $this->getButton($type,0);
 			}else{
-				return $butInfo[2];
+				return $this->getButton($type,2);
 			}
 			
 		}
@@ -536,10 +567,10 @@ class AttendController extends AmongController {
 	}
 
 	/**
-	 * [submit_checkin 提交打打卡信息]
+	 * [submitCheckin 提交打打卡信息]
 	 * @return [type] [description]
 	 */
-	function submit_checkin(){
+	function submitCheckin(){
 		if(IS_AJAX){
 		// print_r($_POST);
 			$checkinData=$_POST["data"];
@@ -853,40 +884,7 @@ class AttendController extends AmongController {
 		}
 	}
 
-	/**
-	 * 对早上时间进行判断 function
-	 *
-	 * @param [type] $startTime
-	 * @return void
-	 */
-	private function loadStartTime($startTime){
-		$date=split(" ",$startTime);
-		$MO=$date[0]." ".$this->timeNode["MO"];
-		$MF=$date[0]." ".$this->timeNode["MF"];
-		$AO=$date[0]." ".$this->timeNode["AO"];
-		$AF=$date[0]." ".$this->timeNode["AF"];
-		/*这里需要增加一个判断是否加早班*/
-		if($startTime<$MO){
-			return $MO;
-		}else{
-			if($startTime>$MF && $startTime<$AO){
-				return $AO;
-			}
-		}
-		return $startTime;
-	}
-	/**
-	 * loadEndTime function 对结束时间做判断
-	 *
-	 * @param [type] $endTime
-	 * @return void
-	 */
-	private function loadEndTime($endTime){
-		if($endTime>$MF && $endTime<$AO){
-			return $MF;
-		}
-		return $endTime;
-	}
+	
 
 	/**
 	 * updateMonthRec function
@@ -973,7 +971,40 @@ class AttendController extends AmongController {
 			$this->acheckin->setCheckin($checkins["acheckin_id"],array("acheckin_state"=>$state,"acheckin_tempstorage"=>json_encode($storageArray)));
 		}
 	}
-	
+	/**
+	 * 对早上时间进行判断 function
+	 *
+	 * @param [type] $startTime
+	 * @return void
+	 */
+	private function loadStartTime($startTime){
+		$date=split(" ",$startTime);
+		$MO=$date[0]." ".$this->timeNode["MO"];
+		$MF=$date[0]." ".$this->timeNode["MF"];
+		$AO=$date[0]." ".$this->timeNode["AO"];
+		$AF=$date[0]." ".$this->timeNode["AF"];
+		/*这里需要增加一个判断是否加早班*/
+		if($startTime<$MO){
+			return $MO;
+		}else{
+			if($startTime>$MF && $startTime<$AO){
+				return $AO;
+			}
+		}
+		return $startTime;
+	}
+	/**
+	 * loadEndTime function 对结束时间做判断
+	 *
+	 * @param [type] $endTime
+	 * @return void
+	 */
+	private function loadEndTime($endTime){
+		if($endTime>$MF && $endTime<$AO){
+			return $MF;
+		}
+		return $endTime;
+	}
 	/**
 	 * getForeAfter function 更新指定日期的最新记录（临时），返回数组
 	 *
@@ -1004,6 +1035,18 @@ class AttendController extends AmongController {
 		$MonthRec["afternoon"]= $afternoon;
 		return $MonthRec;
 	}
+	// private function predictSovertime($startTime){
+	// 	$date=split(" ",$startTime);
+	// 	if($startTime<$date[0]." ".$this->timeNode["MF"]){
+	// 		$forenoon=time_reduce($startTime,$date[0]." ".$this->timeNode["MF"]);
+	// 		$time=strtotime($startTime)+28800-5400;
+	// 	}if($startTime>=$date[0]." ".$this->timeNode["MF"] && $startTime<$date[0]." ".$this->timeNode["AO"]){
+	// 		$time=strtotime($this->timeNode["AO"])+28800;
+	// 	}else{
+
+	// 	}
+	// 	return date("Y-m-d H:i:s",$time);
+	// }
 
 	/**
 	 * 以下是申请功能
@@ -1056,22 +1099,22 @@ class AttendController extends AmongController {
 
 			if($isWeekday==true){
 				if(I("type")==4){
-					echo "非节假日不能申请";
-					return;
+					$this->ajaxReturn(array("status"=>"0","msg"=>"非节假日不能申请"));
+
 				}
 			}else{
 				if(I("type")==3 || I("type")==7 || I("type")==8 || I("type")==9 || I("type")==10 || I("type")==11 || I("type")==12){
-					echo "节假日不能申请";
-					return;
+					$this->ajaxReturn(array("status"=>"0","msg"=>"节假日不能申请"));
+
 				}
 			}
 
 			if($applyArray["aapply_inday"]>0 && $applyArray["aapply_inday"]<3 && (time()> strtotime($applyArray["aapply_schedule"]." 09:00:00")) && I("remedy")=="false"){
-				echo "上午超时了";
-				return false;
+				$this->ajaxReturn(array("status"=>"0","msg"=>"上午超时了"));
+
 			}else if($applyArray["aapply_inday"]==3 && I("type")!=3 && time()> strtotime($applyArray["aapply_schedule"]." 13:30:00")){
-				echo "下午超时了";
-				return false;
+				$this->ajaxReturn(array("status"=>"0","msg"=>"下午超时了"));
+
 
 			}
 			// return;
@@ -1084,19 +1127,28 @@ class AttendController extends AmongController {
 				 *在家加班不允许：出差
 				*/
 
-					if(I("type")==3 && (time()> strtotime($applyArray["aapply_schedule"]." 18:00:00")) && I("remedy")=="false"){
-						echo "超时了";
-						//**再加一个判断上班时间是否打卡了
-						return false;
+					if(I("type")==3){
+						if((time()> strtotime($applyArray["aapply_schedule"]." 18:00:00")) && I("remedy")=="false"){
+							$this->ajaxReturn(array("status"=>"0","msg"=>"申请超时了"));
+
+						}else{
+							//**再加一个判断上班时间是否打卡了
+							$checkin=$this->acheckin->hasCheckin($this->selfUser["user_code"],1,1,$applyArray["aapply_schedule"]);
+							if($checkin==null){
+								$this->ajaxReturn(array("status"=>"0","msg"=>"没有上班打卡记录不能申请加班！"));
+							}else{
+								$this->acheckin->checkin(array("acheckin_code"=>$this->selfUser["user_code"],"acheckin_checkinway"=>3,"acheckin_type"=>3,"acheckin_timetype"=>1,"acheckin_addtime"=>date("Y-m-d H:i:s",time()),"acheckin_checkintime"=>$applyArray["aapply_schedule"]." 18:30:00"));
+							}
+						}
 					}
 					
 					
 					if(I("type")==5 && (time()> strtotime($applyArray["aapply_schedule"]." 09:00:00")) && I("remedy")=="false"){
-						echo "超时了";
-						return false;
+						$this->ajaxReturn(array("status"=>"0","msg"=>"申请超时了"));
+
 					}
 
-					$this->aapply->addApply($applyArray);
+					// $this->aapply->addApply($applyArray);
 					break;
 				case 7:/*补休*/
 					$this->aapply->addApply($applyArray);
@@ -1138,6 +1190,12 @@ class AttendController extends AmongController {
 				default:
 					# code...
 					break;
+			}
+			$result=$this->aapply->addApply($applyArray);
+			if($result>0){
+				$this->ajaxReturn(array("status"=>"1","msg"=>"申请提交成功！"));
+			}else{
+				$this->ajaxReturn(array("status"=>"0","msg"=>$result));
 			}
 			
 		}

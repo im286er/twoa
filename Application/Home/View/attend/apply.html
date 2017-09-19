@@ -88,6 +88,7 @@
        
         /*根据不同申请类型调用弹窗*/
         $(".btn-app").on("click",function(){
+            $("#applyModal .modal-body").html("")
             $.ajax({
                 url:"{:U('getApplyHtml')}",
                 data:{html:$(this).data("html")},
@@ -154,19 +155,22 @@
                 alert("请认真填写理由");
                 return;
             }
-            if(datas["data"]["aapply_project"]<=0 && datas["data"]["aapply_approve"]===null){
-                alert("项目名称和主管/组长必须选择一个")
-                return;
-            }
+            // if(datas["data"]["aapply_project"]<=0 && datas["data"]["aapply_approve"]===null){
+            //     alert("项目名称和主管/组长必须选择一个")
+            //     return;
+            // }
 
             datas["type"]=datas["data"]["aapply_type"]
             $.ajax({
                 url:"{:U('submitApply')}",
                 data:datas,
                 type:"post",
-                dataType:"html",
+                dataType:"json",
                 success:function(data){
-                    console.log(data);
+                    alert(data.msg)
+                    if(data.status>0){
+                        $("#applyModal").modal('toggle');
+                    }
                 }
             })
         })

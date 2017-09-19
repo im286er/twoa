@@ -110,3 +110,6 @@
 
 #### 2017-09-14
 * ALTER TABLE `oa_attend_apply` ADD `aapply_settle` INT(2) NOT NULL DEFAULT '0' COMMENT '申请是否结算' ;
+
+#### 2017-09-19
+* ALTER TABLE `oa_project_list` ADD `project_trave` INT(2) NOT NULL DEFAULT '0' COMMENT '是否出差' AFTER `project_type`;
