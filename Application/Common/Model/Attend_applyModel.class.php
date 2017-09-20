@@ -18,22 +18,22 @@ class Attend_applyModel extends AmongModel{
 		if($limit>0){
 			$this->limit($start.','.$limit);
 		}
-		$where=array();
+
 		if($aapply_code>0){
 			if($approve==true){
-				$where["aapply_approve"]=array("LIKE","%{$aapply_code}%");
+				$condition["aapply_approve"]=array("LIKE","%{$aapply_code}%");
 				// $this->where("aapply_approve LIKE '%".$aapply_code."%'");
 			}else{
-				$where["aapply_code"]=array("EQ",$aapply_code);
+				$condition["aapply_code"]=array("EQ",$aapply_code);
 				// $this->where(array("aapply_code"=>$aapply_code));
 			}
 			
 		}
-		if(!empty($condition)){
-			// print_r($condition);
-			return $this->where($where)->where($condition)->select();
-		}
-		return $this->where($where)->select();
+		// if(!empty($condition)){
+		// 	// print_r($condition);
+		// 	return $this->where($condition)->select();
+		// }
+		return $this->where($condition)->select();
 	}
 	/**
 	 * [seekApply 查找申请记录]

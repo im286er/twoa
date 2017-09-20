@@ -55,7 +55,7 @@ class Attend_checkinModel extends AmongModel{
 			$where["acheckin_applyid"]=array("eq",$applyid);
 		}
 		
-		return $this->where($where)->order("acheckin_checkintime")->select();
+		return $this->where($where)->order("acheckin_checkintime DESC")->select();
 		
 	}
 
