@@ -311,8 +311,13 @@ class AttendController extends AmongController {
 		foreach ($allCheckin as $checkin){
 			$checkins[$checkin["acheckin_type"]][$checkin["acheckin_timetype"]]=$checkin;
 		}
-		
-		//2，开始计算所有可能的考勤
+		//2，获取指定日期的所有申请
+		$allApply=$this->aapply->sameDate($user_code,$date);
+		$applys=array();
+		foreach ($allApply as $apply){
+			$applys[$apply["aapply_type"]]=$apply;
+		}
+		//3，开始计算所有可能的考勤
 		$forenoon=0;
 		$afternoon=0;
 		$dates=split("-", $date);/*分解成年月日*/
@@ -325,98 +330,89 @@ class AttendController extends AmongController {
 			$tempRec[$dates[0]][$dates[1]][$dates[2]]=$foreAfter["rec"];
 			$forenoon=$foreAfter["forenoon"];
 			$afternoon=$foreAfter["afternoon"];
-		}
-
-		//3，获取指定日期的所有申请
-		$allApply=$this->aapply->sameDate($user_code,$date);
-		print_r($tempRec);
-		foreach ($allApply as $apply){
-			
-			$tempRec=$this->settleApply($user_code,$apply["aapply_type"],$date,$apply,$tempRec);
-			print_r($tempRec);
-			
+			// print_r($applys);
 		}
 		// echo $forenoon,"-",$afternoon;
 		// echo "<br>";
 		/*计算外勤的时间*/
-		// if(isset($applys[2])){
-		// 	/*判断外勤申请是否批准*/
-		// 	if($applys[2]["aapply_state"]>0 && $applys[2]["aapply_tempstorage"]!=""){
-		// 		$tempAttend=json_decode($applys[2]["aapply_tempstorage"],true);
-		// 		$foreTemp=$tempAttend[$dates[0]][$dates[1]][$dates[2]]["forenoon"]["worktime"];
-		// 		$afterTemp=$tempAttend[$dates[0]][$dates[1]][$dates[2]]["afternoon"]["worktime"];
+		if(isset($applys[2])){
+			/*判断外勤申请是否批准*/
+			if($applys[2]["aapply_state"]>0 && $applys[2]["aapply_tempstorage"]!=""){
+				$tempAttend=json_decode($applys[2]["aapply_tempstorage"],true);
+				$foreTemp=$tempAttend[$dates[0]][$dates[1]][$dates[2]]["forenoon"]["worktime"];
+				$afterTemp=$tempAttend[$dates[0]][$dates[1]][$dates[2]]["afternoon"]["worktime"];
 
-		// 		if($foreTemp>=2 || ($foreTemp+$forenoon)>=3){
-		// 			$forenoon=3;
-		// 		}else{
-		// 			$forenoon+=$foreTemp;
-		// 		}
-		// 		if($afterTemp>=4 || ($afterTemp+$afternoon)>=5){
-		// 			$afternoon=5;
-		// 		}else{
-		// 			$afternoon+=$afterTemp;
-		// 		}
-		// 	}
-		// }
-		// /*计算工作日加班（计算临时存储时跨天自动加天数） 做循环计算3、4、5、6*/
-		// for ($i=3; $i <7 ; $i++) { 
-		// 	if(isset($applys[$i])){
-		// 		if($applys[$i]["aapply_state"]>0 && $applys[$i]["aapply_tempstorage"]!=""){
-		// 			$tempAttend=json_decode($applys[$i]["aapply_tempstorage"],true);
-		// 			$foreTemp=$tempAttend[$dates[0]][$dates[1]][$dates[2]]["forenoon"]["worktime"];
-		// 			$afterTemp=$tempAttend[$dates[0]][$dates[1]][$dates[2]]["afternoon"]["worktime"];
+				if($foreTemp>=2 || ($foreTemp+$forenoon)>=3){
+					$forenoon=3;
+				}else{
+					$forenoon+=$foreTemp;
+				}
+				if($afterTemp>=4 || ($afterTemp+$afternoon)>=5){
+					$afternoon=5;
+				}else{
+					$afternoon+=$afterTemp;
+				}
+			}
+		}
+		/*计算工作日加班（计算临时存储时跨天自动加天数） 做循环计算3、4、5、6*/
+		for ($i=3; $i <7 ; $i++) { 
+			if(isset($applys[$i])){
+				if($applys[$i]["aapply_state"]>0 && $applys[$i]["aapply_tempstorage"]!=""){
+					$tempAttend=json_decode($applys[$i]["aapply_tempstorage"],true);
+					$foreTemp=$tempAttend[$dates[0]][$dates[1]][$dates[2]]["forenoon"]["worktime"];
+					$afterTemp=$tempAttend[$dates[0]][$dates[1]][$dates[2]]["afternoon"]["worktime"];
 	
-		// 			if($foreTemp>0){
-		// 				$forenoon+=$foreTemp;
-		// 			}
-		// 			if($afterTemp>0){
-		// 				$afternoon+=$afterTemp;
-		// 			}
-		// 		}
-		// 	}
-		// }
+					if($foreTemp>0){
+						$forenoon+=$foreTemp;
+					}
+					if($afterTemp>0){
+						$afternoon+=$afterTemp;
+					}
+				}
+			}
+		}
 		
-		// /*计算补休、事假、病假时间*/
-		// for ($i=7; $i <10 ; $i++) { 
-		// 	if(isset($applys[$i])){
-		// 		/*判断补休申请是否批准*/
-		// 		if($applys[$i]["aapply_state"]>0 && $applys[$i]["aapply_tempstorage"]!=""){
-		// 			$tempAttend=json_decode($applys[$i]["aapply_tempstorage"],true);
-		// 			/*临时记录保存的是可以补休的小时，如果工时不够时间，那么保存的将是0*/
-		// 			$foreTemp=$tempAttend[$dates[0]][$dates[1]][$dates[2]]["forenoon"]["worktime"];
-		// 			$afterTemp=$tempAttend[$dates[0]][$dates[1]][$dates[2]]["afternoon"]["worktime"];
-		// 			$forenoon+=$foreTemp;
-		// 			$afternoon+=$afterTemp;
-		// 		}
-		// 	}
-		// }
+		/*计算补休、事假、病假时间*/
+		for ($i=7; $i <10 ; $i++) { 
+			if(isset($applys[$i])){
+				/*判断补休申请是否批准*/
+				if($applys[$i]["aapply_state"]>0 && $applys[$i]["aapply_tempstorage"]!=""){
+					$tempAttend=json_decode($applys[$i]["aapply_tempstorage"],true);
+					/*临时记录保存的是可以补休的小时，如果工时不够时间，那么保存的将是0*/
+					$foreTemp=$tempAttend[$dates[0]][$dates[1]][$dates[2]]["forenoon"]["worktime"];
+					$afterTemp=$tempAttend[$dates[0]][$dates[1]][$dates[2]]["afternoon"]["worktime"];
+					$forenoon+=$foreTemp;
+					$afternoon+=$afterTemp;
+				}
+			}
+		}
 		
-		// /*计算出差、产假、婚假，巡展时间*/
-		// for ($i=10; $i <14 ; $i++) { 
-		// 	if(isset($applys[$i])){
-		// 		$forenoon=3;
-		// 		$afternoon=$this->attendUser["auser_eachday"]-$forenoon;
-		// 	}
-		// }
+		/*计算出差、产假、婚假，巡展时间*/
+		for ($i=10; $i <14 ; $i++) { 
+			if(isset($applys[$i])){
+				$forenoon=3;
+				$afternoon=$this->attendUser["auser_eachday"]-$forenoon;
+			}
+		}
 
-		// /*计算产检时间*/
-		// if(isset($applys[14])){
-		// 	if($applys[14]["aapply_state"]>0){
-		// 		switch ($applys[14]["aapply_inday"]) {
-		// 			case 1:
-		// 				$forenoon=3;
-		// 				$afternoon=$this->attendUser["auser_eachday"]-$forenoon;
-		// 				break;
-		// 			case 2:
-		// 				$forenoon=3;
-		// 				break;
-		// 			case 3:
-		// 				$afternoon=$this->attendUser["auser_eachday"]-3;
-		// 				break;
-		// 		}
-		// 	}
+		/*计算产检时间*/
+		if(isset($applys[14])){
+			if($applys[14]["aapply_state"]>0){
+				switch ($applys[14]["aapply_inday"]) {
+					case 1:
+						$forenoon=3;
+						$afternoon=$this->attendUser["auser_eachday"]-$forenoon;
+						break;
+					case 2:
+						$forenoon=3;
+						break;
+					case 3:
+						$afternoon=$this->attendUser["auser_eachday"]-3;
+						break;
+				}
+			}
 			
-		// }
+		}
 		// echo $forenoon,"-",$afternoon;
 		// echo "<br>";
 	}
@@ -438,8 +434,6 @@ class AttendController extends AmongController {
 		// echo date("Y-m-d",strtotime("2017-8-14 +1 day"));// echo date("Y-m-d",strtotime("2017-8-14 +1 day"));
 		
 		// $this->settleCheckin($this->selfUser["user_code"],3,date("Y-m-d",strtotime("2017-8-21")));
-		$this->settleAttend($this->selfUser["user_code"],"2017-08-21");
-		return;
 		// return ;
 		$normalCheckin=$this->checkinType($this->selfUser["user_code"],1,$date);
 		$outCheckin=$this->checkinType($this->selfUser["user_code"],2,$date);
@@ -659,78 +653,246 @@ class AttendController extends AmongController {
 	 * @param [type] $date
 	 * @return void
 	 */
-	function settleApply($user_code,$type,$date,$apply,$tempRec){
-		$forenoon=0;
-		$afternoon=0;
-		$foreType=0;
-		$afterType=0;
+	function settleCheckin($user_code,$type,$date){
+
 		$dates=split("-", $date);/*分解成年月日*/
+		$this->MonthRec=$this->arecord->getMonthRec($this->selfUser["user_code"],$dates[0],$dates[1]);
+		/*判断哪些类型不需要涉及日期*/
+		if(in_array($type,array("3"))){
+			$checkinData=$this->acheckin->seekCheckin($user_code,$type,null);
+			$overTime=$this->acheckin->isOverTime($user_code,$date);
+			$checkinData=$this->acheckin->applySeekCheckin($overTime[0]);
 
-		if($tempRec!=false){
-			$theDate=$tempRec[$dates[0]][$dates[1]][$dates[2]];
-			$forenoon=$theDate["forenoon"]["worktime"];
-			$afternoon=$theDate["afternoon"]["worktime"];
-			$foreType=$theDate["forenoon"]["type"];
-			$afterType=$theDate["afternoon"]["type"];
+		}else{
+			$checkinData=$this->acheckin->seekCheckin($user_code,$type,$date);
 		}
+		if(count($checkinData)==2 && $checkinData[0]["acheckin_timetype"]==1 && $checkinData[1]["acheckin_timetype"]==2){
+
+			/**
+			 * 当打卡记录=2，第一条记录是开始，第二条记录是结束的时候执行下列结算，不同打卡类型计算不同
+			 */
+			$startTime= $this->loadStartTime($checkinData[0]["acheckin_checkintime"]);
+			$endTime= $this->loadEndTime($checkinData[1]["acheckin_checkintime"]);
 		
-		switch ($type) {
-				/*外勤*/
-			case "2":
-				// print_r($apply);
-				
-				if($apply["aapply_state"]>0 && $apply["aapply_tempstorage"]!=""){
-					$tempAttend=json_decode($apply["aapply_tempstorage"],true);
+			switch ($type) {
+				/**
+				 * 正常上班班
+				 */
+				case '1':
+						$foreAfter=$this->getForeAfter($startTime,$endTime,$date,$type);
+						$tempRec[$dates[0]][$dates[1]][$dates[2]]=$foreAfter["rec"];
+						$forenoon=$foreAfter["forenoon"];
+						$afternoon=$foreAfter["afternoon"];
+
+						/*需要加一个对外勤进行判断，直接获取现有的时间，判断，
+							如果上午：外勤时间>=2，那么上午直接为3
+									 else 外勤时间外勤时间+正常时间>=3，那么上午直接3
+									 else 上午时间  外勤时间+正常时间
+							如果下午：外勤时间>=4，那么下午直接为5
+									 else 外勤时间+正常时间>5,那么下午直接5
+									 else 下午时间 外勤时间+正常时间
+						*/
+						$outIsApply=$this->aapply->isApply($user_code,2,$date);//外勤申请
+						/*判断外勤申请是否存在，是否审批*/
+						$forenoonOld=0;
+						$afternoonOld=0;
+						if($outIsApply){
+							$type=2;
+							$outCheckinData=$this->acheckin->seekCheckin($user_code,2,$date);//取外勤打卡记录
+							
+
+							if($outCheckinData[1]["acheckin_tempstorage"]!=""){
+
+								/*打卡的计时必须存在*/
+								$tempstorage=json_decode($outCheckinData[1]["acheckin_tempstorage"],true);
+								$forenoonOld=$tempstorage[$dates[0]][$dates[1]][$dates[2]]["forenoon"]["worktime"];
+								$afternoonOld=$tempstorage[$dates[0]][$dates[1]][$dates[2]]["afternoon"]["worktime"];
+							}
+							// else{
+							// 	$dayRec=$this->arecord->getMonthRec($this->selfUser["user_code"],$dates[0],$dates[1],$dates[2]);
+
+							// 	$forenoonOld=$dayRec["forenoon"]["worktime"];
+							// 	$afternoonOld=$dayRec["afternoon"]["worktime"];
+							// }
+								/*计算上午的时间*/
+								if($forenoonOld>0){
+
+									if($forenoonOld>=2 || ($forenoon+$forenoonOld)>=3){
+										$forenoon=3;
+									}else{
+										$forenoon=$forenoon+$forenoonOld;
+									}
+								}
+								/*计算下午的时间*/
+								if($afternoonOld>0){
+									if($afternoonOld>=($this->attendUser["auser_eachday"]-$forenoon-1) || ($afternoon+$afternoonOld)>=($this->attendUser["auser_eachday"]-$forenoon)){
+										$afternoon=$this->attendUser["auser_eachday"]-$forenoon;
+									}else{
+										$afternoon=$afternoon+$afternoonOld;
+									}
+								}
+						}
+						if($outCheckinData[1]["acheckin_state"]>0){
+							$this->arecord->reduceCount($this->selfUser["user_code"],$dates[0],$dates[1],($forenoonOld+$afternoonOld));
+						}
+						/*存在加班start*/
+
+						$overIsApply=$this->acheckin->isOverTime($this->selfUser["user_code"],$date);//加班申请
+						
+						if($overIsApply){
+
+							$overCheckinData=$this->acheckin->seekCheckin($user_code,3,$date,1);//取外勤打卡记录
+							if($overCheckinData[1]["acheckin_tempstorage"]!=""){
+								$type=3;
+								$tempstorage=json_decode($overCheckinData[1]["acheckin_tempstorage"],true);
+								foreach ($tempstorage as $day => $value) {
+									if($day==$dates[2]){
+										$forenoon=$value["forenoon"]["worktime"];
+										$afternoon=$value["afternoon"]["worktime"];
+									}else{
+
+									}
+								}
+							}
+						}
+						/*存在加班end*/
+
+						$dayTime=$forenoon+$afternoon;
+						/*开始修改json数据*/
+						$this->MonthRec[$dates[2]]=array("forenoon"=>array("type"=>$type,"worktime"=>$forenoon),"afternoon"=>array("type"=>$type,"worktime"=>$afternoon));
+
+						$this->updateMonthRec($user_code,$dates,$type,$checkinData,$dayTime);
+									
+					break;
+					/*外勤*/
+				case "2":
 					
-					$foreTemp=$tempAttend[$dates[0]][$dates[1]][$dates[2]]["forenoon"]["worktime"];
-					if($foreTemp>0){
-						$foreType=$type;
-					}
-					$afterTemp=$tempAttend[$dates[0]][$dates[1]][$dates[2]]["afternoon"]["worktime"];
-					if($afterTemp>0){
-						$afterType=$type;
-					}
+					$isApply=$this->aapply->isApply($user_code,$type,$date);
+					$tempRec=array();
+
+					$foreAfter=$this->getForeAfter($startTime,$endTime,$date,$type);
+					$tempRec[$dates[0]][$dates[1]][$dates[2]]=$foreAfter["rec"];
+					$forenoon=$foreAfter["forenoon"];
+					$afternoon=$foreAfter["afternoon"];
+					$dayTime=$forenoon+$afternoon;
+					
+					/*统一数据更新*/
+					
+					if($isApply){
+						$this->tempStorage($checkinData,$tempRec,1);
+						/*判断正常的上下班时间是否已计算，涉及，打卡记录是否为1，取指定日期的上下午记录
+							已计算：恢复记录，减掉时间，打卡记录状态恢复0，
+								   重新运行	settleCheckin,
+							未计算：直接修改记录
+						*/
+						
+						$baseCheckinData=$this->acheckin->seekCheckin($user_code,1,$date,1);
+						if(!empty($baseCheckinData)){
+							echo "guolai";
+							$dayRec=$this->arecord->getMonthRec($this->selfUser["user_code"],$dates[0],$dates[1],$dates[2]);
 	
-					if($foreTemp>=2 || ($foreTemp+$forenoon)>=3){
-						$forenoon=3;
-					}else{
-						$forenoon+=$foreTemp;
-					}
-					if($afterTemp>=4 || ($afterTemp+$afternoon)>=5){
-						$afternoon=5;
-					}else{
-						$afternoon+=$afterTemp;
-					}
-				}
-				$theDate["forenoon"]["worktime"]=$forenoon;
-				$theDate["afternoon"]["worktime"]=$afternoon;
-				$theDate["forenoon"]["type"]=$foreType;
-				$theDate["afternoon"]["type"]=$afterType;
-				$tempRec[$dates[0]][$dates[1]][$dates[2]]=$theDate;
-				return $tempRec;
-				// print_r($tempRec);
-				break;
-			case "3":
+							$this->MonthRec[$dates[2]]=array("forenoon"=>array("type"=>"","worktime"=>""),"afternoon"=>array("type"=>"","worktime"=>""));
 
-				if($apply["aapply_state"]>0 && $apply["aapply_tempstorage"]!=""){
-					$tempAttend=json_decode($apply["aapply_tempstorage"],true);
-					$afterTemp=$tempAttend[$dates[0]][$dates[1]][$dates[2]]["afternoon"]["worktime"];
-					if($afterTemp>0){
-						$afterType=$type;
-						$afternoon+=$afterTemp;
-					}
-				}
+							$dayTime=$dayRec["forenoon"]["worktime"]+$dayRec["afternoon"]["worktime"];
 
-				$theDate["afternoon"]["worktime"]=$afternoon;
-				$theDate["afternoon"]["type"]=$afterType;
-				$tempRec[$dates[0]][$dates[1]][$dates[2]]=$theDate;
-				return $tempRec;
-				// print_r($apply);
-				// print_r($tempRec);
-				break;
-			default :
-				# code...
-				break;
+							if($this-> updateMonthRec($user_code,$dates,1,$baseCheckinData,$dayTime,0)){
+
+								$this->settleCheckin($user_code,1,$date);
+							}
+
+						}else{
+							$this->updateMonthRec($user_code,$dates,$type,$checkinData,$dayTime);
+						}
+					}else{
+						$this->tempStorage($checkinData,$tempRec);
+					}
+					break;
+				case "3":
+					// echo "上午".$forenoon;
+					// echo "下午".$afternoon;
+					$isApply=$this->acheckin->isOverTime($user_code,$date);
+
+					$interval=count_days($startTime,$endTime);
+
+					$startDate=split("-",split(" ",$startTime)[0]);
+					$endDate=split("-",split(" ",$endTime)[0]);
+					// $thisDay=$this->arecord->isWeekday($dates[0],$dates[1],$dates[2]);
+					$tempRec=array();
+					
+					// return ;
+					if($interval>0){
+						/*超过当天*/
+						echo "跨天的了";
+						/*计算第一天的时间*/
+						$foreAfter=$this->getForeAfter($startTime,split(" ",$startTime)[0]." ".$this->timeNode["END"],split(" ",$startTime)[0],$type);
+						$tempRec[$startDate[0]][$startDate[1]][$startDate[2]]=$foreAfter["rec"];
+						
+						/*计算最后一天的时间*/
+						
+						
+						$foreAfter=$this->getForeAfter(split(" ",$endTime)[0]." ".$this->timeNode["STA"],$endTime,split(" ",$endTime)[0],$type);
+						$tempRec[$endDate[0]][$endDate[1]][$endDate[2]]=$foreAfter["rec"];
+
+							// $tempRec[$dates[0]][$dates[1]][$dates[2]]=$this->MonthRec[$dates[2]];
+						// $dayTime=$afternoon;
+						if($interval>1){
+							for ($i=1; $i <$interval ; $i++) {
+								$tempDate=date("Y-m-d",strtotime(split(" ",$startTime)[0]." +{$i} day"));
+								$tempDates=split("-",$tempDate);
+
+								$foreAfter=$this->getForeAfter($tempDate." ".$this->timeNode["STA"],$tempDate." ".$this->timeNode["END"],$tempDate,$type);
+								$tempRec[$tempDates[0]][$tempDates[1]][$tempDates[2]]=$foreAfter["rec"];
+							}
+							// $this->MonthRec=$this->arecord->getMonthRec($this->selfUser["user_code"],$dates[0],$dates[0]);
+							
+						}else{
+							
+						}
+						// echo count($tempRec);
+						$year=key($tempRec);
+						echo count($tempRec[$year]);
+
+					}else{
+						// if($startTime<=$this)
+			
+						$foreAfter=$this->getForeAfter($startTime,$endTime,$date,$type);
+						$tempRec[$dates[0]][$dates[1]][$dates[2]]=$foreAfter["rec"];
+						$forenoon=$foreAfter["forenoon"];
+						$afternoon=$foreAfter["afternoon"];
+						$dayTime=$forenoon+$afternoon;
+						// $this-> updateMonthRec($user_code,$dates,1,$baseCheckinData,$dayTime,0)
+						/*当天*/
+					}
+					if($isApply){
+						// $this->tempStorage($checkinData,$tempRec);
+						$baseCheckinData=$this->acheckin->seekCheckin($user_code,1,$date,1);
+
+							$dayRec=$this->arecord->getMonthRec($this->selfUser["user_code"],$dates[0],$dates[1],$dates[2]);
+							// $this->MonthRec[$dates[2]]=array("forenoon"=>array("type"=>"","worktime"=>""),"afternoon"=>array("type"=>"","worktime"=>""));
+
+							$dayTime=$dayRec["forenoon"]["worktime"]+$dayRec["afternoon"]["worktime"];
+							if($this-> updateMonthRec($user_code,$dates,1,$baseCheckinData,$dayTime,0)){
+								foreach ($tempRec as  $year =>$yearData) {
+									$month =key($yearData);
+									foreach ($yearData[$month] as $day => $dayData) {
+										$this->settleCheckin($user_code,1,date("Y-m-d",strtotime($year."-".$month."-".$day)));
+									}
+								}
+							}
+						// $this->updateMonthRec($user_code,$dates,$type,$checkinData,$afternoon);
+					}else{
+						$this->tempStorage($checkinData,$tempRec);
+					}
+				/**
+				 * 加班
+				 */
+					break;
+				default :
+					# code...
+					break;
+			}
+		}else{
+			// echo "没有记录啊";
 		}
 	}
 

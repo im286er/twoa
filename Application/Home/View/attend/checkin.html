@@ -184,9 +184,7 @@
 			</div> 
    			
    		</div>
-    </div>
-	<button class="btn btn-info" id="bootbox-confirm">Confirm</button>
-   		
+    </div>	
    	<script src="__PUBLIC__/components/jquery/dist/jquery.js"></script>	 
 	<script src="__PUBLIC__/components/bootstrap/dist/js/bootstrap.js"></script>			
 	<script src="__PUBLIC__/components/jquery.gritter/js/jquery.gritter.js"></script>
@@ -202,10 +200,6 @@
 
 	<script type="text/javascript">
 		jQuery(function($) {
-			$("#bootbox-confirm").on(ace.click_event, function() {
-				
-			});
-
 			var images = {localId: [],serverId: []};
 			set_monitor_date()
 			$("input[name='monitor']").on("click",function(){
@@ -354,33 +348,38 @@
 		    		datas["data"]=get_checkin_data("photo-info")
 		    	}
 				
+
 				if(datas["data"]["acheckin_type"]==2 && datas["data"]["acheckin_timetype"]==2){
 					bootbox.confirm({message:"你想结束外勤的时候同时下班么？",buttons:{confirm:{label:"同时下班",className:"btn-success"},cancel:{label:"只结束外勤",className:"btn-info"}}, callback:function(result) {
 						if(result) {
-							//
+							datas["knockoff"]=true
 						}
+						submitCheckin(datas)
 					}});
+				}else{
+					submitCheckin(datas)
 				}
-		    	console.log(datas["data"]);
-				return;
-		    	// if(datas["data"]!=false){
-		    	// 	$.ajax({
-			    // 		url:"{:U('submitCheckin')}",
-			    // 		type:"post",
-			    // 		dataType:"json",
-			    // 		data:datas,
-			    // 		success:function(data){
-			    // 			if(data.status>0){
-			    // 				alert_msg("信息正确","打卡记录id："+data.msg,'gritter-success')
-			    // 				setTimeout(function(){location.reload(); }, 4000);
-			    // 			}else{
-			    // 				alert_msg("信息出错",data.msg,'gritter-error')
-			    // 			}
-			    // 			// location.reload()
-			    // 		}
-			    // 	})
-		    	// }
-		    	
+
+		    	function submitCheckin(datas){
+					if(datas["data"]!=false){
+						$.ajax({
+							url:"{:U('submitCheckin')}",
+							type:"post",
+							dataType:"json",
+							data:datas,
+							success:function(data){
+								if(data.status>0){
+									alert_msg("信息正确","打卡记录id："+data.msg,'gritter-success')
+									setTimeout(function(){location.reload(); }, 4000);
+								}else{
+									alert_msg("信息出错",data.msg,'gritter-error')
+								}
+								// location.reload()
+							}
+						})
+					}
+				}
+				
 		    })
 
 		    /*改变打卡方式，定位1，拍照2*/

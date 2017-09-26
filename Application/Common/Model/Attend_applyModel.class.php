@@ -151,7 +151,7 @@ class Attend_applyModel extends AmongModel{
 			$where["aapply_inday"]=array("EQ",$aapply_inday);
 		}
 		$where["_string"]="(aapply_schedule<='{$aapply_schedule}' AND '{$aapply_schedule}'<(date_sub(aapply_schedule,interval -aapply_days day)) AND aapply_days>0) OR (aapply_schedule='{$aapply_schedule}' AND aapply_days='0') OR (aapply_schedule<='{$aapply_schedule}' AND '{$aapply_schedule}'<= pl.project_enddate AND aapply_type=10)";
-		$resultArray=$this->table($this->trueTableName." ap")->join("oa_project_list pl on ap.aapply_project=pl.project_id AND project_trave=1")->where($where)->select();
+		$resultArray=$this->table($this->trueTableName." ap")->join("left join oa_project_list pl on ap.aapply_project=pl.project_id AND project_trave=1")->where($where)->select();
 		// echo $this->getLastSql();
 		return $resultArray;
 	}
