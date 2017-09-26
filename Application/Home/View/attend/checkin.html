@@ -21,6 +21,7 @@
 			#checkin-way{padding-top:3px;padding-left: 3px; }
 			#accordion .panel-body{text-align: center;}
 			#imageModal .modal-body img{width:90%;}
+			.modal-dialog{top:40%;}
 		</style>
     </head>
     <body>
@@ -184,7 +185,7 @@
    			
    		</div>
     </div>
-
+	<button class="btn btn-info" id="bootbox-confirm">Confirm</button>
    		
    	<script src="__PUBLIC__/components/jquery/dist/jquery.js"></script>	 
 	<script src="__PUBLIC__/components/bootstrap/dist/js/bootstrap.js"></script>			
@@ -194,13 +195,17 @@
 	<script src="__PUBLIC__/assets/js/src/ace.js"></script>
 	<script src="__PUBLIC__/assets/js/src/ace.basics.js"></script>
 	<script src="http://res.wx.qq.com/open/js/jweixin-1.2.0.js"></script>
+	<script src="__PUBLIC__/components/bootbox.js/bootbox.js"></script>
 	
 
 
 
 	<script type="text/javascript">
 		jQuery(function($) {
-			
+			$("#bootbox-confirm").on(ace.click_event, function() {
+				
+			});
+
 			var images = {localId: [],serverId: []};
 			set_monitor_date()
 			$("input[name='monitor']").on("click",function(){
@@ -348,24 +353,33 @@
 		    	}else if(checkinway==2){
 		    		datas["data"]=get_checkin_data("photo-info")
 		    	}
-		    	// console.log(datas["data"]);
-		    	if(datas["data"]!=false){
-		    		$.ajax({
-			    		url:"{:U('submitCheckin')}",
-			    		type:"post",
-			    		dataType:"json",
-			    		data:datas,
-			    		success:function(data){
-			    			if(data.status>0){
-			    				alert_msg("信息正确","打卡记录id："+data.msg,'gritter-success')
-			    				setTimeout(function(){location.reload(); }, 4000);
-			    			}else{
-			    				alert_msg("信息出错",data.msg,'gritter-error')
-			    			}
-			    			// location.reload()
-			    		}
-			    	})
-		    	}
+				
+				if(datas["data"]["acheckin_type"]==2 && datas["data"]["acheckin_timetype"]==2){
+					bootbox.confirm({message:"你想结束外勤的时候同时下班么？",buttons:{confirm:{label:"同时下班",className:"btn-success"},cancel:{label:"只结束外勤",className:"btn-info"}}, callback:function(result) {
+						if(result) {
+							//
+						}
+					}});
+				}
+		    	console.log(datas["data"]);
+				return;
+		    	// if(datas["data"]!=false){
+		    	// 	$.ajax({
+			    // 		url:"{:U('submitCheckin')}",
+			    // 		type:"post",
+			    // 		dataType:"json",
+			    // 		data:datas,
+			    // 		success:function(data){
+			    // 			if(data.status>0){
+			    // 				alert_msg("信息正确","打卡记录id："+data.msg,'gritter-success')
+			    // 				setTimeout(function(){location.reload(); }, 4000);
+			    // 			}else{
+			    // 				alert_msg("信息出错",data.msg,'gritter-error')
+			    // 			}
+			    // 			// location.reload()
+			    // 		}
+			    // 	})
+		    	// }
 		    	
 		    })
 

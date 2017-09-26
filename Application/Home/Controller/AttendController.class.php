@@ -599,7 +599,8 @@ class AttendController extends AmongController {
 					}
 					$result=$this->acheckin->checkin($checkinData);
 					if($result>0){
-						$checkinResult=array("status"=>"1","msg"=>$result);
+						$checkinResult=array("status"=>"1","msg"=>$result
+					);
 					}
 					break;
 				case "2":
@@ -627,11 +628,12 @@ class AttendController extends AmongController {
 					# code...
 					break;
 			}
-			// $this->ajaxReturn($checkinResult);
+			
 			if($checkinData["acheckin_type"]>2 && $checkinData["acheckin_timetype"]==2 && $checkinResult["status"]==1){
 				/*当打卡结束的时候计算时间*/
 				// $this->settleAttend($this->selfUser["user_code"],"2017-09-14");
 			}
+			$this->ajaxReturn($checkinResult);
 			
 		}
 	}
