@@ -3,8 +3,8 @@
  * @Author: vition
  * @Email:369709991@qq.com
  * @Date:   2017-08-03 16:43:53
- * @Last Modified by:   369709991@qq.com
- * @Last Modified time: 2017-09-02 15:41:09
+ * @Last Modified by:   vition
+ * @Last Modified time: 2017-09-26 23:27:22
  */
 
 /*{"control":"Attend","name":"考勤管理","icon":"fa fa-calendar","menus":[{"name":"考勤配置","icon":"fa fa-gear","menus":"config"},{"name":"考勤申请","icon":"fa fa-list-alt","menus":"apply"},{"name":"申请管理","icon":"fa fa-pencil-square","menus":"applycontrol"},{"name":"打卡","icon":"fa fa-square","menus":"checkin"}]}*/
@@ -660,6 +660,11 @@ class AttendController extends AmongController {
 	 * @return void
 	 */
 	function settleApply($user_code,$type,$date,$apply,$tempRec){
+		if($apply["aapply_state"]>0 && $apply["aapply_tempstorage"]!=""){
+			$tempAttend=json_decode($apply["aapply_tempstorage"],true);
+		}else{
+			return $tempRec;
+		}
 		$forenoon=0;
 		$afternoon=0;
 		$foreType=0;
@@ -678,30 +683,26 @@ class AttendController extends AmongController {
 				/*外勤*/
 			case "2":
 				// print_r($apply);
-				
-				if($apply["aapply_state"]>0 && $apply["aapply_tempstorage"]!=""){
-					$tempAttend=json_decode($apply["aapply_tempstorage"],true);
-					
-					$foreTemp=$tempAttend[$dates[0]][$dates[1]][$dates[2]]["forenoon"]["worktime"];
-					if($foreTemp>0){
-						$foreType=$type;
-					}
-					$afterTemp=$tempAttend[$dates[0]][$dates[1]][$dates[2]]["afternoon"]["worktime"];
-					if($afterTemp>0){
-						$afterType=$type;
-					}
-	
-					if($foreTemp>=2 || ($foreTemp+$forenoon)>=3){
-						$forenoon=3;
-					}else{
-						$forenoon+=$foreTemp;
-					}
-					if($afterTemp>=4 || ($afterTemp+$afternoon)>=5){
-						$afternoon=5;
-					}else{
-						$afternoon+=$afterTemp;
-					}
+				$foreTemp=$tempAttend[$dates[0]][$dates[1]][$dates[2]]["forenoon"]["worktime"];
+				if($foreTemp>0){
+					$foreType=$type;
 				}
+				$afterTemp=$tempAttend[$dates[0]][$dates[1]][$dates[2]]["afternoon"]["worktime"];
+				if($afterTemp>0){
+					$afterType=$type;
+				}
+
+				if($foreTemp>=2 || ($foreTemp+$forenoon)>=3){
+					$forenoon=3;
+				}else{
+					$forenoon+=$foreTemp;
+				}
+				if($afterTemp>=4 || ($afterTemp+$afternoon)>=5){
+					$afternoon=5;
+				}else{
+					$afternoon+=$afterTemp;
+				}
+
 				$theDate["forenoon"]["worktime"]=$forenoon;
 				$theDate["afternoon"]["worktime"]=$afternoon;
 				$theDate["forenoon"]["type"]=$foreType;
@@ -720,13 +721,18 @@ class AttendController extends AmongController {
 						$afternoon+=$afterTemp;
 					}
 				}
-
 				$theDate["afternoon"]["worktime"]=$afternoon;
 				$theDate["afternoon"]["type"]=$afterType;
 				$tempRec[$dates[0]][$dates[1]][$dates[2]]=$theDate;
 				return $tempRec;
-				// print_r($apply);
-				// print_r($tempRec);
+				break;
+			case "4":
+				$theDate["forenoon"]["worktime"]=$tempAttend[$dates[0]][$dates[1]][$dates[2]]["forenoon"]["worktime"];;
+				$theDate["afternoon"]["worktime"]=$tempAttend[$dates[0]][$dates[1]][$dates[2]]["afternoon"]["worktime"];;
+				$theDate["forenoon"]["type"]=$type;
+				$theDate["afternoon"]["type"]=$type;
+				$tempRec[$dates[0]][$dates[1]][$dates[2]]=$theDate;
+				return $tempRec;
 				break;
 			default :
 				# code...
