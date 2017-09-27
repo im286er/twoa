@@ -10,7 +10,7 @@ namespace Common\Model;
 use Common\Model\AmongModel;
 class Attend_applyModel extends AmongModel{
 	protected $trueTableName = 'oa_attend_apply'; 
-	protected $fields = array("aapply_id","aapply_code","aapply_type","aapply_inday","aapply_addtime","aapply_schedule","aapply_days","aapply_hours","aapply_reason",'aapply_project','aapply_proof',"aapply_approve","aapply_state","aapply_operation","aapply_remark");
+	protected $fields = array("aapply_id","aapply_code","aapply_type","aapply_inday","aapply_addtime","aapply_schedule","aapply_days","aapply_hours","aapply_reason",'aapply_project','aapply_proof',"aapply_approve","aapply_state","aapply_operation","aapply_remark","aapply_tempstorage");
 
 	function searchApply($aapply_code,$condition=array(),$start=0,$limit=0,$approve=false){
 		if(!$this->has_auth("select")) return false;

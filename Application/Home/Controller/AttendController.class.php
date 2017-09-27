@@ -332,7 +332,7 @@ class AttendController extends AmongController {
 		print_r($tempRec);
 		foreach ($allApply as $apply){
 			
-			$tempRec=$this->settleApply($user_code,$apply["aapply_type"],$date,$apply,$tempRec);
+			$tempRec=$this->getTimeRec($user_code,$apply["aapply_type"],$date,$apply,$tempRec);
 			print_r($tempRec);
 			
 		}
@@ -430,7 +430,10 @@ class AttendController extends AmongController {
 		if(IS_AJAX){
 			$date=date("Y-m-d",strtotime(I("thisDay")));
 		}
-		// return;
+
+		$this->settleApply();
+		
+		return;
 		/*测试各种考勤审计*/
 		// $test=$this->acheckin->isOverTime($this->selfUser["user_code"],"2017-08-18");
 		// print_r($test);
@@ -438,8 +441,8 @@ class AttendController extends AmongController {
 		// echo date("Y-m-d",strtotime("2017-8-14 +1 day"));// echo date("Y-m-d",strtotime("2017-8-14 +1 day"));
 		
 		// $this->settleCheckin($this->selfUser["user_code"],3,date("Y-m-d",strtotime("2017-8-21")));
-		$this->settleAttend($this->selfUser["user_code"],"2017-08-21");
-		return;
+		// $this->settleAttend($this->selfUser["user_code"],"2017-08-21");
+		// return;
 		// return ;
 		$normalCheckin=$this->checkinType($this->selfUser["user_code"],1,$date);
 		$outCheckin=$this->checkinType($this->selfUser["user_code"],2,$date);
@@ -659,7 +662,7 @@ class AttendController extends AmongController {
 	 * @param [type] $date
 	 * @return void
 	 */
-	function settleApply($user_code,$type,$date,$apply,$tempRec){
+	function getTimeRec($user_code,$type,$date,$apply,$tempRec){
 		if($apply["aapply_state"]>0 && $apply["aapply_tempstorage"]!=""){
 			$tempAttend=json_decode($apply["aapply_tempstorage"],true);
 		}else{
@@ -727,15 +730,86 @@ class AttendController extends AmongController {
 				return $tempRec;
 				break;
 			case "4":
-				$theDate["forenoon"]["worktime"]=$tempAttend[$dates[0]][$dates[1]][$dates[2]]["forenoon"]["worktime"];;
-				$theDate["afternoon"]["worktime"]=$tempAttend[$dates[0]][$dates[1]][$dates[2]]["afternoon"]["worktime"];;
+				$theDate["forenoon"]["worktime"]=$tempAttend[$dates[0]][$dates[1]][$dates[2]]["forenoon"]["worktime"];
+				$theDate["afternoon"]["worktime"]=$tempAttend[$dates[0]][$dates[1]][$dates[2]]["afternoon"]["worktime"];
 				$theDate["forenoon"]["type"]=$type;
 				$theDate["afternoon"]["type"]=$type;
 				$tempRec[$dates[0]][$dates[1]][$dates[2]]=$theDate;
 				return $tempRec;
 				break;
+			case "6":
+				$theDate["afternoon"]["worktime"]=$tempAttend[$dates[0]][$dates[1]][$dates[2]]["afternoon"]["worktime"]+$apply["aapply_hours"];
+				$theDate["afternoon"]["type"]=$type;
+				$tempRec[$dates[0]][$dates[1]][$dates[2]]=$theDate;
+				return $tempRec;
+			case "7":
+				/*aapply_tempstorage里存储的是可以调休的时间，比如商务3，证明上午可以调休的小时是3*/
+				$foreTemp=$tempAttend[$dates[0]][$dates[1]][$dates[2]]["forenoon"]["worktime"];
+				if($foreTemp>0){
+					$foreType=$type;
+				}
+				$afterTemp=$tempAttend[$dates[0]][$dates[1]][$dates[2]]["afternoon"]["worktime"];
+				if($afterTemp>0){
+					$afterType=$type;
+				}
+
+				if(($foreTemp+$forenoon)>=3){
+					$forenoon=3;
+				}else{
+					$forenoon+=$foreTemp;
+				}
+				if(($afterTemp+$afternoon)>=5){
+					$afternoon=5;
+				}else{
+					$afternoon+=$afterTemp;
+				}
+
+				$theDate["forenoon"]["worktime"]=$forenoon;
+				$theDate["afternoon"]["worktime"]=$afternoon;
+				$theDate["forenoon"]["type"]=$foreType;
+				$theDate["afternoon"]["type"]=$afterType;
+				$tempRec[$dates[0]][$dates[1]][$dates[2]]=$theDate;
+				return $tempRec;
+			case "8": case "9":
+				$foreTemp=$tempAttend[$dates[0]][$dates[1]][$dates[2]]["forenoon"]["worktime"];
+				if($foreTemp>0){
+					$foreType=$type;
+					$theDate["forenoon"]["worktime"]=$forenoon-$foreTemp;
+				}
+				$afterTemp=$tempAttend[$dates[0]][$dates[1]][$dates[2]]["afternoon"]["worktime"];
+				if($afterTemp>0){
+					$afterType=$type;
+					$theDate["afternoon"]["worktime"]=$afternoon-$afterTemp;
+				}
+				return $tempRec;
+				break;
+			case "10": case "11": case "12": case "13":
+				$theDate["forenoon"]["worktime"]=3;
+				$theDate["afternoon"]["worktime"]=5;
+				$theDate["forenoon"]["type"]=$type;
+				$theDate["afternoon"]["type"]=$type;
+				return $tempRec;
+				break;
+			case "14":
+				$foreTemp=$tempAttend[$dates[0]][$dates[1]][$dates[2]]["forenoon"]["worktime"];
+				if($foreTemp>0){
+					$foreType=$type;
+					$theDate["forenoon"]["worktime"]=3;
+				}
+				$afterTemp=$tempAttend[$dates[0]][$dates[1]][$dates[2]]["afternoon"]["worktime"];
+				if($afterTemp>0){
+					$afterType=$type;
+					$theDate["afternoon"]["worktime"]=3;
+				}
+				$theDate["forenoon"]["worktime"]=$forenoon;
+				$theDate["afternoon"]["worktime"]=$afternoon;
+				$theDate["forenoon"]["type"]=$foreType;
+				$theDate["afternoon"]["type"]=$afterType;
+				$tempRec[$dates[0]][$dates[1]][$dates[2]]=$theDate;
+				return $tempRec;
+				break;
 			default :
-				# code...
+				return $tempRec;
 				break;
 		}
 	}
@@ -1084,5 +1158,138 @@ class AttendController extends AmongController {
 			}
 			
 		}
+	}
+
+	function settleApply(){
+		$unSettleApply=$this->aapply->searchApply($aapply_code,array("aapply_state"=>1,"aapply_settle"=>0));
+		foreach ($unSettleApply as $apply) {
+			$this->setAttend($apply);
+		}
+	}
+
+	function setAttend($applyInfo){
+		// print_r($applyInfo);
+		if($applyInfo["aapply_days"]==0){
+			$days=1;
+		}else{
+			$days=$applyInfo["aapply_days"];
+		}
+		for ($i=0; $i <$days; $i++) {
+			// echo $applyInfo["aapply_type"].'-'.$i.'\n';
+			$thisDate=date('Y-m-d',strtotime('+'.$i.' day',strtotime($applyInfo["aapply_schedule"])))."\n";
+			list($year,$month,$date)=split("-",$thisDate);
+		}
+		
+		// return;
+		// list($year,$month,$date)=split("-",$applyInfo["aapply_schedule"]);
+		//获取考勤记录的数据
+		$monthRec=$this->arecord->getMonthRec($this->selfUser["user_code"],$year,$month);
+
+		//初始化每天数据结构
+		$baseRec=array("forenoon"=>array("worktime"=>0,"type"=>0),"afternoon"=>array("worktime"=>0,"type"=>0));
+		if(is_array($monthRec[$date])){
+			$baseRec=$monthRec[$date];
+		}
+		$forenoon=$baseRec["forenoon"]["worktime"];
+		$afternoon=$baseRec["afternoon"]["worktime"];
+		$foreType=$baseRec["forenoon"]["type"];
+		$afterType=$baseRec["afternoon"]["type"];
+
+		echo $applyInfo["aapply_type"];
+		$type=$applyInfo["aapply_type"];
+		switch ($type) {
+			case '2'://外勤
+				if($applyInfo["aapply_tempstorage"]!=""){
+					$tempAttend=json_decode($applyInfo["aapply_tempstorage"],true);
+				}else{
+					return false;
+				}
+				$foreTemp=$tempAttend[$year][$month][$date]["forenoon"]["worktime"];
+				$afterTemp=$tempAttend[$year][$month][$date]["afternoon"]["worktime"];
+				if($foreTemp>0){
+					$foreType=$type;
+				}
+				if($afterTemp>0){
+					$afterType=$type;
+				}
+
+				if($foreTemp>=2 || ($foreTemp+$forenoon)>=3){
+					$forenoon=3;
+				}else{
+					$forenoon+=$foreTemp;
+				}
+				if($afterTemp>=4 || ($afterTemp+$afternoon)>=5){
+					$afternoon=5;
+				}else{
+					$afternoon+=$afterTemp;
+				}
+				# code...
+				break;
+			case "3"://工作日加班
+				if($applyInfo["aapply_tempstorage"]!=""){
+					$tempAttend=json_decode($applyInfo["aapply_tempstorage"],true);
+				}else{
+					return false;
+				}
+				$afterTemp=$tempAttend[$year][$month][$date]["afternoon"]["worktime"];
+				if($afterTemp>0){
+					$afterType=$type;
+					$afternoon+=$afterTemp;
+				}
+				break;
+			case "4"://工作日加班
+				if($applyInfo["aapply_tempstorage"]!=""){
+					$tempAttend=json_decode($applyInfo["aapply_tempstorage"],true);
+				}else{
+					return false;
+				}
+				$foreTemp=$tempAttend[$year][$month][$date]["forenoon"]["worktime"];
+				$afterTemp=$tempAttend[$year][$month][$date]["afternoon"]["worktime"];
+				if($foreTemp>0){
+					$foreType=$type;
+					$forenoon=$foreTemp;
+				}
+				if($afterTemp>0){
+					$afterType=$type;
+					$afternoon=$afterTemp;
+				}
+				break;
+			case "5"://上午加班
+				$checkinInfo=$this->acheckin->findCheckin($applyInfo["aapply_code"],array("acheckin_type"=>array("eq",1),"acheckin_timetype"=>array("eq",1),"date_format(acheckin_checkintime,'%Y-%m-%d')"=>array("eq",$applyInfo["aapply_schedule"])));
+				$theTime=split(" ",$checkinInfo["acheckin_checkintime"]);
+				$theMO=$theTime[0]." 09:00:00";
+				if($checkinInfo["acheckin_checkintime"]<$theMO){
+					$forenoon+="\n".(strtotime($theMO)-strtotime($checkinInfo["acheckin_checkintime"]))/3600;
+					$foreType=$type;
+				}
+				break;
+			
+			case "6"://在家加班
+				$afternoon+=$applyInfo["aapply_hours"];
+				$afterType=$type;
+				break;
+			
+			case "7"://补休，补休要去查找时间总和，
+				
+				break;
+			
+			case "8": case "9"://事假，病假
+				break;
+			case "10": case "11": case "12": case "13"://
+				break;
+			case "14"://婚检
+				break;
+			default:
+				# code...
+				break;
+		}
+
+		$theDate["forenoon"]["worktime"]=$forenoon;
+		$theDate["afternoon"]["worktime"]=$afternoon;
+		$theDate["forenoon"]["type"]=$foreType;
+		$theDate["afternoon"]["type"]=$afterType;
+
+		print_r($theDate);
+
 	}
 }

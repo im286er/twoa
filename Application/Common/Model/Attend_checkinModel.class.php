@@ -59,6 +59,12 @@ class Attend_checkinModel extends AmongModel{
 		
 	}
 
+	function findCheckin($user_code,$condition=array()){
+		if(!$this->has_auth("select")) return false;
+		$condition["acheckin_code"]=array("EQ",$user_code);
+		return $this->where($condition)->find();
+	}
+
 	function applySeekCheckin($apply_id){
 		if(!$this->has_auth("select")) return false;
 		return $this->where(array("acheckin_applyid"=>$apply_id))->select();
