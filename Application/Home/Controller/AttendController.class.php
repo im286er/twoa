@@ -4,7 +4,7 @@
  * @Email:369709991@qq.com
  * @Date:   2017-08-03 16:43:53
  * @Last Modified by:   vition
- * @Last Modified time: 2017-09-26 23:27:22
+ * @Last Modified time: 2017-09-28 23:42:02
  */
 
 /*{"control":"Attend","name":"考勤管理","icon":"fa fa-calendar","menus":[{"name":"考勤配置","icon":"fa fa-gear","menus":"config"},{"name":"考勤申请","icon":"fa fa-list-alt","menus":"apply"},{"name":"申请管理","icon":"fa fa-pencil-square","menus":"applycontrol"},{"name":"打卡","icon":"fa fa-square","menus":"checkin"}]}*/
@@ -508,6 +508,15 @@ class AttendController extends AmongController {
 			}else{
 				if($checkinData["acheckin_timetype"]==2 && $checkinResult["status"]==1){
 					//计算上下班时间，
+					$checkinData=$this->acheckin->seekCheckin($this->selfUser["user_code"],$checkinData["acheckin_timetype"],null,null,$checkinData["acheckin_applyid"]);
+					if(count($checkinData)>1){
+						if(split(" ",$checkinData[1]["acheckin_checkintime"])[0]==split(" ",$checkinData[0]["acheckin_checkintime"])[0]){
+							$MonthRec=$this->getForeAfter($checkinData[1]["acheckin_checkintime"],$checkinData[0]["acheckin_checkintime"],split(" ",$checkinData[1]["acheckin_checkintime"])[0],$checkinData["acheckin_type"])
+						}else{
+
+						}
+						
+					}
 				}
 
 			}
@@ -549,25 +558,34 @@ class AttendController extends AmongController {
 	 */
 	private function getForeAfter($startTime,$endTime,$date,$type){
 		$startTime=$this->loadStartTime($startTime);//对开始时间进行初始化
-		$dates=split("-",$date);
+		list($year,$month,$date)=split("-",$date);
+		$forenoon=0;
+		$afternoon=0;
+		$foreType=0;
+		$afterType=0;
 		if($startTime<$date." ".$this->timeNode["AO"] && $endTime<$date." ".$this->timeNode["AO"]){
 			// echo "A";
 			$forenoon=time_reduce($startTime,$endTime);
+			$foreType=$type;
 		}elseif ($startTime>$date." ".$this->timeNode["MF"] && $endTime>$date." ".$this->timeNode["MF"]) {
 			// echo "B";
 			$afternoon=time_reduce($startTime,$endTime);
+			$afterType=$type;
 			# code...
 		}else {
 			$forenoon=time_reduce($startTime,$date." ".$this->timeNode["MF"]);
 			$afternoon=time_reduce($date." ".$this->timeNode["AO"],$endTime);
+			$foreType=$type;
+			$afterType=$type;
 		}
-		// $MonthRec["rec"]=$this->arecord->getMonthRec($this->selfUser["user_code"],$dates[0],$dates[1])[$dates[2]];
-		$MonthRec["rec"]["forenoon"]["worktime"]= $forenoon;
-		$MonthRec["rec"]["afternoon"]["worktime"]= $afternoon;
-		$MonthRec["rec"]["forenoon"]["type"]= $type;
-		$MonthRec["rec"]["afternoon"]["type"]= $type;
-		$MonthRec["forenoon"]= $forenoon;
-		$MonthRec["afternoon"]= $afternoon;
+
+		$dateRec["forenoon"]["worktime"]= $forenoon;
+		$dateRec["afternoon"]["worktime"]= $afternoon;
+		$dateRec["forenoon"]["type"]= $foreType;
+		$dateRec["afternoon"]["type"]= $afterType;
+		$MonthRec[$year][$month][$date]=$dateRec;
+		// $MonthRec["forenoon"]= $forenoon;
+		// $MonthRec["afternoon"]= $afternoon;
 		return $MonthRec;
 	}
 
