@@ -289,6 +289,48 @@ class AttendController extends AmongController {
 	}
 	/*申请管理相关结束*/
 
+	// /**
+	//  * settleAttend function 计算一天里的考勤
+	//  *
+	//  * @param [type] $user_code
+	//  * @param [type] $date
+	//  * @return void
+	//  */
+	// function settleAttend($user_code,$date){
+	// 	//1，先获取指定日期的所有打卡记录
+	// 	$allCheckin=$this->acheckin->seekCheckin($user_code,null,$date);
+	// 	$checkins=array();
+	// 	//1,重新编排记录，三维数组，第一维key为类型，第二维key为开始1或结束2
+	// 	foreach ($allCheckin as $checkin){
+	// 		$checkins[$checkin["acheckin_type"]][$checkin["acheckin_timetype"]]=$checkin;
+	// 	}
+		
+	// 	//2，开始计算所有可能的考勤
+	// 	$forenoon=0;
+	// 	$afternoon=0;
+	// 	$dates=split("-", $date);/*分解成年月日*/
+
+	// 	/*计算正常上班的时间，上午，下午*/
+	// 	if(count($checkins[1])>1){
+	// 		$startTime=$this->loadStartTime($checkins[1][1]["acheckin_checkintime"]);
+	// 		$endTime=$this->loadEndTime($checkins[1][2]["acheckin_checkintime"]);
+	// 		$foreAfter=$this->getForeAfter($startTime,$endTime,$date,1);
+	// 		$tempRec[$dates[0]][$dates[1]][$dates[2]]=$foreAfter["rec"];
+	// 		$forenoon=$foreAfter["forenoon"];
+	// 		$afternoon=$foreAfter["afternoon"];
+	// 	}
+
+	// 	//3，获取指定日期的所有申请
+	// 	$allApply=$this->aapply->sameDate($user_code,$date);
+	// 	print_r($tempRec);
+	// 	foreach ($allApply as $apply){
+			
+	// 		$tempRec=$this->getTimeRec($user_code,$apply["aapply_type"],$date,$apply,$tempRec);
+	// 		print_r($tempRec);
+			
+	// 	}
+	// }
+
 	/**
 	 * [checkin 打卡页面]
 	 * @return [type] [description]
@@ -465,7 +507,8 @@ class AttendController extends AmongController {
 					}
 					$result=$this->acheckin->checkin($checkinData);
 					if($result>0){
-						$checkinResult=array("status"=>"1","msg"=>$result);
+						$checkinResult=array("status"=>"1","msg"=>$result
+					);
 					}
 					break;
 				case "2":
@@ -505,15 +548,257 @@ class AttendController extends AmongController {
 					//
 				}
 				// $this->settleAttend($this->selfUser["user_code"],"2017-09-14");
-			}else if($checkinData["acheckin_type"]==1 && $checkinData["acheckin_timetype"]==2 && $checkinResult["status"]==1){
-
 			}
 			$this->ajaxReturn($checkinResult);
 			
 		}
 	}
+	/**
+	 * settleCheckin 计算考勤
+	 *
+	 * @param [type] $user_code
+	 * @param [type] $type
+	 * @param [type] $date
+	 * @return void
+	 */
+	function getTimeRec($user_code,$type,$date,$apply,$tempRec){
+		if($apply["aapply_state"]>0 && $apply["aapply_tempstorage"]!=""){
+			$tempAttend=json_decode($apply["aapply_tempstorage"],true);
+			$forenoon=0;
+			$afternoon=0;
+			$foreType=0;
+			$afterType=0;
+			$dates=split("-", $date);/*分解成年月日*/
+			if($tempRec!=false){
+				$theDate=$tempRec[$dates[0]][$dates[1]][$dates[2]];
+				$forenoon=$theDate["forenoon"]["worktime"];
+				$afternoon=$theDate["afternoon"]["worktime"];
+				$foreType=$theDate["forenoon"]["type"];
+				$afterType=$theDate["afternoon"]["type"];
+			}
+			
+			switch ($type) {
+					/*外勤*/
+				case "2":
+					// print_r($apply);
+					$foreTemp=$tempAttend[$dates[0]][$dates[1]][$dates[2]]["forenoon"]["worktime"];
+					if($foreTemp>0){
+						$foreType=$type;
+					}
+					$afterTemp=$tempAttend[$dates[0]][$dates[1]][$dates[2]]["afternoon"]["worktime"];
+					if($afterTemp>0){
+						$afterType=$type;
+					}
+	
+					if($foreTemp>=2 || ($foreTemp+$forenoon)>=3){
+						$forenoon=3;
+					}else{
+						$forenoon+=$foreTemp;
+					}
+					if($afterTemp>=4 || ($afterTemp+$afternoon)>=5){
+						$afternoon=5;
+					}else{
+						$afternoon+=$afterTemp;
+					}
+	
+					$theDate["forenoon"]["worktime"]=$forenoon;
+					$theDate["afternoon"]["worktime"]=$afternoon;
+					$theDate["forenoon"]["type"]=$foreType;
+					$theDate["afternoon"]["type"]=$afterType;
+					$tempRec[$dates[0]][$dates[1]][$dates[2]]=$theDate;
+					return $tempRec;
+					// print_r($tempRec);
+					break;
+				case "3":
+	
+					if($apply["aapply_state"]>0 && $apply["aapply_tempstorage"]!=""){
+						$tempAttend=json_decode($apply["aapply_tempstorage"],true);
+						$afterTemp=$tempAttend[$dates[0]][$dates[1]][$dates[2]]["afternoon"]["worktime"];
+						if($afterTemp>0){
+							$afterType=$type;
+							$afternoon+=$afterTemp;
+						}
+					}
+					$theDate["afternoon"]["worktime"]=$afternoon;
+					$theDate["afternoon"]["type"]=$afterType;
+					$tempRec[$dates[0]][$dates[1]][$dates[2]]=$theDate;
+					return $tempRec;
+					break;
+				case "4":
+					$theDate["forenoon"]["worktime"]=$tempAttend[$dates[0]][$dates[1]][$dates[2]]["forenoon"]["worktime"];
+					$theDate["afternoon"]["worktime"]=$tempAttend[$dates[0]][$dates[1]][$dates[2]]["afternoon"]["worktime"];
+					$theDate["forenoon"]["type"]=$type;
+					$theDate["afternoon"]["type"]=$type;
+					$tempRec[$dates[0]][$dates[1]][$dates[2]]=$theDate;
+					return $tempRec;
+					break;
+				case "6":
+					$theDate["afternoon"]["worktime"]=$tempAttend[$dates[0]][$dates[1]][$dates[2]]["afternoon"]["worktime"]+$apply["aapply_hours"];
+					$theDate["afternoon"]["type"]=$type;
+					$tempRec[$dates[0]][$dates[1]][$dates[2]]=$theDate;
+					return $tempRec;
+				case "7":
+					/*aapply_tempstorage里存储的是可以调休的时间，比如商务3，证明上午可以调休的小时是3*/
+					$foreTemp=$tempAttend[$dates[0]][$dates[1]][$dates[2]]["forenoon"]["worktime"];
+					if($foreTemp>0){
+						$foreType=$type;
+					}
+					$afterTemp=$tempAttend[$dates[0]][$dates[1]][$dates[2]]["afternoon"]["worktime"];
+					if($afterTemp>0){
+						$afterType=$type;
+					}
+	
+					if(($foreTemp+$forenoon)>=3){
+						$forenoon=3;
+					}else{
+						$forenoon+=$foreTemp;
+					}
+					if(($afterTemp+$afternoon)>=5){
+						$afternoon=5;
+					}else{
+						$afternoon+=$afterTemp;
+					}
+	
+					$theDate["forenoon"]["worktime"]=$forenoon;
+					$theDate["afternoon"]["worktime"]=$afternoon;
+					$theDate["forenoon"]["type"]=$foreType;
+					$theDate["afternoon"]["type"]=$afterType;
+					$tempRec[$dates[0]][$dates[1]][$dates[2]]=$theDate;
+					return $tempRec;
+				case "8": case "9":
+					$foreTemp=$tempAttend[$dates[0]][$dates[1]][$dates[2]]["forenoon"]["worktime"];
+					if($foreTemp>0){
+						$foreType=$type;
+						$theDate["forenoon"]["worktime"]=$forenoon-$foreTemp;
+					}
+					$afterTemp=$tempAttend[$dates[0]][$dates[1]][$dates[2]]["afternoon"]["worktime"];
+					if($afterTemp>0){
+						$afterType=$type;
+						$theDate["afternoon"]["worktime"]=$afternoon-$afterTemp;
+					}
+					return $tempRec;
+					break;
+				case "10": case "11": case "12": case "13":
+					$theDate["forenoon"]["worktime"]=3;
+					$theDate["afternoon"]["worktime"]=5;
+					$theDate["forenoon"]["type"]=$type;
+					$theDate["afternoon"]["type"]=$type;
+					return $tempRec;
+					break;
+				case "14":
+					$foreTemp=$tempAttend[$dates[0]][$dates[1]][$dates[2]]["forenoon"]["worktime"];
+					if($foreTemp>0){
+						$foreType=$type;
+						$theDate["forenoon"]["worktime"]=3;
+					}
+					$afterTemp=$tempAttend[$dates[0]][$dates[1]][$dates[2]]["afternoon"]["worktime"];
+					if($afterTemp>0){
+						$afterType=$type;
+						$theDate["afternoon"]["worktime"]=3;
+					}
+					$theDate["forenoon"]["worktime"]=$forenoon;
+					$theDate["afternoon"]["worktime"]=$afternoon;
+					$theDate["forenoon"]["type"]=$foreType;
+					$theDate["afternoon"]["type"]=$afterType;
+					$tempRec[$dates[0]][$dates[1]][$dates[2]]=$theDate;
+					return $tempRec;
+					break;
+				default :
+					return $tempRec;
+					break;
+			}
+		}else{
+			return $tempRec;
+		}
+	}
 
+	
 
+	/**
+	 * updateMonthRec function
+	 *
+	 * @param [str] $dates 日期   	  '2017-08-15'
+	 * @param [int] $type 更新的类型，   1正常上下班，2外勤，3加班
+	 * @param [array] $checkinData		打卡记录两条的数据
+	 * @param [float] $dayTime			累积的时间
+	 * @return void
+	 */
+	private function updateMonthRec($user_code,$dates,$type,$checkinData,$dayTime,$acheckin_state=1,$customData=array()){
+		/*启动事物*/
+		$emptyRec=array("forenoon"=>array("type"=>"","worktime"=>""),"afternoon"=>array("type"=>"","worktime"=>""));
+		$this->acheckin->startTrans();
+		/*修改打卡记录的状态，防止打卡记录重复使用*/
+		foreach ($checkinData as $checkins) {
+			$this->acheckin->setCheckin($checkins["acheckin_id"],array("acheckin_state"=>$acheckin_state));
+		}
+		// $this->arecord->startTrans();
+		/*开始修改月数据*/
+		if(empty($customData)){
+			$setMonthResult=$this->arecord->setMonthRec($user_code,$dates[0],$dates[1],json_encode($this->MonthRec),$dayTime,$acheckin_state);
+		}else{
+			if(count($customData)>1){
+				/*表示跨年*/
+				foreach ($customData as $year=>$yearData) {
+					$month=key($yearData);
+
+					$tempMonthRec=$this->$this->arecord->getMonthRec($this->selfUser["user_code"],$year,$month);
+					foreach ($yearData[$month] as $day => $dayData) {
+						$tempMonthRec[$day]=$acheckin_state==1?$dayData:$emptyRec;
+					}
+					
+					$setMonthResult=$this->arecord->setMonthRec($user_code,$year,$month,json_encode($tempMonthRec),$dayTime,$acheckin_state);
+				}
+			}else{
+				/*当年*/
+				$year=key($customData);
+				if(count($customData[$year])>1){
+					/*跨月*/
+					foreach ($customData[$year] as $month => $monthData) {
+						$day=key($monthData[$day]);
+						$tempMonthRec=$this->$this->arecord->getMonthRec($this->selfUser["user_code"],$year,$month);
+
+						foreach ($monthData as $day => $dayData) {
+							$tempMonthRec[$day]=$acheckin_state==1?$dayData:$emptyRec;
+						}
+
+						$setMonthResult=$this->arecord->setMonthRec($user_code,$year,$month,json_encode($tempMonthRec),$dayTime,$acheckin_state);
+					}
+				}else{
+					/*当月*/
+					$year=key($customData);
+					$month=key($customData[$year]);
+					$tempMonthRec=$this->$this->arecord->getMonthRec($this->selfUser["user_code"],$year,$month);
+					foreach ($customData[$year][$month] as $day => $dayData){
+						$tempMonthRec[$day]=$acheckin_state==1?$dayData:$emptyRec;
+					}
+					$setMonthResult=$this->arecord->setMonthRec($user_code,$year,$month,json_encode($tempMonthRec),$dayTime,$acheckin_state);
+				}
+			}
+		}
+		
+
+		/*判断是否执行成功，是，提交事务，否回滚*/
+		if($setMonthResult>0){
+			$this->acheckin->commit();
+			return true;
+		}else{
+			$this->acheckin->rollback();
+			return false;
+		}
+	}
+
+	/**
+	 * tempStorage function 当申请未审批时，计算的时间储存到临时字段里
+	 *
+	 * @param [type] $checkinData 打卡的两条信息
+	 * @param [type] $storageArray
+	 * @return void
+	 */
+	function tempStorage($checkinData,$storageArray,$state=0){
+		foreach ($checkinData as $checkins) {
+			$this->acheckin->setCheckin($checkins["acheckin_id"],array("acheckin_state"=>$state,"acheckin_tempstorage"=>json_encode($storageArray)));
+		}
+	}
 	/**
 	 * 对早上时间进行判断 function
 	 *
@@ -526,7 +811,7 @@ class AttendController extends AmongController {
 		$MF=$date[0]." ".$this->timeNode["MF"];
 		$AO=$date[0]." ".$this->timeNode["AO"];
 		$AF=$date[0]." ".$this->timeNode["AF"];
-
+		/*这里需要增加一个判断是否加早班*/
 		if($startTime<$MO){
 			return $MO;
 		}else{
@@ -537,6 +822,18 @@ class AttendController extends AmongController {
 		return $startTime;
 	}
 	/**
+	 * loadEndTime function 对结束时间做判断
+	 *
+	 * @param [type] $endTime
+	 * @return void
+	 */
+	private function loadEndTime($endTime){
+		if($endTime>$MF && $endTime<$AO){
+			return $MF;
+		}
+		return $endTime;
+	}
+	/**
 	 * getForeAfter function 更新指定日期的最新记录（临时），返回数组
 	 *
 	 * @param [type] $startTime
@@ -545,7 +842,6 @@ class AttendController extends AmongController {
 	 * @return void
 	 */
 	private function getForeAfter($startTime,$endTime,$date,$type){
-		$startTime=$this->loadStartTime($startTime);//对开始时间进行初始化
 		$dates=split("-",$date);
 		if($startTime<$date." ".$this->timeNode["AO"] && $endTime<$date." ".$this->timeNode["AO"]){
 			// echo "A";
@@ -567,6 +863,18 @@ class AttendController extends AmongController {
 		$MonthRec["afternoon"]= $afternoon;
 		return $MonthRec;
 	}
+	// private function predictSovertime($startTime){
+	// 	$date=split(" ",$startTime);
+	// 	if($startTime<$date[0]." ".$this->timeNode["MF"]){
+	// 		$forenoon=time_reduce($startTime,$date[0]." ".$this->timeNode["MF"]);
+	// 		$time=strtotime($startTime)+28800-5400;
+	// 	}if($startTime>=$date[0]." ".$this->timeNode["MF"] && $startTime<$date[0]." ".$this->timeNode["AO"]){
+	// 		$time=strtotime($this->timeNode["AO"])+28800;
+	// 	}else{
+
+	// 	}
+	// 	return date("Y-m-d H:i:s",$time);
+	// }
 
 	/**
 	 * 以下是申请功能
@@ -750,25 +1058,15 @@ class AttendController extends AmongController {
 		}
 	}
 
-	/**
-	 * Undocumented function 处理未计算的申请
-	 *
-	 * @return void
-	 */
-	private function settleApply(){
+	function settleApply(){
 		$unSettleApply=$this->aapply->searchApply($aapply_code,array("aapply_state"=>1,"aapply_settle"=>0));
 		foreach ($unSettleApply as $apply) {
 			$this->setAttend($apply);
 		}
 	}
 
-	/**
-	 * setAttend function 审计考勤
-	 *
-	 * @param [type] $applyInfo 要审计的申请信息
-	 * @return void
-	 */
 	function setAttend($applyInfo){
+		// print_r($applyInfo);
 		if($applyInfo["aapply_days"]==0){
 			$days=1;
 		}else{

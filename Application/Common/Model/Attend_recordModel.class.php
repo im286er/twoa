@@ -99,7 +99,7 @@ class Attend_recordModel extends AmongModel{
 	 * @param [type] $count
 	 * @return void
 	 */
-	function setMonthRec($arecord_code,$arecord_year,$arecord_month,$json,$count,$operation=1){
+	function setMonthRec1($arecord_code,$arecord_year,$arecord_month,$json,$count,$operation=1){
 		if(!$this->has_auth("update")) return false;
 		if($operation==1){
 			$allCount=$this->findCount($arecord_code,$arecord_year,$arecord_month)+$count;
@@ -108,7 +108,10 @@ class Attend_recordModel extends AmongModel{
 		}
 
 		return $this->where(array("arecord_code"=>$arecord_code,"arecord_year"=>$arecord_year,"arecord_month"=>(int)$arecord_month))->save(array("arecord_json"=>$json,"arecord_count"=>$allCount));
-
+	}
+	function setMonthRec($arecord_code,$arecord_year,$arecord_month,$dataArray){
+		if(!$this->has_auth("update")) return false;
+		return $this->where(array("arecord_code"=>$arecord_code,"arecord_year"=>$arecord_year,"arecord_month"=>$arecord_month))->save($dataArray);
 	}
 	/**
 	 * [findCount 查询当月工时统计]

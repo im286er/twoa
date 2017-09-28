@@ -177,7 +177,7 @@
 						<input type="hidden" class="photo-info" data-title="图片" name="acheckin_picture" value="0"/>
 						<input type="hidden" class="checkin-info photo-info" data-title="坐标" name="acheckin_longlat" value="0"/>
 						<input type="hidden" class="checkin-info " data-title="地址" name="acheckin_location" value="0"/>
-
+						<input type="hidden" class="checkin-info photo-info" data-title="监控后补" name="acheckin_state" value="1"/>
 						<button class="btn btn-primary btn-block" id="submit-checkin"><i class="ace-icon fa fa-hand-o-up align-top bigger-125">&nbsp;提交记录&nbsp;</i></button>
 					</div>
 				</div>
@@ -339,15 +339,12 @@
 		    $("#submit-checkin").on("click",function(){
 		    	var datas={}
 		    	datas["data"]={}
-
-		    	var checkinway=$("input[name='acheckin_checkinway']").val()
-
 		    	if(checkinway==1){
 		    		datas["data"]=get_checkin_data("checkin-info")
 		    	}else if(checkinway==2){
 		    		datas["data"]=get_checkin_data("photo-info")
 		    	}
-				
+				datas["monitor"]=$(".monitor-info").val();
 
 				if(datas["data"]["acheckin_type"]==2 && datas["data"]["acheckin_timetype"]==2){
 					bootbox.confirm({message:"你想结束外勤的时候同时下班么？",buttons:{confirm:{label:"同时下班",className:"btn-success"},cancel:{label:"只结束外勤",className:"btn-info"}}, callback:function(result) {
@@ -406,13 +403,14 @@
 			$('#date-monitor').val(year+"-"+month+"-"+day+" "+hours+":"+minutes+":"+seconds)
 			if($("input[name='monitor']").is(":checked")){
 				$("#date-monitor").parent().removeClass("hide")
-
 				$(".checkinway").eq(0).parent().addClass("hide")
 				$($(".checkinway").eq(0).attr("href")).addClass("hide")
 				$(".checkinway").eq(1).parent().addClass("active")
 				$($(".checkinway").eq(1).attr("href")).addClass("active")
 				$("input[name='acheckin_checkinway']").val(2)
+				$("input[name='acheckin_state']").val(0);
 			}else{
+				$("input[name='acheckin_state']").val(1);
 				$(".checkinway").eq(0).parent().removeClass("hide")
 				$($(".checkinway").eq(0).attr("href")).removeClass("hide")
 
