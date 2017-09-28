@@ -3,7 +3,7 @@
 -- http://www.phpmyadmin.net
 --
 -- Host: 127.0.0.1
--- Generation Time: 2017-09-26 05:03:30
+-- Generation Time: 2017-09-28 12:27:16
 -- 服务器版本： 5.6.17
 -- PHP Version: 5.5.12
 
@@ -86,7 +86,7 @@ CREATE TABLE IF NOT EXISTS `oa_attend_apply` (
   `aapply_tempstorage` varchar(1000) DEFAULT '' COMMENT '临时储存考勤计算',
   `aapply_settle` int(2) NOT NULL DEFAULT '0' COMMENT '申请是否结算',
   PRIMARY KEY (`aapply_id`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=59 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=60 ;
 
 --
 -- 转存表中的数据 `oa_attend_apply`
@@ -95,28 +95,29 @@ CREATE TABLE IF NOT EXISTS `oa_attend_apply` (
 INSERT INTO `oa_attend_apply` (`aapply_id`, `aapply_code`, `aapply_type`, `aapply_inday`, `aapply_addtime`, `aapply_schedule`, `aapply_days`, `aapply_hours`, `aapply_reason`, `aapply_project`, `aapply_proof`, `aapply_approve`, `aapply_state`, `aapply_operation`, `aapply_remark`, `aapply_tempstorage`, `aapply_settle`) VALUES
 (1, 1000000120, 2, 0, '2017-08-07 12:00:00', '2017-08-08', 0, 3.00, '外出啊', 0, '', '["1000000107"]', 2, '', '就是不批准', '', 0),
 (5, 1000000107, 2, 1, '2017-08-14 08:00:00', '2017-08-14', 0, 3.00, '多人', 0, '', '["1000000107","1000000109"]', 0, '', '', '', 0),
-(6, 1000000107, 3, 1, '2017-08-14 08:00:00', '2017-08-14', 0, 0.00, '加班啊', 0, '', '123456789', 3, '', '', '', 0),
+(6, 1000000107, 3, 1, '2017-08-14 08:00:00', '2017-08-14', 0, 0.00, '加班啊', 0, '', '123456789', 1, '', '', '{"2017":{"08":{"14":{"forenoon":{"type":0,"worktime":0},"afternoon":{"type":3,"worktime":3}}}}}', 1),
 (8, 1000000107, 3, 1, '2017-08-18 18:30:00', '2017-08-18', 2, 0.00, '周六日加班', 0, '', '123456789', 1, '', '', '', 0),
-(9, 1000000107, 2, 1, '2017-08-20 18:30:00', '2017-08-21', 0, 0.00, '外勤', 0, '', '123456789', 1, '', '', '{"2017":{"08":{"21":{"forenoon":{"type":2,"worktime":1},"afternoon":{"type":2,"worktime":0}}}}}', 0),
-(10, 1000000107, 3, 1, '2017-08-20 18:30:00', '2017-08-21', 0, 0.00, '加班', 0, '', '123456789', 1, '', '', '', 0),
+(9, 1000000107, 2, 1, '2017-08-20 18:30:00', '2017-08-21', 0, 0.00, '外勤', 0, '', '123456789', 1, '', '', '{"2017":{"08":{"21":{"forenoon":{"type":2,"worktime":1},"afternoon":{"type":2,"worktime":0}}}}}', 1),
+(10, 1000000107, 3, 1, '2017-08-20 18:30:00', '2017-08-21', 0, 0.00, '加班', 0, '', '123456789', 1, '', '', '{"2017":{"08":{"21":{"forenoon":{"type":0,"worktime":0},"afternoon":{"type":3,"worktime":5}}}}}', 1),
 (16, 1000000107, 3, 0, '2017-08-25 00:00:00', '2017-08-25', 0, 0.00, 'print_r($applyArray);', 0, '', '1000000116', 0, '', '', '', 0),
 (27, 1000000107, 7, 1, '2017-08-25 16:28:38', '2017-08-25', 0, 1.00, ',$aapply_inday', 0, '', '1000000116', 0, '', '', '', 0),
 (28, 1000000107, 2, 2, '2017-08-25 16:32:05', '2017-08-25', 0, 0.00, '&lt;input type=&quot;hidden&quot; class=&quot;apply-info&quot; name=&quot;aapply_type&quot; value=&quot;7&quot;&gt;', 0, '', '1000000116', 0, '', '', '', 0),
 (29, 1000000107, 2, 3, '2017-08-25 16:32:11', '2017-08-25', 0, 0.00, '&lt;input type=&quot;hidden&quot; class=&quot;apply-info&quot; name=&quot;aapply_type&quot; value=&quot;7&quot;&gt;', 0, '', '1000000116', 0, '', '', '', 0),
 (30, 1000000107, 3, 0, '2017-08-29 10:54:10', '2017-08-29', 0, 0.00, '一般2天左右', 0, '', '1000000116', 4, '{"1000000107":["4",1505719289]}', '', '', 0),
 (31, 1000000107, 5, 0, '2017-08-29 11:06:02', '2017-08-29', 0, 0.00, '一般2天左右', 0, '', '1000000116', 2, '', '就是不批准', '', 0),
-(32, 1000000107, 6, 0, '2017-08-29 11:06:10', '2017-08-29', 0, 1.00, '一般2天左右', 0, '', '1000000116', 0, '', '', '', 0),
+(32, 1000000107, 6, 0, '2017-08-29 11:06:10', '2017-08-29', 0, 1.00, '一般2天左右', 0, '', '1000000116', 1, '', '', '', 1),
 (33, 1000000107, 3, 3, '2017-08-30 16:20:50', '2017-08-30', 0, 0.00, '3，普通加班', 0, '', '1000000116', 0, '', '', '', 0),
-(34, 1000000107, 7, 2, '2017-08-30 17:23:33', '2017-09-01', 0, 0.00, '|| I(&quot;type&quot;)==7', 0, '', '["1000000107"]', 1, '', '', '', 0),
-(35, 1000000107, 10, 3, '2017-09-05 18:23:59', '2017-09-05', 0, 0.00, '申请功能开发', 7, '', '["1000000116"]', 1, '', '', '', 0),
+(34, 1000000107, 7, 2, '2017-08-30 17:23:33', '2017-09-01', 0, 0.00, '|| I(&quot;type&quot;)==7', 0, '', '["1000000107"]', 1, '', '', '', 1),
+(35, 1000000107, 10, 3, '2017-09-05 18:23:59', '2017-09-05', 0, 0.00, '申请功能开发', 7, '', '["1000000116"]', 1, '', '', '', 1),
 (43, 1000000107, 4, 1, '2017-09-20 11:53:09', '2017-09-23', 0, 0.00, '加班加班啊', 0, '', '["1000000116"]', 0, '', '', '', 0),
-(44, 1000000107, 5, 2, '2017-09-20 12:01:05', '2017-09-20', 0, 0.00, '早来了啊啊', 0, '', '["1000000116"]', 0, '', '', '', 0),
+(44, 1000000107, 5, 2, '2017-09-20 12:01:05', '2017-09-20', 0, 0.00, '早来了啊啊', 0, '', '["1000000116"]', 1, '', '', '', 1),
 (50, 1000000107, 7, 1, '2017-09-20 16:28:43', '2017-09-16', 2, 0.00, 'daysdays', 0, '', '["1000000116"]', 0, '', '', '', 0),
 (53, 1000000107, 7, 1, '2017-09-20 16:37:03', '2017-09-21', 1, 0.00, '偷偷再补休', 0, '', '["1000000116"]', 0, '', '', '', 0),
 (54, 1000000107, 10, 4, '2017-09-20 17:02:24', '2017-09-29', 0, 0.00, '模拟一下出差', 0, '', '["1000000116"]', 0, '', '', '', 0),
 (55, 1000000107, 3, 3, '2017-09-20 17:43:42', '2017-09-19', 0, 0.00, '赶紧申请加班', 0, '', '["1000000116"]', 0, '', '', '', 0),
 (57, 1000000107, 2, 1, '2017-09-18 16:32:11', '2017-09-19', 0, 0.00, '', 0, '', '1000000116', 0, '', '', '', 0),
-(58, 1000000107, 2, 2, '2017-09-21 10:34:37', '2017-09-21', 0, 0.00, '去一趟电脑城', 0, '', '["1000000116"]', 0, '', '', '', 0);
+(58, 1000000107, 2, 2, '2017-09-21 10:34:37', '2017-09-21', 0, 0.00, '去一趟电脑城', 0, '', '["1000000116"]', 0, '', '', '', 0),
+(59, 1000000107, 2, 2, '2017-09-26 11:16:18', '2017-09-26', 0, 0.00, '我要外勤啊', 0, '', '["1000000116"]', 0, '', '', '', 0);
 
 -- --------------------------------------------------------
 
@@ -139,7 +140,7 @@ CREATE TABLE IF NOT EXISTS `oa_attend_checkin` (
   `acheckin_tempstorage` varchar(200) DEFAULT '',
   `acheckin_applyid` bigint(20) DEFAULT '0',
   PRIMARY KEY (`acheckin_id`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=35 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=46 ;
 
 --
 -- 转存表中的数据 `oa_attend_checkin`
@@ -169,11 +170,15 @@ INSERT INTO `oa_attend_checkin` (`acheckin_id`, `acheckin_code`, `acheckin_check
 (21, 1000000107, 1, 3, 2, '2017-08-21 23:10:12', '2017-08-21 23:10:12', '123.12-141.2', 'abc', '', 0, '', 10),
 (22, 1000000107, 1, 1, 1, '2017-09-08 10:10:12', '2017-09-08 10:10:12', '123.12-141.2', 'abc', '', 1, '', 0),
 (23, 1000000107, 1, 1, 1, '2017-09-18 09:10:12', '2017-09-18 09:10:12', '123.12-141.2', 'abc', '', 0, '', 0),
-(24, 1000000107, 1, 1, 1, '2017-09-19 09:20:12', '2017-09-20 09:20:12', '123.12-141.2', 'abc', '', 0, '', 0),
+(24, 1000000107, 1, 1, 1, '2017-09-19 09:20:12', '2017-09-20 08:00:00', '123.12-141.2', 'abc', '', 0, '', 0),
 (29, 1000000107, 3, 3, 1, '2017-09-20 17:43:42', '2017-09-19 18:30:00', '', '', '', 0, '', 55),
 (31, 1000000107, 1, 2, 1, '2017-09-19 09:10:12', '2017-09-19 09:10:12', '123.12-141.2', 'abc', '', 1, '', 57),
 (33, 1000000107, 1, 1, 1, '2017-09-21 10:32:30', '2017-09-21 09:32:30', '广州', '1230', '', 0, '', 0),
-(34, 1000000107, 1, 2, 1, '2017-09-21 10:37:21', '2017-09-21 09:37:21', '天河电脑城', '1.246-144', '', 0, '', 58);
+(34, 1000000107, 1, 2, 1, '2017-09-21 10:37:21', '2017-09-21 09:37:21', '天河电脑城', '1.246-144', '', 0, '', 58),
+(35, 1000000107, 1, 1, 1, '2017-09-26 11:15:27', '2017-09-26 11:15:27', '1', '1', '', 0, '', 0),
+(36, 1000000107, 1, 2, 1, '2017-09-26 11:18:56', '2017-09-26 10:18:56', '1', '1', '', 0, '', 59),
+(44, 1000000107, 1, 2, 2, '2017-09-26 15:41:07', '2017-09-26 15:41:07', '4', '4', '', 0, '', 59),
+(45, 1000000107, 1, 1, 1, '2017-09-28 17:45:19', '2017-09-28 17:45:19', '1', '1', '', 1, '', 0);
 
 -- --------------------------------------------------------
 
@@ -198,8 +203,8 @@ CREATE TABLE IF NOT EXISTS `oa_attend_record` (
 
 INSERT INTO `oa_attend_record` (`arecord_id`, `arecord_code`, `arecord_year`, `arecord_month`, `arecord_json`, `arecord_count`, `arecord_remedy`) VALUES
 (1, 0, 2017, 8, '1, 2, 3, 4, 7, 8, 9, 10, 11, 14, 15, 16, 17, 18, 21, 22, 23, 24, 25, 28, 29, 30, 31', 0.00, 0),
-(15, 1000000107, 2017, 8, '{"1":{"forenoon":{"type":"","worktime":""},"afternoon":{"type":"","worktime":""}},"2":{"forenoon":{"type":"","worktime":""},"afternoon":{"type":"","worktime":""}},"3":{"forenoon":{"type":"","worktime":""},"afternoon":{"type":"","worktime":""}},"4":{"forenoon":{"type":"","worktime":""},"afternoon":{"type":"","worktime":""}},"5":{"forenoon":{"type":"","worktime":""},"afternoon":{"type":"","worktime":""}},"6":{"forenoon":{"type":"","worktime":""},"afternoon":{"type":"","worktime":""}},"7":{"forenoon":{"type":"","worktime":""},"afternoon":{"type":"","worktime":""}},"8":{"forenoon":{"type":"","worktime":""},"afternoon":{"type":"","worktime":""}},"9":{"forenoon":{"type":"","worktime":""},"afternoon":{"type":"","worktime":""}},"10":{"forenoon":{"type":"","worktime":""},"afternoon":{"type":"","worktime":""}},"11":{"forenoon":{"type":"","worktime":""},"afternoon":{"type":"","worktime":""}},"12":{"forenoon":{"type":"","worktime":""},"afternoon":{"type":"","worktime":""}},"13":{"forenoon":{"type":"","worktime":""},"afternoon":{"type":"","worktime":""}},"14":{"forenoon":{"type":"","worktime":""},"afternoon":{"type":"","worktime":""}},"15":{"forenoon":{"type":"","worktime":""},"afternoon":{"type":"","worktime":""}},"16":{"forenoon":{"type":"","worktime":""},"afternoon":{"type":"","worktime":""}},"17":{"forenoon":{"type":"","worktime":""},"afternoon":{"type":"","worktime":""}},"18":{"forenoon":{"type":"","worktime":""},"afternoon":{"type":"","worktime":""}},"19":{"forenoon":{"type":"","worktime":""},"afternoon":{"type":"","worktime":""}},"20":{"forenoon":{"type":"","worktime":""},"afternoon":{"type":"","worktime":""}},"21":{"forenoon":{"type":2,"worktime":2.83},"afternoon":{"type":2,"worktime":4.84}},"22":{"forenoon":{"type":"","worktime":""},"afternoon":{"type":"","worktime":""}},"23":{"forenoon":{"type":"","worktime":""},"afternoon":{"type":"","worktime":""}},"24":{"forenoon":{"type":"","worktime":""},"afternoon":{"type":"","worktime":""}},"25":{"forenoon":{"type":"","worktime":""},"afternoon":{"type":"","worktime":""}},"26":{"forenoon":{"type":"","worktime":""},"afternoon":{"type":"","worktime":""}},"27":{"forenoon":{"type":"","worktime":""},"afternoon":{"type":"","worktime":""}},"28":{"forenoon":{"type":"","worktime":""},"afternoon":{"type":"","worktime":""}},"29":{"forenoon":{"type":"","worktime":""},"afternoon":{"type":"","worktime":""}},"30":{"forenoon":{"type":"","worktime":""},"afternoon":{"type":"","worktime":""}},"31":{"forenoon":{"type":"","worktime":""},"afternoon":{"type":"","worktime":""}}}', 5.67, 2),
-(16, 1000000107, 2017, 9, '{"1":{"forenoon":{"type":"","worktime":""},"afternoon":{"type":"","worktime":""}},"2":{"forenoon":{"type":"","worktime":""},"afternoon":{"type":"","worktime":""}},"3":{"forenoon":{"type":"","worktime":""},"afternoon":{"type":"","worktime":""}},"4":{"forenoon":{"type":"","worktime":""},"afternoon":{"type":"","worktime":""}},"5":{"forenoon":{"type":"","worktime":""},"afternoon":{"type":"","worktime":""}},"6":{"forenoon":{"type":"","worktime":""},"afternoon":{"type":"","worktime":""}},"7":{"forenoon":{"type":"","worktime":""},"afternoon":{"type":"","worktime":""}},"8":{"forenoon":{"type":"","worktime":""},"afternoon":{"type":"","worktime":""}},"9":{"forenoon":{"type":"","worktime":""},"afternoon":{"type":"","worktime":""}},"10":{"forenoon":{"type":"","worktime":""},"afternoon":{"type":"","worktime":""}},"11":{"forenoon":{"type":"","worktime":""},"afternoon":{"type":"","worktime":""}},"12":{"forenoon":{"type":"","worktime":""},"afternoon":{"type":"","worktime":""}},"13":{"forenoon":{"type":"","worktime":""},"afternoon":{"type":"","worktime":""}},"14":{"forenoon":{"type":"","worktime":""},"afternoon":{"type":"","worktime":""}},"15":{"forenoon":{"type":"","worktime":""},"afternoon":{"type":"","worktime":""}},"16":{"forenoon":{"type":"","worktime":""},"afternoon":{"type":"","worktime":""}},"17":{"forenoon":{"type":"","worktime":""},"afternoon":{"type":"","worktime":""}},"18":{"forenoon":{"type":"","worktime":""},"afternoon":{"type":"","worktime":""}},"19":{"forenoon":{"type":"","worktime":""},"afternoon":{"type":"","worktime":""}},"20":{"forenoon":{"type":"","worktime":""},"afternoon":{"type":"","worktime":""}},"21":{"forenoon":{"type":"","worktime":""},"afternoon":{"type":"","worktime":""}},"22":{"forenoon":{"type":"","worktime":""},"afternoon":{"type":"","worktime":""}},"23":{"forenoon":{"type":"","worktime":""},"afternoon":{"type":"","worktime":""}},"24":{"forenoon":{"type":"","worktime":""},"afternoon":{"type":"","worktime":""}},"25":{"forenoon":{"type":"","worktime":""},"afternoon":{"type":"","worktime":""}},"26":{"forenoon":{"type":"","worktime":""},"afternoon":{"type":"","worktime":""}},"27":{"forenoon":{"type":"","worktime":""},"afternoon":{"type":"","worktime":""}},"28":{"forenoon":{"type":"","worktime":""},"afternoon":{"type":"","worktime":""}},"29":{"forenoon":{"type":"","worktime":""},"afternoon":{"type":"","worktime":""}},"30":{"forenoon":{"type":"","worktime":""},"afternoon":{"type":"","worktime":""}}}', 0.00, 3),
+(15, 1000000107, 2017, 8, '{"1":{"forenoon":{"type":"","worktime":""},"afternoon":{"type":"","worktime":""}},"2":{"forenoon":{"type":"","worktime":""},"afternoon":{"type":"","worktime":""}},"3":{"forenoon":{"type":"","worktime":""},"afternoon":{"type":"","worktime":""}},"4":{"forenoon":{"type":"","worktime":""},"afternoon":{"type":"","worktime":""}},"5":{"forenoon":{"type":"","worktime":""},"afternoon":{"type":"","worktime":""}},"6":{"forenoon":{"type":"","worktime":""},"afternoon":{"type":"","worktime":""}},"7":{"forenoon":{"type":"","worktime":""},"afternoon":{"type":"","worktime":""}},"8":{"forenoon":{"type":"","worktime":""},"afternoon":{"type":"","worktime":""}},"9":{"forenoon":{"type":"","worktime":""},"afternoon":{"type":"","worktime":""}},"10":{"forenoon":{"type":"","worktime":""},"afternoon":{"type":"","worktime":""}},"11":{"forenoon":{"type":"","worktime":""},"afternoon":{"type":"","worktime":""}},"12":{"forenoon":{"type":"","worktime":""},"afternoon":{"type":"","worktime":""}},"13":{"forenoon":{"type":"","worktime":""},"afternoon":{"type":"","worktime":""}},"14":{"forenoon":{"worktime":"","type":""},"afternoon":{"worktime":3,"type":"3"}},"15":{"forenoon":{"type":"","worktime":""},"afternoon":{"type":"","worktime":""}},"16":{"forenoon":{"type":"","worktime":""},"afternoon":{"type":"","worktime":""}},"17":{"forenoon":{"type":"","worktime":""},"afternoon":{"type":"","worktime":""}},"18":{"forenoon":{"type":"","worktime":""},"afternoon":{"type":"","worktime":""}},"19":{"forenoon":{"type":"","worktime":""},"afternoon":{"type":"","worktime":""}},"20":{"forenoon":{"type":"","worktime":""},"afternoon":{"type":"","worktime":""}},"21":{"forenoon":{"worktime":3,"type":"2"},"afternoon":{"worktime":9.84,"type":"3"}},"22":{"forenoon":{"type":"","worktime":""},"afternoon":{"type":"","worktime":""}},"23":{"forenoon":{"type":"","worktime":""},"afternoon":{"type":"","worktime":""}},"24":{"forenoon":{"type":"","worktime":""},"afternoon":{"type":"","worktime":""}},"25":{"forenoon":{"type":"","worktime":""},"afternoon":{"type":"","worktime":""}},"26":{"forenoon":{"type":"","worktime":""},"afternoon":{"type":"","worktime":""}},"27":{"forenoon":{"type":"","worktime":""},"afternoon":{"type":"","worktime":""}},"28":{"forenoon":{"type":"","worktime":""},"afternoon":{"type":"","worktime":""}},"29":{"forenoon":{"worktime":"","type":""},"afternoon":{"worktime":1,"type":"6"}},"30":{"forenoon":{"type":"","worktime":""},"afternoon":{"type":"","worktime":""}},"31":{"forenoon":{"type":"","worktime":""},"afternoon":{"type":"","worktime":""}}}', 16.84, 2),
+(16, 1000000107, 2017, 9, '{"1":{"forenoon":{"type":"","worktime":""},"afternoon":{"type":"","worktime":""}},"2":{"forenoon":{"type":"","worktime":""},"afternoon":{"type":"","worktime":""}},"3":{"forenoon":{"type":"","worktime":""},"afternoon":{"type":"","worktime":""}},"4":{"forenoon":{"type":"","worktime":""},"afternoon":{"type":"","worktime":""}},"5":{"forenoon":{"type":"","worktime":""},"afternoon":{"type":"","worktime":""}},"6":{"forenoon":{"type":"","worktime":""},"afternoon":{"type":"","worktime":""}},"7":{"forenoon":{"type":"","worktime":""},"afternoon":{"type":"","worktime":""}},"8":{"forenoon":{"type":"","worktime":""},"afternoon":{"type":"","worktime":""}},"9":{"forenoon":{"type":"","worktime":""},"afternoon":{"type":"","worktime":""}},"10":{"forenoon":{"type":"","worktime":""},"afternoon":{"type":"","worktime":""}},"11":{"forenoon":{"type":"","worktime":""},"afternoon":{"type":"","worktime":""}},"12":{"forenoon":{"type":"","worktime":""},"afternoon":{"type":"","worktime":""}},"13":{"forenoon":{"type":"","worktime":""},"afternoon":{"type":"","worktime":""}},"14":{"forenoon":{"type":"","worktime":""},"afternoon":{"type":"","worktime":""}},"15":{"forenoon":{"type":"","worktime":""},"afternoon":{"type":"","worktime":""}},"16":{"forenoon":{"type":"","worktime":""},"afternoon":{"type":"","worktime":""}},"17":{"forenoon":{"type":"","worktime":""},"afternoon":{"type":"","worktime":""}},"18":{"forenoon":{"type":"","worktime":""},"afternoon":{"type":"","worktime":""}},"19":{"forenoon":{"type":"","worktime":""},"afternoon":{"type":"","worktime":""}},"20":{"forenoon":{"worktime":1,"type":"5"},"afternoon":{"worktime":"","type":""}},"21":{"forenoon":{"type":"","worktime":""},"afternoon":{"type":"","worktime":""}},"22":{"forenoon":{"type":"","worktime":""},"afternoon":{"type":"","worktime":""}},"23":{"forenoon":{"type":"","worktime":""},"afternoon":{"type":"","worktime":""}},"24":{"forenoon":{"type":"","worktime":""},"afternoon":{"type":"","worktime":""}},"25":{"forenoon":{"type":"","worktime":""},"afternoon":{"type":"","worktime":""}},"26":{"forenoon":{"type":"","worktime":""},"afternoon":{"type":"","worktime":""}},"27":{"forenoon":{"type":"","worktime":""},"afternoon":{"type":"","worktime":""}},"28":{"forenoon":{"type":"","worktime":""},"afternoon":{"type":"","worktime":""}},"29":{"forenoon":{"type":"","worktime":""},"afternoon":{"type":"","worktime":""}},"30":{"forenoon":{"type":"","worktime":""},"afternoon":{"type":"","worktime":""}},"05":{"forenoon":{"worktime":3,"type":"10"},"afternoon":{"worktime":5,"type":"10"}},"01":{"forenoon":{"worktime":3,"type":"7"},"afternoon":{"worktime":0.5,"type":"7"}}}', 12.50, 3),
 (17, 0, 2017, 9, '1, 4, 5, 6, 7, 8, 11, 12, 13, 14, 15, 18, 19, 20, 21, 22, 25, 26, 27, 28, 29, 30', 0.00, 0),
 (18, 1000000107, 2017, 7, '{"1":{"forenoon":{"type":"","worktime":""},"afternoon":{"type":"","worktime":""}},"2":{"forenoon":{"type":"","worktime":""},"afternoon":{"type":"","worktime":""}},"3":{"forenoon":{"type":"","worktime":""},"afternoon":{"type":"","worktime":""}},"4":{"forenoon":{"type":"","worktime":""},"afternoon":{"type":"","worktime":""}},"5":{"forenoon":{"type":"","worktime":""},"afternoon":{"type":"","worktime":""}},"6":{"forenoon":{"type":"","worktime":""},"afternoon":{"type":"","worktime":""}},"7":{"forenoon":{"type":"","worktime":""},"afternoon":{"type":"","worktime":""}},"8":{"forenoon":{"type":"","worktime":""},"afternoon":{"type":"","worktime":""}},"9":{"forenoon":{"type":"","worktime":""},"afternoon":{"type":"","worktime":""}},"10":{"forenoon":{"type":"","worktime":""},"afternoon":{"type":"","worktime":""}},"11":{"forenoon":{"type":"","worktime":""},"afternoon":{"type":"","worktime":""}},"12":{"forenoon":{"type":"","worktime":""},"afternoon":{"type":"","worktime":""}},"13":{"forenoon":{"type":"","worktime":""},"afternoon":{"type":"","worktime":""}},"14":{"forenoon":{"type":"","worktime":""},"afternoon":{"type":"","worktime":""}},"15":{"forenoon":{"type":"","worktime":""},"afternoon":{"type":"","worktime":""}},"16":{"forenoon":{"type":"","worktime":""},"afternoon":{"type":"","worktime":""}},"17":{"forenoon":{"type":"","worktime":""},"afternoon":{"type":"","worktime":""}},"18":{"forenoon":{"type":"","worktime":""},"afternoon":{"type":"","worktime":""}},"19":{"forenoon":{"type":"","worktime":""},"afternoon":{"type":"","worktime":""}},"20":{"forenoon":{"type":"","worktime":""},"afternoon":{"type":"","worktime":""}},"21":{"forenoon":{"type":"","worktime":""},"afternoon":{"type":"","worktime":""}},"22":{"forenoon":{"type":"","worktime":""},"afternoon":{"type":"","worktime":""}},"23":{"forenoon":{"type":"","worktime":""},"afternoon":{"type":"","worktime":""}},"24":{"forenoon":{"type":"","worktime":""},"afternoon":{"type":"","worktime":""}},"25":{"forenoon":{"type":"","worktime":""},"afternoon":{"type":"","worktime":""}},"26":{"forenoon":{"type":"","worktime":""},"afternoon":{"type":"","worktime":""}},"27":{"forenoon":{"type":"","worktime":""},"afternoon":{"type":"","worktime":""}},"28":{"forenoon":{"type":"","worktime":""},"afternoon":{"type":"","worktime":""}},"29":{"forenoon":{"type":"","worktime":""},"afternoon":{"type":"","worktime":""}},"30":{"forenoon":{"type":"","worktime":""},"afternoon":{"type":"","worktime":""}},"31":{"forenoon":{"type":"","worktime":""},"afternoon":{"type":"","worktime":""}}}', 0.00, 3);
 
@@ -224,7 +229,7 @@ CREATE TABLE IF NOT EXISTS `oa_attend_user` (
 --
 
 INSERT INTO `oa_attend_user` (`auser_id`, `auser_code`, `auser_eachday`, `auser_worktime`, `auser_annual`) VALUES
-(1, 1000000107, 8, 0.00, 0);
+(1, 1000000107, 8, 3.50, 0);
 
 -- --------------------------------------------------------
 
@@ -420,7 +425,7 @@ CREATE TABLE IF NOT EXISTS `oa_project_list` (
   `project_region` int(5) NOT NULL DEFAULT '0' COMMENT '地区',
   `project_state` int(1) DEFAULT '0' COMMENT '状态',
   PRIMARY KEY (`project_id`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=8 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=11 ;
 
 --
 -- 转存表中的数据 `oa_project_list`
@@ -433,7 +438,7 @@ INSERT INTO `oa_project_list` (`project_id`, `project_company`, `project_name`, 
 (4, 1, '2017幸福方向盘', 1, 0, '2017-06-27', '2017-08-17', 1000000107, 16, 0),
 (5, 1, '2017幸福方向盘', 1, 0, '2017-06-27', '2017-08-17', 1000000107, 11, 0),
 (6, 1, '2017广本', 1, 0, '2017-07-04', '2017-08-29', 1000000107, 30, 0),
-(7, 1, 'TW系统', 1, 0, '2017-01-01', '2017-12-31', 1000000107, 190, 0);
+(10, 1, 'TW系统', 1, 0, '2017-01-01', '2017-12-31', 1000000107, 190, 0);
 
 -- --------------------------------------------------------
 

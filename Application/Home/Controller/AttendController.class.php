@@ -505,7 +505,10 @@ class AttendController extends AmongController {
 					//
 				}
 				// $this->settleAttend($this->selfUser["user_code"],"2017-09-14");
-			}else if($checkinData["acheckin_type"]==1 && $checkinData["acheckin_timetype"]==2 && $checkinResult["status"]==1){
+			}else{
+				if($checkinData["acheckin_timetype"]==2 && $checkinResult["status"]==1){
+					//计算上下班时间，
+				}
 
 			}
 			$this->ajaxReturn($checkinResult);
