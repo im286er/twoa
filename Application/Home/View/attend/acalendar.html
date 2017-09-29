@@ -93,6 +93,7 @@
             month=arguments[1];
         }
         var monthAtt=getMonthAttend(year,month);
+        getMonthAppyl(year,month);
         $(".the-date h3").text(year+"-"+month)
         
         var thisDate=new Date(year,month-1,1);
@@ -119,11 +120,11 @@
                     var butStr="";
                    
                     if(monthAtt[sNowDay]["forenoon"]["type"]>0){
-                        console.log(monthAtt[sNowDay]["forenoon"]["worktime"])
+                        // console.log(monthAtt[sNowDay]["forenoon"]["worktime"])
                         butStr+='<button class="attend-label btn btn-minier btn-block btn-white btn-success"><span class="hidden-480">上午上班：</span>'+monthAtt[sNowDay]["forenoon"]["worktime"]+'</button>';
                     }
                     if(monthAtt[sNowDay]["afternoon"]["type"]>0){
-                        console.log(monthAtt[sNowDay]["afternoon"]["worktime"])
+                        // console.log(monthAtt[sNowDay]["afternoon"]["worktime"])
                         butStr+='<button class="attend-label btn btn-minier btn-white btn-warning btn-block"><span class="hidden-480">下午上班：</span>'+monthAtt[sNowDay]["afternoon"]["worktime"]+'</button>';
                     }
 
@@ -157,6 +158,22 @@
             async:false,
             data:{year:year,month:month},
             success:function(data){
+                attendData=data
+            }
+        })
+        return attendData;
+    }
+    //通过ajax获取对应的月份申请
+    function getMonthAppyl(year,month){
+        var attendData={}
+        $.ajax({
+            url:"{:U(getMonthAppyl)}",
+            type:"post",
+            dataType:"json",
+            async:false,
+            data:{year:year,month:month},
+            success:function(data){
+                console.log(data)
                 attendData=data
             }
         })

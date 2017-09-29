@@ -4,7 +4,7 @@
  * @Email:369709991@qq.com
  * @Date:   2017-08-07 18:24:40
  * @Last Modified by:   369709991@qq.com
- * @Last Modified time: 2017-09-08 23:27:22
+ * @Last Modified time: 2017-09-29 22:12:23
  */
 namespace Common\Model;
 use Common\Model\AmongModel;
@@ -29,10 +29,6 @@ class Attend_applyModel extends AmongModel{
 			}
 			
 		}
-		// if(!empty($condition)){
-		// 	// print_r($condition);
-		// 	return $this->where($condition)->select();
-		// }
 		return $this->where($condition)->select();
 	}
 	/**

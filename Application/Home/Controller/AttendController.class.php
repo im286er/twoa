@@ -3,8 +3,8 @@
  * @Author: vition
  * @Email:369709991@qq.com
  * @Date:   2017-08-03 16:43:53
- * @Last Modified by:   vition
- * @Last Modified time: 2017-09-28 23:42:02
+ * @Last Modified by:   369709991@qq.com
+ * @Last Modified time: 2017-09-29 22:13:49
  */
 
 /*{"control":"Attend","name":"考勤管理","icon":"fa fa-calendar","menus":[{"name":"考勤配置","icon":"fa fa-gear","menus":"config"},{"name":"考勤申请","icon":"fa fa-list-alt","menus":"apply"},{"name":"申请管理","icon":"fa fa-pencil-square","menus":"applycontrol"},{"name":"打卡","icon":"fa fa-square","menus":"checkin"},{"name":"考勤月历","icon":"fa fa-calendar","menus":"acalendar"}]}*/
@@ -1009,7 +1009,26 @@ class AttendController extends AmongController {
 			}
 		}
 	}
+	/**
+	 * [getMonthAttend description] 获取指定月考勤
+	 * @method   getMonthAttend
+	 * @Author   vition
+	 * @DateTime 2017-09-29
+	 * @return   [type]         [description]
+	 */
 	function getMonthAttend(){
 		echo $this->arecord->getMonthRec($this->selfUser["user_code"],I("year"),I("month"),0,false);
+	}
+	/**
+	 * [getMonthAppyl description] 获取指定月申请，已结算
+	 * @method   getMonthAppyl
+	 * @Author   vition
+	 * @DateTime 2017-09-29
+	 * @return   [type]        [description]
+	 */
+	function getMonthAppyl(){
+		$condition=array();
+		$applyArray=$this->aapply->searchApply($this->selfUser["user_code"],$condition);
+		echo $this->aapply->getLastSql();
 	}
 }
