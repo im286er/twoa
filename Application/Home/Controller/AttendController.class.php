@@ -808,17 +808,23 @@ class AttendController extends AmongController {
 	private function settleApply(){
 		$unSettleApply=$this->aapply->searchApply($aapply_code,array("aapply_state"=>1,"aapply_settle"=>0));
 		foreach ($unSettleApply as $apply) {
-			$this->setAttend($apply);
+			if(($apply["aapply_type"]==10 && $apply["aapply_days"]==0) || ($apply["aapply_type"]==13 && $apply["aapply_inday"]==3)){
+				//打算加一个处理出差的时间days
+				continue;
+			}else{
+				$this->settleAttend($apply);
+			}
+			
 		}
 	}
 
 	/**
-	 * setAttend function 审计考勤
+	 * settleAttend function 审计考勤
 	 *
 	 * @param [type] $applyInfo 要审计的申请信息
 	 * @return void
 	 */
-	function setAttend($applyInfo){
+	function settleAttend($applyInfo){
 		if($applyInfo["aapply_days"]==0){
 			$days=1;
 		}else{
