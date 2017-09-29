@@ -5,8 +5,10 @@
     .ac-header-table th,.ac-days-table td{border-color: #BCD4E5;text-align: center;border-style: solid;border-width: 1px;}
     .ac-header-table th{background: #ECF2F7; color: #8090A0;padding:5px 0;border-bottom:0;}
     .ac-days-table td{vertical-align: top;}
-    .ac-days-table td .this-day-number{text-align: right;padding: 5px 10px;color: #2E6589;font-size:0.8em;}
-    .ac-days-table td .last-day-number,.ac-days-table td .next-day-number{text-align: right;padding: 5px 10px;color: #C1D1DC;font-size:0.8em;}
+    .ac-days-table td .attend-label{display: block;  white-space: nowrap; overflow: hidden; text-overflow: ellipsis;color:#FFFFFF;padding:2px 0;text-align: center;cursor:pointer;}
+    .ac-days-table td .this-day-number{text-align: right;padding: 2px 5px;color: #2E6589;font-size:0.8em;}
+    .ac-days-table td .last-day-number,.ac-days-table td .next-day-number{text-align: right;padding: 2px 5px;color: #C1D1DC;font-size:0.8em;}
+
     .nowDay{background: #E3F0B2}
     /* .ac-days-table tr{height:150px;    min-height:50px;} */
 </style>
@@ -79,8 +81,9 @@
         }
 
     }
-    //构建表格
+    //创建月历表格
     function createDaysTable(){
+        
         var nowDate=new Date();
         if(arguments.length==0){
             year=nowDate.getFullYear();
@@ -89,7 +92,7 @@
             year=arguments[0];
             month=arguments[1];
         }
-
+        var monthAtt=getMonthAttend(year,month);
         $(".the-date h3").text(year+"-"+month)
         
         var thisDate=new Date(year,month-1,1);
@@ -112,12 +115,22 @@
             for(var td=0;td<7;td++){
                 if((tr==0 && td>=thisDate.getUTCDay()+1) || (tr>0) && sNowDay<thisDays){
                     sNowDay++
-                    //'-'+thisDate.getMonth()+'-'+sNowDay+
                     var dataDay=thisDate.getFullYear()+'-'+(thisDate.getMonth()+1)+'-'+sNowDay;
+                    var butStr="";
+                   
+                    if(monthAtt[sNowDay]["forenoon"]["type"]>0){
+                        console.log(monthAtt[sNowDay]["forenoon"]["worktime"])
+                        butStr+='<button class="attend-label btn btn-minier btn-block btn-white btn-success"><span class="hidden-480">上午上班：</span>'+monthAtt[sNowDay]["forenoon"]["worktime"]+'</button>';
+                    }
+                    if(monthAtt[sNowDay]["afternoon"]["type"]>0){
+                        console.log(monthAtt[sNowDay]["afternoon"]["worktime"])
+                        butStr+='<button class="attend-label btn btn-minier btn-white btn-warning btn-block"><span class="hidden-480">下午上班：</span>'+monthAtt[sNowDay]["afternoon"]["worktime"]+'</button>';
+                    }
+
                     if(nowDay==dataDay){
-                        trLabel+='<td class="nowDay" data-day="'+thisDate.getFullYear()+'-'+(thisDate.getMonth()+1)+'-'+sNowDay+'"><div class="this-day-number">'+sNowDay+'<div></td>';
+                        trLabel+='<td class="nowDay" data-day="'+thisDate.getFullYear()+'-'+(thisDate.getMonth()+1)+'-'+sNowDay+'"><div class="this-day-number">'+sNowDay+'<div>'+butStr+'</td>';
                     }else{
-                        trLabel+='<td class="" data-day="'+thisDate.getFullYear()+'-'+(thisDate.getMonth()+1)+'-'+sNowDay+'"><div class="this-day-number">'+sNowDay+'<div></td>';
+                        trLabel+='<td class="" data-day="'+thisDate.getFullYear()+'-'+(thisDate.getMonth()+1)+'-'+sNowDay+'"><div class="this-day-number">'+sNowDay+'<div>'+butStr+'</td>'; 
                     }
                 }else{
                     if(tr==0){
@@ -133,5 +146,20 @@
         }
         $(".ac-days-table").html(trLabel)
         resizeDaysTable()
+    }
+    //通过ajax获取对应的月份考勤
+    function getMonthAttend(year,month){
+        var attendData={}
+        $.ajax({
+            url:"{:U(getMonthAttend)}",
+            type:"post",
+            dataType:"json",
+            async:false,
+            data:{year:year,month:month},
+            success:function(data){
+                attendData=data
+            }
+        })
+        return attendData;
     }
 </script>

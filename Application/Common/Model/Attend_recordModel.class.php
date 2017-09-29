@@ -54,7 +54,7 @@ class Attend_recordModel extends AmongModel{
 	 * @param    [type]      $arecord_month [月]
 	 * @return   [type]                     [description]
 	 */
-	function getMonthRec($arecord_code,$arecord_year,$arecord_month,$day=0){
+	function getMonthRec($arecord_code,$arecord_year,$arecord_month,$day=0,$array=true){
 		if(!$this->has_auth("select")) return false;
 		$arecord_json=$this->field("arecord_json")->where(array("arecord_code"=>$arecord_code,"arecord_year"=>$arecord_year,"arecord_month"=>(int)$arecord_month))->find()["arecord_json"];
 		if($arecord_json==null){
@@ -65,7 +65,11 @@ class Attend_recordModel extends AmongModel{
 		if($day>0){
 			return $monthRec[(int)$day];
 		}else{
-			return $monthRec;
+			if($array==true){
+				return $monthRec;
+			}else{
+				return $arecord_json;
+			}
 		}
 	}
 

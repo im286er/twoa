@@ -386,8 +386,8 @@ class AttendController extends AmongController {
 				return $this->getButton($type,1,$applyid);
 			}
 		}else{
-			$dates=split("-", $date);
-			$thisDay=$this->arecord->isWeekday($dates[0],$dates[1],$dates[2]);
+			list($year,$month,$date)=split("-", date("Y-n-j",strtotime($date)));
+			$thisDay=$this->arecord->isWeekday($year,$month,$date);
 			/*判断是否工作日*/
 			if($thisDay==false){
 				return $this->getButton($type,0);
@@ -456,8 +456,8 @@ class AttendController extends AmongController {
 					if($checkinData["acheckin_type"]>2 && $checkinData["acheckin_timetype"]==2){
 						$checkinData=$this->acheckin->seekCheckin($checkinData["acheckin_code"],$checkinData["acheckin_type"]);
 						if(count($checkinData)>1){
-							$dates=split("-",date("Y-m-d",time()));
-							$isWeekday=$this->arecord->isWeekday($dates[0],$dates[1],$dates[2]);
+							list($year,$month,$date)=split("-",date("Y-n-j",time()));
+							$isWeekday=$this->arecord->isWeekday($year,$month,$date);
 							if($isWeekday==true){
 								if($checkinData[0]["acheckin_applyid"]!=$checkinData[1]["acheckin_applyid"]){
 									$this->ajaxReturn(array("status"=>"0","msg"=>"你的工作日加班超时，请使用监控拍照"));
@@ -511,7 +511,7 @@ class AttendController extends AmongController {
 					if(count($checkinArray)>1){
 						$sTime=$checkinArray[1]["acheckin_checkintime"];
 						$eTime=$checkinArray[0]["acheckin_checkintime"];
-						list($year,$month,$date)=split("-",split(" ",$sTime)[0]);
+						list($year,$month,$date)=split("-",date("Y-n-j",strtotime($sTime)));
 						if(split(" ",$sTime)[0]==split(" ",$eTime)[0]){
 							$monthRec=$this->getForeAfter($sTime,$eTime,split(" ",$sTime)[0],$checkinData["acheckin_type"]);
 						}else{
@@ -521,7 +521,7 @@ class AttendController extends AmongController {
 							}else{
 								//通宵操作9点的，一般是周六日
 								$monthRec=$this->getForeAfter($sTime,split(" ",$sTime)[0].$this->timeNode["END"],split(" ",$sTime)[0],$checkinData["acheckin_type"]);
-								list($year,$month,$date)=split("-",split(" ",$eTime)[0]);
+								list($year,$month,$date)=split("-",date("Y-n-j",strtotime($eTime)));
 								$monthRec2=$this->getForeAfter(split(" ",$eTime)[0].$this->timeNode["STA"],$eTime,split(" ",$eTime)[0],$checkinData["acheckin_type"]);
 								$monthRec[$year][$month][$date]=$monthRec2[$year][$month][$date];
 							}
@@ -561,6 +561,7 @@ class AttendController extends AmongController {
 	 */
 	private function loadStartTime($startTime){
 		$date=split(" ",$startTime);
+		
 		$MO=$date[0]." ".$this->timeNode["MO"];
 		$MF=$date[0]." ".$this->timeNode["MF"];
 		$AO=$date[0]." ".$this->timeNode["AO"];
@@ -587,7 +588,7 @@ class AttendController extends AmongController {
 		if($type<3){
 			$startTime=$this->loadStartTime($startTime);//如果考勤类是不是加班3、4、5，对开始时间进行初始化
 		}
-		list($year,$month,$date)=split("-",$date);
+		list($year,$month,$date)=split("-",date("Y-n-j",strtotime($date)));
 		$forenoon=0;
 		$afternoon=0;
 		$foreType=0;
@@ -629,11 +630,11 @@ class AttendController extends AmongController {
 	 */
 	function getApplyHtml(){
 		$nowDate=$this->getNowTime(1);
-		$nowDates=split("-",$nowDate);
+		list($year,$month,$date)=split("-",date("Y-n-j",strtotime($nowDate)));
 		if(IS_AJAX){
 			$this->assign("nowtime",$nowDate);
 			$managerArray=$this->baseInfo->user()->searchManager();
-			$this->assign("remedy",$this->arecord->findRemedy($this->selfUser["user_code"],$nowDates[0],$nowDates[1]));
+			$this->assign("remedy",$this->arecord->findRemedy($this->selfUser["user_code"],$year,$month));
 			$this->assign("managerArray",$managerArray);
 			$this->assign("projectArray",R("Project/searchProjectName"));
 			$this->ajaxReturn(array("html"=>$this->fetch("attend/apply/".I("html"))));
@@ -660,9 +661,9 @@ class AttendController extends AmongController {
 
 			// print_r($applyArray);
 			
-			$dates=split("-", $applyArray["aapply_schedule"]);
-			$this->MonthRec=$this->arecord->getMonthRec($this->selfUser["user_code"],$dates[0],$dates[1]);
-			$isWeekday=$this->arecord->isWeekday($dates[0],$dates[1],$dates[2]);
+			list($year,$month,$date)=split("-", date("Y-n-j",strtotime($applyArray["aapply_schedule"])));
+			$this->MonthRec=$this->arecord->getMonthRec($this->selfUser["user_code"],$year,$month);
+			$isWeekday=$this->arecord->isWeekday($year,$month,$date);
 
 			if($isWeekday==true){
 				if(I("type")==4){
@@ -835,7 +836,7 @@ class AttendController extends AmongController {
 			// echo $i."开始";
 			// echo $applyInfo["aapply_type"].'-'.$i.'\n';
 			$thisDate=date('Y-m-d',strtotime('+'.$i.' day',strtotime($applyInfo["aapply_schedule"])));
-			list($year,$month,$date)=split("-",$thisDate);
+			list($year,$month,$date)=split("-",date("Y-n-j",strtotime($thisDate)));
 			
 			//获取考勤记录的数据
 			$monthRec=$this->arecord->getMonthRec($this->selfUser["user_code"],$year,$month);
@@ -1007,5 +1008,8 @@ class AttendController extends AmongController {
 				}
 			}
 		}
+	}
+	function getMonthAttend(){
+		echo $this->arecord->getMonthRec($this->selfUser["user_code"],I("year"),I("month"),0,false);
 	}
 }
