@@ -339,6 +339,7 @@
 		    $("#submit-checkin").on("click",function(){
 		    	var datas={}
 		    	datas["data"]={}
+				var checkinway=$("input[name='acheckin_checkinway']").val()
 		    	if(checkinway==1){
 		    		datas["data"]=get_checkin_data("checkin-info")
 		    	}else if(checkinway==2){
