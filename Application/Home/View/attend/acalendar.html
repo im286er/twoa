@@ -1,0 +1,137 @@
+<link rel="stylesheet" href="__PUBLIC__/components/bootstrap-datepicker/dist/css/bootstrap-datepicker3.css">
+<style>
+    .ac-header-table,.ac-days-table{width:100%;table-layout: fixed;border-collapse: collapse;border-spacing: 0;font-size: 1em;}
+    .ac-header-table{margin-top:20px;}
+    .ac-header-table th,.ac-days-table td{border-color: #BCD4E5;text-align: center;border-style: solid;border-width: 1px;}
+    .ac-header-table th{background: #ECF2F7; color: #8090A0;padding:5px 0;border-bottom:0;}
+    .ac-days-table td{vertical-align: top;}
+    .ac-days-table td .this-day-number{text-align: right;padding: 5px 10px;color: #2E6589;font-size:0.8em;}
+    .ac-days-table td .last-day-number,.ac-days-table td .next-day-number{text-align: right;padding: 5px 10px;color: #C1D1DC;font-size:0.8em;}
+    .nowDay{background: #E3F0B2}
+    /* .ac-days-table tr{height:150px;    min-height:50px;} */
+</style>
+<div class="page-header">
+	<h1>
+		考勤管理
+		<small>
+			<i class="ace-icon fa fa-angle-double-right"></i>
+			考勤月历
+		</small>
+	</h1>
+</div><!-- /.page-header -->
+
+<div class="row">
+    <div class="col-xs-12 col-ms-12">
+        <div style="text-align: center;">
+            <div style="float:left;">
+                <button type="button" class="btn btn-white btn-yellow  btn-sm month-control" data-type="last">上个月</button><button type="button" class="btn btn-white btn-yellow  btn-sm month-control" data-type="next">下个月</button><button type="button" class="btn btn-white btn-success btn-sm month-control"  style="margin-left:10px;" data-type="today">今天</button>
+            </div>
+            <div class="the-date" style="float: inherit;height:27px;line-height:27px;color: #65A0CE;"><h3>2017-09</h3></div>
+        </div>
+        <div>
+            <table class="ac-header-table">
+                <tr>
+                    <th class="ac-day-header">周日</th>
+                    <th class="ac-day-header">周一</th>
+                    <th class="ac-day-header">周二</th>
+                    <th class="ac-day-header">周三</th>
+                    <th class="ac-day-header">周四</th>
+                    <th class="ac-day-header">周五</th>
+                    <th class="ac-day-header">周六</th>
+                </tr>
+            </table>
+            <table class="ac-days-table">
+            </table>
+        </div>
+    </div>
+</div>
+<script>
+    $(function(){
+        //初始化创建表格
+        createDaysTable()
+        //考勤日历宽高重置
+        $(window).resize(function(){
+            resizeDaysTable()
+        })
+        //更改月份
+        $(".month-control").on("click",function(){
+            var theDate=new Date($(".the-date h3").text()+"-1")
+            var nowDate=new Date();
+            if($(this).data("type")=="last"){
+                var lastDate=new Date(theDate.getTime()-1000*60*60*24)
+                createDaysTable(lastDate.getFullYear(),(lastDate.getMonth()+1))
+            }else if($(this).data("type")=="next"){
+                var nextDate=new Date((new Date(theDate.getFullYear(),(theDate.getMonth()+1))).getTime()+1000*60*60*24)
+                createDaysTable(nextDate.getFullYear(),(nextDate.getMonth()+1))
+            }else{
+                createDaysTable(nowDate.getFullYear(),(nowDate.getMonth()+1))
+            }
+        })
+
+    })
+    //重新设置每一天的高度
+    function resizeDaysTable(){
+        var proportion=$(window).width()/($(window).height()+$(window).width())
+        if(proportion>0.6){
+            $(".ac-days-table tr").height(($(".ac-day-header").width()*proportion)+"px")
+        }else{
+            $(".ac-days-table tr").height($(".ac-day-header").width()+"px")
+        }
+
+    }
+    //构建表格
+    function createDaysTable(){
+        var nowDate=new Date();
+        if(arguments.length==0){
+            year=nowDate.getFullYear();
+            month=nowDate.getMonth()+1;
+        }else{
+            year=arguments[0];
+            month=arguments[1];
+        }
+
+        $(".the-date h3").text(year+"-"+month)
+        
+        var thisDate=new Date(year,month-1,1);
+        var thisDays=(new Date((new Date(year,month)).getTime()-1000*60*60*24)).getDate();
+        var lastDate=new Date((new Date(year,month-1)).getTime()-1000*60*60*24)
+        var nextDate=new Date((new Date(year,month)).getTime()+1000*60*60*24)
+
+        var nowDay=nowDate.getFullYear()+'-'+(nowDate.getMonth()+1)+'-'+nowDate.getDate();
+        var lastMonDay=lastDate.getDate();
+        var nextMonDay=1;
+        if(thisDate.getUTCDay()>=6){
+            lastMonDay-=6
+        }else{
+            lastMonDay-=(8-thisDate.getUTCDay())
+        }
+        var sNowDay=0;
+        trLabel=""
+        for (var tr = 0; tr < 6; tr++) {
+            trLabel+="<tr>";
+            for(var td=0;td<7;td++){
+                if((tr==0 && td>=thisDate.getUTCDay()+1) || (tr>0) && sNowDay<thisDays){
+                    sNowDay++
+                    //'-'+thisDate.getMonth()+'-'+sNowDay+
+                    var dataDay=thisDate.getFullYear()+'-'+(thisDate.getMonth()+1)+'-'+sNowDay;
+                    if(nowDay==dataDay){
+                        trLabel+='<td class="nowDay" data-day="'+thisDate.getFullYear()+'-'+(thisDate.getMonth()+1)+'-'+sNowDay+'"><div class="this-day-number">'+sNowDay+'<div></td>';
+                    }else{
+                        trLabel+='<td class="" data-day="'+thisDate.getFullYear()+'-'+(thisDate.getMonth()+1)+'-'+sNowDay+'"><div class="this-day-number">'+sNowDay+'<div></td>';
+                    }
+                }else{
+                    if(tr==0){
+                        trLabel+='<td data-day="'+lastDate.getFullYear()+'-'+(lastDate.getMonth()+1)+'-'+lastMonDay+'"><div class="last-day-number">'+lastMonDay+'<div></td>';
+                            lastMonDay++
+                    }else{
+                        trLabel+='<td data-day="'+nextDate.getFullYear()+'-'+(nextDate.getMonth()+1)+'-'+nextMonDay+'"><div class="next-day-number">'+nextMonDay+'<div></td>';
+                        nextMonDay++;
+                    }
+                }
+            }
+            trLabel+="</tr>"
+        }
+        $(".ac-days-table").html(trLabel)
+        resizeDaysTable()
+    }
+</script>

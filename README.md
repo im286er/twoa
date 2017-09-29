@@ -113,3 +113,7 @@
 
 #### 2017-09-19
 * ALTER TABLE `oa_project_list` ADD `project_trave` INT(2) NOT NULL DEFAULT '0' COMMENT '是否出差' AFTER `project_type`;
+
+#### 2017-09-29
+* 完成考勤审计
+* 完成考勤月历js部分
