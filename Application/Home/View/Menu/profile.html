@@ -56,7 +56,11 @@
 					<div>
 						<!-- #section:pages/profile.picture -->
 						<span class="profile-picture">
-							<img id="avatar" class="editable img-responsive" alt="Alex's Avatar" src="__PUBLIC__/{$user['user_avatar']}" />
+							<if condition="is_http($user['user_avatar']) eq true">
+								<img id="avatar" class="editable img-responsive" alt="Alex's Avatar" src="{$user['user_avatar']}" />
+							<else />
+								<img id="avatar" class="editable img-responsive" alt="Alex's Avatar" src="__PUBLIC__/{$user['user_avatar']}" />
+							</if>
 						</span>
 
 						<!-- /section:pages/profile.picture -->

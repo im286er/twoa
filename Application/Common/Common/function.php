@@ -101,3 +101,17 @@
 		}
 		return $interval/86400;
 	}
+
+	/**
+	 * Undocumented function 判断是否包含http
+	 *
+	 * @param [type] $src
+	 * @return boolean
+	 */
+	function is_http($src){
+		$reArray=preg_match("/^http/",$src);
+		if($reArray>0){
+			return true;
+		}
+		return false;
+	}

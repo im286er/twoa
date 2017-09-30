@@ -99,9 +99,9 @@ class UserController extends AmongController {
 				$userData["user_passwd"]=sha1($userData["user_passwd"]);//密码加密
 			}
 			 if($userData["user_sex"]=="男"){
-				$userData["user_avatar"]="/assets/avatars/man.png";
+				$userData["user_avatar"]="__PUBLIC__/assets/avatars/man.png";
 			}else if($userData["user_sex"]=="女"){
-				$userData["user_avatar"]="/assets/avatars/lady.png";
+				$userData["user_avatar"]="__PUBLIC__/assets/avatars/lady.png";
 			}
 
 			

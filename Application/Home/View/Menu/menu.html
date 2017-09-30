@@ -332,7 +332,12 @@
 						<!-- #section:basics/navbar.user_menu -->
 						<li class="light-blue dropdown-modal main-menu" data-module="Menu">
 							<a data-toggle="dropdown" href="javascript:void(0);" class="dropdown-toggle">
-								<img class="nav-user-photo" src="__PUBLIC__/assets/avatars/user.jpg" alt="Jason's Photo" />
+								<if condition="is_http($user['user_avatar']) eq true">
+									<img class="nav-user-photo" src="{$user['user_avatar']}" alt="" />
+								<else />
+									<img class="nav-user-photo" src="__PUBLIC__{$user['user_avatar']}" alt="" />
+								</if>
+								
 								<span class="user-info">
 									<small>Welcome,</small>
 									{$user['user_name']}

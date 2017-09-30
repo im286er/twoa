@@ -83,7 +83,8 @@ class AmongController extends Controller {
 				}else{
 					$this->selfUser["user_age"]=get_age($this->selfUser["user_born"]);
 					$this->selfUser["user_joinDay"]=get_day($this->selfUser["user_entry"]);
-					$this->user=$this->selfUser;
+
+					// $this->user=$this->selfUser;
 					$this->assign("user",$this->selfUser);
 					$this->assign("rand",lcg_value());
 				}

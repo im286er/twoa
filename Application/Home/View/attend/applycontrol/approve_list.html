@@ -1,9 +1,15 @@
 <volist name="approveArray" id="approve">
     <div class="itemdiv memberdiv apply-id" data-applyid="{$approve.aapply_id}">
         <div class="user">
-            <img alt="Bob Doe's avatar" src="__PUBLIC__/assets/avatars/user.jpg">
+            <if condition="is_http($approve['aapply_avatar']) eq true">
+                <img alt="{$approve.aapply_username}'s avatar" src="{$approve['aapply_avatar']}">
+                <!-- <img id="avatar" class="editable img-responsive" alt="Alex's Avatar" src="{$user['user_avatar']}" /> -->
+            <else />
+                <img alt="{$approve.aapply_username}'s avatar" src="__PUBLIC__/{$approve['aapply_avatar']}">
+                <!-- <img id="avatar" class="editable img-responsive" alt="Alex's Avatar" src="__PUBLIC__/{$user['user_avatar']}" /> -->
+            </if>
         </div>
-
+        
         <div class="body">
             <div class="name">
                 <a href="#">{$approve.aapply_username}</a>
