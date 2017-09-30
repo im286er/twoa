@@ -1017,7 +1017,9 @@ class AttendController extends AmongController {
 	 * @return   [type]         [description]
 	 */
 	function getMonthAttend(){
-		echo $this->arecord->getMonthRec($this->selfUser["user_code"],I("year"),I("month"),0,false);
+		$count=$this->arecord->findCount($this->selfUser["user_code"],I("year"),I("month"));
+		$monthAtt=$this->arecord->getMonthRec($this->selfUser["user_code"],I("year"),I("month"),0,false);
+		echo '{"monthAtt":'.$monthAtt.',"count":'.$count.'}';
 	}
 	/**
 	 * [getMonthAppyl description] 获取指定月申请，已结算
@@ -1027,8 +1029,36 @@ class AttendController extends AmongController {
 	 * @return   [type]        [description]
 	 */
 	function getMonthAppyl(){
-		$condition=array();
+		$year=I("year");
+		$month=I("month");
+		$firstDay=$year."-".$month."-01";
+		$lastDay=date("Y-m-d",strtotime($year."-".$month."-01 + 1 month - 1 day"));
+
+		$condition["_string"]="((aapply_schedule<='{$firstDay}' AND (date_sub(aapply_schedule,interval -aapply_days day))>='{$firstDay}') OR (aapply_days='0' AND aapply_type NOT IN (10,13) AND '{$firstDay}'<=aapply_schedule AND aapply_schedule <='{$lastDay}') OR (aapply_schedule>='{$firstDay}' AND (date_sub(aapply_schedule,interval -aapply_days day))>='{$lastDay}')) AND aapply_settle=1";
+
 		$applyArray=$this->aapply->searchApply($this->selfUser["user_code"],$condition);
-		echo $this->aapply->getLastSql();
+		$applyinfos=array();
+		foreach ($applyArray as $apply) {
+			if($apply["aapply_days"]==0){
+				$days=1;
+			}else{
+				$days=$apply["aapply_days"];
+			}
+			
+			for ($i=0; $i <$days; $i++) {
+				$theDate=date("Y-m-d",strtotime($apply["aapply_schedule"]."+$i day"));
+				if($theDate<=$lastDay){
+					$date=date("j",strtotime($theDate));
+					
+					if(!is_array($applyinfos[$date])){
+						$applyinfos[$date]=array();
+					}
+					array_push($applyinfos[$date],array("type"=>$apply["aapply_type"],"types"=>$apply["aapply_types"],"indays"=>$apply["aapply_indays"]));
+				}
+				# code...
+			}
+		}
+		$this->ajaxReturn($applyinfos);
+		// echo $this->aapply->getLastSql();
 	}
 }

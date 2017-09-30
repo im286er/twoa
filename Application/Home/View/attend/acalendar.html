@@ -5,10 +5,24 @@
     .ac-header-table th,.ac-days-table td{border-color: #BCD4E5;text-align: center;border-style: solid;border-width: 1px;}
     .ac-header-table th{background: #ECF2F7; color: #8090A0;padding:5px 0;border-bottom:0;}
     .ac-days-table td{vertical-align: top;}
-    .ac-days-table td .attend-label{display: block;  white-space: nowrap; overflow: hidden; text-overflow: ellipsis;color:#FFFFFF;padding:2px 0;text-align: center;cursor:pointer;}
+    .ac-days-table td .attend-label{display: block;  white-space: nowrap; overflow: hidden; text-overflow: ellipsis;text-align: center;}
     .ac-days-table td .this-day-number{text-align: right;padding: 2px 5px;color: #2E6589;font-size:0.8em;}
     .ac-days-table td .last-day-number,.ac-days-table td .next-day-number{text-align: right;padding: 2px 5px;color: #C1D1DC;font-size:0.8em;}
-
+    .attend-day{cursor:pointer;}
+    .attend-type-1{background:#AC725E;}
+    .attend-type-2{background:#FA573C;}
+    .attend-type-3{background:#42D692;}
+    .attend-type-4{background:#B3DC6C;}
+    .attend-type-5{background:#FFAD46;}
+    .attend-type-6{background:#D06B64;}
+    .attend-type-7{background:#9FC6E7;}
+    .attend-type-8{background:#4986E7;}
+    .attend-type-9{background:#CABDBF;}
+    .attend-type-10{background:#CCA6AC;}
+    .attend-type-11{background:#F691B2;}
+    .attend-type-12{background:#A47AE2;}
+    .attend-type-13{background:#92E1C0;}
+    .attend-type-14{background:#555555;}
     .nowDay{background: #E3F0B2}
     /* .ac-days-table tr{height:150px;    min-height:50px;} */
 </style>
@@ -30,6 +44,11 @@
             </div>
             <div class="the-date" style="float: inherit;height:27px;line-height:27px;color: #65A0CE;"><h3>2017-09</h3></div>
         </div>
+        <div style="float:right;">
+            <span class="month-count label label-info label-white label-xlg middle"><i class="ace-icon fa fa-clock-o" style="font-size: 18px;" aria-hidden="true"></i>
+                本月工时：<small>123</small></span>
+        </div>
+        
         <div>
             <table class="ac-header-table">
                 <tr>
@@ -47,7 +66,24 @@
         </div>
     </div>
 </div>
+<div id="applyModal" class="modal fade" tabindex="-1" style="text-align: center;">
+    <div class="modal-dialog" >
+        <div class="modal-content" >
+            <div class="modal-body">
+                
+            </div>
+
+            <div class="modal-footer">
+                <button class="btn btn-white btn-default btn-round" data-dismiss="modal">
+                    <i class="ace-icon fa fa-times red2"></i>
+                    取消
+                </button>
+            </div>
+        </div><!-- /.modal-content -->
+    </div><!-- /.modal-dialog -->
+</div>
 <script>
+    var monthAtt,monthCount,monthApply;
     $(function(){
         //初始化创建表格
         createDaysTable()
@@ -68,6 +104,25 @@
             }else{
                 createDaysTable(nowDate.getFullYear(),(nowDate.getMonth()+1))
             }
+        })
+        //考勤月历日点击事件
+        $(".ac-days-table").on("click",".attend-day",function(){   
+            var dayNum=$(this).find(".this-day-number").text();
+            var butStr="";  
+            if(monthAtt[dayNum]["forenoon"]["type"]>0){
+                butStr+='<span class="attend-label label label-white btn-block label-success"><span class="">上午上班：</span>'+monthAtt[dayNum]["forenoon"]["worktime"]+'小时</span>';
+            }
+            if(monthAtt[dayNum]["afternoon"]["type"]>0){
+
+                butStr+='<span class="attend-label label label-white label-warning btn-block"><span class="">下午上班：</span>'+monthAtt[dayNum]["afternoon"]["worktime"]+'小时</span>';
+            }
+            if(monthApply[dayNum]!=undefined){
+                monthApply[dayNum].forEach(function(element) {
+                    butStr+='<span class="label attend-type-'+element["type"]+' btn-block">考勤类型：'+element["types"]+' | 时段：'+element["indays"]+'</span>';
+                });
+            }
+            $("#applyModal .modal-body").html(butStr)
+           
         })
 
     })
@@ -92,8 +147,11 @@
             year=arguments[0];
             month=arguments[1];
         }
-        var monthAtt=getMonthAttend(year,month);
-        getMonthAppyl(year,month);
+        var monthRec=getMonthAttend(year,month);
+        monthAtt=monthRec["monthAtt"]
+        monthCount=monthRec["count"]
+        $(".month-count small").text(monthCount);
+        monthApply=getMonthAppyl(year,month);
         $(".the-date h3").text(year+"-"+month)
         
         var thisDate=new Date(year,month-1,1);
@@ -121,31 +179,42 @@
                    
                     if(monthAtt[sNowDay]["forenoon"]["type"]>0){
                         // console.log(monthAtt[sNowDay]["forenoon"]["worktime"])
-                        butStr+='<button class="attend-label btn btn-minier btn-block btn-white btn-success"><span class="hidden-480">上午上班：</span>'+monthAtt[sNowDay]["forenoon"]["worktime"]+'</button>';
+                        butStr+='<span class="attend-label label btn-block label-success"><span class="hidden-480">上午上班：</span>'+monthAtt[sNowDay]["forenoon"]["worktime"]+'小时</span>';
                     }
                     if(monthAtt[sNowDay]["afternoon"]["type"]>0){
                         // console.log(monthAtt[sNowDay]["afternoon"]["worktime"])
-                        butStr+='<button class="attend-label btn btn-minier btn-white btn-warning btn-block"><span class="hidden-480">下午上班：</span>'+monthAtt[sNowDay]["afternoon"]["worktime"]+'</button>';
+                        butStr+='<span class="attend-label label label-warning btn-block"><span class="hidden-480">下午上班：</span>'+monthAtt[sNowDay]["afternoon"]["worktime"]+'小时</span>';
                     }
 
+                    if(monthApply[sNowDay]!=undefined){
+                        monthApply[sNowDay].forEach(function(element) {
+                            butStr+='<span class="label attend-type-'+element["type"]+' btn-block hidden-480">考勤类型：'+element["types"]+' | 时段：'+element["indays"]+'</span>';
+                        });
+                    }
+                    var modal=""
+                    if(butStr!=""){
+                        modal='data-toggle="modal" data-target="#applyModal"'
+                    }
                     if(nowDay==dataDay){
-                        trLabel+='<td class="nowDay" data-day="'+thisDate.getFullYear()+'-'+(thisDate.getMonth()+1)+'-'+sNowDay+'"><div class="this-day-number">'+sNowDay+'<div>'+butStr+'</td>';
+                        trLabel+='<td class="attend-day nowDay" data-day="'+thisDate.getFullYear()+'-'+(thisDate.getMonth()+1)+'-'+sNowDay+'"'+modal+'><div class="this-day-number">'+sNowDay+'</div>'+butStr+'</td>';
                     }else{
-                        trLabel+='<td class="" data-day="'+thisDate.getFullYear()+'-'+(thisDate.getMonth()+1)+'-'+sNowDay+'"><div class="this-day-number">'+sNowDay+'<div>'+butStr+'</td>'; 
+                        trLabel+='<td class="attend-day" data-day="'+thisDate.getFullYear()+'-'+(thisDate.getMonth()+1)+'-'+sNowDay+'" '+modal+'><div class="this-day-number">'+sNowDay+'</div>'+butStr+'</td>'; 
                     }
                 }else{
                     if(tr==0){
-                        trLabel+='<td data-day="'+lastDate.getFullYear()+'-'+(lastDate.getMonth()+1)+'-'+lastMonDay+'"><div class="last-day-number">'+lastMonDay+'<div></td>';
+                        trLabel+='<td data-day="'+lastDate.getFullYear()+'-'+(lastDate.getMonth()+1)+'-'+lastMonDay+'"><div class="last-day-number">'+lastMonDay+'</div></td>';
                             lastMonDay++
                     }else{
-                        trLabel+='<td data-day="'+nextDate.getFullYear()+'-'+(nextDate.getMonth()+1)+'-'+nextMonDay+'"><div class="next-day-number">'+nextMonDay+'<div></td>';
+                        trLabel+='<td data-day="'+nextDate.getFullYear()+'-'+(nextDate.getMonth()+1)+'-'+nextMonDay+'"><div class="next-day-number">'+nextMonDay+'</div></td>';
                         nextMonDay++;
                     }
                 }
             }
             trLabel+="</tr>"
         }
+        //将表格画到指定容器中
         $(".ac-days-table").html(trLabel)
+        //重新规划表格大小
         resizeDaysTable()
     }
     //通过ajax获取对应的月份考勤
@@ -158,6 +227,7 @@
             async:false,
             data:{year:year,month:month},
             success:function(data){
+                console.log(data)
                 attendData=data
             }
         })
@@ -173,7 +243,7 @@
             async:false,
             data:{year:year,month:month},
             success:function(data){
-                console.log(data)
+                // console.log(data)
                 attendData=data
             }
         })
