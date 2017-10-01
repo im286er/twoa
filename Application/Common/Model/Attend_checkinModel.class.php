@@ -3,8 +3,8 @@
  * @Author: vition
  * @Email:369709991@qq.com
  * @Date:   2017-08-07 18:39:02
- * @Last Modified by:   vition
- * @Last Modified time: 2017-08-10 12:07:15
+ * @Last Modified by:   369709991@qq.com
+ * @Last Modified time: 2017-10-01 11:44:26
  */
 namespace Common\Model;
 use Common\Model\AmongModel;
@@ -12,9 +12,9 @@ class Attend_checkinModel extends AmongModel{
 	protected $trueTableName = 'oa_attend_checkin'; 
 	protected $fields = array('acheckin_id', 'acheckin_code','acheckin_checkinway','acheckin_type','acheckin_timetype','acheckin_addtime','acheckin_checkintime','acheckin_location','acheckin_longlat','acheckin_picture',"acheckin_state","acheckin_tempstorage","acheckin_applyid");
 
-	function search_checkin($acheckin_code,$condition=array(),$start=0,$limit=0){
+	function search_checkin($acheckin_code=0,$condition=array(),$start=0,$limit=0){
 		if(!$this->has_auth("select")) return false;
-		$this->table("oa_attend_checkin ch")->field(array_merge($this->fields,array("ct.config_value acheckin_types","ctt.config_value acheckin_timetypes")))->join("left join oa_config ct on ct.config_class='acheckin_type' AND ct.config_key=ch.acheckin_type")->join("left join oa_config ctt on ctt.config_class='acheckin_timetype' AND ctt.config_key=ch.acheckin_timetype")->order("acheckin_checkintime desc,acheckin_id desc");
+		$this->table("oa_attend_checkin ch")->field(array_merge($this->fields,array("ct.config_value acheckin_types","ctt.config_value acheckin_timetypes","u.user_name acheckin_name","ccw.config_value acheckin_checkinways")))->join("left join oa_config ccw on ccw.config_class='acheckin_checkinway' AND ccw.config_key=ch.acheckin_checkinway")->join("left join oa_config ct on ct.config_class='acheckin_type' AND ct.config_key=ch.acheckin_type")->join("left join oa_config ctt on ctt.config_class='acheckin_timetype' AND ctt.config_key=ch.acheckin_timetype")->join("left join oa_user u on u.user_code=ch.acheckin_code")->order("acheckin_checkintime desc,acheckin_id desc");
 		if($limit>0){
 			$this->limit($start.','.$limit);
 		}

@@ -4,7 +4,7 @@
  * @Email:369709991@qq.com
  * @Date:   2017-08-07 18:24:40
  * @Last Modified by:   369709991@qq.com
- * @Last Modified time: 2017-09-29 22:12:23
+ * @Last Modified time: 2017-10-01 14:38:24
  */
 namespace Common\Model;
 use Common\Model\AmongModel;
@@ -12,7 +12,7 @@ class Attend_applyModel extends AmongModel{
 	protected $trueTableName = 'oa_attend_apply'; 
 	protected $fields = array("aapply_id","aapply_code","aapply_type","aapply_inday","aapply_addtime","aapply_schedule","aapply_days","aapply_hours","aapply_reason",'aapply_project','aapply_proof',"aapply_approve","aapply_state","aapply_settle","aapply_operation","aapply_remark","aapply_tempstorage");
 
-	function searchApply($aapply_code,$condition=array(),$start=0,$limit=0,$approve=false){
+	function searchApply($aapply_code=0,$condition=array(),$start=0,$limit=0,$approve=false){
 		if(!$this->has_auth("select")) return false;
 		$this->table("oa_attend_apply ap")->field(array_merge($this->fields,array("ci.config_value aapply_indays","ct.config_value aapply_types","u.user_name aapply_username","u.user_avatar aapply_avatar")))->join("left join oa_user u on u.user_code=ap.aapply_code")->join("left join oa_config ct on ct.config_class='aapply_type' AND ct.config_key=ap.aapply_type")->join("left join oa_config ci on ci.config_class='aapply_inday' AND ci.config_key=ap.aapply_inday")->order("aapply_schedule DESC");
 		if($limit>0){

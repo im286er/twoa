@@ -1,0 +1,46 @@
+<volist name="checkinArray" id="checkin">
+    <tr>
+    	<td class="">
+            {$checkin.acheckin_name}
+        </td>
+        <td class="">
+            {$checkin.acheckin_checkinways}
+        </td>
+        <td class="">
+            {$checkin.acheckin_types}
+        </td>
+        <td class="">{$checkin.acheckin_timetypes}</td>
+        <td>
+            {$checkin.acheckin_checkintime}
+        </td>
+        <td class="hidden-480">
+            {$checkin.acheckin_location}
+        </td>
+        <td class="hidden-480">
+            <i class="ace-icon fa fa-picture-o"></i>
+        </td>
+        <td class="hidden-480">
+        	<if condition="$checkin['acheckin_state'] eq 1" >
+        		<span class="label label-success"><i class="ace-icon fa fa-check-circle bigger-120"></i> 有效 </span>
+        	<else/>
+        		<span class="label label-warning"><i class="ace-icon fa fa-question-circle bigger-120"></i> 未生效 </span>
+        	</if>
+        </td>
+        <td class="hidden-480">
+        	<div class="hidden-sm hidden-xs btn-group user-control" data-userid="6">
+				<button class="btn btn-xs btn-info user-edit" data-toggle="modal" data-target="#userModal">
+					<i class="ace-icon fa fa-pencil bigger-120"></i>
+				</button>
+				<button class="btn btn-xs btn-success user-active" disabled="disabled">
+					<i class="ace-icon fa fa-check-circle bigger-120"></i>
+				</button>
+				<button class="btn btn-xs btn-warning user-inactive">
+					<i class="ace-icon fa fa-question-circle bigger-120"></i>
+				</button>
+				<button class="btn btn-xs btn-danger user-quit">
+					<i class="ace-icon fa fa-times-circle bigger-120"></i>
+				</button>
+			</div>
+        </td>
+    </tr>
+</volist>

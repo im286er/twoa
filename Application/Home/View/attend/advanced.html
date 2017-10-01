@@ -1,0 +1,383 @@
+<link rel="stylesheet" href="__PUBLIC__/components/bootstrap-datepicker/dist/css/bootstrap-datepicker3.css">
+<link rel="stylesheet" href="__PUBLIC__/components/bootstrap-switch-master/dist/css/bootstrap-switch.css">
+<style>
+    #apply-list .label{cursor:pointer;}
+</style>
+
+<div class="page-header">
+	<h1>
+		考勤管理
+		<small>
+			<i class="ace-icon fa fa-angle-double-right"></i>
+			高级管理
+		</small>
+	</h1>
+</div><!-- /.page-header -->
+
+<div class="row">
+    <div class="tabbable">
+        <ul class="nav nav-tabs padding-12 tab-color-blue background-blue">
+            <li class="active">
+                <a data-toggle="tab" class="record-type" data-checkinway='1' href="#checkin-list">打卡记录</a>
+            </li>
+            <li>
+                <a data-toggle="tab" class="record-type" data-checkinway='2' href="#apply-list">申请记录</a>
+            </li>
+            <li>
+                <a data-toggle="tab" class="record-type" data-checkinway='3' href="#record-list">考勤记录</a>
+            </li>
+            <li>
+                <a data-toggle="tab" class="record-type" data-checkinway='4' href="#user-list">员工信息</a>
+            </li>
+            <li>
+                <a data-toggle="tab" class="record-type" data-checkinway='5' href="#config-list">考勤配置</a>
+            </li>
+        </ul>
+
+        <div class="tab-content">
+            <div id="checkin-list" class="tab-pane in active">
+                <table class="table table-striped table-bordered table-hover">
+                    <thead class="thin-border-bottom">
+                        <tr>
+                            <th>
+                                <i class="ace-icon fa fa-user-o"></i>
+                                员工
+                            </th>
+                            <th>
+                                <i class="ace-icon fa fa-calendar-check-o"></i>
+                                方式
+                            </th>
+                            <th>
+                                <i class="ace-icon fa fa-calendar-check-o"></i>
+                                类型
+                            </th>
+                            <th>
+                                <i class="ace-icon fa fa-calendar-check-o"></i>
+                                始末
+                            </th>
+                            <th>
+                                <i class="ace-icon fa fa-clock-o"></i>
+                                打卡时间
+                            </th>
+                            <th class="hidden-480">
+                                <i class="ace-icon fa fa-map-marker"></i>
+                                打卡地理位置
+                            </th>
+                            <th class="hidden-480">
+                                <i class="ace-icon fa fa-map-marker"></i>
+                                图片
+                            </th>
+                            <th class="hidden-480">
+                                <i class="ace-icon fa fa-map-marker"></i>
+                                状态
+                            </th>
+                            <th class="">
+                                <i class="ace-icon fa fa-map-marker"></i>
+                                控制
+                            </th>
+                        </tr>
+                    </thead>
+
+                    <tbody class="html-box" id="checkin-html-div">
+                        {$checkinListHtml.html}
+                    </tbody>
+                </table>
+                <div id="checkin-page-div" class="pages-list" data-con="advSearchCheckin" data-html="#checkin-html-div" data-page="#checkin-page-div">{$checkinListHtml.pages}</div>
+            </div>
+            <div id="apply-list" class="tab-pane">
+                <table class="table table-striped table-bordered table-hover">
+                    <thead class="thin-border-bottom">
+                        <tr>
+                            <th>
+                                <i class="ace-icon fa fa-calendar-check-o"></i>
+                                申请类型
+                            </th>
+                            <th class="hidden-480">
+                                <i class="ace-icon fa fa-clock-o"></i>
+                                提交时间
+                            </th>
+                            <th >
+                                <i class="ace-icon fa fa-clock-o"></i>
+                                计划日期
+                            </th>
+                            <th class="hidden-480" >
+                                <i class="ace-icon fa fa-map-marker"></i>
+                                天数/小时
+                            </th>
+                            <th class="hidden-480">
+                                <i class="ace-icon fa fa-map-marker"></i>
+                                申请理由
+                            </th>
+                            <th>
+                                <i class="ace-icon fa fa-map-marker"></i>
+                                审批状态
+                            </th>
+                        </tr>
+                    </thead>
+
+                    <tbody class="html-box" id="apply-html-div">
+                        {$applyListHtml.html}
+                    </tbody>
+                </table>
+                <div id="apply-page-div" class="pages-list" data-con="getApplyList" data-html="#apply-html-div" data-page="#apply-page-div">{$applyListHtml.pages}</div>
+            </div>
+            <div id="record-list" class="tab-pane">
+                <table class="table table-striped table-bordered table-hover">
+                    <thead class="thin-border-bottom">
+                        <tr>
+                            <th>
+                                <i class="ace-icon fa fa-calendar-check-o"></i>
+                                申请类型
+                            </th>
+                            <th class="hidden-480">
+                                <i class="ace-icon fa fa-clock-o"></i>
+                                提交时间
+                            </th>
+                            <th >
+                                <i class="ace-icon fa fa-clock-o"></i>
+                                计划日期
+                            </th>
+                            <th class="hidden-480" >
+                                <i class="ace-icon fa fa-map-marker"></i>
+                                天数/小时
+                            </th>
+                            <th class="hidden-480">
+                                <i class="ace-icon fa fa-map-marker"></i>
+                                申请理由
+                            </th>
+                            <th>
+                                <i class="ace-icon fa fa-map-marker"></i>
+                                审批状态
+                            </th>
+                        </tr>
+                    </thead>
+
+                    <tbody class="html-box" id="apply-html-div">
+                        {$applyListHtml.html}
+                    </tbody>
+                </table>
+                <div id="apply-page-div" class="pages-list" data-con="getApplyList" data-html="#apply-html-div" data-page="#apply-page-div">{$applyListHtml.pages}</div>
+            </div>
+            <div id="user-list" class="tab-pane">
+                <table class="table table-striped table-bordered table-hover">
+                    <thead class="thin-border-bottom">
+                        <tr>
+                            <th>
+                                <i class="ace-icon fa fa-calendar-check-o"></i>
+                                申请类型
+                            </th>
+                            <th class="hidden-480">
+                                <i class="ace-icon fa fa-clock-o"></i>
+                                提交时间
+                            </th>
+                            <th >
+                                <i class="ace-icon fa fa-clock-o"></i>
+                                计划日期
+                            </th>
+                            <th class="hidden-480" >
+                                <i class="ace-icon fa fa-map-marker"></i>
+                                天数/小时
+                            </th>
+                            <th class="hidden-480">
+                                <i class="ace-icon fa fa-map-marker"></i>
+                                申请理由
+                            </th>
+                            <th>
+                                <i class="ace-icon fa fa-map-marker"></i>
+                                审批状态
+                            </th>
+                        </tr>
+                    </thead>
+
+                    <tbody class="html-box" id="apply-html-div">
+                        {$applyListHtml.html}
+                    </tbody>
+                </table>
+                <div id="apply-page-div" class="pages-list" data-con="getApplyList" data-html="#apply-html-div" data-page="#apply-page-div">{$applyListHtml.pages}</div>
+            </div>
+            <div id="config-list" class="tab-pane">
+                
+            </div>
+            <div id="right-menu" class="modal aside" data-body-scroll="false" data-offset="true" data-placement="right" data-fixed="true" data-backdrop="false" tabindex="-1">
+                <div class="modal-dialog">
+                    <div class="modal-content">
+                        <div class="modal-header no-padding">
+                            <div class="table-header">
+                                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">
+                                    <span class="white">&times;</span>
+                                </button>
+                                根据不同条件筛选
+                            </div>
+                        </div>
+            
+                        <div class="modal-body">
+                            <div class="search-condition cond-one hide">
+                                <div class="form-group">
+                                    <select class="chosen-select apply-info" multiple name="aapply_code" data-placeholder="申请人">
+                                        <option value="">所有申请人</option>
+                                        <volist name="applicantArray" id="applicant">
+                                                <option value="{$applicant.aapply_code}">{$applicant.aapply_codes}</option>
+                                        </volist>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="search-condition cond-two">
+                                <div class="form-group">
+                                    <label >日期</label>
+                                    <select class="form-control apply-info" name="time">
+                                        <option value="">全部日期</option>
+                                        <option value="1 DAY">当天</option>
+                                        <option value="+1 WEEK">一周</option>
+                                        <option value="+1 MONTH">一个月</option>
+                                    </select>
+                                </div>
+                                
+                            </div>
+                            <div class="search-condition cond-three hide">
+                                <div class="form-group">
+                                    <label >类型</label>
+                                    <select class="form-control apply-info" name="aapply_type">
+                                        <option value="">全部类型</option>
+                                        <volist name="attendtypeArray" id="attendtype">
+                                            <option value="{$attendtype.config_key}">{$attendtype.config_value}</option>
+                                        </volist>
+                                    </select>
+                                </div>
+                                <div class="form-group">
+                                    <label >状态</label>
+                                    <select class="form-control apply-info" name="aapply_state">
+                                        <option value="">全部状态</option>
+                                        <option value="0">未审批</option>
+                                        <option value="1">审批</option>
+                                        <option value="2">拒绝</option>
+                                        <option value="3">审核中</option>
+                                        <option value="4">删除</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <button class="btn btn-info btn-block" id="search-btn">查询</button>
+                            </div>
+                        </div>
+                    </div><!-- /.modal-content -->
+            
+                    <button class="aside-trigger btn btn-info btn-app btn-xs ace-settings-btn" data-target="#right-menu" data-toggle="modal" type="button">
+                        <i data-icon1="fa-plus" data-icon2="fa-minus" class="ace-icon fa fa-search bigger-110 icon-only"></i>
+                    </button>
+                </div><!-- /.modal-dialog -->
+            </div>
+        </div>
+    </div>
+</div>
+
+<div id="applyModal" class="modal fade" tabindex="-1" style="text-align: center;">
+    <div class="modal-dialog" >
+        <div class="modal-content" >
+            <div class="modal-header">
+                <h4 class="modal-title"><i class="ace-icon fa fa-puzzle-piece"></i>&nbsp;申请详情</h4>
+            </div>
+            <div class="modal-body">
+                
+            </div>
+
+            <div class="modal-footer">
+                <button class="btn btn-white btn-default btn-round" data-dismiss="modal">
+                    <i class="ace-icon fa fa-times red2"></i>
+                    Cancel
+                </button>
+            </div>
+        </div><!-- /.modal-content -->
+    </div><!-- /.modal-dialog -->
+</div>
+
+<script src="__PUBLIC__/assets/js/src/elements.aside.js"></script>
+<script src="__PUBLIC__/components/chosen/chosen.jquery.js"></script>
+<script>
+    $(function(){
+        /*申请人下拉框*/
+        $('.chosen-select').chosen({allow_single_deselect:true,search_contains:true,width:"100%"}); 
+        /*右侧筛选框*/
+        $('.modal.aside').ace_aside();
+        /*查询按钮按下*/
+        $("#search-btn").on("click",function(){
+            var con=$(".tab-content .active .pages-list").data("con")
+            var datas={}
+            datas["data"]={}
+            $(".search-condition").each(function(){
+                if(!$(this).hasClass("hide")){
+                    $(this).find("select").each(function(){
+                        var val=$(this).val()
+                        var name=$(this).prop("name")
+                        if(val=="" || val==null){
+                            
+                        }else{
+                            datas["data"][name]=val
+                        }
+                    }) 
+                }
+            })
+            var html="#"+$(".tab-content .active").find(".html-box").attr("id")
+            var pages="#"+$(".tab-content .active").find(".pages-list").attr("id")
+            $.ajax({
+               url:"{:U('"+con+"')}",
+               type:"post",
+               dataType:"json",
+               data:datas,
+               success:function(data){
+                   $(html).html(data.html)
+                   $(pages).html(data.pages)
+               }
+           })
+            // $('.modal.aside').modal("hide");
+        })
+        /*不同类别选择*/
+        $(".tabbable").on("click",".record-type",function(){
+            var href=$(this).attr("href");
+            $(".search-condition").each(function(){
+                $(this).removeClass("hide");
+            })
+            if(href=="#checkin-list"){
+                $(".cond-one").addClass("hide");
+                $(".cond-three").addClass("hide");
+            }else if(href=="#apply-list"){
+                $(".cond-one").addClass("hide");
+            }
+        })
+        /*页数修改*/
+        $(".pages-list").on("click","a",function(){
+
+           var page= $(this).data("page")
+           var html=$(this).parents(".pages-list").data("html")
+           var pages=$(this).parents(".pages-list").data("page")
+           var con=$(this).parents(".pages-list").data("con")
+           $.ajax({
+               url:"{:U('"+con+"')}",
+               type:"post",
+               dataType:"json",
+               data:{p:page},
+               success:function(data){
+                 console.log("data")
+                   $(html).html(data.html)
+                   $(pages).html(data.pages)
+               }
+           })
+       })
+       /*显示申请详情*/
+       $(".tab-content").on("click",".show-apply",function(){
+            $("#applyModal .modal-body").html("")
+            var datas={}
+            datas["applyid"]=$(this).parents(".apply-id").data("applyid")
+            datas["active"]=$(".tab-content .active").find(".html-box").attr("id")
+            $.ajax({
+               url:"{:U('getApplyInfo')}",
+               type:"post",
+               dataType:"json",
+               data:datas,
+               success:function(data){
+                   $("#applyModal .modal-body").html(data.html)
+               }
+           })
+       })
+       
+    })
+</script>

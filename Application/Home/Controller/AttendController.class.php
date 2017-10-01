@@ -4,10 +4,10 @@
  * @Email:369709991@qq.com
  * @Date:   2017-08-03 16:43:53
  * @Last Modified by:   369709991@qq.com
- * @Last Modified time: 2017-09-29 22:13:49
+ * @Last Modified time: 2017-10-01 14:46:00
  */
 
-/*{"control":"Attend","name":"考勤管理","icon":"fa fa-calendar","menus":[{"name":"考勤配置","icon":"fa fa-gear","menus":"config"},{"name":"考勤申请","icon":"fa fa-list-alt","menus":"apply"},{"name":"申请管理","icon":"fa fa-pencil-square","menus":"applycontrol"},{"name":"打卡","icon":"fa fa-square","menus":"checkin"},{"name":"考勤月历","icon":"fa fa-calendar","menus":"acalendar"}]}*/
+/*{"control":"Attend","name":"考勤管理","icon":"fa fa-calendar","menus":[{"name":"高级管理","icon":"fa fa-gear","menus":"advanced"},{"name":"考勤申请","icon":"fa fa-list-alt","menus":"apply"},{"name":"申请管理","icon":"fa fa-pencil-square","menus":"applycontrol"},{"name":"打卡","icon":"fa fa-square","menus":"checkin"},{"name":"考勤月历","icon":"fa fa-calendar","menus":"acalendar"}]}*/
 namespace Home\Controller;
 use Common\Controller\AmongController;
 class AttendController extends AmongController {
@@ -41,13 +41,16 @@ class AttendController extends AmongController {
 		}
         switch ($html) {
 			case "applycontrol":
-
                 $this->assign("checkinListHtml",$this->getCheckinList($this->selfUser["user_code"]));
 				$this->assign("applyListHtml",$this->getApplyList($this->selfUser["user_code"]));
 				$this->assign("approveListHtml",$this->getApproveList($this->selfUser["user_code"]));
 				$this->assign("applicantArray",$this->aapply->getApplicant($this->selfUser["user_code"]));
 				$this->assign("attendtypeArray",$this->config->search_all(array("config_class"=>"aapply_type")));
                 break;
+            case "advanced":
+            	$this->assign("checkinListHtml",$this->advSearchCheckin(array("acheckin_state"=>array("eq","0"))));
+            	$this->assign("applyListHtml",$this->advSearchApply(array("aapply_state"=>array("neq","1"))));
+            	break;
 		}
         parent::gethtml($html);
 	}
@@ -1061,4 +1064,80 @@ class AttendController extends AmongController {
 		$this->ajaxReturn($applyinfos);
 		// echo $this->aapply->getLastSql();
 	}
+	/*高级管理开始*/
+	/**
+	 * [advSearchCheckin description] 打卡记录
+	 * @method   advSearchCheckin
+	 * @Author   vition
+	 * @DateTime 2017-10-01
+	 * @param    array            $condition [description]
+	 * @return   [type]                      [description]
+	 */
+	function advSearchCheckin($condition=array()){
+		$p=1;
+		if(empty($condition)){
+			
+			$p=$_POST["p"];
+			if(I("data")["time"]!=""){
+				$condition["acheckin_checkintime"]=array("EXP",">=date_sub(now(),interval ".I("data")["time"].")");
+			}
+		}else{
+			$condition["acheckin_checkintime"]=array("EXP",">=date_sub(now(),interval +1 year)");
+			$_POST["p"]=$p;
+			
+		}
+
+		$limit=10;
+		$count=$this->acheckin->where($condition)->count();
+		if($p>ceil($count/$limit)){
+			$_POST["p"]=1;
+		}
+
+		$Page=new \Think\Page($count,$limit);
+		$pageShow=$Page->show();
+
+		$checkinArray=$this->acheckin->search_checkin(0,$condition,$Page->firstRow,$Page->listRows);
+		$this->assign("checkinArray",$checkinArray);
+
+		$return=array("html"=>$this->fetch("attend/advanced/checkin_list"),"pages"=>$pageShow);
+		if(empty($condition)){
+			$this->ajaxReturn($return);
+		}
+		return $return;
+	}
+
+	function advSearchApply($condition=array()){
+		$p=1;
+		if(empty($condition)){
+			
+			$p=$_POST["p"];
+			if(I("data")["time"]!=""){
+				$condition["aapply_schedule"]=array("EXP",">=date_sub(now(),interval ".I("data")["time"].")");
+			}
+		}else{
+			$condition["aapply_schedule"]=array("EXP",">=date_sub(now(),interval +1 year)");
+			$_POST["p"]=$p;
+			
+		}
+
+		$limit=10;
+		$count=$this->acheckin->where($condition)->count();
+		if($p>ceil($count/$limit)){
+			$_POST["p"]=1;
+		}
+
+		$Page=new \Think\Page($count,$limit);
+		$pageShow=$Page->show();
+
+		// $checkinArray=$this->acheckin->search_checkin(0,$condition,$Page->firstRow,$Page->listRows);
+		$aapplyArray=$this->aapply->searchApply(0,$condition,$Page->firstRow,$Page->listRows);
+		$this->assign("aapplyArray",$aapplyArray);
+
+		$return=array("html"=>$this->fetch("attend/advanced/apply_list"),"pages"=>$pageShow);
+		if(empty($condition)){
+			$this->ajaxReturn($return);
+		}
+		return $return;
+	}
+	/*高级管理结束*/
 }

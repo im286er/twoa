@@ -1,0 +1,20 @@
+<volist name="aapplyArray" id="aapply">
+    <tr class="apply-id" data-applyid="{$aapply.aapply_id}">
+        <td class="">{$aapply.aapply_types}</td>
+        <td>
+            {$aapply.aapply_addtime}
+        </td>
+        <td class="hidden-480">
+            {$aapply.aapply_schedule}
+        </td>
+        <td class="hidden-480">
+            {$aapply.aapply_days}/{$aapply.aapply_hours}
+        </td>
+        <td class="hidden-480">
+            {$aapply.aapply_reason}
+        </td>
+        <td>
+            {$state[$aapply["aapply_state"]]}
+        </td>
+    </tr>
+</volist>
