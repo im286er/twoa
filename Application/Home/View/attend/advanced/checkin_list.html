@@ -27,17 +27,21 @@
         	</if>
         </td>
         <td class="hidden-480">
-        	<div class="hidden-sm hidden-xs btn-group user-control" data-userid="6">
-				<button class="btn btn-xs btn-info user-edit" data-toggle="modal" data-target="#userModal">
+        	<div class="hidden-sm hidden-xs btn-group edit-control" data-id="{$checkin.acheckin_id}">
+				<button class="btn btn-xs btn-info info-edit" data-toggle="modal" data-target="#attendModal">
 					<i class="ace-icon fa fa-pencil bigger-120"></i>
-				</button>
-				<button class="btn btn-xs btn-success user-active" disabled="disabled">
-					<i class="ace-icon fa fa-check-circle bigger-120"></i>
-				</button>
-				<button class="btn btn-xs btn-warning user-inactive">
-					<i class="ace-icon fa fa-question-circle bigger-120"></i>
-				</button>
-				<button class="btn btn-xs btn-danger user-quit">
+                </button>
+                
+                <if condition="$checkin['acheckin_state'] eq 1">
+                    <button class="btn btn-xs btn-warning checkin-unactive">
+                        <i class="ace-icon fa fa-question-circle bigger-120"></i>
+                    </button>
+                <else/>
+                    <button class="btn btn-xs btn-success checkin-active">
+                        <i class="ace-icon fa fa-check-circle bigger-120"></i>
+                    </button>
+                </if>
+				<button class="btn btn-xs btn-danger checkin-del">
 					<i class="ace-icon fa fa-times-circle bigger-120"></i>
 				</button>
 			</div>

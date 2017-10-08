@@ -196,7 +196,7 @@
                 <div id="apply-page-div" class="pages-list" data-con="getApplyList" data-html="#apply-html-div" data-page="#apply-page-div">{$applyListHtml.pages}</div>
             </div>
             <div id="config-list" class="tab-pane">
-                
+                {$configListHtml.html}
             </div>
             <div id="right-menu" class="modal aside" data-body-scroll="false" data-offset="true" data-placement="right" data-fixed="true" data-backdrop="false" tabindex="-1">
                 <div class="modal-dialog">
@@ -270,12 +270,9 @@
     </div>
 </div>
 
-<div id="applyModal" class="modal fade" tabindex="-1" style="text-align: center;">
+<div id="attendModal" class="modal fade" tabindex="-1" style="text-align: center;">
     <div class="modal-dialog" >
         <div class="modal-content" >
-            <div class="modal-header">
-                <h4 class="modal-title"><i class="ace-icon fa fa-puzzle-piece"></i>&nbsp;申请详情</h4>
-            </div>
             <div class="modal-body">
                 
             </div>
@@ -283,7 +280,7 @@
             <div class="modal-footer">
                 <button class="btn btn-white btn-default btn-round" data-dismiss="modal">
                     <i class="ace-icon fa fa-times red2"></i>
-                    Cancel
+                    取消
                 </button>
             </div>
         </div><!-- /.modal-content -->
@@ -363,18 +360,18 @@
            })
        })
        /*显示申请详情*/
-       $(".tab-content").on("click",".show-apply",function(){
-            $("#applyModal .modal-body").html("")
+       $(".tab-content").on("click",".info-edit",function(){
+            $("#attendModal .modal-body").html("")
             var datas={}
-            datas["applyid"]=$(this).parents(".apply-id").data("applyid")
-            datas["active"]=$(".tab-content .active").find(".html-box").attr("id")
+            datas["id"]=$(this).parents(".edit-control").data("id")
+            // datas["active"]=$(".tab-content .active").find(".html-box").attr("id")
             $.ajax({
-               url:"{:U('getApplyInfo')}",
+               url:"{:U('getAdvInfo')}",
                type:"post",
                dataType:"json",
                data:datas,
                success:function(data){
-                   $("#applyModal .modal-body").html(data.html)
+                   $("#attendModal .modal-body").html(data.html)
                }
            })
        })

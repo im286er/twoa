@@ -59,10 +59,15 @@ class Attend_checkinModel extends AmongModel{
 		
 	}
 
-	function findCheckin($user_code,$condition=array()){
+	function findCheckin($user_code,$condition=array(),$isId=false){
 		if(!$this->has_auth("select")) return false;
-		$condition["acheckin_code"]=array("EQ",$user_code);
-		return $this->where($condition)->find();
+		if($isId==true){
+			$condition["acheckin_id"]=array("EQ",$user_code);
+		}else{
+			$condition["acheckin_code"]=array("EQ",$user_code);
+		}
+		
+		return $this->table("oa_attend_checkin ch")->field(array_merge($this->fields,array("ct.config_value acheckin_types","ctt.config_value acheckin_timetypes","u.user_name acheckin_name","ccw.config_value acheckin_checkinways")))->join("left join oa_config ccw on ccw.config_class='acheckin_checkinway' AND ccw.config_key=ch.acheckin_checkinway")->join("left join oa_config ct on ct.config_class='acheckin_type' AND ct.config_key=ch.acheckin_type")->join("left join oa_config ctt on ctt.config_class='acheckin_timetype' AND ctt.config_key=ch.acheckin_timetype")->join("left join oa_user u on u.user_code=ch.acheckin_code")->where($condition)->find();
 	}
 
 	function applySeekCheckin($apply_id){

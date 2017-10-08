@@ -50,7 +50,10 @@ class AttendController extends AmongController {
             case "advanced":
             	$this->assign("checkinListHtml",$this->advSearchCheckin(array("acheckin_state"=>array("eq","0"))));
             	$this->assign("applyListHtml",$this->advSearchApply(array("aapply_state"=>array("neq","1"))));
-            	break;
+				
+				$this->assign("configListHtml",$this->advshowConfig());
+				break;
+
 		}
         parent::gethtml($html);
 	}
@@ -1106,6 +1109,7 @@ class AttendController extends AmongController {
 		return $return;
 	}
 
+
 	function advSearchApply($condition=array()){
 		$p=1;
 		if(empty($condition)){
@@ -1137,6 +1141,19 @@ class AttendController extends AmongController {
 		if(empty($condition)){
 			$this->ajaxReturn($return);
 		}
+		return $return;
+	}
+	function getAdvInfo(){
+		$infoData=$this->acheckin->findCheckin(I("id"),array(),true);
+		// echo $this->acheckin->getLastSql();
+		$this->assign("infoData",$infoData);
+		// print_r($infoData);
+		$return=array("html"=>$this->fetch("attend/advanced/checkininfo"));
+		$this->ajaxReturn($return);
+	}
+
+	function advshowConfig(){
+		$return=array("html"=>$this->fetch("attend/advanced/config"));
 		return $return;
 	}
 	/*高级管理结束*/
