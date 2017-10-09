@@ -123,7 +123,12 @@
             month=arguments[1];
         }
         // getWeekday(year,month);
-        console.log(getWeekday(year,month))
+        var workArray=""
+        var works=getWeekday(year,month)
+        if(works!=null){
+            workArray=$.trim(works).split(",")
+        }
+       
         $(".the-date h3").text(year+"-"+month)
         
         var thisDate=new Date(year,month-1,1);
@@ -150,11 +155,13 @@
                     sNowDay++
                     var dateDay=thisDate.getFullYear()+'-'+(thisDate.getMonth()+1)+'-'+sNowDay;
                     var butStr="";
+
                     var dateDate=new Date(dateDay);
-                    if($.inArray(dateDate.getDay(),[0,6])>=0){
-                        butStr+='<span class="attend-label label label-white btn-block label-warning"><span class="">节假日</span></span>';
+
+                    if(function(workArray,dateDate,sNowDay){if(workArray==""){if($.inArray(dateDate.getDay(),[0,6])>=0){return false;}else{return true;}}else{if($.inArray(sNowDay.toString(),workArray)>=0){return true;}else{return false;}}}(workArray,dateDate,sNowDay)==false){
+                        butStr+='<span class="attend-label label btn-block label-warning"><span class="">节假日</span></span>';
                     }else{
-                        butStr+='<span class="attend-label label label-white btn-block label-success"><span class="">工作日</span></span>';
+                        butStr+='<span class="attend-label label btn-block label-success"><span class="">工作日</span></span>';
                     }
 
                     var modal=""

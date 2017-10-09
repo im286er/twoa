@@ -1165,7 +1165,7 @@ class AttendController extends AmongController {
 			$month=$arecord_month;
 		}
 
-		$monthDate=$this->arecord->getWeekday($year,$month,true);
+		$monthDate=str_replace(' ', '',$this->arecord->getWeekday($year,$month,true));
 		
 		if($arecord_year==0){
 			$this->ajaxReturn(array("monthDate"=>$monthDate));
