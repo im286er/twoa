@@ -1,7 +1,8 @@
 <link rel="stylesheet" href="__PUBLIC__/components/bootstrap-datepicker/dist/css/bootstrap-datepicker3.css">
 <link rel="stylesheet" href="__PUBLIC__/components/bootstrap-switch-master/dist/css/bootstrap-switch.css">
 <style>
-    #apply-list .label{cursor:pointer;}
+    /* #apply-list .label{cursor:pointer;} */
+    .img-view{cursor:pointer;}
 </style>
 
 <div class="page-header">
@@ -286,47 +287,83 @@
         </div><!-- /.modal-content -->
     </div><!-- /.modal-dialog -->
 </div>
+<div id="imgModal" class="modal fade" tabindex="-1" style="text-align: center;">
+    <div class="modal-dialog" role="archiveModal">
+        <div class="modal-content" >
 
+            <div class="modal-body">
+                <div class="row">
+                    <div class="col-sm-12 pdf">
+
+                    </div>
+                </div>
+            </div>
+
+            <div class="modal-footer">
+                <button class="btn btn-sm btn-danger pull-right" data-dismiss="modal">
+                    <i class="ace-icon fa fa-times"></i>
+                    Close
+                </button>
+            </div>
+        </div><!-- /.modal-content -->
+    </div><!-- /.modal-dialog -->
+</div>
+<div class="pdf1"></div>
 <script src="__PUBLIC__/assets/js/src/elements.aside.js"></script>
 <script src="__PUBLIC__/components/chosen/chosen.jquery.js"></script>
+<script src="__PUBLIC__/components/jquery.media/jquery.media.js"></script>
+
 <script>
     $(function(){
-        /*申请人下拉框*/
-        $('.chosen-select').chosen({allow_single_deselect:true,search_contains:true,width:"100%"}); 
-        /*右侧筛选框*/
-        $('.modal.aside').ace_aside();
-        /*查询按钮按下*/
-        $("#search-btn").on("click",function(){
-            var con=$(".tab-content .active .pages-list").data("con")
-            var datas={}
-            datas["data"]={}
-            $(".search-condition").each(function(){
-                if(!$(this).hasClass("hide")){
-                    $(this).find("select").each(function(){
-                        var val=$(this).val()
-                        var name=$(this).prop("name")
-                        if(val=="" || val==null){
-                            
-                        }else{
-                            datas["data"][name]=val
-                        }
-                    }) 
-                }
-            })
-            var html="#"+$(".tab-content .active").find(".html-box").attr("id")
-            var pages="#"+$(".tab-content .active").find(".pages-list").attr("id")
-            $.ajax({
-               url:"{:U('"+con+"')}",
-               type:"post",
-               dataType:"json",
-               data:datas,
-               success:function(data){
-                   $(html).html(data.html)
-                   $(pages).html(data.pages)
-               }
-           })
-            // $('.modal.aside').modal("hide");
+        /**
+		 * 通过jquery media显示文件 图片和pdf
+		 * 
+		 */
+		$(".page-content").on("click",".img-view",function(){
+            var fileUrl=$(this).data("url");
+            fileUrl="__PUBLIC__"+fileUrl
+			$('#imgModal .pdf').media({width:"100%",height:($(document).height()-100)+"px", autoplay: true,src:fileUrl});
+		})
+
+		$('#imgModal').on('hidden.bs.modal', function() {
+             $(document.body).addClass("modal-open");
         })
+
+        /*申请人下拉框*/
+        // $('.chosen-select').chosen({allow_single_deselect:true,search_contains:true,width:"100%"}); 
+        /*右侧筛选框*/
+        // $('.modal.aside').ace_aside();
+        /*查询按钮按下*/
+        // $("#search-btn").on("click",function(){
+        //     var con=$(".tab-content .active .pages-list").data("con")
+        //     var datas={}
+        //     datas["data"]={}
+        //     $(".search-condition").each(function(){
+        //         if(!$(this).hasClass("hide")){
+        //             $(this).find("select").each(function(){
+        //                 var val=$(this).val()
+        //                 var name=$(this).prop("name")
+        //                 if(val=="" || val==null){
+                            
+        //                 }else{
+        //                     datas["data"][name]=val
+        //                 }
+        //             }) 
+        //         }
+        //     })
+        //     var html="#"+$(".tab-content .active").find(".html-box").attr("id")
+        //     var pages="#"+$(".tab-content .active").find(".pages-list").attr("id")
+        //     $.ajax({
+        //        url:"{:U('"+con+"')}",
+        //        type:"post",
+        //        dataType:"json",
+        //        data:datas,
+        //        success:function(data){
+        //            $(html).html(data.html)
+        //            $(pages).html(data.pages)
+        //        }
+        //    })
+        // })
         /*不同类别选择*/
         $(".tabbable").on("click",".record-type",function(){
             var href=$(this).attr("href");

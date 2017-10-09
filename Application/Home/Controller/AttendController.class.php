@@ -1156,5 +1156,22 @@ class AttendController extends AmongController {
 		$return=array("html"=>$this->fetch("attend/advanced/config"));
 		return $return;
 	}
+	function getWeekday($arecord_year=0,$arecord_month=0){
+		if($arecord_year==0){
+			$year=I("post.year");
+			$month=I("post.month");
+		}else{
+			$year=$arecord_year;
+			$month=$arecord_month;
+		}
+
+		$monthDate=$this->arecord->getWeekday($year,$month,true);
+		
+		if($arecord_year==0){
+			$this->ajaxReturn(array("monthDate"=>$monthDate));
+		}else{
+			return $monthDate;
+		}
+	}
 	/*高级管理结束*/
 }

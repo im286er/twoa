@@ -1,6 +1,200 @@
-<script>
-    function calendar(){
-        
-    }
+<style>
+    .ac-header-table,.ac-days-table{width:100%;table-layout: fixed;border-collapse: collapse;border-spacing: 0;font-size: 1em;}
+    .ac-header-table{margin-top:20px;}
+    .ac-header-table th,.ac-days-table td{border-color: #BCD4E5;text-align: center;border-style: solid;border-width: 1px;}
+    .ac-header-table th{background: #ECF2F7; color: #8090A0;padding:5px 0;border-bottom:0;}
+    .ac-days-table td{vertical-align: top;}
+    .ac-days-table td .attend-label{display: block;  white-space: nowrap; overflow: hidden; text-overflow: ellipsis;text-align: center;}
+    .ac-days-table td .this-day-number{text-align: right;padding: 2px 5px;color: #2E6589;font-size:0.8em;}
+    .ac-days-table td .last-day-number,.ac-days-table td .next-day-number{text-align: right;padding: 2px 5px;color: #C1D1DC;font-size:0.8em;}
+    .attend-day{cursor:pointer;}
+    .attend-type-1{background:#AC725E;}
+    .attend-type-2{background:#FA573C;}
+    .attend-type-3{background:#42D692;}
+    .attend-type-4{background:#B3DC6C;}
+    .attend-type-5{background:#FFAD46;}
+    .attend-type-6{background:#D06B64;}
+    .attend-type-7{background:#9FC6E7;}
+    .attend-type-8{background:#4986E7;}
+    .attend-type-9{background:#CABDBF;}
+    .attend-type-10{background:#CCA6AC;}
+    .attend-type-11{background:#F691B2;}
+    .attend-type-12{background:#A47AE2;}
+    .attend-type-13{background:#92E1C0;}
+    .attend-type-14{background:#555555;}
+    .nowDay{background: #E3F0B2}
+    /* .ac-days-table tr{height:150px;    min-height:50px;} */
+</style>
+<div id="accordion" class="accordion-style1 panel-group">
+    <div class="panel panel-default">
+        <div class="panel-heading">
+            <h4 class="panel-title">
+                <a class="accordion-toggle collapsed" data-toggle="collapse" data-parent="#accordion" href="#collapseOne" aria-expanded="false">
+                    <i class="bigger-110 ace-icon fa fa-angle-right" data-icon-hide="ace-icon fa fa-angle-down" data-icon-show="ace-icon fa fa-angle-right"></i>
+                    &nbsp;常规配置
+                </a>
+            </h4>
+        </div>
 
+        <div class="panel-collapse collapse in" id="collapseOne" aria-expanded="true" style=""> 
+            <div class="panel-body">
+                Anim pariatur cliche reprehenderit, enim eiusmod high life accusamus terry richardson ad squid. 3 wolf moon officia aute, non cupidatat skateboard dolor brunch. Food truck quinoa nesciunt laborum eiusmod. Brunch 3 wolf moon tempor, sunt aliqua put a bird on it squid single-origin coffee nulla assumenda shoreditch et. Nihil anim keffiyeh helvetica, craft beer labore wes anderson cred nesciunt sapiente ea proident.
+            </div>
+        </div>
+    </div>
+
+    <div class="panel panel-default">
+        <div class="panel-heading">
+            <h4 class="panel-title">
+                <a class="accordion-toggle" data-toggle="collapse" data-parent="#accordion" href="#collapseTwo" aria-expanded="true">
+                    <i class="bigger-110 ace-icon fa fa-angle-down" data-icon-hide="ace-icon fa fa-angle-down" data-icon-show="ace-icon fa fa-angle-right"></i>
+                    &nbsp;节假日配置
+                </a>
+            </h4>
+        </div>
+
+        <div class="panel-collapse collapse" id="collapseTwo" aria-expanded="false" style="height: 0px;">
+            <div class="panel-body">
+                <div style="text-align: center;">
+                    <div style="float:left;">
+                        <button type="button" class="btn btn-white btn-yellow  btn-sm month-control" data-type="last">上个月</button><button type="button" class="btn btn-white btn-yellow  btn-sm month-control" data-type="next">下个月</button><button type="button" class="btn btn-white btn-success btn-sm month-control"  style="margin-left:10px;" data-type="today">今天</button>
+                    </div>
+                    <div class="the-date" style="float: inherit;height:27px;line-height:27px;color: #65A0CE;"><h3>2017-09</h3></div>
+                </div>
+                <table class="ac-header-table">
+                    <tr>
+                        <th class="ac-day-header">周日</th>
+                        <th class="ac-day-header">周一</th>
+                        <th class="ac-day-header">周二</th>
+                        <th class="ac-day-header">周三</th>
+                        <th class="ac-day-header">周四</th>
+                        <th class="ac-day-header">周五</th>
+                        <th class="ac-day-header">周六</th>
+                    </tr>
+                </table>
+                <table class="ac-days-table">
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <div class="panel panel-default">
+        <div class="panel-heading">
+            <h4 class="panel-title">
+                <a class="accordion-toggle collapsed" data-toggle="collapse" data-parent="#accordion" href="#collapseThree" aria-expanded="false">
+                    <i class="ace-icon fa fa-angle-right bigger-110" data-icon-hide="ace-icon fa fa-angle-down" data-icon-show="ace-icon fa fa-angle-right"></i>
+                    &nbsp;Group Item #3
+                </a>
+            </h4>
+        </div>
+
+        <div class="panel-collapse collapse" id="collapseThree" aria-expanded="false" style="height: 0px;">
+            <div class="panel-body">
+                Anim pariatur cliche reprehenderit, enim eiusmod high life accusamus terry richardson ad squid. 3 wolf moon officia aute, non cupidatat skateboard dolor brunch. Food truck quinoa nesciunt laborum eiusmod. Brunch 3 wolf moon tempor, sunt aliqua put a bird on it squid single-origin coffee nulla assumenda shoreditch et.
+            </div>
+        </div>
+    </div>
+</div>
+<script>
+    $(function(){
+        createDaysTable()
+        $(".month-control").on("click",function(){
+            var theDate=new Date($(".the-date h3").text()+"-1")
+            var nowDate=new Date();
+            if($(this).data("type")=="last"){
+                var lastDate=new Date(theDate.getTime()-1000*60*60*24)
+                createDaysTable(lastDate.getFullYear(),(lastDate.getMonth()+1))
+            }else if($(this).data("type")=="next"){
+                var nextDate=new Date((new Date(theDate.getFullYear(),(theDate.getMonth()+1))).getTime()+1000*60*60*24)
+                createDaysTable(nextDate.getFullYear(),(nextDate.getMonth()+1))
+            }else{
+                createDaysTable(nowDate.getFullYear(),(nowDate.getMonth()+1))
+            }
+        })
+    })
+    //创建月历表格
+    function createDaysTable(){
+        var nowDate=new Date();
+        if(arguments.length==0){
+            year=nowDate.getFullYear();
+            month=nowDate.getMonth()+1;
+        }else{
+            year=arguments[0];
+            month=arguments[1];
+        }
+        // getWeekday(year,month);
+        console.log(getWeekday(year,month))
+        $(".the-date h3").text(year+"-"+month)
+        
+        var thisDate=new Date(year,month-1,1);
+        var thisDays=(new Date((new Date(year,month)).getTime()-1000*60*60*24)).getDate();
+        var lastDate=new Date((new Date(year,month-1)).getTime()-1000*60*60*24)
+        var nextDate=new Date((new Date(year,month)).getTime()+1000*60*60*24)
+
+        var nowDay=nowDate.getFullYear()+'-'+(nowDate.getMonth()+1)+'-'+nowDate.getDate();
+        var lastMonDay=lastDate.getDate();
+        var nextMonDay=1;
+
+        if(thisDate.getUTCDay()>=6){
+            lastMonDay-=6
+        }else{
+            lastMonDay-=(8-thisDate.getUTCDay())
+        }
+        var sNowDay=0;
+        trLabel=""
+        
+        for (var tr = 0; tr < 6; tr++) {
+            trLabel+="<tr>";
+            for(var td=0;td<7;td++){
+                if((tr==0 && td>=thisDate.getUTCDay()+1) || (tr>0) && sNowDay<thisDays){
+                    sNowDay++
+                    var dateDay=thisDate.getFullYear()+'-'+(thisDate.getMonth()+1)+'-'+sNowDay;
+                    var butStr="";
+                    var dateDate=new Date(dateDay);
+                    if($.inArray(dateDate.getDay(),[0,6])>=0){
+                        butStr+='<span class="attend-label label label-white btn-block label-warning"><span class="">节假日</span></span>';
+                    }else{
+                        butStr+='<span class="attend-label label label-white btn-block label-success"><span class="">工作日</span></span>';
+                    }
+
+                    var modal=""
+                    if(butStr!=""){
+                        modal='data-toggle="modal" data-target="#applyModal"'
+                    }
+                    if(nowDay==dateDay){
+                        trLabel+='<td class="attend-day nowDay" data-day="'+dateDay+'"'+modal+'><div class="this-day-number">'+sNowDay+'</div>'+butStr+'</td>';
+                    }else{
+                        trLabel+='<td class="attend-day" data-day="'+dateDay+'" '+modal+'><div class="this-day-number">'+sNowDay+'</div>'+butStr+'</td>'; 
+                    }
+                }else{
+                    if(tr==0){
+                        trLabel+='<td data-day="'+lastDate.getFullYear()+'-'+(lastDate.getMonth()+1)+'-'+lastMonDay+'"><div class="last-day-number">'+lastMonDay+'</div></td>';
+                            lastMonDay++
+                    }else{
+                        trLabel+='<td data-day="'+nextDate.getFullYear()+'-'+(nextDate.getMonth()+1)+'-'+nextMonDay+'"><div class="next-day-number">'+nextMonDay+'</div></td>';
+                        nextMonDay++;
+                    }
+                }
+            }
+            trLabel+="</tr>"
+        }
+        //将表格画到指定容器中
+        $(".ac-days-table").html(trLabel)
+        //重新规划表格大小
+        // resizeDaysTable()
+    }
+    function getWeekday(year,month){
+        var dates=""
+        $.ajax({
+            url:"{:U('getWeekday')}",
+            type:"post",
+            data:{year:year,month:month},
+            dataType:"json",
+            async:false,
+            success:function(data){
+                dates= data.monthDate
+            }
+        }) 
+        return dates
+    }
 </script>   

@@ -18,9 +18,12 @@ class Attend_recordModel extends AmongModel{
 	 * @param  [type] $arecord_month [月]
 	 * @return [type]                [description]
 	 */
-	function getWeekday($arecord_year,$arecord_month){
+	function getWeekday($arecord_year,$arecord_month,$origin=false){
 		if(!$this->has_auth("select")) return false;
 		$result=$this->field("arecord_json")->where(array("arecord_code"=>"0","arecord_year"=>$arecord_year,"arecord_month"=>(int)$arecord_month))->find()["arecord_json"];
+		if($origin==true){
+			return $result;
+		}
 		return split(",", $result);
 
 	}

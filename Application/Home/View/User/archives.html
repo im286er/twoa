@@ -122,6 +122,11 @@
 		<div class="modal-content" >
 
 			<div class="modal-body">
+				<div class="row">
+					<div class="col-sm-12 pdf">
+
+					</div>
+				</div>
 			</div>
 
 			<div class="modal-footer">
@@ -133,7 +138,8 @@
 		</div><!-- /.modal-content -->
 	</div><!-- /.modal-dialog -->
 </div>
-<script src="__PUBLIC__/assets/js/pdfobject.js"></script>
+<!-- <script src="__PUBLIC__/assets/js/pdfobject.js"></script> -->
+<script src="__PUBLIC__/components/jquery.media/jquery.media.js"></script>
 <script>
 
 	jQuery(function($){
@@ -169,18 +175,14 @@
 		})
 		
 		/**
-		 * 通过PDFobject插件显示文件 图片和pdf
+		 * 通过jquery media显示文件 图片和pdf
 		 * 
 		 */
 		$("#content-box").on("click",".img-view",function(){
 			var fileUrl=$(this).data("url");
-			var options = {
-			   width: "70%",
-			   height: "100%"
-			};
-			PDFObject.embed(fileUrl, "#imgModal",options);
-
+			$('#imgModal .pdf').media({width:"100%",height:($(document).height()-100)+"px", autoplay: true,src:fileUrl});
 		})
+
 		$('#imgModal').on('hidden.bs.modal', function() {
              $(document.body).addClass("modal-open");
         })
