@@ -220,17 +220,29 @@
                         </div>
             
                         <div class="modal-body">
-                            <div class="search-condition cond-one hide">
+                            <div class="">
                                 <div class="form-group">
                                     <select class="chosen-select apply-info" multiple name="aapply_code" data-placeholder="申请人">
-                                        <option value="">所有申请人</option>
+                                        <option value="">员工姓名</option>
                                         <volist name="applicantArray" id="applicant">
                                                 <option value="{$applicant.aapply_code}">{$applicant.aapply_codes}</option>
                                         </volist>
                                     </select>
                                 </div>
                             </div>
-                            <div class="search-condition cond-two">
+                            <div class="search-box checkin-condition">
+                                打卡的条件
+                            </div>
+                            <div class="search-box apply-condition hide">
+                                申请的条件
+                            </div>
+                            <div class="search-box record-condition hide">
+                                记录的条件
+                            </div>
+                            <div class="search-box user-condition hide">
+                                用户的条件
+                            </div>
+                            <!-- <div class="search-condition cond-two">
                                 <div class="form-group">
                                     <label >日期</label>
                                     <select class="form-control apply-info" name="time">
@@ -262,8 +274,8 @@
                                         <option value="3">审核中</option>
                                         <option value="4">删除</option>
                                     </select>
-                                </div>
-                            </div>
+                                </div> 
+                            </div> -->
                             <div class="form-group">
                                 <button class="btn btn-info btn-block" id="search-btn">查询</button>
                             </div>
@@ -361,9 +373,9 @@
         })
 
         /*申请人下拉框*/
-        // $('.chosen-select').chosen({allow_single_deselect:true,search_contains:true,width:"100%"}); 
+        $('.chosen-select').chosen({allow_single_deselect:true,search_contains:true,width:"100%"}); 
         /*右侧筛选框*/
-        // $('.modal.aside').ace_aside();
+        $('.modal.aside').ace_aside();
         /*查询按钮按下*/
         // $("#search-btn").on("click",function(){
         //     var con=$(".tab-content .active .pages-list").data("con")
@@ -398,14 +410,22 @@
         /*不同类别选择*/
         $(".tabbable").on("click",".record-type",function(){
             var href=$(this).attr("href");
-            $(".search-condition").each(function(){
-                $(this).removeClass("hide");
-            })
-            if(href=="#checkin-list"){
-                $(".cond-one").addClass("hide");
-                $(".cond-three").addClass("hide");
-            }else if(href=="#apply-list"){
-                $(".cond-one").addClass("hide");
+            $(".search-box").addClass("hide");
+            if(href=="#config-list"){
+                $('.aside-trigger').addClass("hide")
+                $('.aside-trigger').parents(".modal-dialog").addClass("hide")
+            }else{
+                $('.aside-trigger').removeClass("hide")
+                $('.aside-trigger').parents(".modal-dialog").removeClass("hide")
+                if(href=="#checkin-list"){
+                $(".checkin-condition").removeClass("hide");
+                }else if(href=="#apply-list"){
+                    $(".apply-condition").removeClass("hide");
+                }else if(href=="#record-list"){
+                    $(".record-condition").removeClass("hide");
+                }else if(href=="#user-list"){
+                    $(".user-condition").removeClass("hide");
+                }
             }
         })
         /*页数修改*/

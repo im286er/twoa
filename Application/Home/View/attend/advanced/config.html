@@ -200,7 +200,7 @@
                     var dateDate=new Date(dateDay);
 
                     if(function(workArray,dateDate,sNowDay){if(workArray==""){if($.inArray(dateDate.getDay(),[0,6])>=0){return false;}else{return true;}}else{if($.inArray(sNowDay.toString(),workArray)>=0){return true;}else{return false;}}}(workArray,dateDate,sNowDay)==false){
-                        butStr+='<div class="btn-group"><button data-toggle="dropdown" ria-haspopup="true" aria-expanded="false" class="dropdown-toggle attend-label btn btn-sm btn-danger holiday"><span class="day-text">节假日</span><span class="ace-icon fa fa-caret-down icon-on-right"></span></button><ul class="dropdown-menu"><li><a href="#" data-daytype="weekday">工作日</a></li><li><a href="#" data-daytype="holiday">节假日</a></li></ul></div>';
+                        butStr+='<div class="btn-group"><button data-toggle="dropdown" ria-haspopup="true" aria-expanded="false" class="dropdown-toggle attend-label btn btn-sm btn-danger holiday"><span class="day-text">节假日</span><span class="ace-icon fa fa-caret-down icon-on-right"></span></button><ul class="dropdown-menu"><li><a href="javascript:void(0)" data-daytype="weekday">工作日</a></li><li><a href="javascript:void(0)" data-daytype="holiday">节假日</a></li></ul></div>';
                     }else{
                         butStr+='<div class="btn-group"><button  data-toggle="dropdown" ria-haspopup="true" aria-expanded="false" class="dropdown-toggle attend-label btn btn-sm btn-success weekday"><span class="day-text">工作日</span><span class="ace-icon fa fa-caret-down icon-on-right"></span></button><ul class="dropdown-menu"><li><a href="javascript:void(0)" data-daytype="weekday">工作日</a></li><li><a href="javascript:void(0)" data-daytype="holiday">节假日</a></li></ul></div>';
                     }
