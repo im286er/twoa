@@ -46,6 +46,23 @@ class Attend_recordModel extends AmongModel{
 			return false;
 		}
 	}
+	/**
+	 * Undocumented function 修改工作日数据
+	 *
+	 * @param [type] $arecord_year
+	 * @param [type] $arecord_month
+	 * @param [type] $weekdays
+	 * @return void
+	 */
+	function setWeekday($arecord_year,$arecord_month,$weekdays){
+		if(!$this->has_auth("insert")) return false;
+		$result=$this->getWeekday($arecord_year,$arecord_month,true);
+		if($result==null){
+			return $this->add(array("arecord_code"=>"0","arecord_year"=>$arecord_year,"arecord_month"=>(int)$arecord_month,"arecord_json"=>$weekdays));
+		}else{
+			return $this->where(array("arecord_code"=>"0","arecord_year"=>$arecord_year,"arecord_month"=>(int)$arecord_month))->save(array("arecord_json"=>$weekdays));
+		}
+	}
 
 	/**
 	 * [getMonthRec 获取指定月份的考勤记录，无返回false]

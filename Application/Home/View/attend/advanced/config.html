@@ -74,6 +74,10 @@
                 </table>
                 <table class="ac-days-table">
                 </table>
+                <hr>
+                <div>
+                    <button id="save-weekday" class="btn btn-sm btn-primary">保存当前月份工作日</button>
+                </div>
             </div>
         </div>
     </div>
@@ -95,9 +99,11 @@
         </div>
     </div>
 </div>
+
 <script>
     $(function(){
         createDaysTable()
+        //月份修改
         $(".month-control").on("click",function(){
             var theDate=new Date($(".the-date h3").text()+"-1")
             var nowDate=new Date();
@@ -111,6 +117,41 @@
                 createDaysTable(nowDate.getFullYear(),(nowDate.getMonth()+1))
             }
         })
+        //修改节假日事件
+        $(".panel-body").on("click",".btn-group .dropdown-menu li a",function(){
+            // console.log($(this).data("daytype"))
+            var text=$(this).text()
+            var theDay=$(this).parents(".dropdown-menu").prev()
+            theDay.find(".day-text").text(text);
+
+            if($(this).data("daytype")=="weekday"){
+                theDay.removeClass("holiday btn-danger")
+                theDay.addClass("weekday btn-success")
+            }else{
+                theDay.removeClass("weekday btn-success")
+                theDay.addClass("holiday btn-danger")
+            }
+        })
+        //保存工作日
+        $("#save-weekday").on("click",function(){
+            var weekdays=$(".weekday")
+            dates=$(".the-date h3").text().split("-")
+            weekday=""
+            weekdays.each(function(){
+                weekday+=$(this).parents("td").find(".this-day-number").text()+","
+            })
+            $.ajax({
+                url:"{:U('setWeekday')}",
+                type:"post",
+                dataType:"json",
+                data:{year:dates[0],month:dates[1],weekday:weekday},
+                success:function(data){
+                    alert(data.msg)
+                    // console.log(data)
+                }
+            })
+        })
+
     })
     //创建月历表格
     function createDaysTable(){
@@ -124,9 +165,9 @@
         }
         // getWeekday(year,month);
         var workArray=""
-        var works=getWeekday(year,month)
-        if(works!=null){
-            workArray=$.trim(works).split(",")
+        var weekday=getWeekday(year,month)
+        if(weekday!=null){
+            workArray=$.trim(weekday).split(",")
         }
        
         $(".the-date h3").text(year+"-"+month)
@@ -159,11 +200,10 @@
                     var dateDate=new Date(dateDay);
 
                     if(function(workArray,dateDate,sNowDay){if(workArray==""){if($.inArray(dateDate.getDay(),[0,6])>=0){return false;}else{return true;}}else{if($.inArray(sNowDay.toString(),workArray)>=0){return true;}else{return false;}}}(workArray,dateDate,sNowDay)==false){
-                        butStr+='<span class="attend-label label btn-block label-warning"><span class="">节假日</span></span>';
+                        butStr+='<div class="btn-group"><button data-toggle="dropdown" ria-haspopup="true" aria-expanded="false" class="dropdown-toggle attend-label btn btn-sm btn-danger holiday"><span class="day-text">节假日</span><span class="ace-icon fa fa-caret-down icon-on-right"></span></button><ul class="dropdown-menu"><li><a href="#" data-daytype="weekday">工作日</a></li><li><a href="#" data-daytype="holiday">节假日</a></li></ul></div>';
                     }else{
-                        butStr+='<span class="attend-label label btn-block label-success"><span class="">工作日</span></span>';
+                        butStr+='<div class="btn-group"><button  data-toggle="dropdown" ria-haspopup="true" aria-expanded="false" class="dropdown-toggle attend-label btn btn-sm btn-success weekday"><span class="day-text">工作日</span><span class="ace-icon fa fa-caret-down icon-on-right"></span></button><ul class="dropdown-menu"><li><a href="javascript:void(0)" data-daytype="weekday">工作日</a></li><li><a href="javascript:void(0)" data-daytype="holiday">节假日</a></li></ul></div>';
                     }
-
                     var modal=""
                     if(butStr!=""){
                         modal='data-toggle="modal" data-target="#applyModal"'

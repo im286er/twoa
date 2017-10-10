@@ -1156,6 +1156,13 @@ class AttendController extends AmongController {
 		$return=array("html"=>$this->fetch("attend/advanced/config"));
 		return $return;
 	}
+	/**
+	 * Undocumented function 获取工作日
+	 *
+	 * @param integer $arecord_year
+	 * @param integer $arecord_month
+	 * @return void
+	 */
 	function getWeekday($arecord_year=0,$arecord_month=0){
 		if($arecord_year==0){
 			$year=I("post.year");
@@ -1171,6 +1178,28 @@ class AttendController extends AmongController {
 			$this->ajaxReturn(array("monthDate"=>$monthDate));
 		}else{
 			return $monthDate;
+		}
+	}
+	function setWeekday($arecord_year=0,$arecord_month=0,$weekday){
+		if($arecord_year==0){
+			$year=I("post.year");
+			$month=I("post.month");
+			$weekday=I("post.weekday");
+		}else{
+			$year=$arecord_year;
+			$month=$arecord_month;
+			$weekday=$arecord_month;
+		}
+		$result=$this->arecord->setWeekday($year,$month,$weekday);
+		if($result>0){
+			$return=array("status"=>1,"msg"=>"保存成功");
+		}else{
+			$return=array("status"=>0,"msg"=>"保存失败");
+		}
+		if($arecord_year==0){
+			$this->ajaxReturn($return);
+		}else{
+			return $return;
 		}
 	}
 	/*高级管理结束*/
