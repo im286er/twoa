@@ -1,0 +1,30 @@
+<volist name="userArray" id="user">
+    <tr class="user-code" data-usercode="{$user.user_code}">
+        <td class="">{$user.user_name}</td>
+        <td>
+            {$user.user_company}
+        </td>
+        <td class="hidden-480">
+            {$user.user_department}
+        </td>
+        <td class="hidden-480">
+            {$user.user_group}
+        </td>
+        <td class="hidden-480">
+            <input type="text" class="auser-info" name="auser_eachday" placeholder="每天工时" value="{$user.auser_eachday}">
+        </td>
+        <td>
+            <input type="text" class="auser-info" name="auser_worktime" placeholder="累积工时" value="{$user.auser_worktime}">
+        </td>
+        <td class="hidden-480">
+            <input type="text" class="auser-info" name="auser_annual" placeholder="年假" value="{$user.auser_annual}">
+        </td>
+        <td class="hidden-480">
+            <div class="hidden-sm hidden-xs btn-group" data-code="{$user.auser_annual}">
+                <button class="btn btn-xs btn-info user-edit">
+                    <i class="ace-icon fa fa-pencil bigger-120"></i>
+                </button>
+            </div>
+        </td>
+    </tr>
+</volist>

@@ -165,36 +165,44 @@
                         <tr>
                             <th>
                                 <i class="ace-icon fa fa-calendar-check-o"></i>
-                                申请类型
+                                员工姓名
                             </th>
-                            <th class="hidden-480">
+                            <th>
                                 <i class="ace-icon fa fa-clock-o"></i>
-                                提交时间
+                                隶属公司
                             </th>
                             <th >
                                 <i class="ace-icon fa fa-clock-o"></i>
-                                计划日期
+                                隶属部门
+                            </th>
+                            <th >
+                                <i class="ace-icon fa fa-clock-o"></i>
+                                隶属小组
                             </th>
                             <th class="hidden-480" >
                                 <i class="ace-icon fa fa-map-marker"></i>
-                                天数/小时
+                                每天工时
                             </th>
                             <th class="hidden-480">
                                 <i class="ace-icon fa fa-map-marker"></i>
-                                申请理由
+                                累积工时
                             </th>
-                            <th>
+                            <th class="hidden-480">
                                 <i class="ace-icon fa fa-map-marker"></i>
-                                审批状态
+                                年假天数
+                            </th>
+                            <th class="hidden-480">
+                                <i class="ace-icon fa fa-map-marker"></i>
+                                操作
                             </th>
                         </tr>
                     </thead>
 
-                    <tbody class="html-box" id="apply-html-div">
-                        {$applyListHtml.html}
+                    <tbody class="html-box" id="user-html-div">
+                        {$userListHtml.html}
                     </tbody>
                 </table>
-                <div id="apply-page-div" class="pages-list" data-con="getApplyList" data-html="#apply-html-div" data-page="#apply-page-div">{$applyListHtml.pages}</div>
+                <div id="user-page-div" class="pages-list" data-con="advUserApply" data-html="#user-html-div" data-page="#user-page-div">{$userListHtml.pages}</div>
             </div>
             <div id="config-list" class="tab-pane">
                 {$configListHtml.html}
@@ -270,7 +278,7 @@
         </div>
     </div>
 </div>
-
+<!-- 考勤弹窗 -->
 <div id="attendModal" class="modal fade" tabindex="-1" style="text-align: center;">
     <div class="modal-dialog" >
         <div class="modal-content" >
@@ -287,6 +295,7 @@
         </div><!-- /.modal-content -->
     </div><!-- /.modal-dialog -->
 </div>
+<!-- 图片弹窗 -->
 <div id="imgModal" class="modal fade" tabindex="-1" style="text-align: center;">
     <div class="modal-dialog" role="archiveModal">
         <div class="modal-content" >
@@ -308,6 +317,28 @@
         </div><!-- /.modal-content -->
     </div><!-- /.modal-dialog -->
 </div>
+<!-- 人员信息修改弹窗 -->
+<div id="userModal" class="modal fade" tabindex="-1" style="text-align: center;">
+        <div class="modal-dialog" role="archiveModal">
+            <div class="modal-content" >
+    
+                <div class="modal-body">
+                    <div class="row">
+                        <div class="col-sm-12 pdf">
+    
+                        </div>
+                    </div>
+                </div>
+    
+                <div class="modal-footer">
+                    <button class="btn btn-sm btn-danger pull-right" data-dismiss="modal">
+                        <i class="ace-icon fa fa-times"></i>
+                        Close
+                    </button>
+                </div>
+            </div><!-- /.modal-content -->
+        </div><!-- /.modal-dialog -->
+    </div>
 <div class="pdf1"></div>
 <script src="__PUBLIC__/assets/js/src/elements.aside.js"></script>
 <script src="__PUBLIC__/components/chosen/chosen.jquery.js"></script>
@@ -412,6 +443,30 @@
                }
            })
        })
+       /*修改制定用户的工时、累积工时、年假*/
+        $(".tab-content").on("click",".user-edit",function(){
+            var datas={}
+            datas["data"]={}
+            datas["data"]["auser_code"]= $(this).parents(".user-code").data("usercode");
+
+            $(this).parents(".user-code").find(".auser-info").each(function(){
+                var name=$(this).attr("name")
+                var val=$(this).val()
+                if(val==""){
+                    val=0
+                }
+                datas["data"][name]=val
+            })
+            $.ajax({
+                url:"{:U('setAuser')}",
+                data:datas,
+                type:"post",
+                dataType:"json",
+                success:function(data){
+                    alert(data.msg)
+                }
+            })
+        })
        
     })
 </script>

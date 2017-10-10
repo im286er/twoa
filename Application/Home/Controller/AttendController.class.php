@@ -49,8 +49,9 @@ class AttendController extends AmongController {
                 break;
             case "advanced":
             	$this->assign("checkinListHtml",$this->advSearchCheckin(array("acheckin_state"=>array("eq","0"))));
-            	$this->assign("applyListHtml",$this->advSearchApply(array("aapply_state"=>array("neq","1"))));
-				
+				$this->assign("applyListHtml",$this->advSearchApply(array("aapply_state"=>array("neq","1"))));
+				$this->assign("userListHtml",$this->advUserApply(array()));
+			
 				$this->assign("configListHtml",$this->advshowConfig());
 				break;
 
@@ -1113,7 +1114,6 @@ class AttendController extends AmongController {
 	function advSearchApply($condition=array()){
 		$p=1;
 		if(empty($condition)){
-			
 			$p=$_POST["p"];
 			if(I("data")["time"]!=""){
 				$condition["aapply_schedule"]=array("EXP",">=date_sub(now(),interval ".I("data")["time"].")");
@@ -1121,7 +1121,6 @@ class AttendController extends AmongController {
 		}else{
 			$condition["aapply_schedule"]=array("EXP",">=date_sub(now(),interval +1 year)");
 			$_POST["p"]=$p;
-			
 		}
 
 		$limit=10;
@@ -1152,6 +1151,32 @@ class AttendController extends AmongController {
 		$this->ajaxReturn($return);
 	}
 
+	function advUserApply($condition=null){
+		$p=1;
+		if($condition===null){
+			$p=$_POST["p"];
+		}else{
+			$_POST["p"]=$p;
+		}
+
+		$limit=10;
+		$count=$this->user->where($condition)->count();
+		if($p>ceil($count/$limit)){
+			$_POST["p"]=1;
+		}
+
+		$Page=new \Think\Page($count,$limit);
+		$pageShow=$Page->show();
+
+		$userArray=$this->auser->searchAuser($condition,$Page->firstRow,$Page->listRows);
+		$this->assign("userArray",$userArray);
+
+		$return=array("html"=>$this->fetch("attend/advanced/user_list"),"pages"=>$pageShow);
+		if($condition===null){
+			$this->ajaxReturn($return);
+		}
+		return $return;
+	}
 	function advshowConfig(){
 		$return=array("html"=>$this->fetch("attend/advanced/config"));
 		return $return;
@@ -1197,6 +1222,27 @@ class AttendController extends AmongController {
 			$return=array("status"=>0,"msg"=>"保存失败");
 		}
 		if($arecord_year==0){
+			$this->ajaxReturn($return);
+		}else{
+			return $return;
+		}
+	}
+	/*考勤用户信息修改 工时、累积工时、年假*/
+	function setAuser($udata=0){
+		if($udata==0){
+			$userData=I("post.data");
+		}else{
+			$userData=$udata;
+		}
+		$result=$this->auser->setAuser($userData);
+		if($result>0){
+			$return=array("status"=>1,"msg"=>"修改成功");
+		}else{
+			$return=array("status"=>0,"msg"=>"修改失败");
+		}
+
+		if($udata==0){
+
 			$this->ajaxReturn($return);
 		}else{
 			return $return;
