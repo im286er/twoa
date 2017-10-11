@@ -55,7 +55,8 @@ class AttendController extends AmongController {
 				$this->assign("attendTypeArray",$this->config->search_all(array("config_class"=>"aapply_type")));
             	$this->assign("checkinListHtml",$this->advSearchCheckin(array("acheckin_state"=>array("eq","0"))));
 				$this->assign("applyListHtml",$this->advSearchApply(array("aapply_state"=>array("neq","1"))));
-				$this->assign("userListHtml",$this->advUserApply(array()));
+				$this->assign("userListHtml",$this->advSearchUser(array()));
+				$this->assign("recordListHtml",$this->advSearchRecord(array()));
 			
 				$this->assign("configListHtml",$this->advshowConfig());
 				break;
@@ -1147,6 +1148,36 @@ class AttendController extends AmongController {
 		}
 		return $return;
 	}
+
+	function advSearchRecord($cond=null){
+		$condition=array("arecord_code"=>array("neq","0"));
+		$state=1;
+		$p=1;
+		if($cond===null){
+			$p=$_POST["p"];
+		}else{
+			$_POST["p"]=$p;
+		}
+
+		$limit=10;
+		$count=$this->arecord->where($condition)->count();
+		if($p>ceil($count/$limit)){
+			$_POST["p"]=1;
+		}
+
+		$Page=new \Think\Page($count,$limit);
+		$pageShow=$Page->show();
+
+		$recordArray=$this->arecord->having("arecord_state='{$state}'")->searchRecord($condition,$Page->firstRow,$Page->listRows);
+		$this->assign("recordArray",$recordArray);
+
+		$return=array("html"=>$this->fetch("attend/advanced/record_list"),"pages"=>$pageShow);
+		if($cond===null){
+			$this->ajaxReturn($return);
+		}
+		return $return;
+	}
+
 	function getAdvInfo(){
 		$infoData=$this->acheckin->findCheckin(I("id"),array(),true);
 		// echo $this->acheckin->getLastSql();
@@ -1156,7 +1187,7 @@ class AttendController extends AmongController {
 		$this->ajaxReturn($return);
 	}
 
-	function advUserApply($condition=null){
+	function advSearchUser($condition=null){
 		$p=1;
 		if($condition===null){
 			$p=$_POST["p"];

@@ -1,22 +1,44 @@
-<volist name="aapplyArray" id="aapply">
-    <tr class="apply-id" data-applyid="{$aapply.aapply_id}">
-        <td class="">{$aapply.aapply_username}</td>
-        <td class="">{$aapply.aapply_types}</td>
+<volist name="recordArray" id="record">
+    <tr class="arecord-id" data-applyid="{$record.arecord_id}">
+        <td class="">{$record.arecord_username}</td>
+        <td class="">{$record.arecord_year}</td>
         <td>
-            {$aapply.aapply_addtime}
+            {$record.arecord_month}
+        </td>
+        <td class="hidden-480" >
+            <i class="ace-icon fa fa-calendar bigger-120 orange show-calendar" style="cursor:pointer;" data-json='{$record.arecord_json}'></i>
         </td>
         <td class="hidden-480">
-            {$aapply.aapply_schedule}
+            {$record.arecord_count}
         </td>
         <td class="hidden-480">
-            {$aapply.aapply_days}/{$aapply.aapply_hours}
-        </td>
-        <td class="hidden-480">
-            {$aapply.aapply_reason}
+            <input type="text" class="auser-info" name="auser_eachday" placeholder="后补次数" value="{$record.arecord_remedy}">
+            <button class="btn btn-xs btn-info user-edit">
+                <i class="ace-icon fa fa-floppy-o bigger-120"></i>
+            </button>
         </td>
         <td>
-            {$state[$aapply["aapply_state"]]}
+            <switch name="record.arecord_state">
+                <case value="0" >
+                    <span class="label label-lg label-warning">未激活</span>
+                </case>
+                <case value="1" >
+                    <span class="label label-lg label-success">在职</span>
+                </case>
+                <case value="2" >
+                    <span class="label label-lg label-danger">离职</span>
+                </case>
+                <default />
+            </switch>
         </td>
     </tr>
 </volist>
-<i class="ace-icon fa fa-calendar-check-o"></i>
+
+<script>
+    $(function(){
+        $(".show-calendar").on("click",function(){
+            var json=$(this).data("json");
+            console.log(typeof(json))
+        })
+    })
+</script>

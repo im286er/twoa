@@ -12,6 +12,10 @@ class Attend_recordModel extends AmongModel{
 	protected $trueTableName = 'oa_attend_record'; 
 	protected $fields = array('arecord_id', 'arecord_code','arecord_year','arecord_month','arecord_json','arecord_count','arecord_remedy');
 
+	function searchRecord($condition,$start,$limit){
+		if(!$this->has_auth("select")) return false;
+		return $this->table("oa_attend_record r")->field(array_merge($this->fields,array("u.user_name arecord_username","u.user_state arecord_state")))->join("left join oa_user u on u.user_code=r.arecord_code")->where($condition)->limit($start.','.$limit)->select();
+	}
 	/**
 	 * [getWeekday 获取工作日]
 	 * @param  [type] $arecord_year  [年]
