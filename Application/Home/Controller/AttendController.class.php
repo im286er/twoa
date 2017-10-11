@@ -47,7 +47,12 @@ class AttendController extends AmongController {
 				$this->assign("applicantArray",$this->aapply->getApplicant($this->selfUser["user_code"]));
 				$this->assign("attendtypeArray",$this->config->search_all(array("config_class"=>"aapply_type")));
                 break;
-            case "advanced":
+			case "advanced":
+				$this->assign("companyArray",$this->baseInfo->company()->search_company());
+				$this->assign("departmentArray",$this->baseInfo->department()->search_department());
+				$this->assign("groupArray",$this->baseInfo->group()->search_group());
+				
+				$this->assign("attendTypeArray",$this->config->search_all(array("config_class"=>"aapply_type")));
             	$this->assign("checkinListHtml",$this->advSearchCheckin(array("acheckin_state"=>array("eq","0"))));
 				$this->assign("applyListHtml",$this->advSearchApply(array("aapply_state"=>array("neq","1"))));
 				$this->assign("userListHtml",$this->advUserApply(array()));
@@ -1242,7 +1247,6 @@ class AttendController extends AmongController {
 		}
 
 		if($udata==0){
-
 			$this->ajaxReturn($return);
 		}else{
 			return $return;

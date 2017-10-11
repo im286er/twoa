@@ -90,6 +90,10 @@
                     <thead class="thin-border-bottom">
                         <tr>
                             <th>
+                                <i class="ace-icon fa fa-user"></i>
+                                申请人
+                            </th>
+                            <th>
                                 <i class="ace-icon fa fa-calendar-check-o"></i>
                                 申请类型
                             </th>
@@ -120,31 +124,35 @@
                         {$applyListHtml.html}
                     </tbody>
                 </table>
-                <div id="apply-page-div" class="pages-list" data-con="getApplyList" data-html="#apply-html-div" data-page="#apply-page-div">{$applyListHtml.pages}</div>
+                <div id="apply-page-div" class="pages-list" data-con="advSearchApply" data-html="#apply-html-div" data-page="#apply-page-div">{$applyListHtml.pages}</div>
             </div>
             <div id="record-list" class="tab-pane">
                 <table class="table table-striped table-bordered table-hover">
                     <thead class="thin-border-bottom">
                         <tr>
                             <th>
+                                <i class="ace-icon fa fa-user"></i>
+                                申请人
+                            </th>
+                            <th>
                                 <i class="ace-icon fa fa-calendar-check-o"></i>
-                                申请类型
+                                年份
                             </th>
                             <th class="hidden-480">
                                 <i class="ace-icon fa fa-clock-o"></i>
-                                提交时间
+                                月份
                             </th>
                             <th >
-                                <i class="ace-icon fa fa-clock-o"></i>
-                                计划日期
+                                <i class="ace-icon fa fa-calendar-check-o"></i>
+                                考勤月历
                             </th>
                             <th class="hidden-480" >
                                 <i class="ace-icon fa fa-map-marker"></i>
-                                天数/小时
+                                本月统计
                             </th>
                             <th class="hidden-480">
                                 <i class="ace-icon fa fa-map-marker"></i>
-                                申请理由
+                                后补次数
                             </th>
                             <th>
                                 <i class="ace-icon fa fa-map-marker"></i>
@@ -231,16 +239,123 @@
                                 </div>
                             </div>
                             <div class="search-box checkin-condition">
-                                打卡的条件
+                                <div class="form-group">
+                                    <label >打卡方式</label>
+                                    <select class="form-control">
+                                        <option value="">全部日期</option>
+                                        <option value="1">定位</option>
+                                        <option value="2">打卡</option>
+                                    </select>
+                                </div>
+                                <div class="form-group">
+                                    <label >打卡类型</label>
+                                    <select class="form-control">
+                                        <option value="">全部类型</option>
+                                        <volist name="attendTypeArray" id="attentype">
+                                            <option value="{$attentype.config_key}">{$attentype.config_value}</option>
+                                        </volist>
+                                    </select>
+                                </div>
+                                <div class="form-group">
+                                    <label >日期</label>
+                                    <select class="form-control apply-info" name="time">
+                                        <option value="">全部日期</option>
+                                        <option value="1 DAY">当天</option>
+                                        <option value="+1 WEEK">一周</option>
+                                        <option value="+1 MONTH">一个月</option>
+                                    </select>
+                                </div>
+                                <div class="form-group">
+                                    <label >打卡状态</label>
+                                    <select class="form-control">
+                                        <option value="">全部状态</option>
+                                        <option value="0">未生效</option>
+                                        <option value="1">已生效</option>
+                                    </select>
+                                </div>
                             </div>
                             <div class="search-box apply-condition hide">
-                                申请的条件
+                                <div class="form-group">
+                                    <label >申请类型</label>
+                                    <select class="form-control">
+                                        <option value="">全部类型</option>
+                                        <volist name="attendTypeArray" id="attentype">
+                                            <option value="{$attentype.config_key}">{$attentype.config_value}</option>
+                                        </volist>
+                                    </select>
+                                </div>
+                                <div class="form-group">
+                                    <label >申请时间</label>
+                                    <select class="form-control apply-info" name="time">
+                                        <option value="">全部日期</option>
+                                        <option value="1 DAY">当天</option>
+                                        <option value="+1 WEEK">一周</option>
+                                        <option value="+1 MONTH">一个月</option>
+                                    </select>
+                                </div>
+                                <div class="form-group">
+                                    <label >计划日期</label>
+                                    <select class="form-control apply-info" name="time">
+                                        <option value="">全部日期</option>
+                                        <option value="1 DAY">当天</option>
+                                        <option value="+1 WEEK">一周</option>
+                                        <option value="+1 MONTH">一个月</option>
+                                    </select>
+                                </div>
+                                <div class="form-group">
+                                    <label >审批状态</label>
+                                    <select class="form-control apply-info" name="aapply_state">
+                                        <option value="">全部状态</option>
+                                        <option value="0">未审批</option>
+                                        <option value="1">审批</option>
+                                        <option value="2">拒绝</option>
+                                        <option value="3">审核中</option>
+                                        <option value="4">删除</option>
+                                    </select>
+                                </div>
                             </div>
                             <div class="search-box record-condition hide">
-                                记录的条件
+                                <div class="form-group">
+                                    <label >年份</label>
+                                    <input type="text" class="form-control" placeholder="年份">
+                                </div>
+                                <div class="form-group">
+                                    <label >月份</label>
+                                    <select class="form-control apply-info" name="aapply_state">
+                                        <for start="1" end="13">
+                                            <option value="{$i}">{$i}</option>
+                                        </for>
+                                    </select>
+                                </div>
                             </div>
                             <div class="search-box user-condition hide">
-                                用户的条件
+                                <div class="form-group">
+                                    <label >公司</label>
+                                    <select class="form-control">
+                                        <option value="">全部公司</option>
+                                        <volist name="companyArray" id="company">
+                                            <option value="{$company.company_id}">{$company.company_name}</option>
+                                        </volist>
+                                    </select>
+                                </div>
+                                <div class="form-group">
+                                    <label >部门</label>
+                                    <select class="form-control">
+                                        <option value="">全部部门</option>
+                                        <volist name="departmentArray" id="department">
+                                            <option value="{$department.department_id}">{$department.department_name}</option>
+                                        </volist>
+                                    </select>
+                                </div>
+                                <div class="form-group">
+                                    <label >小组</label>
+                                    <select class="form-control">
+                                        <option value="">全部小组</option>
+                                        <volist name="groupArray" id="group">
+                                            <option value="{$group.group_id}">{$group.group_name}</option>
+                                        </volist>
+                                    </select>
+                                </div>
                             </div>
                             <!-- <div class="search-condition cond-two">
                                 <div class="form-group">
