@@ -3,6 +3,28 @@
 <style>
     /* #apply-list .label{cursor:pointer;} */
     .img-view{cursor:pointer;}
+    td {
+    border-color: #BCD4E5;
+    text-align: center;
+    border-style: solid;
+    border-width: 1px;
+    }
+    .attend-type-0{background:#698281;}
+    .attend-type-1{background:#AC725E;}
+    .attend-type-2{background:#FA573C;}
+    .attend-type-3{background:#42D692;}
+    .attend-type-4{background:#B3DC6C;}
+    .attend-type-5{background:#FFAD46;}
+    .attend-type-6{background:#D06B64;}
+    .attend-type-7{background:#9FC6E7;}
+    .attend-type-8{background:#4986E7;}
+    .attend-type-9{background:#CABDBF;}
+    .attend-type-10{background:#CCA6AC;}
+    .attend-type-11{background:#F691B2;}
+    .attend-type-12{background:#A47AE2;}
+    .attend-type-13{background:#92E1C0;}
+    .attend-type-14{background:#555555;}
+    .attend-type-btn{cursor:pointer;}
 </style>
 
 <div class="page-header">
@@ -252,7 +274,7 @@
                                     <select class="form-control">
                                         <option value="">全部类型</option>
                                         <volist name="attendTypeArray" id="attentype">
-                                            <option value="{$attentype.config_key}">{$attentype.config_value}</option>
+                                            <option class="attype" value="{$attentype.config_key}">{$attentype.config_value}</option>
                                         </volist>
                                     </select>
                                 </div>
@@ -454,26 +476,51 @@
 </div>
 <!-- 月历弹窗 -->
 <div id="recordModal" class="modal fade" tabindex="-1" style="text-align: center;">
-        <div class="modal-dialog" role="archiveModal">
-            <div class="modal-content" >
-    
-                <div class="modal-body">
-                    <div class="row">
-                        <div class="col-sm-12 pdf">
-    
-                        </div>
-                    </div>
+    <div class="modal-dialog" role="archiveModal">
+        <div class="modal-content" >
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title" id="recordModalTitle">Modal title</h4>
+            </div>
+            <div class="modal-body">
+            </div>
+
+            <div class="modal-footer">
+                <button class="btn btn-sm btn-danger pull-right" data-dismiss="modal">
+                    <i class="ace-icon fa fa-times"></i>
+                    Close
+                </button>
+            </div>
+        </div><!-- /.modal-content -->
+    </div><!-- /.modal-dialog -->
+</div>
+<!-- 修改考勤时间 -->
+<div id="editTimeModal" class="modal fade" tabindex="-1" style="text-align: center;">
+    <div class="modal-dialog modal-sm" role="archiveModal">
+        <div class="modal-content" >
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title" id="editTimeTitle">Modal title</h4>
+            </div>
+            <div class="modal-body">
+                <div class="form-group">
+                    <label for="recipient-name" class="control-label">申请类型</label>
+                    <input type="text" class="form-control" name="worktime" placeholder="工时" value="0">
                 </div>
-    
-                <div class="modal-footer">
-                    <button class="btn btn-sm btn-danger pull-right" data-dismiss="modal">
-                        <i class="ace-icon fa fa-times"></i>
-                        Close
-                    </button>
+                <div class="form-group">
+                    <label for="message-text" class="control-label">申请类型</label>
+                    <select class="form-control noon-type">
+                        <option value="0">无</option>
+                        <volist name="attendTypeArray" id="attentype">
+                            <option value="{$attentype.config_key}">{$attentype.config_value}</option>
+                        </volist>
+                    </select>
                 </div>
-            </div><!-- /.modal-content -->
-        </div><!-- /.modal-dialog -->
-    </div>
+                <button class="btn btn-info btn-block">修改工时和类型</button>
+            </div>
+        </div><!-- /.modal-content -->
+    </div><!-- /.modal-dialog -->
+</div>
 <div class="pdf1"></div>
 <script src="__PUBLIC__/assets/js/src/elements.aside.js"></script>
 <script src="__PUBLIC__/components/chosen/chosen.jquery.js"></script>

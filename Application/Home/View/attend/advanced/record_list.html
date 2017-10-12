@@ -1,12 +1,11 @@
+
 <volist name="recordArray" id="record">
     <tr class="arecord-id" data-applyid="{$record.arecord_id}">
-        <td class="">{$record.arecord_username}</td>
-        <td class="">{$record.arecord_year}</td>
-        <td>
-            {$record.arecord_month}
-        </td>
+        <td class="arecord_username">{$record.arecord_username}</td>
+        <td class="arecord_year">{$record.arecord_year}</td>
+        <td class="arecord_month">{$record.arecord_month}</td>
         <td class="hidden-480" >
-            <i class="ace-icon fa fa-calendar bigger-120 orange show-calendar" style="cursor:pointer;" data-json='{$record.arecord_json}'></i>
+            <i class="ace-icon fa fa-calendar bigger-120 orange show-calendar" data-toggle="modal" data-target="#recordModal" style="cursor:pointer;" data-json='{$record.arecord_json}'></i>
         </td>
         <td class="hidden-480">
             {$record.arecord_count}
@@ -37,8 +36,48 @@
 <script>
     $(function(){
         $(".show-calendar").on("click",function(){
-            var json=$(this).data("json");
-            console.log(typeof(json))
+            var table='<table style="width: 100%;table-layout: fixed;border-collapse: collapse;border-spacing: 0;"><tr>'
+            var json=$(this).data('json');
+            var attype=$(".attype")
+            for (day in json) {
+                var typeStr=''
+                for(noon in json[day]){
+                    var noont=json[day][noon]["type"]
+                    var noonw=json[day][noon]["worktime"]
+                    var exattend="无"
+                    if(noon=="forenoon"){
+                        var noonName="上午"
+                    }else{
+                        var noonName="下午"
+                    }
+                    if(noont>0){
+                        exattend=attype.eq(noont-1).text()
+                    }else{
+                        noont=0
+                        noonw=0
+                    }
+                    typeStr+='<span data-toggle="modal" data-target="#editTimeModal" class="label label-lg attend-type-btn attend-type-'+noont+' btn-block">'+noonName+','+noonw+','+exattend+'</span>'
+                }
+
+                table+='<td><div style="text-align:right;">'+day+'</div>'+typeStr+'</td>'
+                if((day%5)==0){
+                    table+='</tr><tr>'
+                }
+            }
+            table+='</tr></table>'
+            // console.log(table)
+            $("#recordModal .modal-body").html(table)
+            var arecordBox=$(this).parents(".arecord-id");
+            var html='<span>'+arecordBox.find(".arecord_username").text()+'</span>'+arecordBox.find(".arecord_year").text()+arecordBox.find(".arecord_month").text()
+            $("#recordModalTitle").html(html)
+        })
+        $("#recordModal").on("click",".attend-type-btn",function(){
+            var tempStr=$(this).text()
+            $("#editTimeTitle").text(tempStr)
+            
+            var aStr=tempStr.split(",")
+            $("#editTimeModal input[name='worktime']").val(aStr[1])
+            $("#editTimeModal .noon-type").find("option:contains('"+aStr[2]+"')").attr("selected",true)
         })
     })
 </script>
