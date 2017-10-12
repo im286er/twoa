@@ -40,25 +40,30 @@ class AttendController extends AmongController {
 			$html=I("html");
 		}
         switch ($html) {
+			//申请管理栏需要的初始化内容
 			case "applycontrol":
-                $this->assign("checkinListHtml",$this->getCheckinList($this->selfUser["user_code"]));
-				$this->assign("applyListHtml",$this->getApplyList($this->selfUser["user_code"]));
-				$this->assign("approveListHtml",$this->getApproveList($this->selfUser["user_code"]));
-				$this->assign("applicantArray",$this->aapply->getApplicant($this->selfUser["user_code"]));
-				$this->assign("attendtypeArray",$this->config->search_all(array("config_class"=>"aapply_type")));
-                break;
+                $this->assign("checkinListHtml",$this->getCheckinList($this->selfUser["user_code"]));//个人打卡记录列表
+				$this->assign("applyListHtml",$this->getApplyList($this->selfUser["user_code"]));//个人申请列表
+				$this->assign("approveListHtml",$this->getApproveList($this->selfUser["user_code"]));//个人审批列表
+				$this->assign("applicantArray",$this->aapply->getApplicant($this->selfUser["user_code"]));//申请人列表
+				$this->assign("attendtypeArray",$this->config->search_all(array("config_class"=>"aapply_type")));//考勤类型
+				break;
+			//高级管理栏需要的厨师内容
 			case "advanced":
-				$this->assign("companyArray",$this->baseInfo->company()->search_company());
-				$this->assign("departmentArray",$this->baseInfo->department()->search_department());
-				$this->assign("groupArray",$this->baseInfo->group()->search_group());
-				
-				$this->assign("attendTypeArray",$this->config->search_all(array("config_class"=>"aapply_type")));
-            	$this->assign("checkinListHtml",$this->advSearchCheckin(array("acheckin_state"=>array("eq","0"))));
-				$this->assign("applyListHtml",$this->advSearchApply(array("aapply_state"=>array("neq","1"))));
-				$this->assign("userListHtml",$this->advSearchUser(array()));
-				$this->assign("recordListHtml",$this->advSearchRecord(array()));
+
+				$this->assign("companyArray",$this->baseInfo->company()->search_company());//公司
+				$this->assign("departmentArray",$this->baseInfo->department()->search_department());//部门
+				$this->assign("groupArray",$this->baseInfo->group()->search_group());//小组
+				$this->assign("checkinListHtml",$this->advSearchCheckin(array("acheckin_checkintime"=>array("EXP",">=date_sub(now(),interval +1 MONTH)"),"acheckin_state"=>array("eq","0"))));//打卡列表
+				$this->assign("attendTypeArray",$this->config->search_all(array("config_class"=>"aapply_type")));//考勤类型列表
+            	
+				$this->assign("applyListHtml",$this->advSearchApply(array("aapply_state"=>array("neq","1"))));//申请列表
+				$this->assign("userListHtml",$this->advSearchUser(array()));//员工列表
+				$this->assign("recordListHtml",$this->advSearchRecord(array()));//考勤记录列表
 			
-				$this->assign("configListHtml",$this->advshowConfig());
+				$this->assign("configListHtml",$this->advshowConfig());//考勤配置
+
+				$this->assign("userList",$this->searchNameCode(array()));
 				break;
 
 		}
@@ -1083,20 +1088,20 @@ class AttendController extends AmongController {
 	 * @param    array            $condition [description]
 	 * @return   [type]                      [description]
 	 */
-	function advSearchCheckin($condition=array()){
+	function advSearchCheckin($cond=null){
+		// print_r($_POST);
 		$p=1;
-		if(empty($condition)){
-			
-			$p=$_POST["p"];
-			if(I("data")["time"]!=""){
-				$condition["acheckin_checkintime"]=array("EXP",">=date_sub(now(),interval ".I("data")["time"].")");
+		if($cond==null){
+			$p=I("post.p");
+			$condition=I("post.data");
+			if(isset($condition["acheckin_checkintime"])){
+				$condition["acheckin_checkintime"]=array("EXP",">=date_sub(now(),interval ".$condition["acheckin_checkintime"].")");
 			}
 		}else{
-			$condition["acheckin_checkintime"]=array("EXP",">=date_sub(now(),interval +1 year)");
+			$condition=$cond;
 			$_POST["p"]=$p;
-			
 		}
-
+		// print_r($condition);
 		$limit=10;
 		$count=$this->acheckin->where($condition)->count();
 		if($p>ceil($count/$limit)){
@@ -1110,7 +1115,7 @@ class AttendController extends AmongController {
 		$this->assign("checkinArray",$checkinArray);
 
 		$return=array("html"=>$this->fetch("attend/advanced/checkin_list"),"pages"=>$pageShow);
-		if(empty($condition)){
+		if($cond==null){
 			$this->ajaxReturn($return);
 		}
 		return $return;
@@ -1284,4 +1289,25 @@ class AttendController extends AmongController {
 		}
 	}
 	/*高级管理结束*/
+	function searchNameCode($cond=null){
+		
+		if($cond===null){
+
+			$condition=array("user_name"=>array("like","%".I("post.data")["name"]."%"));
+		}else{
+			$condition=$con;
+		}
+		$userList=$this->user->searchNameCode($condition,0,10);
+
+		$option="";
+		foreach ($userList as $nameCode) {
+			$option.="<option value='".$nameCode["user_code"]."'>".$nameCode["user_name"]."</option>";
+		}
+		$return=array("html"=>$option);
+		if($cond===null){
+			$this->ajaxReturn($return);
+		}else{
+			return $return;
+		}
+	}
 }

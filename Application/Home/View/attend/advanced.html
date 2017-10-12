@@ -237,6 +237,7 @@
             <div id="config-list" class="tab-pane">
                 {$configListHtml.html}
             </div>
+            <!-- 右栏筛选框 start-->
             <div id="right-menu" class="modal aside" data-body-scroll="false" data-offset="true" data-placement="right" data-fixed="true" data-backdrop="false" tabindex="-1">
                 <div class="modal-dialog">
                     <div class="modal-content">
@@ -250,28 +251,31 @@
                         </div>
             
                         <div class="modal-body">
+                            <!-- 通用 员工姓名筛选 -->
                             <div class="">
                                 <div class="form-group">
-                                    <select class="chosen-select apply-info" multiple name="aapply_code" data-placeholder="申请人">
-                                        <option value="">员工姓名</option>
-                                        <volist name="applicantArray" id="applicant">
+                                    <select class="chosen-select apply-info" multiple name="user_code" data-placeholder="员工">
+                                        <option value="">所有员工</option>
+                                        {$userList.html}
+                                        <!-- <volist name="applicantArray" id="applicant">
                                                 <option value="{$applicant.aapply_code}">{$applicant.aapply_codes}</option>
-                                        </volist>
+                                        </volist> -->
                                     </select>
                                 </div>
                             </div>
-                            <div class="search-box checkin-condition">
+                            <!-- 打卡记录筛选条件 -->
+                            <div class="search-box checkin-condition cond-active">
                                 <div class="form-group">
                                     <label >打卡方式</label>
-                                    <select class="form-control">
-                                        <option value="">全部日期</option>
+                                    <select class="form-control cond-info" name="acheckin_checkinway">
+                                        <option value="">全部方式</option>
                                         <option value="1">定位</option>
                                         <option value="2">打卡</option>
                                     </select>
                                 </div>
                                 <div class="form-group">
                                     <label >打卡类型</label>
-                                    <select class="form-control">
+                                    <select class="form-control cond-info" name="acheckin_type">
                                         <option value="">全部类型</option>
                                         <volist name="attendTypeArray" id="attentype">
                                             <option class="attype" value="{$attentype.config_key}">{$attentype.config_value}</option>
@@ -279,27 +283,28 @@
                                     </select>
                                 </div>
                                 <div class="form-group">
-                                    <label >日期</label>
-                                    <select class="form-control apply-info" name="time">
+                                    <label >打卡日期</label>
+                                    <select class="form-control cond-info" name="acheckin_checkintime">
                                         <option value="">全部日期</option>
                                         <option value="1 DAY">当天</option>
                                         <option value="+1 WEEK">一周</option>
-                                        <option value="+1 MONTH">一个月</option>
+                                        <option value="+1 MONTH" selected>一个月</option>
                                     </select>
                                 </div>
                                 <div class="form-group">
                                     <label >打卡状态</label>
-                                    <select class="form-control">
+                                    <select class="form-control cond-info" name="acheckin_state">
                                         <option value="">全部状态</option>
-                                        <option value="0">未生效</option>
+                                        <option value="0" selected>未生效</option>
                                         <option value="1">已生效</option>
                                     </select>
                                 </div>
                             </div>
+                            <!-- 申请记录筛选条件 -->
                             <div class="search-box apply-condition hide">
                                 <div class="form-group">
                                     <label >申请类型</label>
-                                    <select class="form-control">
+                                    <select class="form-control cond-info">
                                         <option value="">全部类型</option>
                                         <volist name="attendTypeArray" id="attentype">
                                             <option value="{$attentype.config_key}">{$attentype.config_value}</option>
@@ -308,25 +313,25 @@
                                 </div>
                                 <div class="form-group">
                                     <label >申请时间</label>
-                                    <select class="form-control apply-info" name="time">
-                                        <option value="">全部日期</option>
+                                    <select class="form-control cond-info" name="time">
+                                        <option value="">全部时间</option>
                                         <option value="1 DAY">当天</option>
                                         <option value="+1 WEEK">一周</option>
-                                        <option value="+1 MONTH">一个月</option>
+                                        <option value="+1 MONTH" selected>一个月</option>
                                     </select>
                                 </div>
                                 <div class="form-group">
                                     <label >计划日期</label>
-                                    <select class="form-control apply-info" name="time">
+                                    <select class="form-control cond-info" name="time">
                                         <option value="">全部日期</option>
                                         <option value="1 DAY">当天</option>
                                         <option value="+1 WEEK">一周</option>
-                                        <option value="+1 MONTH">一个月</option>
+                                        <option value="+1 MONTH" selected>一个月</option>
                                     </select>
                                 </div>
                                 <div class="form-group">
                                     <label >审批状态</label>
-                                    <select class="form-control apply-info" name="aapply_state">
+                                    <select class="form-control cond-info" name="aapply_state">
                                         <option value="">全部状态</option>
                                         <option value="0">未审批</option>
                                         <option value="1">审批</option>
@@ -336,21 +341,22 @@
                                     </select>
                                 </div>
                             </div>
+                            <!-- 考勤记录筛选条件 -->
                             <div class="search-box record-condition hide">
                                 <div class="form-group">
                                     <label >年份</label>
-                                    <input type="text" class="form-control" placeholder="年份">
+                                    <input type="text" class="form-control cond-info" placeholder="年份">
                                 </div>
                                 <div class="form-group">
                                     <label >月份</label>
-                                    <select class="form-control apply-info" name="aapply_state">
+                                    <select class="form-control cond-info" name="aapply_state">
                                         <for start="1" end="13">
                                             <option value="{$i}">{$i}</option>
                                         </for>
                                     </select>
                                 </div>
                                 <div class="form-group">
-                                    <select name="user_state" class="form-control apply-info">
+                                    <select name="user_state" class="form-control cond-info">
                                         <option value="">所有状态</option>
                                         <option value=1>在职</option>
                                         <option value=0>未激活</option>
@@ -358,10 +364,11 @@
                                     </select>
                                 </div>
                             </div>
+                            <!--员工信息筛选条件 -->
                             <div class="search-box user-condition hide">
                                 <div class="form-group">
                                     <label >公司</label>
-                                    <select class="form-control">
+                                    <select class="form-control cond-info">
                                         <option value="">全部公司</option>
                                         <volist name="companyArray" id="company">
                                             <option value="{$company.company_id}">{$company.company_name}</option>
@@ -370,7 +377,7 @@
                                 </div>
                                 <div class="form-group">
                                     <label >部门</label>
-                                    <select class="form-control">
+                                    <select class="form-control cond-info">
                                         <option value="">全部部门</option>
                                         <volist name="departmentArray" id="department">
                                             <option value="{$department.department_id}">{$department.department_name}</option>
@@ -379,7 +386,7 @@
                                 </div>
                                 <div class="form-group">
                                     <label >小组</label>
-                                    <select class="form-control">
+                                    <select class="form-control cond-info">
                                         <option value="">全部小组</option>
                                         <volist name="groupArray" id="group">
                                             <option value="{$group.group_id}">{$group.group_name}</option>
@@ -387,40 +394,6 @@
                                     </select>
                                 </div>
                             </div>
-                            <!-- <div class="search-condition cond-two">
-                                <div class="form-group">
-                                    <label >日期</label>
-                                    <select class="form-control apply-info" name="time">
-                                        <option value="">全部日期</option>
-                                        <option value="1 DAY">当天</option>
-                                        <option value="+1 WEEK">一周</option>
-                                        <option value="+1 MONTH">一个月</option>
-                                    </select>
-                                </div>
-                                
-                            </div>
-                            <div class="search-condition cond-three hide">
-                                <div class="form-group">
-                                    <label >类型</label>
-                                    <select class="form-control apply-info" name="aapply_type">
-                                        <option value="">全部类型</option>
-                                        <volist name="attendtypeArray" id="attendtype">
-                                            <option value="{$attendtype.config_key}">{$attendtype.config_value}</option>
-                                        </volist>
-                                    </select>
-                                </div>
-                                <div class="form-group">
-                                    <label >状态</label>
-                                    <select class="form-control apply-info" name="aapply_state">
-                                        <option value="">全部状态</option>
-                                        <option value="0">未审批</option>
-                                        <option value="1">审批</option>
-                                        <option value="2">拒绝</option>
-                                        <option value="3">审核中</option>
-                                        <option value="4">删除</option>
-                                    </select>
-                                </div> 
-                            </div> -->
                             <div class="form-group">
                                 <button class="btn btn-info btn-block" id="search-btn">查询</button>
                             </div>
@@ -432,6 +405,7 @@
                     </button>
                 </div><!-- /.modal-dialog -->
             </div>
+            <!-- 右栏筛选框 end-->
         </div>
     </div>
 </div>
@@ -527,6 +501,7 @@
 <script src="__PUBLIC__/components/jquery.media/jquery.media.js"></script>
 
 <script>
+    var page=1
     $(function(){
         /**
 		 * 通过jquery media显示文件 图片和pdf
@@ -543,40 +518,13 @@
         })
 
         /*申请人下拉框*/
-        $('.chosen-select').chosen({allow_single_deselect:true,search_contains:true,width:"100%"}); 
+        $('.chosen-select').chosen({allow_single_deselect:true,search_contains:true,width:"100%",hide_results_on_select:false}); 
         /*右侧筛选框*/
         $('.modal.aside').ace_aside();
         /*查询按钮按下*/
-        // $("#search-btn").on("click",function(){
-        //     var con=$(".tab-content .active .pages-list").data("con")
-        //     var datas={}
-        //     datas["data"]={}
-        //     $(".search-condition").each(function(){
-        //         if(!$(this).hasClass("hide")){
-        //             $(this).find("select").each(function(){
-        //                 var val=$(this).val()
-        //                 var name=$(this).prop("name")
-        //                 if(val=="" || val==null){
-                            
-        //                 }else{
-        //                     datas["data"][name]=val
-        //                 }
-        //             }) 
-        //         }
-        //     })
-        //     var html="#"+$(".tab-content .active").find(".html-box").attr("id")
-        //     var pages="#"+$(".tab-content .active").find(".pages-list").attr("id")
-        //     $.ajax({
-        //        url:"{:U('"+con+"')}",
-        //        type:"post",
-        //        dataType:"json",
-        //        data:datas,
-        //        success:function(data){
-        //            $(html).html(data.html)
-        //            $(pages).html(data.pages)
-        //        }
-        //    })
-        // })
+        $("#search-btn").on("click",function(){
+            search()
+        })
         /*不同类别选择*/
         $(".tabbable").on("click",".record-type",function(){
             var href=$(this).attr("href");
@@ -589,33 +537,38 @@
                 $('.aside-trigger').parents(".modal-dialog").removeClass("hide")
                 if(href=="#checkin-list"){
                 $(".checkin-condition").removeClass("hide");
+                $(".checkin-condition").addClass("cond-active");
                 }else if(href=="#apply-list"){
                     $(".apply-condition").removeClass("hide");
+                    $(".apply-condition").addClass("cond-active");
                 }else if(href=="#record-list"){
                     $(".record-condition").removeClass("hide");
+                    $(".record-condition").addClass("cond-active");
                 }else if(href=="#user-list"){
                     $(".user-condition").removeClass("hide");
+                    $(".user-condition").addClass("cond-active");
                 }
             }
         })
         /*页数修改*/
         $(".pages-list").on("click","a",function(){
-
-           var page= $(this).data("page")
-           var html=$(this).parents(".pages-list").data("html")
-           var pages=$(this).parents(".pages-list").data("page")
-           var con=$(this).parents(".pages-list").data("con")
-           $.ajax({
-               url:"{:U('"+con+"')}",
-               type:"post",
-               dataType:"json",
-               data:{p:page},
-               success:function(data){
-                 console.log("data")
-                   $(html).html(data.html)
-                   $(pages).html(data.pages)
-               }
-           })
+            page=$(this).data("page")
+            search()
+        //    var page= $(this).data("page")
+        //    var html=$(this).parents(".pages-list").data("html")
+        //    var pages=$(this).parents(".pages-list").data("page")
+        //    var con=$(this).parents(".pages-list").data("con")
+        //    $.ajax({
+        //        url:"{:U('"+con+"')}",
+        //        type:"post",
+        //        dataType:"json",
+        //        data:{p:page},
+        //        success:function(data){
+        //          console.log("data")
+        //            $(html).html(data.html)
+        //            $(pages).html(data.pages)
+        //        }
+        //    })
        })
        /*显示申请详情*/
        $(".tab-content").on("click",".info-edit",function(){
@@ -657,6 +610,54 @@
                 }
             })
         })
-       
+        //员工姓名获取
+
+        $("select[name='user_code']").next().find(".default").on('change', function() {
+            // console.log($(this).val());
+            var meInput=$(this)
+            var datas={}
+            datas["data"]={name:$(this).val()}
+            $.ajax({
+                url:"{:U('searchNameCode')}",
+                type:"post",
+                dataType:"json",
+                data:datas,
+                success:function(data){
+                    console.log(data.html)
+                    $("select[name='user_code']").html(data.html);
+                    $("select[name='user_code']").trigger('chosen:updated');
+                }
+            })
+        })
     })
+    function search(){
+        var con=$(".tab-content .active .pages-list").data("con")
+        var infoBox=$(".cond-active").find(".cond-info")
+        
+        var datas={}
+        datas["p"]=page
+        datas["data"]={}
+        infoBox.each(function(){
+            var name=$(this).attr("name")
+            var val=$(this).val();
+            if(val!=""){
+                datas["data"][name]=val
+            }
+            
+        })
+
+        var html="#"+$(".tab-content .active").find(".html-box").attr("id")
+        var pages="#"+$(".tab-content .active").find(".pages-list").attr("id")
+
+        $.ajax({
+            url:"{:U('"+con+"')}",
+            type:"post",
+            dataType:"json",
+            data:datas,
+            success:function(data){
+                $(html).html(data.html);
+                $(pages).html(data.pages);
+            }
+        })
+    }
 </script>

@@ -163,4 +163,16 @@ class UserModel extends AmongModel{
 			return $this->field("user_name,user_username")->where(array("user_code"=>$value))->find();
 		}
 	}
+	/**
+	 * Undocumented function 只搜索用户名和code
+	 *
+	 * @param [type] $condition
+	 * @param [type] $start
+	 * @param [type] $limit
+	 * @return void
+	 */
+	function searchNameCode($condition,$start,$limit){
+		if(!$this->has_auth("select")) return false;
+		return $this->field("user_name,user_code")->where($condition)->limit($start,$limit)->select();
+	}
 }
