@@ -254,7 +254,7 @@
                             <!-- 通用 员工姓名筛选 -->
                             <div class="">
                                 <div class="form-group">
-                                    <select class="chosen-select apply-info" multiple name="user_code" data-placeholder="员工">
+                                    <select class="chosen-select condition-info" multiple name="user_code" data-placeholder="员工">
                                         <option value="">所有员工</option>
                                         {$userList.html}
                                         <!-- <volist name="applicantArray" id="applicant">
@@ -297,6 +297,7 @@
                                         <option value="">全部状态</option>
                                         <option value="0" selected>未生效</option>
                                         <option value="1">已生效</option>
+                                        <option value="2">已删除</option>
                                     </select>
                                 </div>
                             </div>
@@ -476,6 +477,7 @@
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
                 <h4 class="modal-title" id="editTimeTitle">Modal title</h4>
             </div>
+
             <div class="modal-body">
                 <div class="form-group">
                     <label for="recipient-name" class="control-label">申请类型</label>
@@ -610,33 +612,54 @@
                 }
             })
         })
-        //员工姓名获取
-
-        $("select[name='user_code']").next().find(".default").on('change', function() {
-            // console.log($(this).val());
-            var meInput=$(this)
+        //打卡记录状态修改
+        $("#content-box").on("click",".checkin-con",function(){
             var datas={}
-            datas["data"]={name:$(this).val()}
+            datas["data"]={}
+            datas["data"]["id"]=$(this).parents(".edit-control").data("id")
+            datas["data"]["state"]=$(this).data("state")
             $.ajax({
-                url:"{:U('searchNameCode')}",
+                url:"{:U('setCheckinState')}",
                 type:"post",
                 dataType:"json",
                 data:datas,
                 success:function(data){
-                    console.log(data.html)
-                    $("select[name='user_code']").html(data.html);
-                    $("select[name='user_code']").trigger('chosen:updated');
+                    alert(data.msg)
+                    if(data.status>0){
+                        $("#attendModal").modal('hide')
+                        search()
+                    }
                 }
             })
         })
+        //员工姓名获取
+
+        // $("select[name='user_code']").next().find(".default").on('change', function() {
+        //     // console.log($(this).val());
+        //     var meInput=$(this)
+        //     var datas={}
+        //     datas["data"]={name:$(this).val()}
+        //     $.ajax({
+        //         url:"{:U('searchNameCode')}",
+        //         type:"post",
+        //         dataType:"json",
+        //         data:datas,
+        //         success:function(data){
+        //             console.log(data.html)
+        //             $("select[name='user_code']").html(data.html);
+        //             $("select[name='user_code']").trigger('chosen:updated');
+        //         }
+        //     })
+        // })
     })
     function search(){
         var con=$(".tab-content .active .pages-list").data("con")
         var infoBox=$(".cond-active").find(".cond-info")
-        
         var datas={}
+        
         datas["p"]=page
         datas["data"]={}
+        datas["user_code"]=$("select[name='user_code']").val();
         infoBox.each(function(){
             var name=$(this).attr("name")
             var val=$(this).val();

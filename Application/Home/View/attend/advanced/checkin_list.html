@@ -25,8 +25,10 @@
         <td class="hidden-480">
         	<if condition="$checkin['acheckin_state'] eq 1" >
         		<span class="label label-success"><i class="ace-icon fa fa-check-circle bigger-120"></i> 有效 </span>
-        	<else/>
-        		<span class="label label-warning"><i class="ace-icon fa fa-question-circle bigger-120"></i> 未生效 </span>
+        	<elseif condition="$checkin['acheckin_state'] eq 0" />
+                <span class="label label-warning"><i class="ace-icon fa fa-question-circle bigger-120"></i> 未生效 </span>
+            <else />
+            <span class="label label-danger"><i class="ace-icon fa fa-times-circle bigger-120"></i> 已删除 </span>
         	</if>
         </td>
         <td class="hidden-480">
@@ -36,17 +38,20 @@
                 </button>
                 
                 <if condition="$checkin['acheckin_state'] eq 1">
-                    <button class="btn btn-xs btn-warning checkin-unactive">
+                    <button class="btn btn-xs btn-warning checkin-con" data-state="0">
                         <i class="ace-icon fa fa-question-circle bigger-120"></i>
                     </button>
                 <else/>
-                    <button class="btn btn-xs btn-success checkin-active">
+                    <button class="btn btn-xs btn-success checkin-con" data-state="1">
                         <i class="ace-icon fa fa-check-circle bigger-120"></i>
                     </button>
                 </if>
-				<button class="btn btn-xs btn-danger checkin-del">
-					<i class="ace-icon fa fa-times-circle bigger-120"></i>
-				</button>
+                <if condition="$checkin['acheckin_state'] neq 2">
+                    <button class="btn btn-xs btn-danger checkin-con" data-state="2">
+                        <i class="ace-icon fa fa-times-circle bigger-120"></i>
+                    </button>
+                </if>
+				
 			</div>
         </td>
     </tr>

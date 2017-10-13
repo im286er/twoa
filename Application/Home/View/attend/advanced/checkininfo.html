@@ -1,115 +1,120 @@
 <style>
-        .profile-info-value .btn{margin:0 2px;}
-    </style>
-    <div class="row">
-        <input type="hidden" id="apply-id" value="{$infoData.acheckin_id}">
-        <div class="profile-user-info">
-            <div class="profile-info-row">
-                <div class="profile-info-name"> 打卡员工 </div>
-    
-                <div class="profile-info-value">
-                    <span>{$infoData.acheckin_name}</span>
-                </div>
+    .profile-info-value .btn{margin:0 2px;}
+</style>
+<div class="row">
+    <div class="profile-user-info">
+        <div class="profile-info-row">
+            <div class="profile-info-name"> 打卡员工 </div>
+
+            <div class="profile-info-value">
+                <span>{$infoData.acheckin_name}</span>
             </div>
-    
-            <div class="profile-info-row">
-                <div class="profile-info-name"> 打卡方法 </div>
-    
-                <div class="profile-info-value">
-                    <span>{$infoData.acheckin_checkinways}</span>
-                </div>
+        </div>
+
+        <div class="profile-info-row">
+            <div class="profile-info-name"> 打卡方法 </div>
+
+            <div class="profile-info-value">
+                <span>{$infoData.acheckin_checkinways}</span>
             </div>
-    
-            <div class="profile-info-row">
-                <div class="profile-info-name"> 打卡类型 </div>
-    
-                <div class="profile-info-value">
-                    <span>{$infoData.acheckin_types}</span>
-                </div>
+        </div>
+
+        <div class="profile-info-row">
+            <div class="profile-info-name"> 打卡类型 </div>
+
+            <div class="profile-info-value">
+                <span>{$infoData.acheckin_types}</span>
             </div>
-    
-            <div class="profile-info-row">
-                <div class="profile-info-name"> 时间始末 </div>
-    
-                <div class="profile-info-value">
-                    <span>{$infoData.acheckin_timetypes}</span>
-                </div>
+        </div>
+
+        <div class="profile-info-row">
+            <div class="profile-info-name"> 时间始末 </div>
+
+            <div class="profile-info-value">
+                <span>{$infoData.acheckin_timetypes}</span>
             </div>
-    
-            <div class="profile-info-row">
-                <div class="profile-info-name"> 添加时间 </div>
-    
-                <div class="profile-info-value">
-                    <span>{$infoData.acheckin_addtime}</span>
-                </div>
+        </div>
+
+        <div class="profile-info-row">
+            <div class="profile-info-name"> 添加时间 </div>
+
+            <div class="profile-info-value">
+                <span>{$infoData.acheckin_addtime}</span>
             </div>
-            <div class="profile-info-row">
-                <div class="profile-info-name"> 打卡时间 </div>
-    
-                <div class="profile-info-value">
-                    <span>{$infoData.acheckin_checkintime}</span>
-                </div>
+        </div>
+        <div class="profile-info-row">
+            <div class="profile-info-name"> 打卡时间 </div>
+
+            <div class="profile-info-value">
+                <span>{$infoData.acheckin_checkintime}</span>
             </div>
-            <div class="profile-info-row">
-                <div class="profile-info-name"> 打卡位置 </div>
-    
-                <div class="profile-info-value">
-                    <span>{$infoData.acheckin_location}</span>
-                </div>
+        </div>
+        <div class="profile-info-row">
+            <div class="profile-info-name"> 打卡位置 </div>
+
+            <div class="profile-info-value">
+                <span>{$infoData.acheckin_location}</span>
             </div>
-            <div class="profile-info-row">
-                <div class="profile-info-name"> 打卡经纬度 </div>
-    
-                <div class="profile-info-value">
-                    <span>{$infoData.acheckin_longlat}</span>
-                </div>
+        </div>
+        <div class="profile-info-row">
+            <div class="profile-info-name"> 打卡经纬度 </div>
+
+            <div class="profile-info-value">
+                <span>{$infoData.acheckin_longlat}</span>
             </div>
-            <div class="profile-info-row">
-                <div class="profile-info-name"> 拍照图片 </div>
-    
-                <div class="profile-info-value">
-                    <span>
-                        <if condition="$infoData['acheckin_picture'] neq ''">
-                            <i class="ace-icon fa fa-picture-o img-view" aria-hidden="true" data-url='{$checkin["acheckin_picture"]}' data-toggle="modal" data-target="#imgModal"></i>
-                        </if>   
-                    </span>
-                </div>
+        </div>
+        <div class="profile-info-row">
+            <div class="profile-info-name"> 拍照图片 </div>
+
+            <div class="profile-info-value">
+                <span>
+                    <if condition="$infoData['acheckin_picture'] neq ''">
+                        <i class="ace-icon fa fa-picture-o img-view" aria-hidden="true" data-url='{$checkin["acheckin_picture"]}' data-toggle="modal" data-target="#imgModal"></i>
+                    </if>   
+                </span>
             </div>
-            <div class="profile-info-row">
-                <div class="profile-info-name"> 状态 </div>
-    
-                <div class="profile-info-value">
-                    <span>
-                        <if condition="$infoData['acheckin_state'] eq 0">
-                                <span class="label label-warning"><i class="ace-icon fa fa-question-circle bigger-120"></i> 未生效 </span>
-                        <elseif condition="$infoData['acheckin_state'] eq 1"/>
-                                <span class="label label-success"><i class="ace-icon fa fa-check-circle bigger-120"></i> 有效</span>
-                        <else/>   
-                            <span class="label label-danger"><i class="ace-icon fa fa-times-circle bigger-120"></i>已删除 </span> 
-                        </if>
-                    </span>
-                </div>
-            </div>
-            <div class="profile-info-row">
-                <div class="profile-info-name"> 关联申请 </div>
-    
-                <div class="profile-info-value">
-                    <span>{$infoData.acheckin_applyid}</span>
-                </div>
-            </div>
-            <div class="profile-info-row">
-                <div class="profile-info-name"> 操作 </div>
-                <div class="profile-info-value">
-                    <if condition="$infoData['acheckin_state'] eq 1">
-                        <button class="btn btn-xs btn-warning checkin-unactive">
-                            <i class="ace-icon fa fa-question-circle bigger-120"> 未生效</i>
-                        </button>
-                    <else/>
-                        <button class="btn btn-xs btn-success checkin-active">
-                            <i class="ace-icon fa fa-check-circle bigger-120"> 有效</i>
-                        </button>
+        </div>
+        <div class="profile-info-row">
+            <div class="profile-info-name"> 状态 </div>
+
+            <div class="profile-info-value">
+                <span>
+                    <if condition="$infoData['acheckin_state'] eq 0">
+                            <span class="label label-warning"><i class="ace-icon fa fa-question-circle bigger-120"></i> 未生效 </span>
+                    <elseif condition="$infoData['acheckin_state'] eq 1"/>
+                            <span class="label label-success"><i class="ace-icon fa fa-check-circle bigger-120"></i> 有效</span>
+                    <else/>   
+                        <span class="label label-danger"><i class="ace-icon fa fa-times-circle bigger-120"></i>已删除 </span> 
                     </if>
-                </div>
+                </span>
+            </div>
+        </div>
+        <div class="profile-info-row">
+            <div class="profile-info-name"> 关联申请 </div>
+
+            <div class="profile-info-value">
+                <span>{$infoData.acheckin_applyid}</span>
+            </div>
+        </div>
+        <div class="profile-info-row edit-control" data-id="{$infoData.acheckin_id}">
+            <div class="profile-info-name"> 操作 </div>
+            <div class="profile-info-value">
+                <if condition="$infoData['acheckin_state'] eq 1">
+                    <button class="btn btn-xs btn-warning checkin-con" data-state="0">
+                        <i class="ace-icon fa fa-question-circle bigger-120"> 未生效 </i>
+                    </button>
+                <else/>
+                    <button class="btn btn-xs btn-success checkin-con" data-state="1">
+                        <i class="ace-icon fa fa-check-circle bigger-120"> 有效 </i>
+                    </button>
+                </if>
+                <if condition="$infoData['acheckin_state'] neq 2">
+                    <button class="btn btn-xs btn-danger checkin-con" data-state="2">
+                        <i class="ace-icon fa fa-times-circle bigger-120"> 删除 </i>
+                    </button>
+                </if>
+               
             </div>
         </div>
     </div>
+</div>

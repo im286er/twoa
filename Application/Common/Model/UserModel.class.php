@@ -171,8 +171,11 @@ class UserModel extends AmongModel{
 	 * @param [type] $limit
 	 * @return void
 	 */
-	function searchNameCode($condition,$start,$limit){
+	function searchNameCode($condition,$start=0,$limit=0){
 		if(!$this->has_auth("select")) return false;
+		if($limit==0){
+			return $this->field("user_name,user_code")->where($condition)->select();
+		}
 		return $this->field("user_name,user_code")->where($condition)->limit($start,$limit)->select();
 	}
 }

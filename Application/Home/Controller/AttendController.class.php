@@ -1089,7 +1089,7 @@ class AttendController extends AmongController {
 	 * @return   [type]                      [description]
 	 */
 	function advSearchCheckin($cond=null){
-		// print_r($_POST);
+
 		$p=1;
 		if($cond==null){
 			$p=I("post.p");
@@ -1101,7 +1101,12 @@ class AttendController extends AmongController {
 			$condition=$cond;
 			$_POST["p"]=$p;
 		}
-		// print_r($condition);
+		if(I("post.user_code")!=null){
+			// print_r($condition);
+			$condition["acheckin_code"]=array("in",I("post.user_code"));
+		}
+		
+		
 		$limit=10;
 		$count=$this->acheckin->where($condition)->count();
 		if($p>ceil($count/$limit)){
@@ -1292,12 +1297,11 @@ class AttendController extends AmongController {
 	function searchNameCode($cond=null){
 		
 		if($cond===null){
-
 			$condition=array("user_name"=>array("like","%".I("post.data")["name"]."%"));
 		}else{
 			$condition=$con;
 		}
-		$userList=$this->user->searchNameCode($condition,0,10);
+		$userList=$this->user->searchNameCode($condition);
 
 		$option="";
 		foreach ($userList as $nameCode) {
@@ -1305,6 +1309,31 @@ class AttendController extends AmongController {
 		}
 		$return=array("html"=>$option);
 		if($cond===null){
+			$this->ajaxReturn($return);
+		}else{
+			return $return;
+		}
+	}
+
+	//修改打卡状态
+	function setCheckinState($id=0,$state=0){
+		if($id==0){
+			$checkin_id=I("post.data")["id"];
+			$condition=array("acheckin_state"=>I("post.data")["state"]);
+		}else{
+			$checkin_id=$id;
+			$condition=array("acheckin_state"=>$state);
+		}
+
+		$result=$this->acheckin->setCheckin($checkin_id,$condition);
+
+	
+		if($result>0){
+			$return=array("status"=>1,"msg"=>"修改成功","sql"=>$this->acheckin->getLastSql());
+		}else{
+			$return=array("status"=>0,"msg"=>"修改失败","sql"=>$this->acheckin->getLastSql());
+		}
+		if($id==0){
 			$this->ajaxReturn($return);
 		}else{
 			return $return;
