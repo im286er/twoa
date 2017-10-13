@@ -156,7 +156,7 @@
                 <table class="table table-striped table-bordered table-hover">
                     <thead class="thin-border-bottom">
                         <tr>
-                            <th>
+                            <th >
                                 <i class="ace-icon fa fa-user"></i>
                                 申请人
                             </th>
@@ -627,19 +627,17 @@
             datas["data"]={}
             datas["data"]["id"]=$(this).parents(".edit-control").data("id")
             datas["data"]["state"]=$(this).data("state")
-            $.ajax({
-                url:"{:U('setCheckinState')}",
-                type:"post",
-                dataType:"json",
-                data:datas,
-                success:function(data){
-                    alert(data.msg)
-                    if(data.status>0){
-                        $("#attendModal").modal('hide')
-                        search()
-                    }
-                }
-            })
+            setState(datas,"#attendModal")
+        })
+        //申请记录状态修改
+        $("#content-box").on("click",".apply-con",function(){
+
+            var datas={}
+            datas["data"]={}
+            datas["data"]["id"]=$(this).parents(".edit-control").data("id")
+            datas["data"]["state"]=$(this).data("state")
+            // console.log(datas)
+            setState(datas,"#applyModal")
         })
         //员工姓名获取
 
@@ -661,6 +659,7 @@
         //     })
         // })
     })
+    //查询函数
     function search(){
         var con=$(".tab-content .active .pages-list").data("con")
 
@@ -688,6 +687,25 @@
             success:function(data){
                 $(html).html(data.html);
                 $(pages).html(data.pages);
+            }
+        })
+    }
+    function setState(datas,modal){
+        var modals=modal
+        datas["modal"]=modals
+        // console.log(datas)
+        $.ajax({
+            url:"{:U('setState')}",
+            type:"post",
+            dataType:"json",
+            data:datas,
+            success:function(data){
+                // console.log(data)
+                alert(data.msg)
+                if(data.status>0){
+                    $(modals).modal('hide')
+                    search()
+                }
             }
         })
     }

@@ -74,12 +74,30 @@
             </div>
         </div>
         <div class="profile-info-row">
+            <div class="profile-info-name"> 审批人 </div>
+            <div class="profile-info-value">
+                <span>{$infoData.aapply_approves}</span>
+            </div>
+        </div>
+        <div class="profile-info-row">
             <div class="profile-info-name"> 状态 </div>
 
             <div class="profile-info-value">
                 <span>
                     {$state[$infoData["aapply_state"]]}
                 </span>
+            </div>
+        </div>
+        <div class="profile-info-row">
+            <div class="profile-info-name"> 审批时间 </div>
+            <div class="profile-info-value">
+                <span>{$infoData.aapply_contime}</span>
+            </div>
+        </div>
+        <div class="profile-info-row">
+            <div class="profile-info-name"> 审批备注 </div>
+            <div class="profile-info-value">
+                <span>{$infoData.aapply_remark}</span>
             </div>
         </div>
         <div class="profile-info-row">

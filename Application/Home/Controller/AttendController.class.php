@@ -15,9 +15,9 @@ class AttendController extends AmongController {
 	public $timeNode;
 	public $attendUser;
 	private $appState=array('<span class="label label-info">未审批</span>','<span class="label label-success arrowed">已审批</span>','<span class="label label-danger arrowed-in">拒绝</span>','<span class="label label-warning arrowed-in arrowed-in-right">审核中</span>','<span class="label label-inverse arrowed-in-right">删除</span>');
-	private $appConBtn=array('<button class="btn btn-xs btn-success apply-con"><i class="ace-icon fa fa-check-square bigger-110"></i>&nbsp;审批&nbsp;</button><button class="btn btn-xs btn-danger apply-con"><i class="ace-icon fa fa-times-rectangle bigger-110"></i>&nbsp;拒绝&nbsp;</button>','<button class="btn btn-xs btn-inverse apply-con"><i class="ace-icon fa fa-square-o
-	bigger-110"></i>&nbsp;未审批&nbsp;</button><button class="btn btn-xs btn-danger apply-con"><i class="ace-icon fa fa-times-rectangle bigger-110"></i>&nbsp;拒绝&nbsp;</button>','<button class="btn btn-xs btn-inverse apply-con"><i class="ace-icon fa fa-square-o
-	bigger-110"></i>&nbsp;未审批&nbsp;</button><button class="btn btn-xs btn-success apply-con"><i class="ace-icon fa fa-check-square bigger-110"></i>&nbsp;审批&nbsp;</button>');
+	private $appConBtn=array('<button class="btn btn-xs btn-success apply-con" data-state="1"><i class="ace-icon fa fa-check-square bigger-110"></i>&nbsp;审批&nbsp;</button><button class="btn btn-xs btn-danger apply-con" data-state="2"><i class="ace-icon fa fa-times-rectangle bigger-110"></i>&nbsp;拒绝&nbsp;</button>','<button class="btn btn-xs btn-inverse apply-con" data-state="0"><i class="ace-icon fa fa-square-o
+	bigger-110"></i>&nbsp;未审批&nbsp;</button><button class="btn btn-xs btn-danger apply-con" data-state="2"><i class="ace-icon fa fa-times-rectangle bigger-110"></i>&nbsp;拒绝&nbsp;</button>','<button class="btn btn-xs btn-inverse apply-con" data-state="0"><i class="ace-icon fa fa-square-o
+	bigger-110"></i>&nbsp;未审批&nbsp;</button><button class="btn btn-xs btn-success apply-con" data-state="1"><i class="ace-icon fa fa-check-square bigger-110"></i>&nbsp;审批&nbsp;</button>','<button class="btn btn-xs btn-success apply-con" data-state="1"><i class="ace-icon fa fa-check-square bigger-110"></i>&nbsp;审批&nbsp;</button><button class="btn btn-xs btn-danger apply-con" data-state="2"><i class="ace-icon fa fa-times-rectangle bigger-110"></i>&nbsp;拒绝&nbsp;</button>');
 	//
 	function __construct(){
 		parent::__construct();
@@ -1211,7 +1211,19 @@ class AttendController extends AmongController {
 				break;
 			case 'applyinfo':
 				$infoData=$this->aapply->getAppy(I("id"));
-				echo $this->aapply->getLastSql();
+				// echo $this->aapply->getLastSql();
+				$operation=json_decode($infoData["aapply_operation"],true);
+				if($infoData["aapply_operation"]!=""){
+					$infoData["aapply_contime"]=date("Y-m-d H:i:s",$operation[array_keys($operation)[0]][1]);
+					if(count(array_keys($operation))>1){
+						if($operation[array_keys($operation)[0]][1]<$operation[array_keys($operation)[1]][1]){
+							$infoData["aapply_contime"]=date("Y-m-d H:i:s",$operation[array_keys($operation)[1]][1]);
+						}
+					}
+				}
+				// print_r(array_keys($operation));
+				// return;
+				// $infoData["aapply_operation"]=date("Y-m-d H:i:s",json_decode($infoData["aapply_operation"],true)[0]);
 				$this->assign("state",$this->appState);
 				$this->assign("conBtn",$this->appConBtn);
 				break;
@@ -1347,26 +1359,47 @@ class AttendController extends AmongController {
 	}
 
 	//修改打卡状态
-	function setCheckinState($id=0,$state=0){
+	function setState($modal=NULL,$id=0,$state=0){
+		// print_r($_POST);
 		if($id==0){
-			$checkin_id=I("post.data")["id"];
-			$condition=array("acheckin_state"=>I("post.data")["state"]);
+			$modals=I("post.modal");
+			$sid=I("post.data")["id"];
+			$sstate=I("post.data")["state"];
+			// $conditio=array("acheckin_state"=>I("post.data")["state"]);
 		}else{
-			$checkin_id=$id;
-			$condition=array("acheckin_state"=>$state);
+			$modals=$modal;
+			$sid=$id;
+			$sstate=$state;
+			// $condition=array("acheckin_state"=>$state);
 		}
 
-		$result=$this->acheckin->setCheckin($checkin_id,$condition);
-
+		switch ($modals) {
+			case "#attendModal":
+				$condition=array("acheckin_state"=>$sstate);
+				$result=$this->acheckin->setCheckin($sid,$condition);
+				break;
+			case "#applyModal":
+				$condition=array("aapply_state"=>$sstate);
+				$result=$this->aapply->setApply($sid,$condition);
+				break;
+			default:
+				return false;
+				# code...
+				break;
+		}
+		
+		
 	
 		if($result>0){
-			$return=array("status"=>1,"msg"=>"修改成功","sql"=>$this->acheckin->getLastSql());
+			$return=array("status"=>1,"msg"=>"修改成功");
 		}else{
-			$return=array("status"=>0,"msg"=>"修改失败","sql"=>$this->acheckin->getLastSql());
+			$return=array("status"=>0,"msg"=>"修改失败");
 		}
+		// print_r($return);
 		if($id==0){
 			$this->ajaxReturn($return);
 		}else{
+
 			return $return;
 		}
 	}
