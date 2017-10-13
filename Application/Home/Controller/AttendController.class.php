@@ -323,7 +323,7 @@ class AttendController extends AmongController {
 					break;
 			}
 			if(isset($mesArray)){
-				$this->Wxqy->message()->send($mesArray);//通过微信发送通知
+				// $this->Wxqy->message()->send($mesArray);//通过微信发送通知
 			}
 			
 		}
@@ -390,19 +390,25 @@ class AttendController extends AmongController {
 	 */
 	private function checkinType($user_code,$type,$date){
 		/*这里加上判断外勤是否属于全天，如果是，正常上下班按钮禁止*/
+		$aapplyData=$this->aapply->seekApply($user_code,$type,$date);
+		if($type==1){
+			$aapplyData=$this->aapply->seekApply($user_code,0,$date);
+		}
 		$applyid=0;
 		if($type==2){
 			/*状态是外勤*/
-			$aapplyData=$this->aapply->seekApply($user_code,$type,$date);
 			if($aapplyData==null){
 				return $this->getButton($type,0);
 			}else{
 				$applyid=$aapplyData["aapply_id"];
 			}
+		}else{
+			if($aapplyData["aapply_inday"]==1){
+				return $this->getButton($type,0);
+			}
 		}
 		if($type>2){
-			/*状态是加班*/
-			$aapplyData=$this->aapply->seekApply($user_code,$type,$date);	
+			/*状态是加班*/	
 			if($aapplyData==null){
 				
 				$aapplyData=$this->aapply->seekApply($user_code,4,$date);
@@ -490,7 +496,6 @@ class AttendController extends AmongController {
 		}else{
 			echo json_encode(array("status"=>"0","msg"=>"抱歉！坐标不在公司范围，请使用拍照"));
 		}
-		
 	}
 
 	/**
@@ -578,10 +583,12 @@ class AttendController extends AmongController {
 
 				// $this->settleAttend($this->selfUser["user_code"],"2017-09-14");
 			}else{
-				if($checkinData["acheckin_timetype"]==2 && $checkinResult["status"]==1){
+				if($checkinData["acheckin_timetype"]==2 && $checkinResult["status"]==1){ 
 					//计算上下班时间，
 					$checkinArray=$this->acheckin->seekCheckin($this->selfUser["user_code"],$checkinData["acheckin_type"],null,null,$checkinData["acheckin_applyid"]);
+
 					// echo $this->acheckin->getLastSql();
+					// return;
 					if(count($checkinArray)>1){
 						$sTime=$checkinArray[1]["acheckin_checkintime"];
 						$eTime=$checkinArray[0]["acheckin_checkintime"];
@@ -610,8 +617,16 @@ class AttendController extends AmongController {
 							foreach ($this->MonthRec as $eachDate) {
 								$count+=$eachDate["forenoon"]["worktime"]+$eachDate["afternoon"]["worktime"];
 							}
-							$count+=$monthRec[$year][$month][$date]["forenoon"]["worktime"]+$monthRec[$year][$month][$date]["afternoon"]["worktime"];
-							$this->MonthRec[$date]=$monthRec[$year][$month][$date];
+							if(!in_array($this->MonthRec[$date]["forenoon"]["type"],array(1,2,3,4,5,6,7,8,9,10,11,12,13))){
+								$this->MonthRec[$date]["forenoon"]=$monthRec[$year][$month][$date]["forenoon"];
+								$count+=$monthRec[$year][$month][$date]["forenoon"]["worktime"];
+							}
+							if(!in_array($this->MonthRec[$date]["afternoon"]["type"],array(1,2,3,4,5,6,7,8,9,10,11,12,13))){
+								$this->MonthRec[$date]["afternoon"]=$monthRec[$year][$month][$date]["afternoon"];
+								$count+=$monthRec[$year][$month][$date]["afternoon"]["worktime"];
+							}
+							// $count+=$monthRec[$year][$month][$date]["forenoon"]["worktime"]+$monthRec[$year][$month][$date]["afternoon"]["worktime"];
+							// $this->MonthRec[$date]=$monthRec[$year][$month][$date];
 							$this->arecord->setMonthRec($this->selfUser["user_code"],$year,$month,array("arecord_json"=>json_encode($this->MonthRec),"arecord_count"=>$count));
 						}else{
 							//这里要写到 aapply_tempstorage 字段中
@@ -888,6 +903,11 @@ class AttendController extends AmongController {
 			}
 			
 			if($result>0){
+				//微信推送申请通知
+				$this->Wxqy->secret($this->WxConf["assistant"]["corpsecret"]);//更改成企业小助手的secret
+				$mesArray=array("touser"=>$applyArray["aapply_approve"],"msgtype"=>"text","agentid"=>"0","text"=>array("content"=>$this->selfUser['user_name']."向您提交了 {$applyInfo['aapply_schedule']} 的 {$applyInfo['aapply_types']} 申请，请登录系统审核！"));
+				// $this->Wxqy->message()->send($mesArray);//通过微信发送通知
+
 				$this->ajaxReturn(array("status"=>"1","msg"=>"申请提交成功！"));
 			}else{
 				$this->ajaxReturn(array("status"=>"0","msg"=>$result));
@@ -928,18 +948,24 @@ class AttendController extends AmongController {
 		}
 
 		for ($i=0; $i <$days; $i++) {
-
 			$thisDate=date('Y-m-d',strtotime('+'.$i.' day',strtotime($applyInfo["aapply_schedule"])));
+			//现在实现如果小于指定的日期，那么返回假
+			if(date("Y-m-d H:i:s",time())<$thisDate." ".$this->timeNode["AF"]){
+				return false;
+			}
 			list($year,$month,$date)=split("-",date("Y-n-j",strtotime($thisDate)));
 			
 			//获取考勤记录的数据
 			$monthRec=$this->arecord->getMonthRec($this->selfUser["user_code"],$year,$month);
-		
+
 			//初始化每天数据结构
 			$baseRec=array("forenoon"=>array("worktime"=>0,"type"=>0),"afternoon"=>array("worktime"=>0,"type"=>0));
 			if(is_array($monthRec[$date])){
+
 				$baseRec=$monthRec[$date];
 			}
+			
+
 			$forenoon=$baseRec["forenoon"]["worktime"];
 			$afternoon=$baseRec["afternoon"]["worktime"];
 			$foreType=$baseRec["forenoon"]["type"];
@@ -1024,27 +1050,52 @@ class AttendController extends AmongController {
 				case "7"://补休，补休要去查找时间总和，
 					
 					if($this->attendUser["auser_worktime"]>0){
-						$foreType=$type;
-	
-						if($this->attendUser["auser_worktime"]>=(3-$forenoon)){
-							$forenoon=3;
-							$this->attendUser["auser_worktime"]-=3;
-						}else{
-							$forenoon+=$this->attendUser["auser_worktime"];
-							$this->attendUser["auser_worktime"]=0;
+						echo $afternoon;
+						if($applyInfo["aapply_inday"]==1){
+							if($this->attendUser["auser_worktime"]>=3){
+								$forenoon=3;
+								$foreType=$type;
+								$this->attendUser["auser_worktime"]-=$forenoon;
+							}else{
+								$foreType=$type;
+								$forenoon=$this->attendUser["auser_worktime"];
+								$this->attendUser["auser_worktime"]=0;
+							}
+							if($this->attendUser["auser_worktime"]>=($this->attendUser["auser_eachday"]-$forenoon)){
+								$afternoon=$this->attendUser["auser_eachday"]-$forenoon;
+								$afterType=$type;
+								$this->attendUser["auser_worktime"]-=($this->attendUser["auser_eachday"]-$forenoon);
+							}else{
+								$afterType=$type;
+								$afternoon=$this->attendUser["auser_worktime"];
+								$this->attendUser["auser_worktime"]=0;
+							}
+							
+							
+		
+						}elseif($applyInfo["aapply_inday"]==2){
+							$foreType=$type;
+		
+							if($this->attendUser["auser_worktime"]>=(3-$forenoon)){
+								$forenoon=3;
+								$this->attendUser["auser_worktime"]-=3;
+							}else{
+								$forenoon+=$this->attendUser["auser_worktime"];
+								$this->attendUser["auser_worktime"]=0;
+							}
+						}elseif($applyInfo["aapply_inday"]==3){
+							$afterType=$type;
+							if($this->attendUser["auser_worktime"]>=($this->attendUser["auser_eachday"]-3-$afternoon)){
+								$afternoon=$this->attendUser["auser_eachday"]-3;
+								$this->attendUser["auser_worktime"]-=$this->attendUser["auser_eachday"]-3;
+							}else{
+								$afternoon+=$this->attendUser["auser_worktime"];
+								$this->attendUser["auser_worktime"]=0;
+							}
 						}
 					}
-					if($this->attendUser["auser_worktime"]>0){
-						$afterType=$type;
-						if($this->attendUser["auser_worktime"]>=($this->attendUser["auser_eachday"]-3-$afternoon)){
-							$afternoon=$this->attendUser["auser_eachday"]-3;
-							$this->attendUser["auser_worktime"]-=$this->attendUser["auser_eachday"]-3;
-						}else{
-							$afternoon+=$this->attendUser["auser_worktime"];
-							$this->attendUser["auser_worktime"]=0;
-						}
-					}
-	
+					
+					
 					break;
 				
 				case "8": case "9"://事假，病假
@@ -1087,17 +1138,22 @@ class AttendController extends AmongController {
 			$theDate["afternoon"]["type"]=$afterType;
 			$monthRec[$date]=$theDate;
 			// print_r($theDate);
+			// print_r($applyInfo);
 			$count=0;
 			foreach ($monthRec as $eachDate) {
 				$count+=$eachDate["forenoon"]["worktime"]+$eachDate["afternoon"]["worktime"];
 			}
 			$this->arecord->startTrans();
 			$recordResult=$this->arecord->setMonthRec($applyInfo["aapply_code"],$year,$month,array("arecord_json"=>json_encode($monthRec),"arecord_count"=>$count));
-			
+			// echo $this->arecord->getLastSql();
 			if($recordResult>0){
 				$applyResult=$this->aapply->setApply($applyInfo["aapply_id"],array("aapply_settle"=>1));
 				if($applyResult>0){
 					$this->arecord->commit();
+					if($type==7){
+						//如果是补休，要重新写总工时
+						$this->auser->setAuser(array("auser_code"=>$applyInfo["aapply_code"],"auser_worktime"=>$this->attendUser["auser_worktime"]));
+					}
 				}else{
 					$this->arecord->rollback();
 				}
@@ -1129,9 +1185,10 @@ class AttendController extends AmongController {
 		$firstDay=$year."-".$month."-01";
 		$lastDay=date("Y-m-d",strtotime($year."-".$month."-01 + 1 month - 1 day"));
 
-		$condition["_string"]="((aapply_schedule<='{$firstDay}' AND (date_sub(aapply_schedule,interval -aapply_days day))>='{$firstDay}') OR (aapply_days='0' AND aapply_type NOT IN (10,13) AND '{$firstDay}'<=aapply_schedule AND aapply_schedule <='{$lastDay}') OR (aapply_schedule>='{$firstDay}' AND (date_sub(aapply_schedule,interval -aapply_days day))>='{$lastDay}')) AND aapply_settle=1";
+		$condition["_string"]="((aapply_schedule<='{$firstDay}' AND (date_sub(aapply_schedule,interval -aapply_days day))>='{$firstDay}') OR (aapply_type NOT IN (10,13) AND '{$firstDay}'<=aapply_schedule AND aapply_schedule <='{$lastDay}') OR (aapply_schedule>='{$firstDay}' AND (date_sub(aapply_schedule,interval -aapply_days day))>='{$lastDay}')) AND aapply_settle=1";
 
 		$applyArray=$this->aapply->searchApply($this->selfUser["user_code"],$condition);
+		// echo $this->aapply->getLastSql();
 		$applyinfos=array();
 		foreach ($applyArray as $apply) {
 			if($apply["aapply_days"]==0){

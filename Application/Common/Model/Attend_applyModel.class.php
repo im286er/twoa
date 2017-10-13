@@ -38,12 +38,15 @@ class Attend_applyModel extends AmongModel{
 	 * @param  [type] $date      [日期，格式如：2017-08-09]
 	 * @return [type]            [description]
 	 */
-	function seekApply($user_code,$type,$date=null,$inday=0){
+	function seekApply($user_code,$type=0,$date=0,$inday=0){
 		if(!$this->has_auth("select")) return false;
 		$where=array();
 		$where["aapply_code"]=$user_code;
-		$where["aapply_type"]=$type;
-		if($date!=null){
+		if($type>0){
+			$where["aapply_type"]=$type;
+		}
+		
+		if($date>0){
 			$where["aapply_schedule"]=$date;
 		}
 
