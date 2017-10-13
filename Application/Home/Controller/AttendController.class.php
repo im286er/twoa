@@ -14,6 +14,10 @@ class AttendController extends AmongController {
 	public $MonthRec;
 	public $timeNode;
 	public $attendUser;
+	private $appState=array('<span class="label label-info">未审批</span>','<span class="label label-success arrowed">已审批</span>','<span class="label label-danger arrowed-in">拒绝</span>','<span class="label label-warning arrowed-in arrowed-in-right">审核中</span>','<span class="label label-inverse arrowed-in-right">删除</span>');
+	private $appConBtn=array('<button class="btn btn-xs btn-success apply-con"><i class="ace-icon fa fa-check-square bigger-110"></i>&nbsp;审批&nbsp;</button><button class="btn btn-xs btn-danger apply-con"><i class="ace-icon fa fa-times-rectangle bigger-110"></i>&nbsp;拒绝&nbsp;</button>','<button class="btn btn-xs btn-inverse apply-con"><i class="ace-icon fa fa-square-o
+	bigger-110"></i>&nbsp;未审批&nbsp;</button><button class="btn btn-xs btn-danger apply-con"><i class="ace-icon fa fa-times-rectangle bigger-110"></i>&nbsp;拒绝&nbsp;</button>','<button class="btn btn-xs btn-inverse apply-con"><i class="ace-icon fa fa-square-o
+	bigger-110"></i>&nbsp;未审批&nbsp;</button><button class="btn btn-xs btn-success apply-con"><i class="ace-icon fa fa-check-square bigger-110"></i>&nbsp;审批&nbsp;</button>');
 	//
 	function __construct(){
 		parent::__construct();
@@ -29,6 +33,7 @@ class AttendController extends AmongController {
 		$this->timeNode=array("MO"=>"09:00:59","MF"=>"12:00:00","AO"=>"13:30:59","STA"=>"00:00:00","AF"=>"18:30:00","END"=>"23:59:59");
 
 		$this->MonthRec=$this->arecord->getMonthRec($this->selfUser["user_code"],date("Y"),date("m"));
+
 		
 	}
 	/**
@@ -55,9 +60,10 @@ class AttendController extends AmongController {
 				$this->assign("departmentArray",$this->baseInfo->department()->search_department());//部门
 				$this->assign("groupArray",$this->baseInfo->group()->search_group());//小组
 				$this->assign("checkinListHtml",$this->advSearchCheckin(array("acheckin_checkintime"=>array("EXP",">=date_sub(now(),interval +1 MONTH)"),"acheckin_state"=>array("eq","0"))));//打卡列表
+				$this->assign("applyListHtml",$this->advSearchApply(array("aapply_addtime"=>array("EXP",">=date_sub(now(),interval +1 MONTH)"),"aapply_schedule"=>array("EXP",">=date_sub(now(),interval +1 MONTH)"),"aapply_state"=>array("eq","0"))));//申请列表
 				$this->assign("attendTypeArray",$this->config->search_all(array("config_class"=>"aapply_type")));//考勤类型列表
             	
-				$this->assign("applyListHtml",$this->advSearchApply(array("aapply_state"=>array("neq","1"))));//申请列表
+				
 				$this->assign("userListHtml",$this->advSearchUser(array()));//员工列表
 				$this->assign("recordListHtml",$this->advSearchRecord(array()));//考勤记录列表
 			
@@ -1089,7 +1095,6 @@ class AttendController extends AmongController {
 	 * @return   [type]                      [description]
 	 */
 	function advSearchCheckin($cond=null){
-
 		$p=1;
 		if($cond==null){
 			$p=I("post.p");
@@ -1102,7 +1107,6 @@ class AttendController extends AmongController {
 			$_POST["p"]=$p;
 		}
 		if(I("post.user_code")!=null){
-			// print_r($condition);
 			$condition["acheckin_code"]=array("in",I("post.user_code"));
 		}
 		
@@ -1127,20 +1131,30 @@ class AttendController extends AmongController {
 	}
 
 
-	function advSearchApply($condition=array()){
+	function advSearchApply($cond=null){
 		$p=1;
-		if(empty($condition)){
-			$p=$_POST["p"];
-			if(I("data")["time"]!=""){
-				$condition["aapply_schedule"]=array("EXP",">=date_sub(now(),interval ".I("data")["time"].")");
+
+		if($cond==null){
+			$p=I("post.p");
+			$condition=I("post.data");
+						
+			if(isset($condition["aapply_addtime"])){
+				$condition["aapply_addtime"]=array("EXP",">=date_sub(now(),interval ".$condition["aapply_addtime"].")");
 			}
+			if(isset($condition["aapply_schedule"])){
+				$condition["aapply_schedule"]=array("EXP",">=date_sub(now(),interval ".$condition["aapply_schedule"].")");
+			}
+
 		}else{
-			$condition["aapply_schedule"]=array("EXP",">=date_sub(now(),interval +1 year)");
+			$condition=$cond;
 			$_POST["p"]=$p;
 		}
-
+		if(I("post.user_code")!=null){
+			$condition["aapply_code"]=array("in",I("post.user_code"));
+		}
+		
 		$limit=10;
-		$count=$this->acheckin->where($condition)->count();
+		$count=$this->aapply->where($condition)->count();
 		if($p>ceil($count/$limit)){
 			$_POST["p"]=1;
 		}
@@ -1150,10 +1164,12 @@ class AttendController extends AmongController {
 
 		// $checkinArray=$this->acheckin->search_checkin(0,$condition,$Page->firstRow,$Page->listRows);
 		$aapplyArray=$this->aapply->searchApply(0,$condition,$Page->firstRow,$Page->listRows);
+		$this->assign("state",$this->appState);
+		$this->assign("conBtn",$this->appConBtn);
 		$this->assign("aapplyArray",$aapplyArray);
 
 		$return=array("html"=>$this->fetch("attend/advanced/apply_list"),"pages"=>$pageShow);
-		if(empty($condition)){
+		if($cond==null){
 			$this->ajaxReturn($return);
 		}
 		return $return;
@@ -1189,11 +1205,26 @@ class AttendController extends AmongController {
 	}
 
 	function getAdvInfo(){
-		$infoData=$this->acheckin->findCheckin(I("id"),array(),true);
+		switch (I("view")) {
+			case 'checkininfo':
+				$infoData=$this->acheckin->findCheckin(I("id"),array(),true);
+				break;
+			case 'applyinfo':
+				$infoData=$this->aapply->getAppy(I("id"));
+				echo $this->aapply->getLastSql();
+				$this->assign("state",$this->appState);
+				$this->assign("conBtn",$this->appConBtn);
+				break;
+			default:
+				# code...
+				return false;
+				break;
+		}
+		
 		// echo $this->acheckin->getLastSql();
 		$this->assign("infoData",$infoData);
 		// print_r($infoData);
-		$return=array("html"=>$this->fetch("attend/advanced/checkininfo"));
+		$return=array("html"=>$this->fetch("attend/advanced/".I("view")));
 		$this->ajaxReturn($return);
 	}
 

@@ -17,5 +17,13 @@
         <td>
             {$state[$aapply["aapply_state"]]}
         </td>
+        <td>
+            <div class="hidden-sm hidden-xs btn-group edit-control" data-id="{$aapply.aapply_id}" data-view="applyinfo">
+                <button class="btn btn-xs btn-info info-edit" data-toggle="modal" data-target="#applyModal">
+                    <i class="ace-icon fa fa-pencil bigger-120"></i>
+                </button>
+                {$conBtn[$aapply["aapply_state"]]}
+            </div>
+        </td>
     </tr>
 </volist>

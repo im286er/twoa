@@ -1,0 +1,101 @@
+<style>
+ 
+</style>
+<div class="row">
+    <div class="profile-user-info">
+        <div class="profile-info-row">
+            <div class="profile-info-name"> 申请员工 </div>
+
+            <div class="profile-info-value">
+                <span>{$infoData.aapply_codes}</span>
+            </div>
+        </div>
+
+        <div class="profile-info-row">
+            <div class="profile-info-name"> 申请类型 </div>
+
+            <div class="profile-info-value">
+                <span>{$infoData.aapply_types}</span>
+            </div>
+        </div>
+
+        <div class="profile-info-row">
+            <div class="profile-info-name"> 申请时段 </div>
+
+            <div class="profile-info-value">
+                <span>{$infoData.aapply_indays}</span>
+            </div>
+        </div>
+
+        <div class="profile-info-row">
+            <div class="profile-info-name"> 申请时间 </div>
+
+            <div class="profile-info-value">
+                <span>{$infoData.aapply_addtime}</span>
+            </div>
+        </div>
+
+        <div class="profile-info-row">
+            <div class="profile-info-name"> 计划日期 </div>
+
+            <div class="profile-info-value">
+                <span>{$infoData.aapply_schedule}</span>
+            </div>
+        </div>
+        <div class="profile-info-row">
+            <div class="profile-info-name"> 天数/小时 </div>
+
+            <div class="profile-info-value">
+                <span>{$infoData.aapply_days}/{$infoData.aapply_hours}</span>
+            </div>
+        </div>
+        <div class="profile-info-row">
+            <div class="profile-info-name"> 申请理由 </div>
+
+            <div class="profile-info-value">
+                <span>{$infoData.aapply_reason}</span>
+            </div>
+        </div>
+        <div class="profile-info-row">
+            <div class="profile-info-name"> 涉及项目 </div>
+            <div class="profile-info-value">
+                <span>{$infoData.aapply_projects}</span>
+            </div>
+        </div>
+        <div class="profile-info-row">
+            <div class="profile-info-name"> 证明文件 </div>
+
+            <div class="profile-info-value">
+                <span>
+                    <if condition="$infoData['aapply_proof'] neq ''">
+                        <i class="ace-icon fa fa-picture-o img-view" aria-hidden="true" data-url='{$checkin["aapply_proof"]}' data-toggle="modal" data-target="#imgModal"></i>
+                    </if>   
+                </span>
+            </div>
+        </div>
+        <div class="profile-info-row">
+            <div class="profile-info-name"> 状态 </div>
+
+            <div class="profile-info-value">
+                <span>
+                    {$state[$infoData["aapply_state"]]}
+                </span>
+            </div>
+        </div>
+        <div class="profile-info-row">
+            <div class="profile-info-name"> 关联申请 </div>
+
+            <div class="profile-info-value">
+                <span>{$infoData.acheckin_applyid}</span>
+            </div>
+        </div>
+        <div class="profile-info-row edit-control" data-id="{$infoData.acheckin_id}">
+            <div class="profile-info-name"> 操作 </div>
+            <div class="profile-info-value">
+                <div class="hidden-sm hidden-xs btn-group edit-control" data-id="{$infoData.aapply_id}">
+                    {$conBtn[$infoData["aapply_state"]]} 
+                </div>               
+            </div>
+        </div>
+    </div>
+</div>

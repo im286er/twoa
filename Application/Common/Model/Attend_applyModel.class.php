@@ -61,7 +61,7 @@ class Attend_applyModel extends AmongModel{
 	 */
 	function getAppy($aapply_id){
 		if(!$this->has_auth("select")) return false;
-		$this->table($this->trueTableName." ap")->field(array_merge($this->fields,array("u.user_name aapply_codes","ct.config_value aapply_types","ci.config_value aapply_indays")))->join("left join oa_user u on u.user_code=ap.aapply_code")->join("left join oa_config ct on ct.config_class='aapply_type' AND ct.config_key=ap.aapply_type")->join("left join oa_config ci on ci.config_class='aapply_inday' AND ci.config_key=ap.aapply_inday");
+		$this->table($this->trueTableName." ap")->field(array_merge($this->fields,array("u.user_name aapply_codes","ct.config_value aapply_types","ci.config_value aapply_indays","pl.project_name aapply_projects")))->join("left join oa_user u on u.user_code=ap.aapply_code")->join("left join oa_config ct on ct.config_class='aapply_type' AND ct.config_key=ap.aapply_type")->join("left join oa_config ci on ci.config_class='aapply_inday' AND ci.config_key=ap.aapply_inday")->join("left join oa_project_list pl on ap.aapply_project=pl.project_id");
 		return $this->where(array("aapply_id"=>$aapply_id))->find();
 	}
 	/**
