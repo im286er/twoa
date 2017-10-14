@@ -92,7 +92,7 @@ class AmongController extends Controller {
 				
 			}
 		}
-		if(isset($_GET["code"]) && $this->selfUser["user_code"]==null){
+		if(isset($_GET["code"]) && session("oa_user_code")==null){
 			session("oa_islogin",null);
 			echo "<script>document.location.reload()</script>";exit;
 		}
