@@ -171,7 +171,17 @@ class Attend_recordModel extends AmongModel{
 	function findRemedy($arecord_code,$arecord_year,$arecord_month){
 		if(!$this->has_auth("select")) return false;
 		return $this->field("arecord_remedy")->where(array("arecord_code"=>$arecord_code,"arecord_year"=>$arecord_year,"arecord_month"=>(int)$arecord_month))->find()["arecord_remedy"];
-
+	}
+	/**
+	 * 修改后补数
+	 */
+	function setRemedy($arecord_id,$arecord_remedy){
+		if(!$this->has_auth("update")) return false;
+		$result=$this->where(array("arecord_id"=>$arecord_id))->find();
+		if($result==null){
+			return false;
+		}
+		return $this->where(array("arecord_id"=>$arecord_id))->save(array("arecord_remedy"=>$arecord_remedy));
 	}
 
 }

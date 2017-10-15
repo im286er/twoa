@@ -502,18 +502,19 @@
             <div class="modal-body">
                 <div class="form-group">
                     <label for="recipient-name" class="control-label">申请类型</label>
-                    <input type="text" class="form-control" name="worktime" placeholder="工时" value="0">
+                    <input type="text" class="form-control edittime-info" name="worktime" placeholder="工时" value="0">
+                    <input type="hidden" class="form-control edittime-info" name="noon" placeholder="时间段" value="">
                 </div>
                 <div class="form-group">
                     <label for="message-text" class="control-label">申请类型</label>
-                    <select class="form-control noon-type">
+                    <select class="form-control noon-type edittime-info" name="type">
                         <option value="0">无</option>
                         <volist name="attendTypeArray" id="attentype">
                             <option value="{$attentype.config_key}">{$attentype.config_value}</option>
                         </volist>
                     </select>
                 </div>
-                <button class="btn btn-info btn-block">修改工时和类型</button>
+                <button class="btn btn-info btn-block edit-worktime">修改工时和类型</button>
             </div>
         </div><!-- /.modal-content -->
     </div><!-- /.modal-dialog -->
@@ -611,8 +612,25 @@
                 }
                 datas["data"][name]=val
             })
+           
             $.ajax({
                 url:"{:U('setAuser')}",
+                data:datas,
+                type:"post",
+                dataType:"json",
+                success:function(data){
+                    alert(data.msg)
+                }
+            })
+        })
+        //修改后补数
+        $(".tab-content").on("click",".remedy-edit",function(){
+            var datas={}
+            datas["data"]={}
+            datas["data"]["arecord_id"]= $(this).parents(".arecord-id").data("recordid");
+            datas["data"]["arecord_remedy"]=$(this).prev().val()
+            $.ajax({
+                url:"{:U('setRemedy')}",
                 data:datas,
                 type:"post",
                 dataType:"json",
@@ -639,25 +657,110 @@
             // console.log(datas)
             setState(datas,"#applyModal")
         })
-        //员工姓名获取
 
-        // $("select[name='user_code']").next().find(".default").on('change', function() {
-        //     // console.log($(this).val());
-        //     var meInput=$(this)
-        //     var datas={}
-        //     datas["data"]={name:$(this).val()}
-        //     $.ajax({
-        //         url:"{:U('searchNameCode')}",
-        //         type:"post",
-        //         dataType:"json",
-        //         data:datas,
-        //         success:function(data){
-        //             console.log(data.html)
-        //             $("select[name='user_code']").html(data.html);
-        //             $("select[name='user_code']").trigger('chosen:updated');
-        //         }
-        //     })
-        // })
+        /*显示个人考勤月历*/
+        $(".show-calendar").on("click",function(){
+            var me=this
+            var table='<table style="width: 100%;table-layout: fixed;border-collapse: collapse;border-spacing: 0;"><tr>'
+            var dates={}
+            var json=$(this).data('json');
+            var arecordBox=$(this).parents(".arecord-id");
+            dates["year"]=arecordBox.find(".arecord_year").text()
+            dates["month"]=arecordBox.find(".arecord_month").text()
+            dates["code"]=arecordBox.find(".arecord_username").data("code")
+            
+            //设置标题
+            $("#recordModalTitle").html('<span>'+arecordBox.find(".arecord_username").text()+'</span>'+ dates["year"]+"-"+ dates["month"])
+
+            
+            var attype=$(".attype")
+            for (day in json) {
+                var typeStr=''
+                for(noon in json[day]){
+                    var noont=json[day][noon]["type"]
+                    var noonw=json[day][noon]["worktime"]
+                    var exattend="无"
+                    if(noon=="forenoon"){
+                        var noonName="上午"
+                    }else{
+                        var noonName="下午"
+                    }
+                    if(noont>0){
+                        exattend=attype.eq(noont-1).text()
+                    }else{
+                        noont=0
+                        noonw=0
+                    }
+                    typeStr+='<span style="overflow: hidden;" data-toggle="modal" data-target="#editTimeModal" class="label label-lg attend-type-btn attend-type-'+noont+' btn-block" name="'+noon+'" title="'+noonName+','+noonw+','+exattend+'">'+noonName+','+noonw+','+exattend+'</span>'
+                }
+
+                table+='<td><div style="text-align:right;">'+day+'</div>'+typeStr+'</td>'
+                if((day%7)==0){
+                    table+='</tr><tr>'
+                }
+            }
+            table+='</tr></table>'
+            // console.log(table)
+            $("#recordModal .modal-body").html(table)
+            
+              /*点击月历里每一天修改*/
+            $("#recordModal").on("click",".attend-type-btn",function(){
+                var tempStr=$(this).text()
+                $("#editTimeTitle").text(tempStr)
+                
+                var aStr=tempStr.split(",")
+                $("#editTimeModal input[name='worktime']").val(aStr[1])
+                $("#editTimeModal input[name='noon']").val($(this).attr("name"))
+                $("#editTimeModal .noon-type").find("option:contains('"+aStr[2]+"')").attr("selected",true)
+                dates["date"]=$(this).parent().find("div").text()
+            })
+            //修改考勤工时
+            $(".edit-worktime").on("click",function(){
+                
+                var editData={}
+                var datas={}
+                datas["data"]={}
+                datas["data"]=dates
+                $("#editTimeModal .edittime-info").each(function(){
+                    editData[$(this).attr("name")]=[$(this).attr("name"),$(this).val()]
+                })
+                
+                json[dates["date"]][editData["noon"][1]][editData["worktime"][0]]=editData["worktime"][1]
+                json[dates["date"]][editData["noon"][1]][editData["type"][0]]=editData["type"][1]
+
+                datas["data"]["json"]=JSON.stringify(json)
+                datas["data"]["count"]=$("input[name='worktime']").val()-$("#editTimeTitle").text().split(",")[1]
+                
+                $.ajax({
+                    url:"{:U('setMonthRec')}",
+                    type:"post",
+                    dataType:"json",
+                    data:datas,
+                    success:function(data){
+                        alert(data.msg)
+                        // console.log(editData)
+                        if(data.status>0){
+                            $("#editTimeModal").modal('hide')
+                            var theDate= $("#recordModal table td").eq(dates["date"]-1).find("span[name='"+editData["noon"][1]+"']")
+                            var typeStr=theDate.text().split(",")[2]
+                            var typeInt=$("select[name='type']").find("option:contains('"+typeStr+"')").index()
+                            
+                            if(editData["noon"][1]=="forenoon"){
+                                var newNoon="上午"
+                            }else{
+                                var newNoon="下午"
+                            }
+                            theDate.removeClass("attend-type-"+typeInt)
+                            theDate.addClass("attend-type-"+editData["type"][1])
+                            var newTypeStr=$("select[name='type']").find("option[value='"+editData["type"][1]+"']").text()
+                            theDate.text(newNoon+","+editData["worktime"][1]+","+newTypeStr)
+                            theDate.attr("title",newNoon+","+editData["worktime"][1]+","+newTypeStr)
+                            search()
+                        }
+                    }
+                })
+            })
+        })
     })
     //查询函数
     function search(){

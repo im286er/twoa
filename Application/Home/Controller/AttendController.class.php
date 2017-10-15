@@ -1316,6 +1316,64 @@ class AttendController extends AmongController {
 			return $return;
 		}
 	}
+	/**
+	 * 修改后补数
+	 */
+	function setRemedy($arecord_id=0,$arecord_remedy=0){
+		if($arecord_id==0){
+			$id=I("post.data")["arecord_id"];
+			$remedy=I("post.data")["arecord_remedy"];
+		}else{
+			$id=$arecord_id;
+			$remedy=$arecord_remedy;
+		}
+		$result=$this->arecord->setRemedy($id,$remedy);
+		if($result>0){
+			$return=array("status"=>1,"msg"=>"修改成功");
+		}else{
+			$return=array("status"=>0,"msg"=>"修改失败");
+		}
+		if($arecord_id==0){
+			$this->ajaxReturn($return);
+		}else{
+			return $return;
+		}
+	}
+	function setMonthRec($user_code=0,$record_year=0,$record_month=0,$record_json=0,$record_count=0,$sign_count=true){
+		if($user_code==0){
+			$code=I("post.data")["code"];
+			$year=I("post.data")["year"];
+			$month=I("post.data")["month"];
+			$json=I("post.data")["json"];
+			$count=I("post.data")["count"];
+		}else{
+			$code=$user_code;
+			$year=$record_year;
+			$month=$record_month;
+			$json=$record_json;
+			$count=$record_count;
+		}
+		// print_r(I("post.data"));
+		// return;
+		if($sign_count==true){
+			$countAll=$this->arecord->findCount($code,$year,$month);
+			$count+=$countAll;
+			$result=$this->arecord->setMonthRec($code,$year,$month,array("arecord_json"=>$json,"arecord_count"=>$count));
+		}else{
+			$result=$this->arecord->setMonthRec($code,$year,$month,array("arecord_json"=>$json,"arecord_count"=>$count));
+		}
+
+		if($result>0){
+			$return=array("status"=>1,"msg"=>"保存成功");
+		}else{
+			$return=array("status"=>0,"msg"=>"保存失败");
+		}
+		if($user_code==0){
+			$this->ajaxReturn($return);
+		}else{
+			return $return;
+		}
+	}
 	/*考勤用户信息修改 工时、累积工时、年假*/
 	function setAuser($udata=0){
 		if($udata==0){
@@ -1323,6 +1381,7 @@ class AttendController extends AmongController {
 		}else{
 			$userData=$udata;
 		}
+
 		$result=$this->auser->setAuser($userData);
 		if($result>0){
 			$return=array("status"=>1,"msg"=>"修改成功");
@@ -1387,9 +1446,6 @@ class AttendController extends AmongController {
 				# code...
 				break;
 		}
-		
-		
-	
 		if($result>0){
 			$return=array("status"=>1,"msg"=>"修改成功");
 		}else{
