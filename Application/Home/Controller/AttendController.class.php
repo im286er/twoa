@@ -319,6 +319,7 @@ class AttendController extends AmongController {
 	 * @return [type] [description]
 	 */
 	public function checkin(){
+
 		$date=date("Y-m-d",time());
 		if(IS_AJAX){
 			$date=date("Y-m-d",strtotime(I("thisDay")));
