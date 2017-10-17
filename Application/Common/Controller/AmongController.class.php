@@ -94,6 +94,12 @@ class AmongController extends Controller {
 		// 	echo "<script>document.location.reload()</script>";exit;
 		// }
 	}
+	/**
+	 * Undocumented function 通过用户编码获取用户相关信息，内部调用方法
+	 *
+	 * @param [type] $user_code
+	 * @return void
+	 */
     private function getUser($user_code){
         //获取到用户的信息
         $user=M("oa_user u");

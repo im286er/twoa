@@ -284,9 +284,11 @@ class AttendController extends AmongController {
 		$data["aapply_operation"]=json_encode($aapply_operation);
 		if(in_array($applyInfo["aapply_type"],array(2,3,4))){
 			$applyResult=$this->acheckin->applySeekCheckin($aapply_id);
+			
 			if(count($applyResult)>1){
 				$this->acheckin->startTrans();
 				$checkinSetresult=$this->acheckin->setCheckin(0,array("acheckin_state"=>$data["aapply_state"]),array("acheckin_applyid"=>$aapply_id));
+				// print_r($checkinSetresult);
 			}
 		}
 
@@ -294,7 +296,7 @@ class AttendController extends AmongController {
 
 		if(isset($checkinSetresult)){
 
-			if($checkinSetresult>0 && $appSetResult>0){
+			if($appSetResult>0){
 
 				$this->acheckin->commit();
 			}else{
@@ -303,9 +305,9 @@ class AttendController extends AmongController {
 			}
 		}
 		
-		$msg="审批失败";
+		$msg="操作失败";
 		if($appSetResult>0){
-			$msg="审批成功";
+			$msg="操作成功";
 			$this->Wxqy->secret($this->WxConf["assistant"]["corpsecret"]);//更改成企业小助手的secret
 			switch ($data["aapply_state"]) {
 				case 1:
@@ -375,7 +377,7 @@ class AttendController extends AmongController {
 	 * @return void
 	 */
 	private function getButton($type,$index,$applyid=0){
-		$info=array(array(),array("上班","下班","fa-sun-o","fa-moon-o"),array("开始外勤","结束外勤","fa-sign-out","fa-circle-o-notch"),array("开始加班","结束加班","fa-clock-o","fa-hand-peace-o"));
+		$info=array(array(),array("上班","下班","fa-sun-o","fa-moon-o"),array("开始外勤","结束外勤","fa-sign-out","fa-circle-o-notch"),array("开始加班","结束加班","fa-clock-o","fa-hand-peace-o"),array("开始加班","结束加班","fa-clock-o","fa-hand-peace-o"));
 		
 		/*0:两个按钮都禁用,1:第一个按钮禁用，第二个按钮激活，2：第一个按钮激活，第二个按钮禁用*/
 		$butInfo=array("<button class='btn disabled' data-type='{$type}' data-applyid='{$applyid}' data-timetype='1'><i class='ace-icon fa {$info[$type][2]} align-top bigger-125'></i>{$info[$type][0]} </button><button  class='btn disabled' data-type='{$type}' data-applyid='{$applyid}' data-timetype='2'><i class='ace-icon fa {$info[$type][3]} align-top bigger-125'></i>{$info[$type][1]}</button>","<button class='btn disabled' data-type='{$type}' data-applyid='{$applyid}' data-timetype='1'><i class='ace-icon fa {$info[$type][2]} align-top bigger-125'></i>{$info[$type][0]}</button><button data-toggle='button' class='btn btn-success' data-type='{$type}' data-applyid='{$applyid}' data-timetype='2'><i class='ace-icon fa {$info[$type][3]} align-top bigger-125'></i>{$info[$type][1]}</button>","<button data-toggle='button' class='btn btn-success' data-type='{$type}' data-applyid='{$applyid}' data-timetype='1'><i class='ace-icon fa {$info[$type][2]} align-top bigger-125'></i>{$info[$type][0]}</button><button class='btn disabled' data-type='{$type}' data-applyid='{$applyid}' data-timetype='2'><i class='ace-icon fa {$info[$type][3]} align-top bigger-125'></i>{$info[$type][1]}</button>");
@@ -409,23 +411,26 @@ class AttendController extends AmongController {
 		}
 		if($type>2){
 			/*状态是加班*/	
+			
 			if($aapplyData==null){
-				
-				$aapplyData=$this->aapply->seekApply($user_code,4,$date);
+				$aapplyData4=$this->aapply->seekApply($user_code,4,$date);
 				if($aapplyData4==null){
 					return $this->getButton($type,0);
 				}else{
 					$type=4;
-					if((time()-strtotime($aapplyData["aapply_schedule"]." 23:59:59"))>86400){
+					if((time()-strtotime($aapplyData4["aapply_schedule"]." 23:59:59"))>86400){
+						
 						return $this->getButton($type,0);
-						$applyid=$aapplyData["aapply_id"];
+						$applyid=$aapplyData4["aapply_id"];
 						if(I("monitor")==0){
 							return $this->getButton($type,1,$applyid);
 						}else{
+							// print_r($aapplyData4);
 							return $this->getButton($type,0);
 						}
 					}else{
-						$applyid=$aapplyData["aapply_id"];
+						// return $this->getButton($type,2,$applyid);
+						$applyid=$aapplyData4["aapply_id"];
 					}
 				}
 			}else if((time()-strtotime($aapplyData["aapply_schedule"]." 23:59:59"))>86400){
@@ -455,7 +460,12 @@ class AttendController extends AmongController {
 			$thisDay=$this->arecord->isWeekday($year,$month,$date);
 			/*判断是否工作日*/
 			if($thisDay==false){
-				return $this->getButton($type,0);
+				if($type>3){
+					return $this->getButton($type,2,$applyid);
+				}else{
+					return $this->getButton($type,0,$applyid);
+				}
+				
 			}else{
 				return $this->getButton($type,2,$applyid);
 			}
@@ -607,7 +617,7 @@ class AttendController extends AmongController {
 								$monthRec[$year][$month][$date]=$monthRec2[$year][$month][$date];
 							}
 						}
-
+						// print_r($monthRec);
 						//修改临时时间
 						if($checkinData["acheckin_type"]==1){
 							//这是正常上下班，直接修改rec
@@ -631,6 +641,7 @@ class AttendController extends AmongController {
 						}else{
 							//这里要写到 aapply_tempstorage 字段中
 							$this->aapply->setApply($checkinData["acheckin_applyid"],array("aapply_tempstorage"=>json_encode($monthRec)));
+							// echo $this->aapply->getLastSql();
 						}
 					}
 				}
@@ -783,10 +794,10 @@ class AttendController extends AmongController {
 				}
 			}
 
-			if($applyArray["aapply_inday"]>0 && $applyArray["aapply_inday"]<3 && (time()> strtotime($applyArray["aapply_schedule"]." ".$this->timeNode["MO"])) && I("remedy")=="false"){
+			if($applyArray["aapply_inday"]>0 && $applyArray["aapply_inday"]<3 && (time()> strtotime($applyArray["aapply_schedule"]." ".$this->timeNode["MO"])) && I("remedy")=="false" && $isWeekday==true){
 				$this->ajaxReturn(array("status"=>"0","msg"=>"上午超时了"));
 
-			}else if($applyArray["aapply_inday"]==3 && I("type")!=3 && time()> strtotime($applyArray["aapply_schedule"]." ".$this->timeNode["AO"])){
+			}else if($applyArray["aapply_inday"]==3 && I("type")!=3 && time()> strtotime($applyArray["aapply_schedule"]." ".$this->timeNode["AO"]) && $isWeekday==true){
 				$this->ajaxReturn(array("status"=>"0","msg"=>"下午超时了"));
 			}
 			// return;
@@ -797,7 +808,6 @@ class AttendController extends AmongController {
 				 *普通加班不允许：下午和全天补休，下午和全天补休，下午和全天事假，下午和全天病假，出差，婚假，产假
 				 *在家加班不允许：出差
 				*/
-
 					if(I("type")==3){
 						if((time()> strtotime($applyArray["aapply_schedule"]." ".$this->timeNode["AF"])) && I("remedy")=="false"){
 							$this->ajaxReturn(array("status"=>"0","msg"=>"申请超时了"));
@@ -807,7 +817,7 @@ class AttendController extends AmongController {
 							$checkin=$this->acheckin->hasCheckin($this->selfUser["user_code"],1,1,$applyArray["aapply_schedule"]);
 							
 							if($checkin==null){
-								
+								$this->ajaxReturn(array("status"=>"0","msg"=>"没有上班哪来的加班"));
 							}else{
 								$checkinData=$this->acheckin->seekCheckin($this->selfUser["user_code"],3);
 								if(count($checkinData)>1){
@@ -838,6 +848,7 @@ class AttendController extends AmongController {
 							$this->aapply->commit();
 						}else{
 							$this->aapply->rollback();
+							$this->ajaxReturn(array("status"=>"0","msg"=>"已经存在申请了"));
 						}
 					}else{
 						$this->aapply->commit();
@@ -1559,7 +1570,6 @@ class AttendController extends AmongController {
 			$sstate=$state;
 			// $condition=array("acheckin_state"=>$state);
 		}
-
 		switch ($modals) {
 			case "#attendModal":
 				$condition=array("acheckin_state"=>$sstate);

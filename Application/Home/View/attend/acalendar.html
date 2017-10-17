@@ -118,6 +118,7 @@
             }
             if(monthApply[dayNum]!=undefined){
                 monthApply[dayNum].forEach(function(element) {
+                    if(element["indays"]==null){element["indays"]="无";}
                     butStr+='<span class="label attend-type-'+element["type"]+' btn-block">考勤类型：'+element["types"]+' | 时段：'+element["indays"]+'</span>';
                 });
             }
@@ -188,6 +189,7 @@
 
                     if(monthApply[sNowDay]!=undefined){
                         monthApply[sNowDay].forEach(function(element) {
+                            if(element["indays"]==null){element["indays"]="无";}
                             butStr+='<span class="label attend-type-'+element["type"]+' btn-block hidden-480">考勤类型：'+element["types"]+' | 时段：'+element["indays"]+'</span>';
                         });
                     }
@@ -227,7 +229,7 @@
             async:false,
             data:{year:year,month:month},
             success:function(data){
-                console.log(data)
+                // console.log(data)
                 attendData=data
             }
         })
