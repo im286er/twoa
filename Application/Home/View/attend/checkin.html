@@ -346,7 +346,6 @@
 		    		datas["data"]=get_checkin_data("photo-info")
 		    	}
 				datas["monitor"]=$(".monitor-info").val();
-
 				if(datas["data"]["acheckin_type"]==2 && datas["data"]["acheckin_timetype"]==2){
 					bootbox.confirm({message:"你想结束外勤的时候同时下班么？",buttons:{confirm:{label:"同时下班",className:"btn-success"},cancel:{label:"只结束外勤",className:"btn-info"}}, callback:function(result) {
 						if(result) {
@@ -368,7 +367,7 @@
 							success:function(data){
 								if(data.status>0){
 									alert_msg("信息正确","打卡记录id："+data.msg,'gritter-success')
-									setTimeout(function(){location.reload(); }, 4000);
+									setTimeout(function(){location.reload(); }, 2000);
 								}else{
 									alert_msg("信息出错",data.msg,'gritter-error')
 								}
@@ -430,7 +429,7 @@
 		function get_attend_type(thisDate){
 			$.ajax({
 				url:"{:U('checkin')}",
-				data:{thisDay:thisDate},
+				data:{thisDay:thisDate,monitor:$("input[name='acheckin_state']").val()},
 				type:"post",
 				dataType:"json",
 				success:function(data){
@@ -443,22 +442,33 @@
 		}
 		/*获取打卡信息*/
 		function get_checkin_data(className){
+			// console.log(className) 
 			var data={}
 			$("."+className).each(function(){
 	    		var name=$(this).attr("name")
 	    		var val=$(this).val()
-    			if(val==0 && name!="acheckin_applyid"){
-    				alert_msg("信息出错",$(this).data("title")+'没选择','gritter-error')
-    				data=false
-    				return false
-    			}
+				// console.log(name) 
+				// console.log(val) 
+				if(val==0){
+					if(name=="acheckin_applyid" || name=="acheckin_state"){
+						
+					}else{
+						alert_msg("信息出错",$(this).data("title")+'没选择','gritter-error')
+						data=false
+						return false
+					}
+				}
+    			// if((name!="acheckin_applyid" && val==0)||(val==0 && name!="acheckin_state")){
+    			// 	alert_msg("信息出错",$(this).data("title")+'没选择','gritter-error')
+    			// 	data=false
+    			// 	return false
+    			// }
     			data[name]=val
-
 	    	})
 	    	return data
 
 		}
-
+		
 		/*提示函数*/
 		function alert_msg(title,text,class_name){
 			$.gritter.add({

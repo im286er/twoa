@@ -55,7 +55,7 @@ class Attend_checkinModel extends AmongModel{
 			$where["acheckin_applyid"]=array("eq",$applyid);
 		}
 		
-		return $this->where($where)->order("acheckin_checkintime DESC")->select();
+		return $this->where($where)->order("acheckin_checkintime DESC")->limit(0,3)->select();
 		
 	}
 
@@ -109,9 +109,14 @@ class Attend_checkinModel extends AmongModel{
 	 * @param [type] $dataArray 
 	 * @return void
 	 */
-	function setCheckin($acheckin_id,$dataArray){
+	function setCheckin($acheckin_id=0,$dataArray=0,$where=0){
 		if(!$this->has_auth("update")) return false;
-		return $this->where(array("acheckin_id"=>$acheckin_id))->save($dataArray);
+		if($acheckin_id>0){
+			return $this->where(array("acheckin_id"=>$acheckin_id))->save($dataArray);
+		}else{
+			return $this->where($where)->save($dataArray);
+		}
+		
 	}
 	/**
 	 * isOverTime function 判断加班申请
