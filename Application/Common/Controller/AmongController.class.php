@@ -36,6 +36,7 @@ class AmongController extends Controller {
 		if(empty($oa_login)){
 			//防止死循环跳转
             if($_GET["code"]){
+				$this->selfUser["user_code"]=$_GET["code"];
                 $userInfo=$this->Wxqy->user()->getUserInfo($_GET["code"],true);
                 // print_r($userInfo);
                 // return false;
