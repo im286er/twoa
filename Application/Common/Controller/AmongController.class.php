@@ -33,17 +33,21 @@ class AmongController extends Controller {
         $this->WxConf=getWeixinConf();
         $this->Wxqy = new \WeixinQy($this->WxConf["1000006"]["corpid"],$this->WxConf["1000006"]["corpsecret"]);
 
+
 		if(empty($oa_login)){
 			//防止死循环跳转
             if($_GET["code"]){
-				$this->selfUser["user_code"]=$_GET["code"];
+				
                 $userInfo=$this->Wxqy->user()->getUserInfo($_GET["code"],true);
                 // print_r($userInfo);
                 // return false;
                 if($userInfo->userid!=""){
                     session("oa_islogin","1");
                     session("oa_user_code",$userInfo->userid);
-                }
+				}
+				if($userInfo->userid==null){
+					echo "<script>document.location.reload()</script>";exit;
+				}
             }
 			if (strtoupper(CONTROLLER_NAME)!="INDEX" && session("oa_user_code")==null) {
 				$url=U("index/index");
@@ -90,7 +94,6 @@ class AmongController extends Controller {
 				}
 				
 			}
-			
 		}
 	}
 	/**
