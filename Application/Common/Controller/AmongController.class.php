@@ -45,9 +45,6 @@ class AmongController extends Controller {
                     session("oa_islogin","1");
                     session("oa_user_code",$userInfo->userid);
 				}
-				if($userInfo->userid==null){
-					echo "<script>document.location.reload()</script>";exit;
-				}
             }
 			if (strtoupper(CONTROLLER_NAME)!="INDEX" && session("oa_user_code")==null) {
 				$url=U("index/index");
@@ -94,6 +91,10 @@ class AmongController extends Controller {
 				}
 				
 			}
+		}
+		if($this->selfUser["user_code"]==null){
+			session("oa_islogin",null);
+			echo "<script>document.location.reload()</script>";exit;
 		}
 	}
 	/**
