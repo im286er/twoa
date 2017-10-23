@@ -3,8 +3,8 @@
  * @Author: vition
  * @Email:369709991@qq.com
  * @Date:   2017-08-03 16:43:53
- * @Last Modified by:   369709991@qq.com
- * @Last Modified time: 2017-10-01 14:46:00
+ * @Last Modified by:   vition
+ * @Last Modified time: 2017-10-23 17:49:10
  */
 
 /*{"control":"Attend","name":"考勤管理","icon":"fa fa-calendar","menus":[{"name":"高级管理","icon":"fa fa-gear","menus":"advanced"},{"name":"考勤申请","icon":"fa fa-list-alt","menus":"apply"},{"name":"申请管理","icon":"fa fa-pencil-square","menus":"applycontrol"},{"name":"打卡","icon":"fa fa-square","menus":"checkin"},{"name":"考勤月历","icon":"fa fa-calendar","menus":"acalendar"}]}*/
@@ -484,7 +484,7 @@ class AttendController extends AmongController {
 	 * @return [type]            [description]
 	 */
 	public function getPosition($latitude=0,$longitude=0,$range=false){
-		$positions=array(array("minLat"=>23.1313,"maxLat"=>23.1319,"minLong"=>113.274,"maxLong"=>113.2755));
+		$positionArray=array(array("minLat"=>23.1313,"maxLat"=>23.1319,"minLong"=>113.274,"maxLong"=>113.2755));
 		if($latitude==0 && $longitude==0){
 			$latitude=I("latitude");
 			$longitude=I("longitude");
@@ -494,7 +494,7 @@ class AttendController extends AmongController {
 		$getLocation=true;
 		if($range==true){
 			$getLocation=false;
-			foreach ($position as $position) {
+			foreach ($positionArray as $position) {
 				if($latitude>$position["minLat"] && $latitude< $position["maxLat"] && $longitude >$position["minLong"] && $longitude < $position["maxLong"]){
 					$getLocation=true;
 					break;
@@ -508,7 +508,7 @@ class AttendController extends AmongController {
 			$Position=$objPosition->result->address;
 			echo json_encode(array("status"=>"1","msg"=>$Position));
 		}else{
-			echo json_encode(array("status"=>"0","msg"=>"抱歉！坐标不在公司范围，请使用拍照"));
+			echo json_encode(array("status"=>"0","msg"=>$Positions."抱歉！坐标不在公司范围，请使用拍照"));
 		}
 	}
 
