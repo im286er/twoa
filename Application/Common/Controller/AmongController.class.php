@@ -39,7 +39,6 @@ class AmongController extends Controller {
             if($_GET["code"]){
 				
                 $userInfo=$this->Wxqy->user()->getUserInfo($_GET["code"],true);
-                // print_r($userInfo);
                 // return false;
                 if($userInfo->userid!=""){
                     session("oa_islogin","1");
