@@ -730,13 +730,15 @@
 
                 datas["data"]["json"]=JSON.stringify(json)
                 datas["data"]["count"]=$("input[name='worktime']").val()-$("#editTimeTitle").text().split(",")[1]
-                
+                // console.log(datas)
+                // return;
                 $.ajax({
                     url:"{:U('setMonthRec')}",
                     type:"post",
                     dataType:"json",
                     data:datas,
                     success:function(data){
+                        
                         alert(data.msg)
                         // console.log(editData)
                         if(data.status>0){

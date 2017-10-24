@@ -11,7 +11,7 @@ namespace Common\Model;
 use Common\Model\AmongModel;
 class DepartmentModel extends AmongModel{
 	protected $trueTableName = 'oa_department'; 
-	protected $fields = array('department_id', 'department_name','department_leader');
+	protected $fields = array('department_id', 'department_name','department_leader','department_wxid');
 
 	/**
 	 * 查询部门
@@ -86,13 +86,15 @@ class DepartmentModel extends AmongModel{
 	 * 新增部门
 	 * @param [type] $department_name 新增的部门名
 	 */
-	function add_department($department_name,$department_leader=0){
+	function add_department($departmentArray){
 		if(!$this->has_auth("insert")) return false;
-
-		$reaultArray=$this->is_department($department_name,$department_leader);
+		if(!isset($departmentArray["department_leader"])){
+			$departmentArray["department_leader"]=0;
+		}
+		$reaultArray=$this->is_department($departmentArray["department_name"],$departmentArray["department_leader"]);
 		
 		if(empty($reaultArray)){
-			return $this->add(array("department_name"=>$department_name,"department_leader"=>$department_leader));
+			return $this->add($departmentArray);
 		}else{
 			return "部门名已存在";
 		}
@@ -107,6 +109,17 @@ class DepartmentModel extends AmongModel{
 		if(!$this->has_auth("delete")) return false;
 
 		return $this->where(array("department_id"=>$department_id))->delete();
+	}
+
+	/**
+	 * Undocumented function 获取微信指定的部门id号
+	 *
+	 * @param [type] $id
+	 * @return void
+	 */
+	function getWxId($id){
+		if(!$this->has_auth("select")) return false;
+		return $this->where(array("department_id"=>$id))->find()["department_wxid"];
 	}
 
 }

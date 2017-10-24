@@ -1530,8 +1530,6 @@ class AttendController extends AmongController {
 			$json=$record_json;
 			$count=$record_count;
 		}
-		// print_r(I("post.data"));
-		// return;
 		if($sign_count==true){
 			$countAll=$this->arecord->findCount($code,$year,$month);
 			$count+=$countAll;

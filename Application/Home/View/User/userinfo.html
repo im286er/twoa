@@ -367,7 +367,16 @@
 
 			datas["data"]={}
 			$.each(userData,function(i,v){
+				var name=v.name
+				var val=v.value
+				if(name=="user_name"){
+					if(v.value==""){
+						alert("用户姓名不能为空")
+						throw "用户姓名不能为空";
+					}
+				}
 		        datas["data"][v.name] = v.value;
+				
 		    }) 
 		    if($("#user-sex-box").is(":checked")){
 				datas["data"]["user_sex"]="女"

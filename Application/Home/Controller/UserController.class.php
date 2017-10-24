@@ -14,12 +14,14 @@ class UserController extends AmongController {
 	protected $baseInfo;//定义基本信息
 	protected $user;//用户模型
 	protected $archives;
+	protected $weixinQy;
 	//重组gethtml方法
 	function __construct(){
 		parent::__construct();
 		$this->baseInfo=D("Info");
 		$this->user=D("User");
 		$this->archives=D("Archives");
+		$this->weixinQy=$this->Wxqy->secret("GDTwLEDVdhiCz0ViKGOVKJZbQc3eLN9URy9ugIVJNm0");
 		// parent::_initialize();
 	}
 	/**
@@ -86,9 +88,8 @@ class UserController extends AmongController {
 	//用户新建和修改
 	public function con_user(){
 		if(IS_POST){
+
 			$userData=$_POST["data"];
-			// $userId=$userData["user_id"];
-			// unset($userData["user_id"]);
 			if(empty($userData["user_passwd"])){
 				if($_POST["type"]=="add"){
 					$userData["user_passwd"]=sha1("Aa1234567");//初始化密码
@@ -98,19 +99,40 @@ class UserController extends AmongController {
 			}else{
 				$userData["user_passwd"]=sha1($userData["user_passwd"]);//密码加密
 			}
-			 if($userData["user_sex"]=="男"){
-				$userData["user_avatar"]="__PUBLIC__/assets/avatars/man.png";
-			}else if($userData["user_sex"]=="女"){
-				$userData["user_avatar"]="__PUBLIC__/assets/avatars/lady.png";
+			if($_POST["type"]!="state"){
+				$deparWxId=$this->baseInfo->department()->getWxId($userData["user_department"]);
+				if($userData["user_group"]==0){
+					$department=$deparWxId;
+				}else{
+					$department=$this->baseInfo->group()->getWxId($userData["user_group"]);
+				}
+	
+				$placeWxStr=$this->baseInfo->place()->find_place($userData["user_place"])["place_name"];
+				$gender=1;
+				if($userData["user_sex"]=="女"){
+					$gender=2;
+				}
 			}
-
 			
+
 			switch ($_POST["type"]) {
 				case 'add':
+					if($userData["user_sex"]=="男"){
+						$userData["user_avatar"]="/assets/avatars/man.png";
+					}else if($userData["user_sex"]=="女"){
+						$userData["user_avatar"]="/assets/avatars/lady.png";
+					}
 					if(isset($userData["user_roles"])==Null && isset($userData["user_role"])==Null){
 						$userData["user_role"]=35;//这里后续需要定义
 					}
-					$this->user->add($userData);
+					$result=$this->user->add($userData);
+					if($result>0){
+						if(count($userData)>3){
+							$this->weixinQy->user()->createUser(array("userid"=>$userData["user_code"],"name"=>$userData["user_name"],"department"=>$department,"position"=>$placeWxStr,"mobile"=>$userData["user_phone"],"gender"=>$gender));
+						}else{
+							$this->weixinQy->user()->createUser(array("userid"=>$userData["user_code"],"name"=>$userData["user_name"],"gender"=>$gender));
+						}
+					}
 					break;
 				case 'update':
 					if(isset($userData["user_roles"])==Null && isset($userData["user_role"])==Null){
@@ -118,9 +140,12 @@ class UserController extends AmongController {
 						$role=$this->baseInfo->role()->find_role($place_role);
 						$userData["user_roles"]=$role["role_upper"];
 						$userData["user_role"]=$role["role_id"];
-						
 					}
-					echo $this->user->set_user($userData["user_id"],$userData);
+					$result=$this->user->set_user($userData["user_id"],$userData);
+					if($result>0){
+						$this->weixinQy->user()->updateUser(array("userid"=>$userData["user_code"],"name"=>$userData["user_name"],"department"=>$department,"position"=>$placeWxStr,"mobile"=>$userData["user_phone"],"gender"=>$gender));
+						echo 1;
+					}
 					break;
 				case 'state':
 					$resultData=$this->user->set_state($_POST["user_id"],$_POST["user_state"]);
@@ -201,7 +226,8 @@ class UserController extends AmongController {
 		if(IS_POST){
 			switch ($_POST['type']) {
 				case "company"://新增公司
-					$resultData=$this->baseInfo->company()->add_company($_POST['value']);
+					$resultData=$this->baseInfo->company()->add_company(array("company_name"=>$_POST['value']));
+
 					if($resultData>0){
 						$newResult=$this->baseInfo->company()->find_company($resultData);
 						$jsonData=array("msg"=>"success","option"=>"<option class='ubase-select' data-input='company-data' value='{$newResult["company_id"]}'>{$newResult["company_name"]}</option>");
@@ -211,22 +237,37 @@ class UserController extends AmongController {
 					echo json_encode($jsonData);
 				break;
 				case "department"://新增部门
-					$departmentData=$this->baseInfo->department()->add_department($_POST['value'],$_POST['checked']);
+					$wxResult=$this->weixinQy->user()->createDepartment(array("name"=>$_POST['value'],"parentid"=>1));
+					if($wxResult->errcode==0){
+						$departmentData=$this->baseInfo->department()->add_department(array("department_name"=>$_POST['value'],"department_leader"=>$_POST['checked'],"department_wxid"=>$wxResult->id));
+					}
+					
 					if($departmentData>0){
 						$newResult=$this->baseInfo->department()->find_department(0,$_POST['value']);
 						$jsonData=array("msg"=>"success","option"=>"<option class='ubase-select' data-input='department-data' data-type='group' data-checked='{$newResult["department_leader"]}' value='{$newResult["department_id"]}'>{$newResult["department_name"]}</option>");
 					}else{
+						if($wxResult->errcode==0){
+							$this->weixinQy->user()->deleteDepartment($wxResult->id);
+						}
 						$jsonData=array("msg"=>$departmentData);
 					}
 					echo json_encode($jsonData);
 				break;
 				case "group"://新增分组
 				// print_r($_POST);
-				$groupData=$this->baseInfo->group()->add_group($_POST['department'],$_POST['value']);	
+				$wxId=$this->baseInfo->department()->getWxId($_POST['department']);
+				$wxResult=$this->weixinQy->user()->createDepartment(array("name"=>$_POST['value'],"parentid"=>$wxId));
+				if($wxResult->errcode==0){
+					$groupData=$this->baseInfo->group()->add_group(array("group_department"=>$_POST['department'],"group_name"=>$_POST['value'],"group_wxid"=>$wxResult->id));	
+				}
+				
 				if($groupData>0){
 					$newResult=$this->baseInfo->group()->find_group($groupData);
 					$jsonData=array("msg"=>"success","option"=>"<option class='ubase-select' data-input='group-data' value='{$newResult["group_id"]}'>{$newResult["group_name"]}</option>");
 				}else{
+					if($wxResult->errcode==0){
+						$this->weixinQy->user()->deleteDepartment($wxResult->id);
+					}
 					$jsonData=array("msg"=>$groupData);
 				}
 					echo json_encode($jsonData);
@@ -286,12 +327,18 @@ class UserController extends AmongController {
 					}
 				break;
 				case "department": case "group":
+
 					if($_POST["type"]=="department"){
 						$resultData=$this->baseInfo->department()->set_department($_POST["key"],$_POST["value"],$_POST['checked']);
+						$wxId=$this->baseInfo->department()->getWxId($_POST["key"]);
 					}else{
 						$resultData=$this->baseInfo->group()->set_group($_POST["key"],$_POST["value"],$_POST["department"]);
+						$wxId=$this->baseInfo->group()->getWxId($_POST["key"]);
+
 					}
 					if($resultData>0){
+						$wxInfo=array("id"=>$wxId,"name"=>$_POST["value"]);
+						$this->weixinQy->user()->updateDepartment($wxInfo);
 						echo "success";
 					}else{
 						echo $resultData;
@@ -329,14 +376,16 @@ class UserController extends AmongController {
 			switch ($_POST['type']) {
 				case "company":
 					$delResult=$this->baseInfo->company()->del_company($_POST["key"]);
-
 				break;
 				case "department": case "group":
-					$group=D("Group");
+					// $group=D("Group");
 					if($_POST["type"]=="department"){
+						$wxId=$this->baseInfo->department()->getWxId($_POST["key"]);
 						$delResult= $this->baseInfo->department()->del_department($_POST["key"]);
 					}else{
+						$wxId=$this->baseInfo->group()->getWxId($_POST["key"]);
 						$delResult= $this->baseInfo->group()->del_group($_POST["key"]);
+						
 					}
 				break;
 				case "place":
@@ -364,6 +413,7 @@ class UserController extends AmongController {
 				break;
 			}
 			if($delResult>0){
+				$this->weixinQy->user()->deleteDepartment($wxId);
 				echo "success";
 			}else{
 				echo "删除失败";

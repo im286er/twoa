@@ -75,11 +75,11 @@ class CompanyModel extends AmongModel {
 	 * 新增公司名
 	 * @param [type] $company_name 新增的名字
 	 */
-	function add_company($company_name){
+	function add_company($companyArray){
 		if(!$this->has_auth("insert")) return false;
 
-		if($this->find_company(0,$company_name)==""){
-			return $this->add(array("company_name"=>$company_name));
+		if($this->find_company(0,$companyArray["company_name"])==""){
+			return $this->add($companyArray);
 		}else{
 			return "公司名已存在";
 		}

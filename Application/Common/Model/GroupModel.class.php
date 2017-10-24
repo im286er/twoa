@@ -10,7 +10,7 @@ namespace Common\Model;
 use Common\Model\AmongModel;
 class GroupModel extends AmongModel{
 	protected $trueTableName = 'oa_group'; 
-	protected $fields = array('group_id', 'group_name','group_department');
+	protected $fields = array('group_id', 'group_name','group_department','group_wxid');
 
 	/**
 	 * 查询分组
@@ -74,11 +74,11 @@ class GroupModel extends AmongModel{
 	 * @param [type] $group_department [分组指定的部门]
 	 * @param [type] $group_name       [分组的名称]
 	 */
-	function add_group($group_department,$group_name){
+	function add_group($groupArray){
 		if(!$this->has_auth("insert")) return false;
 
-		if($this->is_group($group_department,$group_name)==""){
-			return $this->add(array("group_name"=>$group_name,"group_department"=>$group_department));
+		if($this->is_group($groupArray["group_department"],$groupArray["group_name"])==""){
+			return $this->add($groupArray);
 		}else{
 			return "分组名已存在";
 		}
@@ -93,5 +93,10 @@ class GroupModel extends AmongModel{
 		if(!$this->has_auth("delete")) return false;
 
 		return $this->where(array("group_id"=>$group_id))->delete();
+	}
+
+	function getWxId($id){
+		if(!$this->has_auth("select")) return false;
+		return $this->where(array("group_id"=>$id))->find()["group_wxid"];
 	}
 }
