@@ -1082,7 +1082,7 @@ class AttendController extends AmongController {
 					$afterType=$type;
 					break;
 				
-				case "7"://补休，补休要去查找时间总和，
+				case "7": case "8": case "9": case "14": //补休，补休要去查找时间总和，事假和病假默认指定补休 ,14 产假
 					$overTimeData=$this->aapply->seekApply($this->selfUser["user_code"],3,$thisDate,3);
 					if($overTimeData!=null){
 						if($overTimeData["aapply_settle"]==0){
@@ -1141,35 +1141,40 @@ class AttendController extends AmongController {
 					
 					break;
 				
-				case "8": case "9"://事假，病假
-					if($forenoon<3){
-						$foreType=$type;
-					}
-					if($afternoon<($this->attendUser["auser_eachday"]-3)){
-						$afterType=$type;
-					}
+				// case "8": case "9"://事假，病假
+				// 	if($forenoon<3){
+				// 		$foreType=$type;
+				// 	}
+				// 	if($afternoon<($this->attendUser["auser_eachday"]-3)){
+				// 		$afterType=$type;
+				// 	}
 					
-					break;
+				// 	break;
 				case "10": case "11": case "12": case "13"://出差、婚假、产假、巡展
 					$forenoon=3;
 					$afternoon=5;
+					if(in_array($type,array(11,12))){
+						$afternoon=$this->attendUser["auser_eachday"]-3;
+					}else{
+						$afternoon=5;
+					}
 					$foreType=$type;
 					$afterType=$type;
 					break;
-				case "14"://婚检
-					if($applyInfo["aapply_inday"]==1){
-						$forenoon=3;
-						$afternoon=$this->attendUser["auser_eachday"]-3;
-						$foreType=$type;
-						$afterType=$type;
-					}else if($applyInfo["aapply_inday"]==2){
-						$forenoon=3;
-						$foreType=$type;
-					}else if($applyInfo["aapply_inday"]==3){
-						$afternoon=$this->attendUser["auser_eachday"]-3;
-						$afterType=$type;
-					}
-					break;
+				// case "14"://婚检
+				// 	if($applyInfo["aapply_inday"]==1){
+				// 		$forenoon=3;
+				// 		$afternoon=$this->attendUser["auser_eachday"]-3;
+				// 		$foreType=$type;
+				// 		$afterType=$type;
+				// 	}else if($applyInfo["aapply_inday"]==2){
+				// 		$forenoon=3;
+				// 		$foreType=$type;
+				// 	}else if($applyInfo["aapply_inday"]==3){
+				// 		$afternoon=$this->attendUser["auser_eachday"]-3;
+				// 		$afterType=$type;
+				// 	}
+				// 	break;
 				default:
 					# code...
 					break;
@@ -1194,7 +1199,7 @@ class AttendController extends AmongController {
 				if($applyResult>0){
 					$setStatus=1;
 					$this->arecord->commit();
-					if($type==7){
+					if(in_array($type,array(7,8,9))){
 						//如果是补休，要重新写总工时
 						$this->auser->setAuser(array("auser_code"=>$applyInfo["aapply_code"],"auser_worktime"=>$this->attendUser["auser_worktime"]));
 					}
@@ -1530,12 +1535,13 @@ class AttendController extends AmongController {
 			$json=$record_json;
 			$count=$record_count;
 		}
+		
 		if($sign_count==true){
 			$countAll=$this->arecord->findCount($code,$year,$month);
 			$count+=$countAll;
-			$result=$this->arecord->setMonthRec($code,$year,$month,array("arecord_json"=>$json,"arecord_count"=>$count));
+			$result=$this->arecord->setMonthRec($code,$year,$month,array("arecord_json"=>urldecode($json),"arecord_count"=>$count));
 		}else{
-			$result=$this->arecord->setMonthRec($code,$year,$month,array("arecord_json"=>$json,"arecord_count"=>$count));
+			$result=$this->arecord->setMonthRec($code,$year,$month,array("arecord_json"=>urldecode($json),"arecord_count"=>$count));
 		}
 
 		if($result>0){

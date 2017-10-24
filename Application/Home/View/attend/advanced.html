@@ -715,7 +715,7 @@
                 dates["date"]=$(this).parent().find("div").text()
             })
             //修改考勤工时
-            $(".edit-worktime").on("click",function(){
+            $("#editTimeModal").on("click",".edit-worktime",function(){
                 
                 var editData={}
                 var datas={}
@@ -728,10 +728,8 @@
                 json[dates["date"]][editData["noon"][1]][editData["worktime"][0]]=editData["worktime"][1]
                 json[dates["date"]][editData["noon"][1]][editData["type"][0]]=editData["type"][1]
 
-                datas["data"]["json"]=JSON.stringify(json)
+                datas["data"]["json"]=encodeURI(JSON.stringify(json))
                 datas["data"]["count"]=$("input[name='worktime']").val()-$("#editTimeTitle").text().split(",")[1]
-                // console.log(datas)
-                // return;
                 $.ajax({
                     url:"{:U('setMonthRec')}",
                     type:"post",
