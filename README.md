@@ -138,6 +138,6 @@
 * 修复提交申请
 * 修复考勤审计
 #### 2017-10-24
-* ALTER TABLE `oa_department` ADD `department_wxid` INT(9) NOT NULL COMMENT '指定的微信id' , ADD UNIQUE (`department_wxid`) ;
-* ALTER TABLE `oa_group` ADD `group_wxid` INT(9) NOT NULL COMMENT '指定的微信id' ;
+* ALTER TABLE `oa_department` ADD `department_wxid` INT(9) DEFAULT 0 NOT NULL COMMENT '指定的微信id';
+* ALTER TABLE `oa_group` ADD `group_wxid` INT(9) NOT NULL DEFAULT 0 COMMENT '指定的微信id' ;
 * 和企业微信做接口对接
