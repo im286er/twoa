@@ -110,11 +110,11 @@
             var dayNum=$(this).find(".this-day-number").text();
             var butStr="";  
             if(monthAtt[dayNum]["forenoon"]["type"]>0){
-                butStr+='<span class="attend-label label label-white btn-block label-success"><span class="">上午上班：</span>'+monthAtt[dayNum]["forenoon"]["worktime"]+'小时</span>';
+                butStr+='<span class="attend-label label label-white btn-block label-success"><span class="">上午工时：</span>'+monthAtt[dayNum]["forenoon"]["worktime"]+'小时</span>';
             }
             if(monthAtt[dayNum]["afternoon"]["type"]>0){
 
-                butStr+='<span class="attend-label label label-white label-warning btn-block"><span class="">下午上班：</span>'+monthAtt[dayNum]["afternoon"]["worktime"]+'小时</span>';
+                butStr+='<span class="attend-label label label-white label-warning btn-block"><span class="">下午工时：</span>'+monthAtt[dayNum]["afternoon"]["worktime"]+'小时</span>';
             }
             if(monthApply[dayNum]!=undefined){
                 monthApply[dayNum].forEach(function(element) {
@@ -180,11 +180,11 @@
                    
                     if(monthAtt[sNowDay]["forenoon"]["type"]>0){
                         // console.log(monthAtt[sNowDay]["forenoon"]["worktime"])
-                        butStr+='<span class="attend-label label btn-block label-success"><span class="hidden-480">上午上班：</span>'+monthAtt[sNowDay]["forenoon"]["worktime"]+'小时</span>';
+                        butStr+='<span class="attend-label label btn-block label-success"><span class="hidden-480">上午工时：</span>'+monthAtt[sNowDay]["forenoon"]["worktime"]+'小时</span>';
                     }
                     if(monthAtt[sNowDay]["afternoon"]["type"]>0){
                         // console.log(monthAtt[sNowDay]["afternoon"]["worktime"])
-                        butStr+='<span class="attend-label label label-warning btn-block"><span class="hidden-480">下午上班：</span>'+monthAtt[sNowDay]["afternoon"]["worktime"]+'小时</span>';
+                        butStr+='<span class="attend-label label label-warning btn-block"><span class="hidden-480">下午工时：</span>'+monthAtt[sNowDay]["afternoon"]["worktime"]+'小时</span>';
                     }
 
                     if(monthApply[sNowDay]!=undefined){

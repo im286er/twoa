@@ -63,7 +63,6 @@ class AttendController extends AmongController {
 				$this->assign("applyListHtml",$this->advSearchApply(array("aapply_addtime"=>array("EXP",">=date_sub(now(),interval +1 MONTH)"),"aapply_schedule"=>array("EXP",">=date_sub(now(),interval +1 MONTH)"),"aapply_state"=>array("eq","0"))));//申请列表
 				$this->assign("attendTypeArray",$this->config->search_all(array("config_class"=>"aapply_type")));//考勤类型列表
             	
-				
 				$this->assign("userListHtml",$this->advSearchUser(array()));//员工列表
 				$this->assign("recordListHtml",$this->advSearchRecord(array()));//考勤记录列表
 			
@@ -71,6 +70,8 @@ class AttendController extends AmongController {
 
 				$this->assign("userList",$this->searchNameCode(array()));
 				break;
+			case "acalendar":
+				// $this->settleApply();
 
 		}
         parent::gethtml($html);
@@ -393,6 +394,7 @@ class AttendController extends AmongController {
 	private function checkinType($user_code,$type,$date){
 		/*这里加上判断外勤是否属于全天，如果是，正常上下班按钮禁止*/
 		$aapplyData=$this->aapply->seekApply($user_code,$type,$date);
+
 		if($type==1){
 			$aapplyData=$this->aapply->seekApply($user_code,0,$date);
 		}
@@ -411,25 +413,24 @@ class AttendController extends AmongController {
 		}
 		if($type>2){
 			/*状态是加班*/	
-			
+			// print_r($_POST);
 			if($aapplyData==null){
 				$aapplyData4=$this->aapply->seekApply($user_code,4,$date);
 				if($aapplyData4==null){
+
 					return $this->getButton($type,0);
 				}else{
 					$type=4;
 					if((time()-strtotime($aapplyData4["aapply_schedule"]." 23:59:59"))>86400){
-						
+
 						return $this->getButton($type,0);
 						$applyid=$aapplyData4["aapply_id"];
 						if(I("monitor")==0){
 							return $this->getButton($type,1,$applyid);
 						}else{
-							// print_r($aapplyData4);
 							return $this->getButton($type,0);
 						}
 					}else{
-						// return $this->getButton($type,2,$applyid);
 						$applyid=$aapplyData4["aapply_id"];
 					}
 				}
@@ -444,12 +445,15 @@ class AttendController extends AmongController {
 			}else{
 				$applyid=$aapplyData["aapply_id"];
 			}
-			$checkinData=$this->acheckin->seekCheckin($user_code,$type,null,null,$aapplyData["aapply_id"]);
+			// echo $applyid;
+			$checkinData=$this->acheckin->seekCheckin($user_code,$type,null,null,$applyid);
+			// echo $this->acheckin->getLastSql();
 		}else{
 			$checkinData=$this->acheckin->seekCheckin($user_code,$type,$date);
 		}
-	
+
 		if(count($checkinData)>0){
+			
 			if(count($checkinData)>1){
 				return $this->getButton($type,0);
 			}else{
@@ -514,10 +518,16 @@ class AttendController extends AmongController {
 	 */
 	function submitCheckin(){
 		if(IS_AJAX){
-		// print_r($_POST);
+			
 			$checkinData=$_POST["data"];
 			$checkinData["acheckin_addtime"]=date("Y-m-d H:i:s",time());
 
+			//加班的时候结束时间不能小于下班时间
+			if($checkinData["acheckin_type"]==3 && $checkinData["acheckin_state"]==1){
+				if(date("Y-m-d H:i:s",time())< date("Y-m-d ",time()).$this->timeNode["AF"]){
+					$this->ajaxReturn(array("status"=>"0","msg"=>"不好意思，根本就还没到加班结束的时间！"));
+				}
+			}
 			/**
 			 * 1,定位打卡，2拍照打卡
 			 */
@@ -617,6 +627,21 @@ class AttendController extends AmongController {
 								$monthRec[$year][$month][$date]=$monthRec2[$year][$month][$date];
 							}
 						}
+						if($checkinData["acheckin_type"]==3){
+							$baseCheckinArray=$this->acheckin->seekCheckin($this->selfUser["user_code"],1);
+							
+							$baseSTime=$baseCheckinArray[1]["acheckin_checkintime"];
+							$baseETime=$baseCheckinArray[0]["acheckin_checkintime"];
+							$baseMonthRec=$this->getForeAfter($baseSTime,$baseETime,split(" ",$baseSTime)[0],1);
+
+							$monthRec[$year][$month][$date]["forenoon"]["worktime"]+=$baseMonthRec[$year][$month][$date]["forenoon"]["worktime"];
+							$monthRec[$year][$month][$date]["afternoon"]["worktime"]+=$baseMonthRec[$year][$month][$date]["afternoon"]["worktime"];
+							if($monthRec[$year][$month][$date]["forenoon"]["type"]==0){
+								$monthRec[$year][$month][$date]["forenoon"]["type"]=1;
+							}
+							
+							$monthRec[$year][$month][$date]["afternoon"]["type"]=3;
+						}
 						// print_r($monthRec);
 						//修改临时时间
 						if($checkinData["acheckin_type"]==1){
@@ -635,8 +660,7 @@ class AttendController extends AmongController {
 								$this->MonthRec[$date]["afternoon"]=$monthRec[$year][$month][$date]["afternoon"];
 								$count+=$monthRec[$year][$month][$date]["afternoon"]["worktime"];
 							}
-							// $count+=$monthRec[$year][$month][$date]["forenoon"]["worktime"]+$monthRec[$year][$month][$date]["afternoon"]["worktime"];
-							// $this->MonthRec[$date]=$monthRec[$year][$month][$date];
+
 							$this->arecord->setMonthRec($this->selfUser["user_code"],$year,$month,array("arecord_json"=>json_encode($this->MonthRec),"arecord_count"=>$count));
 						}else{
 							//这里要写到 aapply_tempstorage 字段中
@@ -941,7 +965,6 @@ class AttendController extends AmongController {
 			}else{
 				$this->settleAttend($apply);
 			}
-			
 		}
 	}
 
@@ -957,9 +980,10 @@ class AttendController extends AmongController {
 		}else{
 			$days=$applyInfo["aapply_days"];
 		}
-
+		$setStatus=0;
 		for ($i=0; $i <$days; $i++) {
 			$thisDate=date('Y-m-d',strtotime('+'.$i.' day',strtotime($applyInfo["aapply_schedule"])));
+			echo $thisDate;
 			//现在实现如果小于指定的日期，那么返回假
 			if(date("Y-m-d H:i:s",time())<$thisDate." ".$this->timeNode["AF"]){
 				return false;
@@ -1012,16 +1036,17 @@ class AttendController extends AmongController {
 					# code...
 					break;
 				case "3"://工作日加班
-
 					if($applyInfo["aapply_tempstorage"]!=""){
 						$tempAttend=json_decode($applyInfo["aapply_tempstorage"],true);
 					}else{
 						return false;
 					}
-					
+					$foreTemp=$tempAttend[$year][$month][$date]["forenoon"]["worktime"];
 					$afterTemp=$tempAttend[$year][$month][$date]["afternoon"]["worktime"];
 					
 					if($afterTemp>0){
+						$forenoon=$foreTemp;
+						$foreType=$tempAttend[$year][$month][$date]["forenoon"]["type"];
 						$afterType=$type;
 						$afternoon+=$afterTemp;
 					}
@@ -1059,23 +1084,29 @@ class AttendController extends AmongController {
 					break;
 				
 				case "7"://补休，补休要去查找时间总和，
-					
+					$overTimeData=$this->aapply->seekApply($this->selfUser["user_code"],3,$thisDate,3);
+					if($overTimeData!=null){
+						if($overTimeData["aapply_settle"]==0){
+							return false;
+						}
+					}
 					if($this->attendUser["auser_worktime"]>0){
-						echo $afternoon;
 						if($applyInfo["aapply_inday"]==1){
-							if($this->attendUser["auser_worktime"]>=3){
-								$forenoon=3;
+							if($this->attendUser["auser_worktime"]>=(3-$forenoon)){
+								
 								$foreType=$type;
-								$this->attendUser["auser_worktime"]-=$forenoon;
+								$this->attendUser["auser_worktime"]-=(3-$forenoon);
+								$forenoon=3;
 							}else{
 								$foreType=$type;
 								$forenoon=$this->attendUser["auser_worktime"];
 								$this->attendUser["auser_worktime"]=0;
 							}
 							if($this->attendUser["auser_worktime"]>=($this->attendUser["auser_eachday"]-$forenoon)){
-								$afternoon=$this->attendUser["auser_eachday"]-$forenoon;
+								
 								$afterType=$type;
 								$this->attendUser["auser_worktime"]-=($this->attendUser["auser_eachday"]-$forenoon);
+								$afternoon=$this->attendUser["auser_eachday"]-$forenoon;
 							}else{
 								$afterType=$type;
 								$afternoon=$this->attendUser["auser_worktime"];
@@ -1088,8 +1119,9 @@ class AttendController extends AmongController {
 							$foreType=$type;
 		
 							if($this->attendUser["auser_worktime"]>=(3-$forenoon)){
+								
+								$this->attendUser["auser_worktime"]-=(3-$forenoon);
 								$forenoon=3;
-								$this->attendUser["auser_worktime"]-=3;
 							}else{
 								$forenoon+=$this->attendUser["auser_worktime"];
 								$this->attendUser["auser_worktime"]=0;
@@ -1097,8 +1129,9 @@ class AttendController extends AmongController {
 						}elseif($applyInfo["aapply_inday"]==3){
 							$afterType=$type;
 							if($this->attendUser["auser_worktime"]>=($this->attendUser["auser_eachday"]-3-$afternoon)){
-								$afternoon=$this->attendUser["auser_eachday"]-3;
-								$this->attendUser["auser_worktime"]-=$this->attendUser["auser_eachday"]-3;
+								
+								$this->attendUser["auser_worktime"]-=($this->attendUser["auser_eachday"]-3-$afternoon);
+								$afternoon=($this->attendUser["auser_eachday"]-3);
 							}else{
 								$afternoon+=$this->attendUser["auser_worktime"];
 								$this->attendUser["auser_worktime"]=0;
@@ -1160,13 +1193,19 @@ class AttendController extends AmongController {
 			if($recordResult>0){
 				$applyResult=$this->aapply->setApply($applyInfo["aapply_id"],array("aapply_settle"=>1));
 				if($applyResult>0){
+					$setStatus=1;
 					$this->arecord->commit();
 					if($type==7){
 						//如果是补休，要重新写总工时
 						$this->auser->setAuser(array("auser_code"=>$applyInfo["aapply_code"],"auser_worktime"=>$this->attendUser["auser_worktime"]));
 					}
 				}else{
-					$this->arecord->rollback();
+					if($setStatus>0){
+						$this->arecord->commit();
+					}else{
+						$this->arecord->rollback();
+					}
+					
 				}
 			}
 		}
