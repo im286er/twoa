@@ -254,7 +254,7 @@
 							url:"{:U('getPosition')}",
 							type:"POST",
 							dataType:"json",
-							data:{latitude:latitude,longitude:longitude},
+							data:{latitude:latitude,longitude:longitude,range:true},
 							success:function(data){
 								if(data.status==1){
 									$("input[name='acheckin_longlat']").val(latitude+"-"+longitude)

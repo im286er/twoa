@@ -983,7 +983,6 @@ class AttendController extends AmongController {
 		$setStatus=0;
 		for ($i=0; $i <$days; $i++) {
 			$thisDate=date('Y-m-d',strtotime('+'.$i.' day',strtotime($applyInfo["aapply_schedule"])));
-			echo $thisDate;
 			//现在实现如果小于指定的日期，那么返回假
 			if(date("Y-m-d H:i:s",time())<$thisDate." ".$this->timeNode["AF"]){
 				return false;
