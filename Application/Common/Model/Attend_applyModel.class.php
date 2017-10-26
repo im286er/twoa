@@ -115,6 +115,7 @@ class Attend_applyModel extends AmongModel{
 	 */
 	function hasApply($user_code,$aapply_type,$aapply_inday,$aapply_schedule){
 		if(!$this->has_auth("select")) return true;
+		$inday=null;
 		$apply=$this->seekApply($user_code,$aapply_type,$aapply_schedule,$aapply_inday);
 		if($apply!=null){
 			return true;
@@ -124,11 +125,13 @@ class Attend_applyModel extends AmongModel{
 				if($applya!=null){
 					if($applya["aapply_inday"]==1 || $aapply_inday==1){
 						return true;
+					}else{
+						$inday=$aapply_inday;
 					}
 				}
 			}
 		}
-		$sameApply=$this->sameDate($user_code,$aapply_schedule,$aapply_inday);
+		$sameApply=$this->sameDate($user_code,$aapply_schedule,$aapply_type,$inday);
 		if($sameApply!=null){
 			return true;
 		}
@@ -139,16 +142,17 @@ class Attend_applyModel extends AmongModel{
 	 * sameDate function 判断同一天内是否存在其他申请，避免冲突
 	 *
 	 * @param [type] $user_code
-	 * @param [type] $aapply_inday
+	 * @param [type] $aapply_type
 	 * @param [type] $aapply_schedule
 	 * @return void
 	 */
-	function sameDate($user_code,$aapply_schedule,$aapply_inday=null){
+	function sameDate($user_code,$aapply_schedule,$aapply_type,$aapply_inday=null){
 		if(!$this->has_auth("select")) return true;
 		$where=array();
 		if($aapply_inday!==null){
 			$where["aapply_inday"]=array("EQ",$aapply_inday);
 		}
+		$where["aapply_type"]=array("EQ",$aapply_type);
 		$where["_string"]="(aapply_schedule<='{$aapply_schedule}' AND '{$aapply_schedule}'<(date_sub(aapply_schedule,interval -aapply_days day)) AND aapply_days>0) OR (aapply_schedule='{$aapply_schedule}' AND aapply_days='0') OR (aapply_schedule<='{$aapply_schedule}' AND '{$aapply_schedule}'<= pl.project_enddate AND aapply_type=10)";
 		$resultArray=$this->table($this->trueTableName." ap")->join("left join oa_project_list pl on ap.aapply_project=pl.project_id AND project_trave=1")->where($where)->select();
 		// echo $this->getLastSql();

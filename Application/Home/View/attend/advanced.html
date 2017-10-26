@@ -526,6 +526,8 @@
 
 <script>
     var page=1
+    var calendarDates={}
+    var monthJson
     $(function(){
         /**
 		 * 通过jquery media显示文件 图片和pdf
@@ -662,23 +664,24 @@
         $(".show-calendar").on("click",function(){
             var me=this
             var table='<table style="width: 100%;table-layout: fixed;border-collapse: collapse;border-spacing: 0;"><tr>'
-            var dates={}
-            var json=$(this).data('json');
+            monthJson=$(this).data('json');
             var arecordBox=$(this).parents(".arecord-id");
-            dates["year"]=arecordBox.find(".arecord_year").text()
-            dates["month"]=arecordBox.find(".arecord_month").text()
-            dates["code"]=arecordBox.find(".arecord_username").data("code")
+            calendarDates["year"]=arecordBox.find(".arecord_year").text()
+            calendarDates["month"]=arecordBox.find(".arecord_month").text()
+            calendarDates["code"]=arecordBox.find(".arecord_username").data("code")
+            calendarDates["count"]=$(this).parent().next().text();
+
             
             //设置标题
-            $("#recordModalTitle").html('<span>'+arecordBox.find(".arecord_username").text()+'</span>'+ dates["year"]+"-"+ dates["month"])
+            $("#recordModalTitle").html('<span>'+arecordBox.find(".arecord_username").text()+'</span>'+ calendarDates["year"]+"-"+ calendarDates["month"]+"【<span class='monthCount'>"+calendarDates["count"]+"</span>】")
 
             
             var attype=$(".attype")
-            for (day in json) {
+            for (day in monthJson) {
                 var typeStr=''
-                for(noon in json[day]){
-                    var noont=json[day][noon]["type"]
-                    var noonw=json[day][noon]["worktime"]
+                for(noon in monthJson[day]){
+                    var noont=monthJson[day][noon]["type"]
+                    var noonw=monthJson[day][noon]["worktime"]
                     var exattend="无"
                     if(noon=="forenoon"){
                         var noonName="上午"
@@ -702,63 +705,62 @@
             table+='</tr></table>'
             // console.log(table)
             $("#recordModal .modal-body").html(table)
+        })
+          /*点击月历里每一天修改*/
+        $("#recordModal").on("click",".attend-type-btn",function(){
+            var tempStr=$(this).text()
+            $("#editTimeTitle").text(tempStr)
             
-              /*点击月历里每一天修改*/
-            $("#recordModal").on("click",".attend-type-btn",function(){
-                var tempStr=$(this).text()
-                $("#editTimeTitle").text(tempStr)
-                
-                var aStr=tempStr.split(",")
-                $("#editTimeModal input[name='worktime']").val(aStr[1])
-                $("#editTimeModal input[name='noon']").val($(this).attr("name"))
-                $("#editTimeModal .noon-type").find("option:contains('"+aStr[2]+"')").attr("selected",true)
-                dates["date"]=$(this).parent().find("div").text()
+            var aStr=tempStr.split(",")
+            $("#editTimeModal input[name='worktime']").val(aStr[1])
+            $("#editTimeModal input[name='noon']").val($(this).attr("name"))
+            $("#editTimeModal .noon-type").find("option:contains('"+aStr[2]+"')").attr("selected",true)
+            calendarDates["date"]=$(this).parent().find("div").text()
+        })
+        //修改考勤工时
+        $("#editTimeModal").on("click",".edit-worktime",function(){
+            
+            var editData={}
+            var datas={}
+            datas["data"]={}
+            datas["data"]=calendarDates
+            $("#editTimeModal .edittime-info").each(function(){
+                editData[$(this).attr("name")]=[$(this).attr("name"),$(this).val()]
             })
-            //修改考勤工时
-            $("#editTimeModal").on("click",".edit-worktime",function(){
-                
-                var editData={}
-                var datas={}
-                datas["data"]={}
-                datas["data"]=dates
-                $("#editTimeModal .edittime-info").each(function(){
-                    editData[$(this).attr("name")]=[$(this).attr("name"),$(this).val()]
-                })
-                
-                json[dates["date"]][editData["noon"][1]][editData["worktime"][0]]=editData["worktime"][1]
-                json[dates["date"]][editData["noon"][1]][editData["type"][0]]=editData["type"][1]
+            monthJson[calendarDates["date"]][editData["noon"][1]][editData["worktime"][0]]=editData["worktime"][1]
+            monthJson[calendarDates["date"]][editData["noon"][1]][editData["type"][0]]=editData["type"][1]
 
-                datas["data"]["json"]=encodeURI(JSON.stringify(json))
-                datas["data"]["count"]=$("input[name='worktime']").val()-$("#editTimeTitle").text().split(",")[1]
-                $.ajax({
-                    url:"{:U('setMonthRec')}",
-                    type:"post",
-                    dataType:"json",
-                    data:datas,
-                    success:function(data){
+            datas["data"]["json"]=encodeURI(JSON.stringify(monthJson))
+            datas["data"]["count"]=$("input[name='worktime']").val()-$("#editTimeTitle").text().split(",")[1]
+            datas["data"]["type"]=editData["type"][1]
+            $.ajax({
+                url:"{:U('setMonthRec')}",
+                type:"post",
+                dataType:"json",
+                data:datas,
+                success:function(data){
+                    alert(data.msg)
+                    // console.log(editData)
+                    if(data.status>0){
+                        $("#editTimeModal").modal('hide')
+                        var theDate= $("#recordModal table td").eq(calendarDates["date"]-1).find("span[name='"+editData["noon"][1]+"']")
+                        var typeStr=theDate.text().split(",")[2]
+                        var typeInt=$("select[name='type']").find("option:contains('"+typeStr+"')").index()
                         
-                        alert(data.msg)
-                        // console.log(editData)
-                        if(data.status>0){
-                            $("#editTimeModal").modal('hide')
-                            var theDate= $("#recordModal table td").eq(dates["date"]-1).find("span[name='"+editData["noon"][1]+"']")
-                            var typeStr=theDate.text().split(",")[2]
-                            var typeInt=$("select[name='type']").find("option:contains('"+typeStr+"')").index()
-                            
-                            if(editData["noon"][1]=="forenoon"){
-                                var newNoon="上午"
-                            }else{
-                                var newNoon="下午"
-                            }
-                            theDate.removeClass("attend-type-"+typeInt)
-                            theDate.addClass("attend-type-"+editData["type"][1])
-                            var newTypeStr=$("select[name='type']").find("option[value='"+editData["type"][1]+"']").text()
-                            theDate.text(newNoon+","+editData["worktime"][1]+","+newTypeStr)
-                            theDate.attr("title",newNoon+","+editData["worktime"][1]+","+newTypeStr)
-                            search()
+                        if(editData["noon"][1]=="forenoon"){
+                            var newNoon="上午"
+                        }else{
+                            var newNoon="下午"
                         }
+                        theDate.removeClass("attend-type-"+typeInt)
+                        theDate.addClass("attend-type-"+editData["type"][1])
+                        var newTypeStr=$("select[name='type']").find("option[value='"+editData["type"][1]+"']").text()
+                        theDate.text(newNoon+","+editData["worktime"][1]+","+newTypeStr)
+                        theDate.attr("title",newNoon+","+editData["worktime"][1]+","+newTypeStr)
+                        $(".monthCount").text((Number($(".monthCount").text())+datas["data"]["count"]))
+                        search()
                     }
-                })
+                }
             })
         })
     })

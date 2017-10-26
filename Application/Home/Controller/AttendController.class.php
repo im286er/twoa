@@ -862,16 +862,22 @@ class AttendController extends AmongController {
 					$this->aapply->startTrans();
 					$result=$this->aapply->addApply($applyArray);
 					if(isset($checkinArray2)){
-						// $checkinArray1["acheckin_applyid"]=$result;
+
 						$checkinArray2["acheckin_applyid"]=$result;
+						$this->acheckin->startTrans();
 						$result1=$this->acheckin->checkin($checkinArray1);
-						if($result1>0){
+						if($result1){
+		
 							$result2=$this->acheckin->checkin($checkinArray2);
 						}
-						if($result2>0){
+						if($result2){
+	
 							$this->aapply->commit();
+							$this->acheckin->commit();
 						}else{
+			
 							$this->aapply->rollback();
+							$this->acheckin->rollback();
 							$this->ajaxReturn(array("status"=>"0","msg"=>"已经存在申请了"));
 						}
 					}else{
@@ -990,7 +996,7 @@ class AttendController extends AmongController {
 			list($year,$month,$date)=split("-",date("Y-n-j",strtotime($thisDate)));
 			
 			//获取考勤记录的数据
-			$monthRec=$this->arecord->getMonthRec($this->selfUser["user_code"],$year,$month);
+			$monthRec=$this->arecord->getMonthRec($applyInfo["aapply_code"],$year,$month);
 
 			//初始化每天数据结构
 			$baseRec=array("forenoon"=>array("worktime"=>0,"type"=>0),"afternoon"=>array("worktime"=>0,"type"=>0));
@@ -1040,6 +1046,22 @@ class AttendController extends AmongController {
 					}else{
 						return false;
 					}
+					//如果时间下午小于等于0重新审定
+					if($afternoon<=0){
+						$checkinData=$this->acheckin->seekCheckin($applyInfo["aapply_code"],1,$thisDate);
+						if(count($checkinData)>1){
+							$sTime=$checkinData[1]["acheckin_checkintime"];
+							$eTime=$checkinData[0]["acheckin_checkintime"];
+							$newMonthRec=$this->getForeAfter($sTime,$eTime,$thisDate,1);
+							$forenoon=$newMonthRec["forenoon"]["worktime"];
+							$afternoon=$newMonthRec["afternoon"]["worktime"];
+							$foreType=$newMonthRec["forenoon"]["type"];
+							$afterType=$newMonthRec["afternoon"]["type"];
+						}else{
+							return false;
+						}
+					}
+
 					$foreTemp=$tempAttend[$year][$month][$date]["forenoon"]["worktime"];
 					$afterTemp=$tempAttend[$year][$month][$date]["afternoon"]["worktime"];
 					
@@ -1083,7 +1105,7 @@ class AttendController extends AmongController {
 					break;
 				
 				case "7": case "8": case "9": case "14": //补休，补休要去查找时间总和，事假和病假默认指定补休 ,14 产假
-					$overTimeData=$this->aapply->seekApply($this->selfUser["user_code"],3,$thisDate,3);
+					$overTimeData=$this->aapply->seekApply($applyInfo["aapply_code"],3,$thisDate,3);
 					if($overTimeData!=null){
 						if($overTimeData["aapply_settle"]==0){
 							return false;
@@ -1202,6 +1224,9 @@ class AttendController extends AmongController {
 					if(in_array($type,array(7,8,9))){
 						//如果是补休，要重新写总工时
 						$this->auser->setAuser(array("auser_code"=>$applyInfo["aapply_code"],"auser_worktime"=>$this->attendUser["auser_worktime"]));
+					}else if($type==3){
+						//如果是加班，要重新定义下班的状态
+						$this->acheckin->setCheckin(0,array("acheckin_state"=>1),array("acheckin_checkintime"=>$thisDate." ".$this->timeNode["AF"],"acheckin_code"=>$applyInfo["aapply_code"]));
 					}
 				}else{
 					if($setStatus>0){
@@ -1521,30 +1546,38 @@ class AttendController extends AmongController {
 			return $return;
 		}
 	}
-	function setMonthRec($user_code=0,$record_year=0,$record_month=0,$record_json=0,$record_count=0,$sign_count=true){
+	function setMonthRec($user_code=0,$record_year=0,$record_month=0,$record_json=0,$record_count=0,$record_type=0,$sign_count=true){
 		if($user_code==0){
 			$code=I("post.data")["code"];
 			$year=I("post.data")["year"];
 			$month=I("post.data")["month"];
 			$json=I("post.data")["json"];
 			$count=I("post.data")["count"];
+			$type=I("post.data")["type"];
 		}else{
 			$code=$user_code;
 			$year=$record_year;
 			$month=$record_month;
 			$json=$record_json;
 			$count=$record_count;
+			$type=$record_type;
 		}
-		
+
 		if($sign_count==true){
+			$plus=$count;
 			$countAll=$this->arecord->findCount($code,$year,$month);
 			$count+=$countAll;
 			$result=$this->arecord->setMonthRec($code,$year,$month,array("arecord_json"=>urldecode($json),"arecord_count"=>$count));
 		}else{
 			$result=$this->arecord->setMonthRec($code,$year,$month,array("arecord_json"=>urldecode($json),"arecord_count"=>$count));
 		}
-
+		
 		if($result>0){
+			if($type==7 && $sign_count==true){
+				if($this->attendUser["auser_worktime"]>=$plus){
+					$this->auser->where("auser_code=".$code)->setDec('auser_worktime',round($plus,2)); 
+				}
+			}
 			$return=array("status"=>1,"msg"=>"保存成功");
 		}else{
 			$return=array("status"=>0,"msg"=>"保存失败");

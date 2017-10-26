@@ -123,7 +123,7 @@ class UserController extends AmongController {
 						$userData["user_avatar"]="/assets/avatars/lady.png";
 					}
 					if(isset($userData["user_roles"])==Null && isset($userData["user_role"])==Null){
-						$userData["user_role"]=35;//这里后续需要定义
+						$userData["user_role"]=5;//这里后续需要定义
 					}
 					$result=$this->user->add($userData);
 					if($result>0){

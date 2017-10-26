@@ -141,3 +141,5 @@
 * ALTER TABLE `oa_department` ADD `department_wxid` INT(9) DEFAULT 0 NOT NULL COMMENT '指定的微信id';
 * ALTER TABLE `oa_group` ADD `group_wxid` INT(9) NOT NULL DEFAULT 0 COMMENT '指定的微信id' ;
 * 和企业微信做接口对接
+#### 2017-10-26
+* 考勤模块 考勤审计修复
