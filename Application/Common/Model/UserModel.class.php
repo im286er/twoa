@@ -54,6 +54,7 @@ class UserModel extends AmongModel{
 		}
 	}
 
+
 	/**
 	 * [get_new_code 获取最新的员工编码]
 	 * @return [type] [description]

@@ -131,6 +131,7 @@ class UserController extends AmongController {
 							$this->weixinQy->user()->createUser(array("userid"=>$userData["user_code"],"name"=>$userData["user_name"],"department"=>$department,"position"=>$placeWxStr,"mobile"=>$userData["user_phone"],"gender"=>$gender));
 						}else{
 							$this->weixinQy->user()->createUser(array("userid"=>$userData["user_code"],"name"=>$userData["user_name"],"gender"=>$gender));
+		
 						}
 					}
 					break;
@@ -822,8 +823,25 @@ class UserController extends AmongController {
 		// $this->assign("rolesArray",$roles);
 		echo $this->fetch("archiveinfo");
 	}
-
+	/**
+	 * Undocumented function 从企业微信里获取用户列表
+	 *
+	 * @return void
+	 */
+	function fromWx(){
+		$contacts=$this->weixinQy->user()->userList(1);
+		if($contacts->errcode==0){
+			foreach ($contacts->userlist as $wxUser) {
+				$userInfo=$this->user->nameTrans($wxUser->userid,3);
+				if($userInfo){
+					//用户存在则修改
+					print_r($userInfo);
+				}else{
+					//用户不存在则新增
+				}
+			}
+		}
+	}
 
 }
 
-//select user_id,user_name,user_code from oa_user where user_place in (select place_id from oa_place where find_in_set(1,place_extent));

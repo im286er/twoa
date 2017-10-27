@@ -189,17 +189,14 @@
 	jQuery(function($){
 		$("#from-wx").on("click",function(){
 			$.ajax({
-				url: 'https://api-cn.faceplusplus.com/facepp/v3/detect', //仅为示例，并非真实的接口地址
-				data: {
-					api_key:'joXkjaH0a8vkcVT-57wJGwG_yKV0m36n',
-					api_secret:'hpSjnxMs0GHPjLeXScjFjR6AtAFykzwT',
-					image_url:'https://bj-mc-prod-asset.oss-cn-beijing.aliyuncs.com/mc-official/images/demo/demo-pic8.jpg'
-				},
+				url:"{:U('fromWx')}",
 				type:"post",
+				dataType:"html",
+				data:datas,
 				success:function(data){
-					console.log(data)
+					dataJson=JSON.parse(data)
+					$("select[name='user_group']").html(dataJson["group"])
 				}
-
 			})
 		})
 		search_user()//默认查询
