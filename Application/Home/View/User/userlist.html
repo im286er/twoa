@@ -90,7 +90,7 @@
 					</div>
 					<div class="form-group">
 						<div class="col-sm-1">
-							<button class="btn btn-sm btn-primary search-btn"><i class="ace-icon fa fa-search"></i>图标</button>
+							<button class="btn btn-sm btn-primary search-btn" id="from-wx"><i class="ace-icon fa fa-search"></i>微信导入</button>
 						</div>
 					</div>
 
@@ -187,6 +187,21 @@
 
 	<script>
 	jQuery(function($){
+		$("#from-wx").on("click",function(){
+			$.ajax({
+				url: 'https://api-cn.faceplusplus.com/facepp/v3/detect', //仅为示例，并非真实的接口地址
+				data: {
+					api_key:'joXkjaH0a8vkcVT-57wJGwG_yKV0m36n',
+					api_secret:'hpSjnxMs0GHPjLeXScjFjR6AtAFykzwT',
+					image_url:'https://bj-mc-prod-asset.oss-cn-beijing.aliyuncs.com/mc-official/images/demo/demo-pic8.jpg'
+				},
+				type:"post",
+				success:function(data){
+					console.log(data)
+				}
+
+			})
+		})
 		search_user()//默认查询
 		$(".dataTables_wrapper").on("click",".paginate_button",search_user)
 		$(".search-btn").on("click",search_user)
