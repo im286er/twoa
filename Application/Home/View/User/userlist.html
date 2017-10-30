@@ -194,8 +194,7 @@
 				dataType:"html",
 				data:datas,
 				success:function(data){
-					dataJson=JSON.parse(data)
-					$("select[name='user_group']").html(dataJson["group"])
+					search_user();
 				}
 			})
 		})

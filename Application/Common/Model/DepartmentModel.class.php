@@ -121,5 +121,15 @@ class DepartmentModel extends AmongModel{
 		if(!$this->has_auth("select")) return false;
 		return $this->where(array("department_id"=>$id))->find()["department_wxid"];
 	}
+	/**
+	 * Undocumented function 微信号转id
+	 *
+	 * @param [type] $wxId
+	 * @return void
+	 */
+	function wxIdTrans($wxId){
+		if(!$this->has_auth("select")) return false;
+		return $this->where(array("department_wxid"=>$wxId))->find()["department_id"];
+	}
 
 }

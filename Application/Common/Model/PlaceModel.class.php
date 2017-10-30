@@ -46,6 +46,17 @@ class PlaceModel extends AmongModel{
 	}
 
 	/**
+	 * Undocumented function 通过条件查找到指定一条的职位信息
+	 *
+	 * @param [type] $conditionArray
+	 * @return void
+	 */
+	function seekPlace($conditionArray){
+		if(!$this->has_auth("select")) return false;
+		return $this->where($conditionArray)->find();
+	}
+
+	/**
 	 * [is_place 判断职位]
 	 * @param  [type]  $place_department [职位隶属部门]
 	 * @param  [type]  $place_name       [职位名称]

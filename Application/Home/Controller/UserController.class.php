@@ -152,6 +152,12 @@ class UserController extends AmongController {
 					$resultData=$this->user->set_state($_POST["user_id"],$_POST["user_state"]);
 					
 					if($resultData>0){
+						$userInfo=$this->user->find_user($_POST["user_id"]);
+						if($_POST["user_state"]==2){
+							$this->weixinQy->user()->deleteUser($userInfo["user_code"]);
+						}else{
+							$this->weixinQy->user()->updateUser(array("userid"=>$userInfo["user_code"],"enable"=>$_POST["user_state"]));
+						}
 						$content="成功改变用户状态";
 						$this->assign("content",$content);
 						echo $this->fetch("Common@alert/success");	
@@ -723,7 +729,6 @@ class UserController extends AmongController {
 				$dirFile=explode("_", $name);
 				$archivesData[$name]=blob_to_file($blobData,$archivesData["archives_usercode"],$filePath.$dirFile[1]);
 			}
-			
 			switch ($_POST["type"]) {
 				case 'insert':
 					echo $this->archives->add_archive($archivesData);
@@ -830,17 +835,51 @@ class UserController extends AmongController {
 	 */
 	function fromWx(){
 		$contacts=$this->weixinQy->user()->userList(1);
+	
 		if($contacts->errcode==0){
 			foreach ($contacts->userlist as $wxUser) {
+				$userInfoA=array();
 				$userInfo=$this->user->nameTrans($wxUser->userid,3);
+				$userInfoA["user_code"]=$wxUser->userid;
+				$userInfoA["user_name"]=$wxUser->name;
+				if($wxUser->department[0]>1){
+					$groupId=$this->baseInfo->group()->wxIdTrans($wxUser->department[0]);
+					if($groupId>0){
+						$userInfoA["user_department"]=$groupId;
+						$groupInfo=$this->baseInfo->group()->find_group($groupId);
+						$departmentId=$groupInfo["group_department"];
+					}else{
+						$departmentId=$this->baseInfo->department()->wxIdTrans($wxUser->department[0]);
+						$userInfoA["user_department"]=$departmentId;
+					}
+					if($wxUser->position!=""){
+						$userInfoA["user_place"]=$this->baseInfo->place()->seekPlace(array("place_name"=>$wxUser->position,"place_department"=>$departmentId,"place_group"=>$groupId))["place_id"];
+					}
+					
+				}
+				
+				$userInfoA["user_phone"]=$wxUser->mobile;
+				$userInfoA["user_sex"]="男";
+				if($wxUser->gender>1){
+					$userInfoA["user_sex"]="女";
+				}
+				if($wxUser->status==4){
+					$wxUser->status=0;
+				}
+				$userInfoA["user_avatar"]=$wxUser->avatar;
+				$userInfoA["user_state"]=$wxUser->status;
+
 				if($userInfo){
 					//用户存在则修改
-					print_r($userInfo);
+					$result=$this->user->set_user($userInfo["user_id"],$userInfoA);
 				}else{
+					$result=$this->user->addUser($userInfoA);
+					$userInfoA["user_passwd"]=SHA1("Aa1234567");//设置默认密码
 					//用户不存在则新增
 				}
 			}
 		}
+		echo true;
 	}
 
 }

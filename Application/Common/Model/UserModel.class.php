@@ -157,11 +157,11 @@ class UserModel extends AmongModel{
 		if(!$this->has_auth("select")) return false;
 
 		if($type==1){
-			return $this->field("user_name,user_code")->where(array("user_username"=>$value))->find();
+			return $this->field("user_id,user_name,user_code")->where(array("user_username"=>$value))->find();
 		}else if($type==2){
-			return $this->field("user_username,user_code")->where(array("user_name"=>$value))->select();
+			return $this->field("user_id,user_username,user_code")->where(array("user_name"=>$value))->select();
 		}else{
-			return $this->field("user_name,user_username")->where(array("user_code"=>$value))->find();
+			return $this->field("user_id,user_name,user_username")->where(array("user_code"=>$value))->find();
 		}
 	}
 	/**
@@ -178,5 +178,15 @@ class UserModel extends AmongModel{
 			return $this->field("user_name,user_code")->where($condition)->select();
 		}
 		return $this->field("user_name,user_code")->where($condition)->limit($start,$limit)->select();
+	}
+	/**
+	 * Undocumented function 添加用户
+	 *
+	 * @param [type] $userInfo
+	 * @return void
+	 */
+	function addUser($userInfo){
+		if(!$this->has_auth("insert")) return false;
+		return $this->add($userInfo);;
 	}
 }

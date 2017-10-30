@@ -94,9 +94,24 @@ class GroupModel extends AmongModel{
 
 		return $this->where(array("group_id"=>$group_id))->delete();
 	}
-
+	/**
+	 * Undocumented function 获取微信指定的小组id
+	 *
+	 * @param [type] $id
+	 * @return void
+	 */
 	function getWxId($id){
 		if(!$this->has_auth("select")) return false;
 		return $this->where(array("group_id"=>$id))->find()["group_wxid"];
+	}
+	/**
+	 * Undocumented function 微信号转id
+	 *
+	 * @param [type] $wxId
+	 * @return void
+	 */
+	function wxIdTrans($wxId){
+		if(!$this->has_auth("select")) return false;
+		return $this->where(array("group_wxid"=>$wxId))->find()["group_id"];
 	}
 }
